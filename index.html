@@ -1,92 +1,419 @@
 <!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Hello Ahmed</title>
-    <style>
-      :root {
-        color-scheme: light dark;
-      }
-      html, body {
-        height: 100%;
-        margin: 0;
-        font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";
-        background-color: #081b3c; /* dark blue */
-        color: #ffffff;
-      }
-      .container {
-        display: grid;
-        place-items: center;
-        height: 100%;
-        padding: 16px;
-      }
-      .stage { width: 100%; display: grid; place-items: center; }
-      .slide-link { display: grid; gap: 12px; place-items: center; text-decoration: none; color: #d1d5db; }
-      .slide { width: min(88vw, 960px); aspect-ratio: 16/9; background: #ffffff; border-radius: 12px; box-shadow: 0 10px 24px rgba(255,255,255,0.1); }
-      .hint { font-size: 14px; color: #9ca3af; }
-      /* Slides-style blank presentation tile */
-      .quick-new {
-        position: fixed;
-        right: 20px;
-        bottom: 20px;
-        display: grid;
-        justify-items: center;
-        gap: 8px;
-        text-decoration: none;
-        color: #d1d5db;
-      }
-      .quick-new-card {
-        width: 120px;
-        height: 84px;
-        background: #ffffff;
-        border-radius: 12px;
-        box-shadow: 0 10px 30px rgba(0,0,0,0.35);
-        border: 1px solid rgba(255,255,255,0.08);
-        display: grid;
-        place-items: center;
-        position: relative;
-      }
-      .g-plus {
-        position: relative;
-        width: 40px;
-        height: 40px;
-      }
-      .g-plus .bar-h, .g-plus .bar-v {
-        position: absolute;
-        top: 50%; left: 50%;
-        transform: translate(-50%, -50%);
-      }
-      .g-plus .bar-h {
-        width: 40px; height: 8px;
-        background: linear-gradient(90deg, #FBBC05 0 50%, #4285F4 50% 100%);
-        border-radius: 6px;
-      }
-      .g-plus .bar-v {
-        width: 8px; height: 40px;
-        background: linear-gradient(#EA4335 0 50%, #34A853 50% 100%);
-        border-radius: 6px;
-      }
-      .quick-new-label { font-size: 12px; color: #e5e7eb; }
-    </style>
-  </head>
-  <body>
-    <main class="container">
-      <div class="stage">
-        <a class="slide-link" href="./slides.html">
-          <div class="slide"></div>
-          <div class="hint">Open Slides</div>
-        </a>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Slides — The Triad Team</title>
+  <style>
+    :root {
+      --bg: #0f172a;
+      --panel: #111827;
+      --panel-2: #0b1020;
+      --text: #e5e7eb;
+      --muted: #9ca3af;
+      --primary: #6366f1;
+      --primary-2: #4f46e5;
+      --accent: #22d3ee;
+      --danger: #ef4444;
+      --border: #1f2937;
+    }
+    * { box-sizing: border-box; }
+    html, body { height: 100%; }
+    body {
+      margin: 0;
+      background: linear-gradient(180deg, var(--bg), var(--panel-2));
+      color: var(--text);
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";
+    }
+    .app {
+      display: grid;
+      grid-template-rows: 56px 1fr;
+      height: 100vh;
+    }
+    .topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 8px 12px;
+      border-bottom: 1px solid var(--border);
+      background: rgba(17, 24, 39, 0.6);
+      backdrop-filter: blur(6px);
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 700;
+    }
+    .brand-badge {
+      width: 28px;
+      height: 28px;
+      border-radius: 8px;
+      background: linear-gradient(135deg, var(--primary), var(--accent));
+      display: grid;
+      place-items: center;
+      color: #0b1020;
+      font-weight: 900;
+    }
+    .actions { display: flex; align-items: center; gap: 8px; }
+    button {
+      background: var(--primary);
+      color: white;
+      border: 1px solid #0000;
+      padding: 8px 12px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 600;
+    }
+    button:hover { background: var(--primary-2); }
+    .btn-secondary { background: #0b1020; border: 1px solid var(--border); color: var(--text); }
+    .btn-secondary:hover { background: #121a33; }
+    .btn-danger { background: var(--danger); }
+    .layout {
+      display: grid;
+      grid-template-columns: 260px 1fr;
+      height: calc(100vh - 56px);
+    }
+    .sidebar {
+      border-right: 1px solid var(--border);
+      padding: 10px;
+      overflow: auto;
+      background: rgba(11, 16, 32, 0.6);
+    }
+    .slides-list { display: flex; flex-direction: column; gap: 8px; margin-top: 8px; }
+    .slide-item {
+      display: grid;
+      grid-template-columns: 32px 1fr auto;
+      align-items: center;
+      gap: 8px;
+      padding: 8px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background: #0b1020;
+      cursor: pointer;
+    }
+    .slide-item.active { outline: 2px solid var(--accent); }
+    .thumb {
+      width: 32px; height: 24px; border-radius: 3px; background: #111827; border: 1px solid var(--border);
+    }
+    .slide-title { color: var(--text); font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .slide-meta { color: var(--muted); font-size: 12px; }
+    .editor-wrap { padding: 16px; display: grid; grid-template-rows: auto 1fr; gap: 12px; }
+    .toolbar { display: flex; flex-wrap: wrap; gap: 8px; }
+    .canvas {
+      display: grid;
+      place-items: center;
+      overflow: auto;
+    }
+    .slide-canvas {
+      width: min(960px, 90vw);
+      aspect-ratio: 16 / 9;
+      background: white;
+      color: #111827;
+      border-radius: 12px;
+      border: 1px solid #e5e7eb;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.25);
+      display: grid;
+      grid-template-rows: auto 1fr;
+      padding: 28px;
+      overflow: hidden;
+    }
+    .slide-canvas input.title {
+      border: none;
+      border-bottom: 1px dashed #d1d5db;
+      outline: none;
+      font-size: clamp(20px, 4vw, 40px);
+      font-weight: 800;
+      margin-bottom: 12px;
+      width: 100%;
+    }
+    .slide-canvas .content {
+      outline: none;
+      font-size: clamp(14px, 2.2vw, 22px);
+      line-height: 1.5;
+      overflow: auto;
+    }
+    .footer-hint { color: var(--muted); font-size: 12px; text-align: center; padding: 4px 0; }
+    @media (max-width: 900px) {
+      .layout { grid-template-columns: 1fr; }
+      .sidebar { order: 2; height: 220px; }
+      .editor-wrap { order: 1; }
+    }
+  </style>
+  <meta name="color-scheme" content="dark light">
+</head>
+<body>
+  <div class="app">
+    <div class="topbar">
+      <div class="brand">
+        <div class="brand-badge">T</div>
+        <div>The Triad Slides</div>
       </div>
-    </main>
-    <a class="quick-new" href="./slides.html" aria-label="Blank presentation">
-      <div class="quick-new-card">
-        <div class="g-plus">
-          <div class="bar-h"></div>
-          <div class="bar-v"></div>
+      <div class="actions">
+        <button id="btn-new">New slide</button>
+        <button id="btn-duplicate" class="btn-secondary">Duplicate</button>
+        <button id="btn-delete" class="btn-danger">Delete</button>
+        <button id="btn-clear" class="btn-secondary" title="Clear all slides">Reset</button>
+      </div>
+    </div>
+    <div class="layout">
+      <aside class="sidebar">
+        <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;">
+          <div style="font-weight:700;">Slides</div>
+          <div class="slide-meta" id="count"></div>
         </div>
-      </div>
-      <div class="quick-new-label">Blank presentation</div>
-    </a>
-  </body>
-  </html>
+        <div id="slides" class="slides-list"></div>
+        <div class="footer-hint">Tip: Use ↑/↓ to navigate, Enter to add</div>
+      </aside>
+      <main class="editor-wrap">
+        <div class="toolbar">
+          <button class="btn-secondary" data-cmd="bold"><b>B</b></button>
+          <button class="btn-secondary" data-cmd="italic"><i>I</i></button>
+          <button class="btn-secondary" data-cmd="insertUnorderedList">• List</button>
+          <button class="btn-secondary" data-cmd="formatBlock" data-value="h2">H2</button>
+          <button class="btn-secondary" data-cmd="formatBlock" data-value="p">P</button>
+        </div>
+        <div class="canvas">
+          <div class="slide-canvas">
+            <input id="title" class="title" placeholder="Slide title">
+            <div id="content" class="content" contenteditable="true" spellcheck="false" placeholder="Start typing..."></div>
+          </div>
+        </div>
+      </main>
+    </div>
+  </div>
+  <script>
+    const storageKey = 'triad.slides.v1';
+    /** @typedef {{id:string,title:string,html:string,createdAt:number,updatedAt:number}} Slide */
+    /** @type {Slide[]} */
+    let slides = [];
+    let selectedId = null;
+
+    const el = (id) => document.getElementById(id);
+    const slidesEl = el('slides');
+    const titleEl = el('title');
+    const contentEl = el('content');
+    const countEl = el('count');
+
+    function generateId() {
+      return 's_' + Math.random().toString(36).slice(2, 10);
+    }
+
+    function now() { return Date.now(); }
+
+    function save() {
+      localStorage.setItem(storageKey, JSON.stringify({ slides, selectedId }));
+    }
+
+    function load() {
+      const raw = localStorage.getItem(storageKey);
+      if (!raw) {
+        slides = [createSlide({ title: 'Welcome', html: '<p>Hello The Triad team</p>' })];
+        selectedId = slides[0].id;
+        return;
+      }
+      try {
+        const data = JSON.parse(raw);
+        slides = Array.isArray(data.slides) ? data.slides : [];
+        selectedId = data.selectedId || (slides[0] && slides[0].id) || null;
+      } catch {
+        slides = [createSlide({ title: 'Welcome', html: '<p>Hello The Triad team</p>' })];
+        selectedId = slides[0].id;
+      }
+    }
+
+    function createSlide(partial) {
+      const s = {
+        id: generateId(),
+        title: partial && partial.title || 'Untitled',
+        html: partial && partial.html || '',
+        createdAt: now(),
+        updatedAt: now()
+      };
+      return s;
+    }
+
+    function addSlide() {
+      const index = selectedIndex();
+      const newSlide = createSlide({ title: 'New slide', html: '' });
+      if (index >= 0) {
+        slides.splice(index + 1, 0, newSlide);
+      } else {
+        slides.push(newSlide);
+      }
+      selectedId = newSlide.id;
+      render();
+      save();
+      focusEditor();
+    }
+
+    function duplicateSlide() {
+      const cur = currentSlide();
+      if (!cur) return;
+      const copy = createSlide({ title: cur.title + ' (copy)', html: cur.html });
+      const idx = selectedIndex();
+      slides.splice(idx + 1, 0, copy);
+      selectedId = copy.id;
+      render();
+      save();
+    }
+
+    function deleteSlide() {
+      const idx = selectedIndex();
+      if (idx < 0) return;
+      slides.splice(idx, 1);
+      if (slides.length === 0) {
+        const s = createSlide({ title: 'New slide', html: '' });
+        slides.push(s);
+        selectedId = s.id;
+      } else {
+        const nextIdx = Math.max(0, idx - 1);
+        selectedId = slides[nextIdx].id;
+      }
+      render();
+      save();
+    }
+
+    function selectSlide(id) {
+      selectedId = id;
+      render();
+      save();
+    }
+
+    function currentSlide() {
+      return slides.find(s => s.id === selectedId) || null;
+    }
+
+    function selectedIndex() {
+      return slides.findIndex(s => s.id === selectedId);
+    }
+
+    function updateCurrentFromEditor() {
+      const cur = currentSlide();
+      if (!cur) return;
+      cur.title = titleEl.value.trim() || 'Untitled';
+      cur.html = contentEl.innerHTML;
+      cur.updatedAt = now();
+      const itemTitle = document.querySelector(`.slide-item[data-id="${cur.id}"] .slide-title`);
+      if (itemTitle) itemTitle.textContent = cur.title;
+      save();
+    }
+
+    function renderList() {
+      slidesEl.innerHTML = '';
+      slides.forEach((s, i) => {
+        const item = document.createElement('div');
+        item.className = 'slide-item' + (s.id === selectedId ? ' active' : '');
+        item.dataset.id = s.id;
+        item.innerHTML = `
+          <div class="thumb"></div>
+          <div>
+            <div class="slide-title">${escapeHtml(s.title)}</div>
+            <div class="slide-meta">Slide ${i + 1}</div>
+          </div>
+          <div style="display:flex;gap:6px;">
+            <button class="btn-secondary btn-mini" data-action="dup" title="Duplicate">⎘</button>
+            <button class="btn-danger btn-mini" data-action="del" title="Delete">×</button>
+          </div>
+        `;
+        item.addEventListener('click', (e) => {
+          const actionBtn = e.target.closest('button');
+          if (actionBtn && actionBtn.dataset.action === 'dup') { duplicateSlide(); e.stopPropagation(); return; }
+          if (actionBtn && actionBtn.dataset.action === 'del') { deleteSlide(); e.stopPropagation(); return; }
+          selectSlide(s.id);
+        });
+        slidesEl.appendChild(item);
+      });
+      countEl.textContent = slides.length + ' slides';
+    }
+
+    function renderEditor() {
+      const cur = currentSlide();
+      if (!cur) return;
+      titleEl.value = cur.title;
+      contentEl.innerHTML = cur.html;
+    }
+
+    function render() {
+      renderList();
+      renderEditor();
+    }
+
+    function focusEditor() {
+      titleEl.focus();
+      titleEl.select();
+    }
+
+    function escapeHtml(str) {
+      return (str || '')
+        .replaceAll('&', '&amp;')
+        .replaceAll('<', '&lt;')
+        .replaceAll('>', '&gt;')
+        .replaceAll('"', '&quot;')
+        .replaceAll("'", '&#039;');
+    }
+
+    // Toolbar commands
+    document.querySelectorAll('[data-cmd]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const cmd = btn.getAttribute('data-cmd');
+        const val = btn.getAttribute('data-value');
+        contentEl.focus();
+        document.execCommand(cmd, false, val);
+        updateCurrentFromEditor();
+      });
+    });
+
+    // Buttons
+    document.getElementById('btn-new').addEventListener('click', addSlide);
+    document.getElementById('btn-duplicate').addEventListener('click', duplicateSlide);
+    document.getElementById('btn-delete').addEventListener('click', deleteSlide);
+    document.getElementById('btn-clear').addEventListener('click', () => {
+      if (!confirm('Reset all slides?')) return;
+      slides = [createSlide({ title: 'Welcome', html: '<p>Hello The Triad team</p>' })];
+      selectedId = slides[0].id;
+      render();
+      save();
+    });
+
+    // Editor listeners
+    titleEl.addEventListener('input', updateCurrentFromEditor);
+    contentEl.addEventListener('input', updateCurrentFromEditor);
+
+    // Keyboard navigation
+    window.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowDown') {
+        const idx = Math.min(slides.length - 1, selectedIndex() + 1);
+        selectedId = slides[idx].id;
+        render();
+        e.preventDefault();
+      } else if (e.key === 'ArrowUp') {
+        const idx = Math.max(0, selectedIndex() - 1);
+        selectedId = slides[idx].id;
+        render();
+        e.preventDefault();
+      } else if (e.key === 'Enter' && (e.metaKey || e.ctrlKey)) {
+        addSlide();
+        e.preventDefault();
+      } else if (e.key === 'Backspace' && (e.metaKey || e.ctrlKey)) {
+        deleteSlide();
+        e.preventDefault();
+      }
+    });
+
+    // Init
+    load();
+    render();
+  </script>
+  <style>
+    .btn-mini { padding: 4px 8px; border-radius: 6px; }
+  </style>
+</body>
+</html>
+
+
+>>>>>>> Stashed changes
