@@ -12,7 +12,7 @@
         height: 100%;
         margin: 0;
         font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";
-        background-color: #0b3d91; /* dark blue */
+        background-color: #081b3c; /* dark blue */
         color: #ffffff;
       }
       .container {
@@ -21,57 +21,72 @@
         height: 100%;
         padding: 16px;
       }
-      h1 {
-        font-size: clamp(2rem, 6vw, 4rem);
-        margin: 0;
-        line-height: 1.1;
-        letter-spacing: -0.02em;
+      .stage { width: 100%; display: grid; place-items: center; }
+      .slide-link { display: grid; gap: 12px; place-items: center; text-decoration: none; color: #d1d5db; }
+      .slide { width: min(88vw, 960px); aspect-ratio: 16/9; background: #ffffff; border-radius: 12px; box-shadow: 0 10px 24px rgba(255,255,255,0.1); }
+      .hint { font-size: 14px; color: #9ca3af; }
+      /* Slides-style blank presentation tile */
+      .quick-new {
+        position: fixed;
+        right: 20px;
+        bottom: 20px;
+        display: grid;
+        justify-items: center;
+        gap: 8px;
+        text-decoration: none;
+        color: #d1d5db;
       }
-      .actions {
-        margin-top: 24px;
-        display: flex;
-        gap: 12px;
-        align-items: center;
-        flex-wrap: wrap;
-        justify-content: center;
-      }
-      button {
-        appearance: none;
-        border: none;
+      .quick-new-card {
+        width: 120px;
+        height: 84px;
         background: #ffffff;
-        color: #0b3d91;
-        padding: 10px 16px;
-        border-radius: 8px;
-        font-size: 16px;
-        font-weight: 600;
-        cursor: pointer;
+        border-radius: 12px;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.35);
+        border: 1px solid rgba(255,255,255,0.08);
+        display: grid;
+        place-items: center;
+        position: relative;
       }
-      #nameText {
-        display: none;
-        font-size: 18px;
+      .g-plus {
+        position: relative;
+        width: 40px;
+        height: 40px;
       }
+      .g-plus .bar-h, .g-plus .bar-v {
+        position: absolute;
+        top: 50%; left: 50%;
+        transform: translate(-50%, -50%);
+      }
+      .g-plus .bar-h {
+        width: 40px; height: 8px;
+        background: linear-gradient(90deg, #FBBC05 0 50%, #4285F4 50% 100%);
+        border-radius: 6px;
+      }
+      .g-plus .bar-v {
+        width: 8px; height: 40px;
+        background: linear-gradient(#EA4335 0 50%, #34A853 50% 100%);
+        border-radius: 6px;
+      }
+      .quick-new-label { font-size: 12px; color: #e5e7eb; }
     </style>
   </head>
   <body>
     <main class="container">
-      <h1>Hello Ahmed</h1>
-      <div class="actions">
-        <button id="showNameBtn" type="button">Show my name</button>
-        <span id="nameText">Ahmed</span>
+      <div class="stage">
+        <a class="slide-link" href="./slides.html">
+          <div class="slide"></div>
+          <div class="hint">Open Slides</div>
+        </a>
       </div>
     </main>
-    <script>
-      (function() {
-        const button = document.getElementById('showNameBtn');
-        const nameText = document.getElementById('nameText');
-        if (button && nameText) {
-          button.addEventListener('click', function() {
-            nameText.style.display = 'inline';
-          });
-        }
-      })();
-    </script>
+    <a class="quick-new" href="./slides.html" aria-label="Blank presentation">
+      <div class="quick-new-card">
+        <div class="g-plus">
+          <div class="bar-h"></div>
+          <div class="bar-v"></div>
+        </div>
+      </div>
+      <div class="quick-new-label">Blank presentation</div>
+    </a>
   </body>
   </html>
-
-
