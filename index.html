@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Hello Ahmed</title>
+    <style>
+      :root {
+        color-scheme: light dark;
+      }
+      html, body {
+        height: 100%;
+        margin: 0;
+        font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";
+        background-color: #0b3d91; /* dark blue */
+        color: #ffffff;
+      }
+      .container {
+        display: grid;
+        place-items: center;
+        height: 100%;
+        padding: 16px;
+      }
+      h1 {
+        font-size: clamp(2rem, 6vw, 4rem);
+        margin: 0;
+        line-height: 1.1;
+        letter-spacing: -0.02em;
+      }
+      .actions {
+        margin-top: 24px;
+        display: flex;
+        gap: 12px;
+        align-items: center;
+        flex-wrap: wrap;
+        justify-content: center;
+      }
+      button {
+        appearance: none;
+        border: none;
+        background: #ffffff;
+        color: #0b3d91;
+        padding: 10px 16px;
+        border-radius: 8px;
+        font-size: 16px;
+        font-weight: 600;
+        cursor: pointer;
+      }
+      #nameText {
+        display: none;
+        font-size: 18px;
+      }
+    </style>
+  </head>
+  <body>
+    <main class="container">
+      <h1>Hello Ahmed</h1>
+      <div class="actions">
+        <button id="showNameBtn" type="button">Show my name</button>
+        <span id="nameText">Ahmed</span>
+      </div>
+    </main>
+    <script>
+      (function() {
+        const button = document.getElementById('showNameBtn');
+        const nameText = document.getElementById('nameText');
+        if (button && nameText) {
+          button.addEventListener('click', function() {
+            nameText.style.display = 'inline';
+          });
+        }
+      })();
+    </script>
+  </body>
+  </html>
+
+
