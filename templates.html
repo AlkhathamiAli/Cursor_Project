@@ -1,0 +1,220 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>SlideMaker • Home</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+      * { box-sizing: border-box; }
+      html, body { height: 100%; margin: 0; }
+      body {
+        font-family: Poppins, sans-serif;
+        background: linear-gradient(135deg, #001a12 0%, #002519 50%, #003020 100%);
+        position: relative;
+        color: #E8F5E9;
+        overflow-x: hidden;
+      }
+      body::before {
+        content: '';
+        position: fixed; inset: 0; z-index: 0;
+        background: rgba(255, 255, 255, 0.05);
+        pointer-events: none;
+      }
+      a { color: inherit; text-decoration: none; }
+      img { max-width: 100%; display: block; }
+
+      /* Header */
+      header {
+        position: sticky; top: 0; z-index: 10;
+        backdrop-filter: blur(25px);
+        background: rgba(0, 26, 18, 0.6);
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+      }
+      .nav { max-width: 1200px; margin: 0 auto; padding: 12px 20px; display: flex; align-items: center; gap: 16px; position: relative; z-index: 1; }
+      .logo { font-weight: 700; letter-spacing: .2px; color: #E8F5E9; }
+      .menu { display: flex; gap: 12px; }
+      .menu a { color: #A5D6A7; font-weight: 600; padding: 8px 10px; border-radius: 8px; transition: color .2s; }
+      .menu a:hover { color: #E8F5E9; }
+      .spacer { flex: 1; }
+
+      /* Layout */
+      .container { max-width: 1200px; margin: 0 auto; padding: 40px 20px; position: relative; z-index: 1; }
+      .start-section { text-align: center; width: 100%; margin-bottom: 60px; }
+      h2 { font-size: 24px; margin: 0 0 8px; font-weight: 700; color: #E8F5E9; }
+      .subtitle { color: #A5D6A7; font-size: 14px; margin-bottom: 32px; }
+
+      /* Single centered card */
+      .card-wrapper { display: flex; justify-content: center; align-items: center; }
+      .card {
+        background: rgba(17, 51, 34, 0.6);
+        border: 1px solid rgba(255,255,255,0.1);
+        border-radius: 16px;
+        box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+        backdrop-filter: blur(20px);
+        overflow: hidden;
+        transition: background .3s ease, transform .3s ease, box-shadow .3s ease;
+        color: #E8F5E9;
+        width: min(90vw, 320px);
+        cursor: pointer;
+      }
+      .card:hover {
+        background: rgba(26, 64, 45, 0.8);
+        transform: scale(1.05);
+        box-shadow: 0 12px 35px rgba(0,0,0,0.4);
+      }
+      .thumb { aspect-ratio: 16/9; background: #ffffff; display: grid; place-items: center; }
+      .thumb.blank { background: #fff; }
+      /* Minimal flat light-green plus icon */
+      .icon-plus { position: relative; width: 56px; height: 56px; }
+      .icon-plus::before,
+      .icon-plus::after {
+        content: '';
+        position: absolute;
+        background: #9CCC65;
+        border-radius: 2px;
+      }
+      .icon-plus::before {
+        width: 56px;
+        height: 4px;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+      }
+      .icon-plus::after {
+        width: 4px;
+        height: 56px;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+      }
+      .card-body { padding: 16px 18px; text-align: center; }
+      .card-title { font-weight: 700; color: #E8F5E9; font-size: 18px; margin: 0 0 6px; }
+      .card-desc { color: #A5D6A7; font-size: 13px; margin: 0; }
+
+      /* Recent Presentations */
+      .recent-section { margin-top: 60px; width: 100%; }
+      .recent-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 20px; }
+      .recent-card { position: relative; }
+      .recent-card .card { width: 100%; }
+      .recent-card .thumb { position: relative; }
+      .recent-card .thumb::after { content: attr(data-title); position: absolute; inset: 0; display: grid; place-items: center; background: rgba(0,0,0,0.3); color: #fff; font-weight: 600; font-size: 14px; }
+      .hover-actions { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; gap: 10px; opacity: 0; transition: opacity .2s; background: rgba(0,0,0,0.15); backdrop-filter: blur(8px); }
+      .recent-card:hover .hover-actions { opacity: 1; }
+      .chip { padding: 10px 16px; border-radius: 10px; background: rgba(26, 64, 45, 0.8); border: 1px solid rgba(255,255,255,0.2); color: #E8F5E9; font-weight: 700; cursor: pointer; font-size: 14px; }
+      .chip.danger { background: rgba(185, 28, 28, 0.6); border-color: rgba(239, 68, 68, 0.4); }
+      .muted { color: #A5D6A7; font-size: 12px; }
+      .empty-state { text-align: center; color: #A5D6A7; padding: 40px 20px; }
+    </style>
+  </head>
+  <body>
+    <header>
+      <div class="nav">
+        <div class="logo">SlideMaker</div>
+        <nav class="menu" aria-label="Main">
+          <a href="#">Home</a>
+          <a href="#">My Slides</a>
+          <a href="#">Settings</a>
+        </nav>
+        <div class="spacer"></div>
+      </div>
+    </header>
+
+    <main class="container">
+      <section id="start" class="start-section">
+        <h2>Create a New Presentation</h2>
+        <p class="subtitle">Start a new deck instantly.</p>
+        <div class="card-wrapper">
+          <a class="card" data-action="open_blank_page" href="#">
+            <div class="thumb blank">
+              <div class="icon-plus"></div>
+            </div>
+            <div class="card-body">
+              <div class="card-title">Blank Presentation</div>
+              <div class="card-desc">Start from a clean slide</div>
+            </div>
+          </a>
+        </div>
+      </section>
+
+      <section id="recent" class="recent-section">
+        <h2>Recent Presentations</h2>
+        <p class="subtitle">Access your latest decks quickly.</p>
+        <div class="recent-grid" id="recentGrid">
+          <div class="empty-state">No saved presentations yet. Create and save your first one!</div>
+        </div>
+      </section>
+    </main>
+
+    <script>
+      // Per Home.json: open_blank_page navigates to blank editor
+      document.querySelector('[data-action="open_blank_page"]').addEventListener('click', (e) => {
+        e.preventDefault();
+        window.location.href = './blank.html';
+      });
+
+      // Load and display saved presentations from localStorage
+      function loadRecentPresentations() {
+        const saved = JSON.parse(localStorage.getItem("recentPresentations")) || [];
+        const grid = document.getElementById('recentGrid');
+        
+        if (saved.length === 0) {
+          grid.innerHTML = '<div class="empty-state">No saved presentations yet. Create and save your first one!</div>';
+          return;
+        }
+
+        // Sort by date (newest first)
+        const sorted = saved.sort((a, b) => new Date(b.date) - new Date(a.date));
+        
+        grid.innerHTML = '';
+        sorted.forEach((pres, index) => {
+          const card = document.createElement('div');
+          card.className = 'card recent-card';
+          card.innerHTML = `
+            <div class="thumb" data-title="${pres.title || 'Untitled'}">
+              <div style="width:100%;height:100%;background:linear-gradient(135deg, rgba(17,51,34,0.8), rgba(26,64,45,0.8));display:grid;place-items:center;color:#fff;font-weight:600;font-size:14px;">${pres.title || 'Untitled'}</div>
+            </div>
+            <div class="card-body">
+              <div class="card-title">${pres.title || 'Untitled'}</div>
+              <div class="muted">Last edited ${pres.date || 'Unknown'}</div>
+            </div>
+            <div class="hover-actions">
+              <button class="chip" data-open="${index}">Open</button>
+              <button class="chip danger" data-delete="${index}">Delete</button>
+            </div>
+          `;
+          grid.appendChild(card);
+        });
+
+        // Add event listeners for open and delete
+        grid.querySelectorAll('[data-open]').forEach(btn => {
+          btn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            const idx = parseInt(btn.getAttribute('data-open'));
+            const pres = sorted[idx];
+            // Store the presentation data to load in editor
+            sessionStorage.setItem('loadPresentation', JSON.stringify(pres));
+            window.location.href = './blank.html';
+          });
+        });
+
+        grid.querySelectorAll('[data-delete]').forEach(btn => {
+          btn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            const idx = parseInt(btn.getAttribute('data-delete'));
+            if (confirm(`Delete "${sorted[idx].title || 'Untitled'}"?`)) {
+              saved.splice(saved.indexOf(sorted[idx]), 1);
+              localStorage.setItem("recentPresentations", JSON.stringify(saved));
+              loadRecentPresentations(); // Reload
+            }
+          });
+        });
+      }
+
+      // Load on page load
+      loadRecentPresentations();
+    </script>
+  </body>
+  </html>

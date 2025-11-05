@@ -1,0 +1,15 @@
+function savePresentation() {
+    const title = document.querySelector(".title-box").innerText || "Untitled";
+    const content = document.querySelector(".text-box").innerText || "";
+    const saved = JSON.parse(localStorage.getItem("recentPresentations")) || [];
+  
+    saved.push({
+      title: title,
+      date: new Date().toISOString().split("T")[0],
+      content: content
+    });
+  
+    localStorage.setItem("recentPresentations", JSON.stringify(saved));
+    alert("Presentation saved!");
+  }
+  

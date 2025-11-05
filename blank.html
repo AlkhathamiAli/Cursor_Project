@@ -1,0 +1,264 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>SlideMaker • Editor</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+      :root {
+        --bg: #ffffff;
+        --panel: #f9fafb;
+        --border: #e5e7eb;
+        --text: #111827;
+        --muted: #6b7280;
+        --accent: #1a73e8;
+      }
+      * { box-sizing: border-box; }
+      html, body { height: 100%; }
+      body { margin: 0; font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif; color: var(--text); background: var(--panel); }
+
+      .layout { display: grid; grid-template-rows: 56px 1fr; height: 100%; }
+      .topbar { display:flex; align-items:center; gap:10px; padding: 8px 12px; background:#fff; border-bottom:1px solid var(--border); }
+      .topbar .btn { border:1px solid var(--border); background:#fff; border-radius:8px; padding:8px 12px; font-weight:700; cursor:pointer; transition: opacity .2s; }
+      .topbar .btn:hover { opacity: 0.9; }
+      .topbar .btn.blue { background:#1a73e8; border-color:#1a73e8; color:#fff; }
+      .topbar .btn.gray { background:#f3f4f6; }
+      .topbar .btn.red { background:#fee2e2; border-color:#fecaca; color:#991b1b; }
+      .topbar .btn.light { background:#f9fafb; }
+      .topbar .btn.emerald { background:#10b981; border-color:#059669; color:#fff; }
+      .topbar .btn.green { background:#10b981; border-color:#059669; color:#06221e; }
+
+      .main { display:grid; grid-template-columns: 260px 1fr; gap: 12px; padding: 12px; min-height:0; }
+      .sidebar { background:#fff; border:1px solid var(--border); border-radius:12px; padding:10px; overflow:auto; }
+      .slide-item { background:#fff; border:1px solid var(--border); border-radius:8px; padding:10px; margin-bottom:10px; cursor:pointer; transition: background .2s; }
+      .slide-item:hover { background:#f9fafb; }
+      .slide-item.active { outline:2px solid #1a73e8; background:#eff6ff; }
+
+      .editor { display:grid; grid-template-rows: 1fr; background:#fff; border:1px solid var(--border); border-radius:12px; }
+      .canvas-wrap { display:grid; place-items:center; padding:24px; overflow:auto; }
+      .canvas { width:min(92vw, 960px); aspect-ratio:16/9; background:#fff; border:1px solid var(--border); border-radius:12px; padding:24px; display:grid; grid-template-rows: auto 1fr; gap:10px; }
+      
+      /* Title box per slides.json */
+      .title-box {
+        font-size: 32px;
+        font-weight: bold;
+        border: 1px dashed #ccc;
+        margin-bottom: 10px;
+        padding: 10px;
+        min-height: 50px;
+        outline: none;
+      }
+      .title-box[data-placeholder]:empty:before {
+        content: attr(data-placeholder);
+        color: #999;
+        pointer-events: none;
+      }
+      .title-box:focus {
+        border-color: #1a73e8;
+        border-style: solid;
+      }
+
+      /* Text box per slides.json */
+      .text-box {
+        font-size: 18px;
+        border: 1px dashed #ccc;
+        padding: 10px;
+        min-height: 200px;
+        outline: none;
+        overflow-y: auto;
+      }
+      .text-box[data-placeholder]:empty:before {
+        content: attr(data-placeholder);
+        color: #999;
+        pointer-events: none;
+      }
+      .text-box:focus {
+        border-color: #1a73e8;
+        border-style: solid;
+      }
+
+      /* Save notification */
+      .save-notification {
+        position: fixed;
+        top: 70px;
+        right: 20px;
+        background: #10b981;
+        color: #fff;
+        padding: 12px 20px;
+        border-radius: 8px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        opacity: 0;
+        transform: translateY(-10px);
+        transition: opacity .3s, transform .3s;
+        z-index: 1000;
+        pointer-events: none;
+      }
+      .save-notification.show {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    </style>
+  </head>
+  <body>
+    <div class="layout">
+      <div class="topbar">
+        <button class="btn blue" id="btnNew" data-action="new_slide">New Slide</button>
+        <button class="btn gray" id="btnDup" data-action="duplicate_slide">Duplicate</button>
+        <button class="btn red" id="btnDel" data-action="delete_slide">Delete</button>
+        <button class="btn light" id="btnReset" data-action="reset_slides">Reset</button>
+        <button class="btn emerald" id="btnSave" data-action="save_presentation">Save</button>
+        <div style="flex:1"></div>
+        <button class="btn green" id="btnHome" data-action="go_home">Return Home</button>
+      </div>
+
+      <div class="main">
+        <aside class="sidebar" id="sidebar"></aside>
+        <section class="editor">
+          <div class="canvas-wrap">
+            <div class="canvas" id="canvas">
+              <div class="title-box" contenteditable="true" id="titleBox" data-placeholder="Click to add title"></div>
+              <div class="text-box" contenteditable="true" id="textBox" data-placeholder="Click to add text"></div>
+            </div>
+          </div>
+        </section>
+      </div>
+    </div>
+
+    <div class="save-notification" id="saveNotification">Presentation saved!</div>
+
+    <script>
+      // Model per slides.json: starting with one welcome slide
+      const slides = [{ title: 'Welcome', content: '' }];
+      let active = 0;
+
+      const sidebar = document.getElementById('sidebar');
+      const titleBox = document.getElementById('titleBox');
+      const textBox = document.getElementById('textBox');
+      const saveNotification = document.getElementById('saveNotification');
+
+      function renderSidebar() {
+        sidebar.innerHTML = '';
+        slides.forEach((s, i) => {
+          const el = document.createElement('div');
+          el.className = 'slide-item' + (i === active ? ' active' : '');
+          el.textContent = s.title || `Slide ${i+1}`;
+          el.addEventListener('click', () => {
+            capture();
+            active = i;
+            load();
+            renderSidebar();
+          });
+          sidebar.appendChild(el);
+        });
+      }
+
+      function load() {
+        const slide = slides[active];
+        titleBox.textContent = slide.title || '';
+        textBox.textContent = slide.content || '';
+        // Trigger placeholder display if empty
+        if (!titleBox.textContent.trim()) titleBox.innerHTML = '';
+        if (!textBox.textContent.trim()) textBox.innerHTML = '';
+      }
+
+      function capture() {
+        slides[active].title = titleBox.textContent.trim() || 'Untitled';
+        slides[active].content = textBox.textContent.trim() || '';
+      }
+
+      // Save function per Editor.json
+      function savePresentation() {
+        capture();
+        const title = titleBox.textContent.trim() || "Untitled";
+        const content = textBox.textContent.trim() || "";
+        const saved = JSON.parse(localStorage.getItem("recentPresentations")) || [];
+        
+        saved.push({
+          title: title,
+          date: new Date().toISOString().split("T")[0],
+          content: content
+        });
+        
+        localStorage.setItem("recentPresentations", JSON.stringify(saved));
+        
+        // Show notification animation
+        saveNotification.classList.add('show');
+        setTimeout(() => {
+          saveNotification.classList.remove('show');
+        }, 2000);
+      }
+
+      // Topbar button actions per slides.json
+      document.getElementById('btnNew').addEventListener('click', () => {
+        capture();
+        slides.push({ title: `Slide ${slides.length+1}`, content: '' });
+        active = slides.length - 1;
+        load();
+        renderSidebar();
+      });
+
+      document.getElementById('btnDup').addEventListener('click', () => {
+        capture();
+        const s = slides[active];
+        slides.splice(active + 1, 0, { title: s.title + ' copy', content: s.content });
+        active += 1;
+        load();
+        renderSidebar();
+      });
+
+      document.getElementById('btnDel').addEventListener('click', () => {
+        if (slides.length <= 1) return;
+        slides.splice(active, 1);
+        active = Math.max(0, active - 1);
+        load();
+        renderSidebar();
+      });
+
+      document.getElementById('btnReset').addEventListener('click', () => {
+        if (confirm('Reset all slides? This cannot be undone.')) {
+          slides.splice(0, slides.length, { title: 'Welcome', content: '' });
+          active = 0;
+          load();
+          renderSidebar();
+        }
+      });
+
+      document.getElementById('btnSave').addEventListener('click', savePresentation);
+
+      document.getElementById('btnHome').addEventListener('click', () => {
+        capture();
+        window.location.href = './templates.html';
+      });
+
+      // Auto-save on input
+      titleBox.addEventListener('input', () => {
+        slides[active].title = titleBox.textContent.trim();
+        renderSidebar();
+      });
+      textBox.addEventListener('input', () => {
+        slides[active].content = textBox.textContent.trim();
+      });
+
+      // Check if loading a saved presentation from Recent section
+      const loadPres = sessionStorage.getItem('loadPresentation');
+      if (loadPres) {
+        try {
+          const pres = JSON.parse(loadPres);
+          // Set the title and content from saved presentation
+          slides[0].title = pres.title || 'Welcome';
+          slides[0].content = pres.content || '';
+          sessionStorage.removeItem('loadPresentation'); // Clear after loading
+        } catch (e) {
+          console.error('Error loading presentation:', e);
+        }
+      }
+
+      // Init
+      renderSidebar();
+      load();
+    </script>
+  </body>
+  </html>

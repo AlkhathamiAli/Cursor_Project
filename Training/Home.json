@@ -1,0 +1,76 @@
+{
+  "project": {
+    "name": "SlideMaker UI",
+    "description": "A minimal dark-forest themed homepage with a single centered Blank Presentation card and no preset slides."
+  },
+
+  "page": {
+    "id": "home",
+    "title": "Home Page",
+    "style": {
+      "background": {
+        "type": "gradient",
+        "colors": ["#001a12", "#002519", "#003020"],
+        "overlay": "rgba(255, 255, 255, 0.05)",
+        "effect": "glassmorphic blur(25px)"
+      },
+      "card": {
+        "background": "rgba(17, 51, 34, 0.6)",
+        "border": "1px solid rgba(255,255,255,0.1)",
+        "backdrop_filter": "blur(20px)",
+        "text_color": "#E8F5E9",
+        "shadow": "0 8px 25px rgba(0,0,0,0.3)",
+        "hover": {
+          "background": "rgba(26, 64, 45, 0.8)",
+          "scale": "1.05"
+        }
+      },
+      "font": "Poppins, sans-serif",
+      "layout": "centered single-card"
+    },
+
+    "layout": {
+      "header": {
+        "logo": "SlideMaker",
+        "menu": ["Home", "My Slides", "Settings"],
+        "text_color": "#A5D6A7"
+      },
+      "sections": [
+        {
+          "id": "start",
+          "title": "Create a New Presentation",
+          "subtitle": "Start a new deck instantly.",
+          "alignment": "center",
+          "cards": [
+            {
+              "title": "Blank Presentation",
+              "description": "Start from a clean slide",
+              "icon": {
+                "type": "plus",
+                "color": "#9CCC65",
+                "style": "minimal_flat"
+              },
+              "action": "open_blank_page"
+            }
+          ]
+        }
+      ]
+    }
+  },
+
+  "interactions": {
+    "actions": [
+      "open_blank_page → navigates to the blank editor page when the card is clicked"
+    ]
+  },
+
+  "ai_guidelines": {
+    "instructions": [
+      "Only display one centered card for creating a blank presentation.",
+      "Remove any predefined or recent presentations.",
+      "Use a soft light-green plus icon (#9CCC65) matching the dark forest palette.",
+      "Maintain glassmorphic background effects for depth.",
+      "Ensure responsiveness and clean spacing."
+    ]
+  }
+}
