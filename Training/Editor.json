@@ -19,6 +19,8 @@ function savePresentation() {
   "layout": {
     "topBar": {
       "buttons": [
+        { "label": "Back", "icon": "◀", "color": "blue", "action": "undoLastAction()" },
+        { "label": "Forward", "icon": "▶", "color": "blue", "action": "redoLastAction()" },
         { "label": "New Slide", "color": "blue", "action": "new_slide" },
         { "label": "Duplicate", "color": "gray", "action": "duplicate_slide" },
         { "label": "Delete", "color": "red", "action": "delete_slide" },
@@ -26,6 +28,11 @@ function savePresentation() {
         { "label": "Save", "color": "green", "action": "save_presentation" },
         { "label": "Return Home", "color": "emerald", "align": "right", "action": "go_home" }
       ]
+    },
+    
+    "keyboardShortcuts": {
+      "undo": ["Command+Z", "Ctrl+Z"],
+      "redo": ["Command+Shift+Z", "Ctrl+Shift+Z"]
     },
 
     "toolbar": {
@@ -62,7 +69,9 @@ function savePresentation() {
           "id": "textBox",
           "type": "editable",
           "placeholder": "Click to add text",
-          "styles": { "fontSize": "16px", "minHeight": "250px", "border": "1px dashed #ccc" }
+          "styles": { "fontSize": "16px", "minHeight": "250px", "border": "1px dashed #ccc" },
+          "deletable": true,
+          "deleteKey": ["Delete", "Backspace"]
         }
       ]
     },

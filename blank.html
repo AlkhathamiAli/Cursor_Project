@@ -51,7 +51,7 @@
       .tool-select { border:1px solid #d8e0e3; background:#fff; border-radius:6px; padding:6px 8px; font-size:13px; cursor:pointer; }
       .tool-color { width:32px; height:28px; border:1px solid #d8e0e3; border-radius:6px; cursor:pointer; }
       .canvas-wrap { display:grid; place-items:center; padding:24px; overflow:auto; }
-      .canvas { width:min(92vw, 960px); aspect-ratio:16/9; background:#fff; border:1px solid rgba(255,255,255,0.2); border-radius:12px; padding:24px; display:grid; grid-template-rows: auto 1fr; gap:10px; }
+      .canvas { width:min(92vw, 960px); aspect-ratio:16/9; background:#fff; border:1px solid rgba(255,255,255,0.2); border-radius:12px; padding:24px; position: relative; }
       
       /* Title box per Editor.json */
       .title-box {
@@ -59,9 +59,14 @@
         font-weight: bold;
         color: #000000;
         border: 1px dashed #ccc;
-        margin-bottom: 10px;
         padding: 10px;
         min-height: 50px;
+        min-width: 200px;
+        outline: none;
+        position: absolute;
+        top: 24px;
+        left: 24px;
+        width: calc(100% - 48px);
         outline: none;
       }
       .title-box[data-placeholder]:empty:before {
@@ -73,6 +78,29 @@
         border-color: #1a73e8;
         border-style: solid;
       }
+      .title-box.dragging {
+        opacity: 0.8;
+        z-index: 1000;
+      }
+      .title-box.resizing {
+        user-select: none;
+      }
+      
+      /* Resize edges for title box */
+      .title-box .resize-edge {
+        position: absolute;
+        background: transparent;
+        z-index: 10;
+      }
+      .title-box .resize-edge.top { top: -5px; left: 0; right: 0; height: 10px; cursor: ns-resize; }
+      .title-box .resize-edge.bottom { bottom: -5px; left: 0; right: 0; height: 10px; cursor: ns-resize; }
+      .title-box .resize-edge.left { left: -5px; top: 0; bottom: 0; width: 10px; cursor: ew-resize; }
+      .title-box .resize-edge.right { right: -5px; top: 0; bottom: 0; width: 10px; cursor: ew-resize; }
+      .title-box .resize-edge.corner { width: 15px; height: 15px; }
+      .title-box .resize-edge.top-left { top: -5px; left: -5px; cursor: nw-resize; }
+      .title-box .resize-edge.top-right { top: -5px; right: -5px; cursor: ne-resize; }
+      .title-box .resize-edge.bottom-left { bottom: -5px; left: -5px; cursor: sw-resize; }
+      .title-box .resize-edge.bottom-right { bottom: -5px; right: -5px; cursor: se-resize; }
 
       /* Text box per Editor.json */
       .text-box {
@@ -80,11 +108,23 @@
         border: 1px dashed #ccc;
         padding: 10px;
         min-height: 250px;
+        min-width: 200px;
         outline: none;
         overflow-y: auto;
         color: #000000;
+        position: absolute;
+        top: 100px;
+        left: 24px;
+        width: calc(100% - 48px);
+        bottom: 24px;
+        outline: none;
       }
       .text-box[data-placeholder]:empty:before {
+        content: attr(data-placeholder);
+        color: #999;
+        pointer-events: none;
+      }
+      .additional-text-box[data-placeholder]:empty:before {
         content: attr(data-placeholder);
         color: #999;
         pointer-events: none;
@@ -93,6 +133,57 @@
         border-color: #1a73e8;
         border-style: solid;
       }
+      
+      /* Selected state for text boxes and title box */
+      .text-box.selected {
+        border-color: #1a73e8;
+        border-style: solid;
+        border-width: 2px;
+        box-shadow: 0 0 0 2px rgba(26, 115, 232, 0.2);
+      }
+      .additional-text-box.selected {
+        border-color: #1a73e8;
+        border-style: solid;
+        border-width: 2px;
+        box-shadow: 0 0 0 2px rgba(26, 115, 232, 0.2);
+      }
+      .title-box.selected {
+        border-color: #1a73e8;
+        border-style: solid;
+        border-width: 2px;
+        box-shadow: 0 0 0 2px rgba(26, 115, 232, 0.2);
+      }
+      
+      .text-box.dragging {
+        opacity: 0.8;
+        z-index: 1000;
+      }
+      .text-box.resizing {
+        user-select: none;
+      }
+      
+      /* Resize edges for text box */
+      .text-box .resize-edge {
+        position: absolute;
+        background: transparent;
+        z-index: 10;
+        transition: background 0.2s;
+      }
+      .text-box:hover .resize-edge {
+        background: rgba(26, 115, 232, 0.1);
+      }
+      .text-box .resize-edge:hover {
+        background: rgba(26, 115, 232, 0.3);
+      }
+      .text-box .resize-edge.top { top: -5px; left: 0; right: 0; height: 10px; cursor: ns-resize; }
+      .text-box .resize-edge.bottom { bottom: -5px; left: 0; right: 0; height: 10px; cursor: ns-resize; }
+      .text-box .resize-edge.left { left: -5px; top: 0; bottom: 0; width: 10px; cursor: ew-resize; }
+      .text-box .resize-edge.right { right: -5px; top: 0; bottom: 0; width: 10px; cursor: ew-resize; }
+      .text-box .resize-edge.corner { width: 15px; height: 15px; }
+      .text-box .resize-edge.top-left { top: -5px; left: -5px; cursor: nw-resize; }
+      .text-box .resize-edge.top-right { top: -5px; right: -5px; cursor: ne-resize; }
+      .text-box .resize-edge.bottom-left { bottom: -5px; left: -5px; cursor: sw-resize; }
+      .text-box .resize-edge.bottom-right { bottom: -5px; right: -5px; cursor: se-resize; }
 
       /* Save notification */
       .save-notification {
@@ -119,6 +210,8 @@
   <body>
     <div class="layout">
       <div class="topbar">
+        <button class="btn blue" id="btnBack" data-action="back" title="Back (Cmd+Z / Ctrl+Z)">◀</button>
+        <button class="btn blue" id="btnForward" data-action="forward" title="Forward (Cmd+Shift+Z / Ctrl+Shift+Z)">▶</button>
         <button class="btn red" id="btnDel" data-action="delete_slide">Delete</button>
         <button class="btn light" id="btnReset" data-action="reset_slides">Reset</button>
         <button class="btn green" id="btnSave" data-action="save_presentation">Save</button>
@@ -146,6 +239,7 @@
             <button class="tool" data-action="justifyFull" title="Justify">⬌⬌</button>
             <button class="tool" data-action="insertUnorderedList" title="Bullet List">• List</button>
             <button class="tool" data-action="insertOrderedList" title="Numbered List">1. List</button>
+            <button class="tool" data-action="addTextBox" title="Add Text Box" style="background: #1a73e8; color: #fff;">📝 Text Box</button>
           </div>
           <div class="canvas-wrap">
             <div class="canvas" id="canvas">
@@ -161,13 +255,192 @@
 
     <script>
       // Model per Editor.json: starting with one slide titled "Title"
-      const slides = [{ title: 'Title', content: '' }];
+      const slides = [{ 
+        title: 'Title', 
+        content: '',
+        titleBox: { top: 24, left: 24, right: 24, width: null, height: null },
+        textBox: { top: 100, left: 24, right: 24, bottom: 24, width: null, height: null }
+      }];
       let active = 0;
 
       const sidebar = document.getElementById('sidebar');
       const titleBox = document.getElementById('titleBox');
       const textBox = document.getElementById('textBox');
       const saveNotification = document.getElementById('saveNotification');
+      const canvas = document.getElementById('canvas');
+      
+      // Track selected text box for keyboard deletion
+      let selectedTextBox = null;
+      
+      // Undo/Redo history stack
+      let actionHistory = [];
+      let redoStack = [];
+      const MAX_HISTORY = 50; // Limit history size
+      
+      // Save current editor state to history
+      function saveEditorState(action) {
+        const state = {
+          action: action,
+          timestamp: Date.now(),
+          slides: JSON.parse(JSON.stringify(slides)), // Deep copy
+          active: active,
+          canvasState: {
+            titleBoxVisible: titleBox.style.display !== 'none',
+            textBoxVisible: textBox.style.display !== 'none',
+            additionalTextBoxes: Array.from(document.querySelectorAll('.additional-text-box')).map(box => {
+              const rect = box.getBoundingClientRect();
+              const canvasRect = canvas.getBoundingClientRect();
+              return {
+                element: box,
+                html: box.innerHTML,
+                style: {
+                  top: rect.top - canvasRect.top,
+                  left: rect.left - canvasRect.left,
+                  width: box.offsetWidth,
+                  height: box.offsetHeight,
+                  fontSize: box.style.fontSize,
+                  display: box.style.display
+                }
+              };
+            })
+          }
+        };
+        
+        actionHistory.push(state);
+        
+        // Limit history size
+        if (actionHistory.length > MAX_HISTORY) {
+          actionHistory.shift();
+        }
+        
+        // Clear redo stack when new action is performed
+        redoStack = [];
+        
+        // Update undo button state
+        updateUndoButton();
+      }
+      
+      // Restore editor state from history
+      function restoreEditorState(state) {
+        // Restore slides data
+        slides.length = 0;
+        slides.push(...JSON.parse(JSON.stringify(state.slides)));
+        active = state.active;
+        
+        // Restore title and text box visibility
+        if (state.canvasState) {
+          titleBox.style.display = state.canvasState.titleBoxVisible ? '' : 'none';
+          textBox.style.display = state.canvasState.textBoxVisible ? '' : 'none';
+        }
+        
+        // Restore slide content
+        load();
+        renderSidebar();
+        
+        // Restore additional text boxes
+        if (state.canvasState && state.canvasState.additionalTextBoxes) {
+          // Remove existing additional text boxes
+          document.querySelectorAll('.additional-text-box').forEach(box => {
+            if (!state.canvasState.additionalTextBoxes.some(saved => saved.element === box)) {
+              box.remove();
+            }
+          });
+          
+          // Restore saved additional text boxes
+          state.canvasState.additionalTextBoxes.forEach(savedBox => {
+            let existingBox = null;
+            if (savedBox.element && document.contains(savedBox.element)) {
+              existingBox = savedBox.element;
+            } else {
+              // Create new box if it doesn't exist
+              existingBox = document.createElement('div');
+              existingBox.className = 'text-box additional-text-box';
+              existingBox.contentEditable = true;
+              existingBox.dataset.placeholder = 'Click to add text';
+              canvas.appendChild(existingBox);
+              
+              // Setup the new box
+              createResizeEdges(existingBox);
+              makeDraggable(existingBox);
+              makeResizable(existingBox);
+              setupFontSizeTracking(existingBox);
+              elementFontSizes.set(existingBox, parseFloat(savedBox.style.fontSize) || 16);
+              
+              // Add selection handler
+              existingBox.addEventListener('click', (e) => {
+                if (e.target === existingBox || !existingBox.textContent.trim()) {
+                  selectTextBox(existingBox);
+                }
+              });
+            }
+            
+            // Restore content and style
+            existingBox.innerHTML = savedBox.html;
+            existingBox.style.top = savedBox.style.top + 'px';
+            existingBox.style.left = savedBox.style.left + 'px';
+            existingBox.style.width = savedBox.style.width + 'px';
+            existingBox.style.height = savedBox.style.height + 'px';
+            existingBox.style.fontSize = savedBox.style.fontSize;
+            existingBox.style.display = savedBox.style.display || '';
+          });
+        }
+        
+        updateUndoButton();
+      }
+      
+      // Undo last action
+      function undoLastAction() {
+        if (actionHistory.length > 0) {
+          const currentState = {
+            slides: JSON.parse(JSON.stringify(slides)),
+            active: active,
+            canvasState: {
+              titleBoxVisible: titleBox.style.display !== 'none',
+              textBoxVisible: textBox.style.display !== 'none',
+              additionalTextBoxes: Array.from(document.querySelectorAll('.additional-text-box')).map(box => {
+                const rect = box.getBoundingClientRect();
+                const canvasRect = canvas.getBoundingClientRect();
+                return {
+                  element: box,
+                  html: box.innerHTML,
+                  style: {
+                    top: rect.top - canvasRect.top,
+                    left: rect.left - canvasRect.left,
+                    width: box.offsetWidth,
+                    height: box.offsetHeight,
+                    fontSize: box.style.fontSize,
+                    display: box.style.display
+                  }
+                };
+              })
+            }
+          };
+          
+          // Save current state to redo stack
+          redoStack.push(currentState);
+          
+          // Get previous state from history
+          const previousState = actionHistory.pop();
+          restoreEditorState(previousState);
+        }
+      }
+      
+      // Update undo/redo button states
+      function updateUndoButton() {
+        const backBtn = document.getElementById('btnBack');
+        const forwardBtn = document.getElementById('btnForward');
+        if (backBtn) {
+          backBtn.disabled = actionHistory.length === 0;
+          backBtn.style.opacity = actionHistory.length === 0 ? '0.5' : '1';
+        }
+        if (forwardBtn) {
+          forwardBtn.disabled = redoStack.length === 0;
+          forwardBtn.style.opacity = redoStack.length === 0 ? '0.5' : '1';
+        }
+      }
+      
+      // Initialize with initial state
+      saveEditorState('initial');
 
       function renderSidebar() {
         sidebar.innerHTML = '';
@@ -241,6 +514,19 @@
         });
       }
 
+      function createResizeEdges(element) {
+        // Remove existing edges
+        element.querySelectorAll('.resize-edge').forEach(el => el.remove());
+        
+        const edges = ['top', 'bottom', 'left', 'right', 'top-left', 'top-right', 'bottom-left', 'bottom-right'];
+        edges.forEach(edge => {
+          const edgeEl = document.createElement('div');
+          edgeEl.className = `resize-edge ${edge}`;
+          edgeEl.dataset.edge = edge;
+          element.appendChild(edgeEl);
+        });
+      }
+
       function load() {
         const slide = slides[active];
         titleBox.textContent = slide.title || 'Title';
@@ -248,12 +534,256 @@
         // Trigger placeholder display if empty
         if (!titleBox.textContent.trim()) titleBox.innerHTML = '';
         if (!textBox.textContent.trim()) textBox.innerHTML = '';
+        
+        // Restore positions and sizes
+        if (slide.titleBox) {
+          titleBox.style.top = slide.titleBox.top + 'px';
+          titleBox.style.left = slide.titleBox.left + 'px';
+          if (slide.titleBox.width) {
+            titleBox.style.width = slide.titleBox.width + 'px';
+            titleBox.style.right = 'auto';
+          }
+          if (slide.titleBox.height) {
+            titleBox.style.height = slide.titleBox.height + 'px';
+          }
+        }
+        if (slide.textBox) {
+          textBox.style.top = slide.textBox.top + 'px';
+          textBox.style.left = slide.textBox.left + 'px';
+          if (slide.textBox.width) {
+            textBox.style.width = slide.textBox.width + 'px';
+            textBox.style.right = 'auto';
+          }
+          if (slide.textBox.height) {
+            textBox.style.height = slide.textBox.height + 'px';
+            textBox.style.bottom = 'auto';
+          }
+        }
+        
+        // Create resize edges
+        createResizeEdges(titleBox);
+        createResizeEdges(textBox);
       }
 
       function capture() {
         slides[active].title = titleBox.textContent.trim() || 'Title';
         slides[active].content = textBox.textContent.trim() || '';
+        
+        // Save positions and sizes
+        const titleRect = titleBox.getBoundingClientRect();
+        const canvasRect = canvas.getBoundingClientRect();
+        slides[active].titleBox = {
+          top: titleRect.top - canvasRect.top,
+          left: titleRect.left - canvasRect.left,
+          width: titleBox.offsetWidth,
+          height: titleBox.offsetHeight,
+          visible: titleBox.style.display !== 'none'
+        };
+        
+        const textRect = textBox.getBoundingClientRect();
+        slides[active].textBox = {
+          top: textRect.top - canvasRect.top,
+          left: textRect.left - canvasRect.left,
+          width: textBox.offsetWidth,
+          height: textBox.offsetHeight,
+          visible: textBox.style.display !== 'none'
+        };
       }
+
+      // Drag functionality - only when clicking on empty space
+      function makeDraggable(element) {
+        let isDragging = false;
+        let startX, startY, initialLeft, initialTop;
+        let dragThreshold = 5;
+        
+        element.addEventListener('mousedown', (e) => {
+          // Don't drag if clicking on resize edge
+          if (e.target.classList && e.target.classList.contains('resize-edge')) {
+            return;
+          }
+          
+          // Don't drag if clicking on text content
+          if (e.target !== element && e.target.nodeType !== Node.ELEMENT_NODE) {
+            return;
+          }
+          
+          // Only drag if clicking on empty space or border area
+          const selection = window.getSelection();
+          if (selection.toString().length > 0) {
+            return;
+          }
+          
+          // Check if element is empty or clicking on border
+          const isEmpty = !element.textContent.trim() || element.textContent.trim() === element.dataset.placeholder;
+          const isBorderClick = e.target === element || (e.target === element && element.contains(e.target));
+          
+          if (!isEmpty && !isBorderClick) {
+            return; // Allow text editing
+          }
+          
+          const rect = element.getBoundingClientRect();
+          const canvasRect = canvas.getBoundingClientRect();
+          
+          startX = e.clientX;
+          startY = e.clientY;
+          initialLeft = rect.left - canvasRect.left;
+          initialTop = rect.top - canvasRect.top;
+        });
+        
+        document.addEventListener('mousemove', (e) => {
+          if (startX === undefined || startY === undefined) return;
+          
+          const deltaX = Math.abs(e.clientX - startX);
+          const deltaY = Math.abs(e.clientY - startY);
+          
+          if (!isDragging && (deltaX > dragThreshold || deltaY > dragThreshold)) {
+            isDragging = true;
+            element.classList.add('dragging');
+            element.setAttribute('contenteditable', 'false');
+          }
+          
+          if (!isDragging) return;
+          
+          const canvasRect = canvas.getBoundingClientRect();
+          const moveX = e.clientX - startX;
+          const moveY = e.clientY - startY;
+          
+          let newLeft = initialLeft + moveX;
+          let newTop = initialTop + moveY;
+          
+          const maxLeft = canvasRect.width - element.offsetWidth - 48;
+          const maxTop = canvasRect.height - element.offsetHeight - 48;
+          
+          newLeft = Math.max(24, Math.min(newLeft, maxLeft));
+          newTop = Math.max(24, Math.min(newTop, maxTop));
+          
+          element.style.left = newLeft + 'px';
+          element.style.top = newTop + 'px';
+          element.style.right = 'auto';
+          element.style.bottom = 'auto';
+          capture();
+        });
+        
+        document.addEventListener('mouseup', () => {
+          if (isDragging) {
+            isDragging = false;
+            element.classList.remove('dragging');
+            element.setAttribute('contenteditable', 'true');
+            capture();
+            // Save state for undo after dragging
+            saveEditorState('move_element');
+          }
+          startX = undefined;
+          startY = undefined;
+        });
+      }
+      
+      // Resize functionality using edges
+      function makeResizable(element) {
+        let isResizing = false;
+        let startX, startY, startWidth, startHeight, startLeft, startTop;
+        let resizeEdge = '';
+        
+        element.addEventListener('mousedown', (e) => {
+          if (!e.target.classList.contains('resize-edge')) return;
+          
+          resizeEdge = e.target.dataset.edge;
+          isResizing = true;
+          element.classList.add('resizing');
+          element.setAttribute('contenteditable', 'false');
+          
+          const rect = element.getBoundingClientRect();
+          const canvasRect = canvas.getBoundingClientRect();
+          
+          startX = e.clientX;
+          startY = e.clientY;
+          startWidth = element.offsetWidth;
+          startHeight = element.offsetHeight;
+          startLeft = rect.left - canvasRect.left;
+          startTop = rect.top - canvasRect.top;
+          
+          e.preventDefault();
+          e.stopPropagation();
+        });
+        
+        document.addEventListener('mousemove', (e) => {
+          if (!isResizing) return;
+          
+          const canvasRect = canvas.getBoundingClientRect();
+          const deltaX = e.clientX - startX;
+          const deltaY = e.clientY - startY;
+          
+          let newWidth = startWidth;
+          let newHeight = startHeight;
+          let newLeft = startLeft;
+          let newTop = startTop;
+          
+          if (resizeEdge.includes('right')) {
+            newWidth = Math.max(200, startWidth + deltaX);
+            newWidth = Math.min(newWidth, canvasRect.width - newLeft - 48);
+          }
+          if (resizeEdge.includes('left')) {
+            newWidth = Math.max(200, startWidth - deltaX);
+            newLeft = Math.max(24, startLeft + deltaX);
+            if (newLeft === 24) newWidth = startLeft + startWidth - 24;
+          }
+          if (resizeEdge.includes('bottom')) {
+            newHeight = Math.max(50, startHeight + deltaY);
+            newHeight = Math.min(newHeight, canvasRect.height - newTop - 48);
+          }
+          if (resizeEdge.includes('top')) {
+            newHeight = Math.max(50, startHeight - deltaY);
+            newTop = Math.max(24, startTop + deltaY);
+            if (newTop === 24) newHeight = startTop + startHeight - 24;
+          }
+          
+          element.style.width = newWidth + 'px';
+          element.style.height = newHeight + 'px';
+          element.style.left = newLeft + 'px';
+          element.style.top = newTop + 'px';
+          element.style.right = 'auto';
+          element.style.bottom = 'auto';
+          
+          capture();
+        });
+        
+        document.addEventListener('mouseup', () => {
+          if (isResizing) {
+            isResizing = false;
+            element.classList.remove('resizing');
+            element.setAttribute('contenteditable', 'true');
+            resizeEdge = '';
+            capture();
+            // Save state for undo after resizing
+            saveEditorState('resize_element');
+          }
+        });
+      }
+      
+      // Make boxes draggable and resizable
+      makeDraggable(titleBox);
+      makeDraggable(textBox);
+      makeResizable(titleBox);
+      makeResizable(textBox);
+      
+      // Initialize resize edges
+      createResizeEdges(titleBox);
+      createResizeEdges(textBox);
+      
+      // Add selection handlers for title and text boxes
+      titleBox.addEventListener('click', (e) => {
+        // Select if clicking on border or empty space
+        if (e.target === titleBox || !titleBox.textContent.trim()) {
+          selectTextBox(titleBox);
+        }
+      });
+      
+      textBox.addEventListener('click', (e) => {
+        // Select if clicking on border or empty space
+        if (e.target === textBox || !textBox.textContent.trim()) {
+          selectTextBox(textBox);
+        }
+      });
 
       // Toolbar interactions per Editor.json
       function getActiveElement() {
@@ -264,11 +794,260 @@
         return document.activeElement === titleBox ? titleBox : textBox;
       }
 
+      // Add Text Box functionality
+      function addTextBox() {
+        const canvasRect = canvas.getBoundingClientRect();
+        const centerX = canvasRect.width / 2 - 150; // Center of canvas
+        const centerY = canvasRect.height / 2 - 100;
+        
+        const newTextBox = document.createElement('div');
+        newTextBox.className = 'text-box additional-text-box';
+        newTextBox.contentEditable = true;
+        newTextBox.dataset.placeholder = 'Click to add text';
+        newTextBox.style.position = 'absolute';
+        newTextBox.style.top = centerY + 'px';
+        newTextBox.style.left = centerX + 'px';
+        newTextBox.style.width = '300px';
+        newTextBox.style.height = '200px';
+        newTextBox.style.minWidth = '200px';
+        newTextBox.style.minHeight = '50px';
+        newTextBox.style.border = '1px dashed #ccc';
+        newTextBox.style.padding = '10px';
+        newTextBox.style.outline = 'none';
+        newTextBox.style.overflowY = 'auto';
+        newTextBox.style.color = '#000000';
+        newTextBox.style.fontSize = '16px';
+        newTextBox.style.background = '#fff';
+        
+        // Add placeholder functionality
+        const placeholder = newTextBox.dataset.placeholder;
+        newTextBox.addEventListener('focus', function() {
+          if (!this.textContent.trim()) {
+            this.innerHTML = '';
+          }
+        });
+        
+        newTextBox.addEventListener('blur', function() {
+          if (!this.textContent.trim()) {
+            this.innerHTML = '';
+          }
+        });
+        
+        // Add placeholder CSS
+        if (!newTextBox.textContent.trim()) {
+          newTextBox.setAttribute('data-placeholder', placeholder);
+        }
+        
+        // Add resize edges
+        createResizeEdges(newTextBox);
+        
+        // Make draggable and resizable
+        makeDraggable(newTextBox);
+        makeResizable(newTextBox);
+        
+        // Setup font size tracking for the new text box
+        setupFontSizeTracking(newTextBox);
+        
+        // Initialize font size
+        elementFontSizes.set(newTextBox, 16);
+        
+        // Select text box when clicking on border
+        newTextBox.addEventListener('click', (e) => {
+          // Select if clicking on border or empty space
+          if (e.target === newTextBox || !newTextBox.textContent.trim()) {
+            selectTextBox(newTextBox);
+          }
+        });
+        
+        // Add to canvas
+        canvas.appendChild(newTextBox);
+        
+        // Focus the new text box
+        setTimeout(() => {
+          newTextBox.focus();
+        }, 100);
+        
+        // Save to slide data
+        capture();
+        
+        // Save state for undo
+        saveEditorState('add_textbox');
+      }
+      
+      // Function to select/deselect text boxes
+      function selectTextBox(element) {
+        // Can select any text box or title box
+        if (!element || (!element.classList.contains('text-box') && element.id !== 'titleBox')) {
+          return;
+        }
+        
+        // Deselect all other boxes
+        document.querySelectorAll('.text-box.selected, .title-box.selected').forEach(box => {
+          box.classList.remove('selected');
+        });
+        
+        // Select this box
+        element.classList.add('selected');
+        selectedTextBox = element;
+        
+        // Deselect when clicking elsewhere
+        setTimeout(() => {
+          document.addEventListener('click', function deselectHandler(e) {
+            if (!element.contains(e.target) && e.target !== element) {
+              element.classList.remove('selected');
+              selectedTextBox = null;
+              document.removeEventListener('click', deselectHandler);
+            }
+          }, { once: true });
+        }, 0);
+      }
+      
+      // Function to delete text box
+      function deleteTextBox(element) {
+        if (!element) return;
+        
+        // Handle title box deletion - hide it instead of removing
+        if (element.id === 'titleBox') {
+          element.style.display = 'none';
+          element.classList.remove('selected');
+          if (selectedTextBox === element) {
+            selectedTextBox = null;
+          }
+          capture();
+          return;
+        }
+        
+        // Handle main text box deletion - hide it instead of removing
+        if (element.id === 'textBox') {
+          element.style.display = 'none';
+          element.classList.remove('selected');
+          if (selectedTextBox === element) {
+            selectedTextBox = null;
+          }
+          // Update active element if this was active
+          if (currentActiveElement === element) {
+            currentActiveElement = titleBox;
+            updateFontSizeInput();
+          }
+          capture();
+          return;
+        }
+        
+        // Handle additional text boxes - remove completely
+        if (element.classList.contains('additional-text-box')) {
+          // Remove from font size tracking
+          elementFontSizes.delete(element);
+          // Remove selection
+          element.classList.remove('selected');
+          if (selectedTextBox === element) {
+            selectedTextBox = null;
+          }
+          // Remove from DOM
+          element.remove();
+          // Update active element if this was active
+          if (currentActiveElement === element) {
+            currentActiveElement = textBox;
+            updateFontSizeInput();
+          }
+          capture();
+        }
+      }
+      
+      // Global keyboard listener for Delete/Backspace and Undo
+      document.addEventListener('keydown', (e) => {
+        // Undo keyboard shortcut (Cmd+Z on Mac, Ctrl+Z on Windows)
+        if ((e.metaKey || e.ctrlKey) && e.key === 'z' && !e.shiftKey) {
+          e.preventDefault();
+          undoLastAction();
+          return;
+        }
+        
+        // Redo keyboard shortcut (Cmd+Shift+Z on Mac, Ctrl+Shift+Z on Windows)
+        if ((e.metaKey || e.ctrlKey) && e.key === 'z' && e.shiftKey) {
+          e.preventDefault();
+          redoLastAction();
+          return;
+        }
+        
+        // Only handle Delete/Backspace if a text box is selected
+        if ((e.key === 'Delete' || e.key === 'Backspace') && selectedTextBox) {
+          // Check if user is typing (cursor is inside the text box)
+          const selection = window.getSelection();
+          const isTyping = selection.rangeCount > 0 && 
+                          selection.getRangeAt(0).startOffset !== selection.getRangeAt(0).endOffset;
+          
+          // Only delete if not typing (no text selection) or if box is empty
+          const isEmpty = !selectedTextBox.textContent.trim();
+          const hasTextSelection = selection.toString().length > 0;
+          
+          if (!hasTextSelection || isEmpty) {
+            e.preventDefault();
+            e.stopPropagation();
+            deleteTextBox(selectedTextBox);
+            saveEditorState('delete_textbox');
+          }
+        }
+      });
+      
+      // Back (Undo) button click handler
+      document.getElementById('btnBack').addEventListener('click', () => {
+        undoLastAction();
+      });
+      
+      // Forward (Redo) button click handler
+      document.getElementById('btnForward').addEventListener('click', () => {
+        redoLastAction();
+      });
+      
+      // Redo functionality
+      function redoLastAction() {
+        if (redoStack.length > 0) {
+          const currentState = {
+            slides: JSON.parse(JSON.stringify(slides)),
+            active: active,
+            canvasState: {
+              titleBoxVisible: titleBox.style.display !== 'none',
+              textBoxVisible: textBox.style.display !== 'none',
+              additionalTextBoxes: Array.from(document.querySelectorAll('.additional-text-box')).map(box => {
+                const rect = box.getBoundingClientRect();
+                const canvasRect = canvas.getBoundingClientRect();
+                return {
+                  element: box,
+                  html: box.innerHTML,
+                  style: {
+                    top: rect.top - canvasRect.top,
+                    left: rect.left - canvasRect.left,
+                    width: box.offsetWidth,
+                    height: box.offsetHeight,
+                    fontSize: box.style.fontSize,
+                    display: box.style.display
+                  }
+                };
+              })
+            }
+          };
+          
+          // Save current state to undo stack
+          actionHistory.push(currentState);
+          
+          // Get next state from redo stack
+          const nextState = redoStack.pop();
+          restoreEditorState(nextState);
+        }
+      }
+      
       // Formatting tools
       document.querySelectorAll('[data-action]').forEach(btn => {
         btn.addEventListener('click', (e) => {
           e.preventDefault();
           const action = btn.getAttribute('data-action');
+          
+          // Handle addTextBox action
+          if (action === 'addTextBox') {
+            addTextBox();
+            return;
+          }
+          
           const activeEl = getActiveElement();
           
           // Focus on the active element if needed
@@ -296,17 +1075,23 @@
         });
       });
 
-      // Store separate font sizes for title and text
+      // Store font sizes for elements
       let titleFontSize = 28;
       let textFontSize = 16;
+      let elementFontSizes = new Map(); // Store font sizes for dynamically created elements
       let currentActiveElement = textBox;
 
       // Initialize default font sizes
       titleBox.style.fontSize = titleFontSize + 'px';
       textBox.style.fontSize = textFontSize + 'px';
+      elementFontSizes.set(titleBox, titleFontSize);
+      elementFontSizes.set(textBox, textFontSize);
 
       // Function to get current font size from an element
       function getCurrentFontSize(element) {
+        if (elementFontSizes.has(element)) {
+          return elementFontSizes.get(element);
+        }
         const computedStyle = window.getComputedStyle(element);
         const fontSize = parseFloat(computedStyle.fontSize);
         return Math.round(fontSize);
@@ -364,44 +1149,63 @@
             }
           });
         }
+        
+        // Store the font size for this element
+        elementFontSizes.set(element, size);
       }
 
       // Update font size input when focus changes
       function updateFontSizeInput() {
         const fontSizeInput = document.getElementById('fontSize');
-        if (currentActiveElement === titleBox) {
-          fontSizeInput.value = titleFontSize;
-        } else {
-          fontSizeInput.value = textFontSize;
+        if (currentActiveElement) {
+          const currentSize = getCurrentFontSize(currentActiveElement);
+          fontSizeInput.value = currentSize;
         }
       }
 
-      // Track focus changes
-      titleBox.addEventListener('focus', () => {
-        currentActiveElement = titleBox;
-        updateFontSizeInput();
-      });
+      // Track focus changes for any contenteditable element
+      function setupFontSizeTracking(element) {
+        element.addEventListener('focus', () => {
+          currentActiveElement = element;
+          updateFontSizeInput();
+        });
+        
+        // Initialize font size if not set
+        if (!elementFontSizes.has(element)) {
+          const currentSize = parseFloat(window.getComputedStyle(element).fontSize) || 16;
+          elementFontSizes.set(element, Math.round(currentSize));
+        }
+      }
 
-      textBox.addEventListener('focus', () => {
-        currentActiveElement = textBox;
-        updateFontSizeInput();
-      });
+      // Track focus changes for existing elements
+      setupFontSizeTracking(titleBox);
+      setupFontSizeTracking(textBox);
 
       // Also check on selection changes
       document.addEventListener('selectionchange', () => {
         const selection = window.getSelection();
         if (selection.rangeCount > 0) {
           const anchorNode = selection.anchorNode;
+          
+          // Find which contenteditable element contains the selection
+          let activeEl = null;
           if (titleBox.contains(anchorNode) || anchorNode === titleBox) {
-            if (currentActiveElement !== titleBox) {
-              currentActiveElement = titleBox;
-              updateFontSizeInput();
-            }
+            activeEl = titleBox;
           } else if (textBox.contains(anchorNode) || anchorNode === textBox) {
-            if (currentActiveElement !== textBox) {
-              currentActiveElement = textBox;
-              updateFontSizeInput();
-            }
+            activeEl = textBox;
+          } else {
+            // Check additional text boxes
+            const allTextBoxes = document.querySelectorAll('.additional-text-box, .text-box');
+            allTextBoxes.forEach(box => {
+              if (box.contains(anchorNode) || anchorNode === box) {
+                activeEl = box;
+              }
+            });
+          }
+          
+          if (activeEl && currentActiveElement !== activeEl) {
+            currentActiveElement = activeEl;
+            updateFontSizeInput();
           }
         }
       });
@@ -410,30 +1214,36 @@
       const fontSizeInput = document.getElementById('fontSize');
       fontSizeInput.addEventListener('change', (e) => {
         const size = parseInt(e.target.value);
-        if (!isNaN(size) && size >= 8 && size <= 72) {
+        if (!isNaN(size) && size >= 8 && size <= 72 && currentActiveElement) {
+          applyFontSize(currentActiveElement, size);
+          
+          // Update stored sizes for title and main text box
           if (currentActiveElement === titleBox) {
             titleFontSize = size;
-            applyFontSize(titleBox, size);
-          } else {
+          } else if (currentActiveElement === textBox) {
             textFontSize = size;
-            applyFontSize(textBox, size);
           }
         }
       });
       
       // Validate input on blur
       fontSizeInput.addEventListener('blur', (e) => {
+        if (!currentActiveElement) return;
+        
         const size = parseInt(e.target.value);
+        const currentSize = getCurrentFontSize(currentActiveElement);
+        
         if (isNaN(size) || size < 8) {
-          e.target.value = currentActiveElement === titleBox ? titleFontSize : textFontSize;
+          e.target.value = currentSize;
         } else if (size > 72) {
           e.target.value = 72;
+          applyFontSize(currentActiveElement, 72);
+          
+          // Update stored sizes
           if (currentActiveElement === titleBox) {
             titleFontSize = 72;
-            applyFontSize(titleBox, 72);
-          } else {
+          } else if (currentActiveElement === textBox) {
             textFontSize = 72;
-            applyFontSize(textBox, 72);
           }
         }
       });
@@ -516,6 +1326,7 @@
       // Topbar button actions per slides.json
       document.getElementById('btnDel').addEventListener('click', () => {
         if (slides.length <= 1) return;
+        saveEditorState('delete_slide');
         slides.splice(active, 1);
         active = Math.max(0, active - 1);
         load();
@@ -524,7 +1335,13 @@
 
       document.getElementById('btnReset').addEventListener('click', () => {
         if (confirm('Reset all slides? This cannot be undone.')) {
-          slides.splice(0, slides.length, { title: 'Title', content: '' });
+          saveEditorState('reset_slides');
+          slides.splice(0, slides.length, { 
+            title: 'Title', 
+            content: '',
+            titleBox: { top: 24, left: 24, right: 24, width: null, height: null },
+            textBox: { top: 100, left: 24, right: 24, bottom: 24, width: null, height: null }
+          });
           active = 0;
           load();
           renderSidebar();
@@ -542,7 +1359,13 @@
       // Hover button functions per Editor.json slidePreview
       function createNewSlide(index) {
         capture();
-        slides.splice(index + 1, 0, { title: `Slide ${slides.length+1}`, content: '' });
+        saveEditorState('create_slide');
+        slides.splice(index + 1, 0, { 
+          title: `Slide ${slides.length+1}`, 
+          content: '',
+          titleBox: { top: 24, left: 24, right: 24, width: null, height: null },
+          textBox: { top: 100, left: 24, right: 24, bottom: 24, width: null, height: null }
+        });
         active = index + 1;
         load();
         renderSidebar();
@@ -550,20 +1373,43 @@
 
       function duplicateCurrentSlide(index) {
         capture();
+        saveEditorState('duplicate_slide');
         const s = slides[index];
-        slides.splice(index + 1, 0, { title: s.title + ' copy', content: s.content });
+        slides.splice(index + 1, 0, { 
+          title: s.title + ' copy', 
+          content: s.content,
+          titleBox: s.titleBox ? {...s.titleBox} : { top: 24, left: 24, right: 24, width: null, height: null },
+          textBox: s.textBox ? {...s.textBox} : { top: 100, left: 24, right: 24, bottom: 24, width: null, height: null }
+        });
         active = index + 1;
         load();
         renderSidebar();
       }
 
-      // Auto-save on input
+      // Auto-save on input with debounce for undo
+      let textEditTimeout;
+      function saveTextEditState() {
+        clearTimeout(textEditTimeout);
+        textEditTimeout = setTimeout(() => {
+          saveEditorState('edit_text');
+        }, 1000); // Save state 1 second after typing stops
+      }
+      
       titleBox.addEventListener('input', () => {
         slides[active].title = titleBox.textContent.trim();
         renderSidebar();
+        saveTextEditState();
       });
       textBox.addEventListener('input', () => {
         slides[active].content = textBox.textContent.trim();
+        saveTextEditState();
+      });
+      
+      // Also track input on additional text boxes
+      document.addEventListener('input', (e) => {
+        if (e.target.classList && e.target.classList.contains('additional-text-box')) {
+          saveTextEditState();
+        }
       });
 
       // Check if loading a saved presentation from Recent section
