@@ -169,12 +169,23 @@
         slides[active].content = textBox.textContent.trim() || '';
       }
 
-      // Save function per Editor.json
+      // Save function per Editor.json and auth_system.json
       function savePresentation() {
+        const currentUser = JSON.parse(localStorage.getItem('currentUser') || 'null');
+        
+        if (!currentUser) {
+          alert('Please log in to save presentations.');
+          window.location.href = './templates.html';
+          return;
+        }
+
         capture();
         const title = titleBox.textContent.trim() || "Untitled";
         const content = textBox.textContent.trim() || "";
-        const saved = JSON.parse(localStorage.getItem("recentPresentations")) || [];
+        
+        // Save to user-specific key per auth_system.json
+        const userKey = `presentations_${currentUser.username}`;
+        const saved = JSON.parse(localStorage.getItem(userKey) || '[]');
         
         saved.push({
           title: title,
@@ -182,7 +193,7 @@
           content: content
         });
         
-        localStorage.setItem("recentPresentations", JSON.stringify(saved));
+        localStorage.setItem(userKey, JSON.stringify(saved));
         
         // Show notification animation
         saveNotification.classList.add('show');

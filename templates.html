@@ -107,6 +107,32 @@
       .chip.danger { background: rgba(185, 28, 28, 0.6); border-color: rgba(239, 68, 68, 0.4); }
       .muted { color: #A5D6A7; font-size: 12px; }
       .empty-state { text-align: center; color: #A5D6A7; padding: 40px 20px; }
+
+      /* Auth Buttons */
+      .auth-buttons { display: flex; gap: 10px; }
+      .auth-btn { padding: 8px 16px; border-radius: 8px; font-weight: 700; cursor: pointer; border: none; transition: opacity .2s; }
+      .auth-btn:hover { opacity: 0.9; }
+      .auth-btn.green { background: #10b981; color: #06221e; }
+      .auth-btn.emerald { background: #10b981; color: #fff; }
+      .auth-btn.gray { background: #6b7280; color: #fff; }
+
+      /* Auth Modal */
+      .modal { display: none; position: fixed; inset: 0; z-index: 1000; backdrop-filter: blur(25px); background: rgba(0,0,0,0.5); }
+      .modal.active { display: grid; place-items: center; }
+      .modal-content { background: rgba(17, 51, 34, 0.6); border: 1px solid rgba(255,255,255,0.1); border-radius: 16px; padding: 32px; width: min(90vw, 400px); box-shadow: 0 8px 25px rgba(0,0,0,0.3); backdrop-filter: blur(20px); color: #E8F5E9; }
+      .modal-header { margin-bottom: 24px; }
+      .modal-title { font-size: 24px; font-weight: 700; margin: 0 0 8px; }
+      .modal-close { position: absolute; top: 16px; right: 16px; background: transparent; border: none; color: #A5D6A7; font-size: 24px; cursor: pointer; }
+      .form-group { margin-bottom: 16px; }
+      .form-label { display: block; margin-bottom: 6px; color: #A5D6A7; font-weight: 600; }
+      .form-input { width: 100%; padding: 10px 12px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.1); background: rgba(0,0,0,0.2); color: #E8F5E9; font-size: 14px; }
+      .form-input:focus { outline: none; border-color: #10b981; }
+      .form-submit { width: 100%; padding: 12px; border-radius: 8px; border: none; font-weight: 700; cursor: pointer; font-size: 16px; }
+      .form-submit.green { background: #10b981; color: #06221e; }
+      .form-submit.emerald { background: #10b981; color: #fff; }
+      .error-message { color: #f87171; font-size: 12px; margin-top: 8px; }
+      .success-message { color: #10b981; font-size: 12px; margin-top: 8px; }
+      .user-info { color: #A5D6A7; margin-right: 12px; }
     </style>
   </head>
   <body>
@@ -119,6 +145,14 @@
           <a href="#">Settings</a>
         </nav>
         <div class="spacer"></div>
+        <div class="auth-buttons" id="authButtons">
+          <button class="auth-btn green" id="btnSignUp" data-action="open_signup">Sign Up</button>
+          <button class="auth-btn emerald" id="btnLogIn" data-action="open_login">Log In</button>
+        </div>
+        <div class="auth-buttons" id="userInfo" style="display: none;">
+          <span class="user-info" id="userName"></span>
+          <button class="auth-btn gray" id="btnLogOut" data-action="logout_user">Log Out</button>
+        </div>
       </div>
     </header>
 
@@ -148,6 +182,54 @@
       </section>
     </main>
 
+    <!-- Auth Modals -->
+    <div class="modal" id="signupModal">
+      <div class="modal-content" style="position: relative;">
+        <button class="modal-close" onclick="closeModal('signupModal')">&times;</button>
+        <div class="modal-header">
+          <h3 class="modal-title">Create Account</h3>
+        </div>
+        <form id="signup_form" onsubmit="signupUser(event)">
+          <div class="form-group">
+            <label class="form-label" for="signup_username">Username</label>
+            <input class="form-input" type="text" id="signup_username" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="signup_email">Email</label>
+            <input class="form-input" type="email" id="signup_email" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="signup_password">Password</label>
+            <input class="form-input" type="password" id="signup_password" required>
+          </div>
+          <div id="signup_error" class="error-message" style="display: none;"></div>
+          <div id="signup_success" class="success-message" style="display: none;"></div>
+          <button type="submit" class="form-submit green">Sign Up</button>
+        </form>
+      </div>
+    </div>
+
+    <div class="modal" id="loginModal">
+      <div class="modal-content" style="position: relative;">
+        <button class="modal-close" onclick="closeModal('loginModal')">&times;</button>
+        <div class="modal-header">
+          <h3 class="modal-title">Log In</h3>
+        </div>
+        <form id="login_form" onsubmit="loginUser(event)">
+          <div class="form-group">
+            <label class="form-label" for="login_email">Email</label>
+            <input class="form-input" type="email" id="login_email" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="login_password">Password</label>
+            <input class="form-input" type="password" id="login_password" required>
+          </div>
+          <div id="login_error" class="error-message" style="display: none;"></div>
+          <button type="submit" class="form-submit emerald">Log In</button>
+        </form>
+      </div>
+    </div>
+
     <script>
       // Per Home.json: open_blank_page navigates to blank editor
       document.querySelector('[data-action="open_blank_page"]').addEventListener('click', (e) => {
@@ -155,9 +237,21 @@
         window.location.href = './blank.html';
       });
 
-      // Load and display saved presentations from localStorage
+      // Load and display saved presentations from localStorage (user-specific)
       function loadRecentPresentations() {
-        const saved = JSON.parse(localStorage.getItem("recentPresentations")) || [];
+        const currentUser = JSON.parse(localStorage.getItem('currentUser') || 'null');
+        let saved = [];
+        
+        if (currentUser) {
+          // Load user-specific presentations
+          saved = JSON.parse(localStorage.getItem(`presentations_${currentUser.username}`) || '[]');
+        } else {
+          // If not logged in, show empty state
+          const grid = document.getElementById('recentGrid');
+          grid.innerHTML = '<div class="empty-state">Please log in to view your saved presentations.</div>';
+          return;
+        }
+
         const grid = document.getElementById('recentGrid');
         
         if (saved.length === 0) {
@@ -194,7 +288,6 @@
             e.stopPropagation();
             const idx = parseInt(btn.getAttribute('data-open'));
             const pres = sorted[idx];
-            // Store the presentation data to load in editor
             sessionStorage.setItem('loadPresentation', JSON.stringify(pres));
             window.location.href = './blank.html';
           });
@@ -205,15 +298,131 @@
             e.stopPropagation();
             const idx = parseInt(btn.getAttribute('data-delete'));
             if (confirm(`Delete "${sorted[idx].title || 'Untitled'}"?`)) {
-              saved.splice(saved.indexOf(sorted[idx]), 1);
-              localStorage.setItem("recentPresentations", JSON.stringify(saved));
-              loadRecentPresentations(); // Reload
+              const currentUser = JSON.parse(localStorage.getItem('currentUser') || 'null');
+              if (currentUser) {
+                saved.splice(saved.indexOf(sorted[idx]), 1);
+                localStorage.setItem(`presentations_${currentUser.username}`, JSON.stringify(saved));
+                loadRecentPresentations(); // Reload
+              }
             }
           });
         });
       }
 
-      // Load on page load
+      // ===== Authentication System =====
+      
+      // Check if user is logged in on page load
+      function checkAuthStatus() {
+        const currentUser = JSON.parse(localStorage.getItem('currentUser') || 'null');
+        if (currentUser) {
+          document.getElementById('authButtons').style.display = 'none';
+          document.getElementById('userInfo').style.display = 'flex';
+          document.getElementById('userName').textContent = `Welcome, ${currentUser.username}`;
+        } else {
+          document.getElementById('authButtons').style.display = 'flex';
+          document.getElementById('userInfo').style.display = 'none';
+        }
+      }
+
+      // Modal functions
+      function openModal(modalId) {
+        document.getElementById(modalId).classList.add('active');
+      }
+
+      function closeModal(modalId) {
+        document.getElementById(modalId).classList.remove('active');
+        // Clear error messages
+        document.getElementById(modalId.replace('Modal', '_error')).style.display = 'none';
+        if (document.getElementById(modalId.replace('Modal', '_success'))) {
+          document.getElementById(modalId.replace('Modal', '_success')).style.display = 'none';
+        }
+      }
+
+      // Open modals
+      document.getElementById('btnSignUp').addEventListener('click', () => openModal('signupModal'));
+      document.getElementById('btnLogIn').addEventListener('click', () => openModal('loginModal'));
+
+      // Close modals on outside click
+      document.getElementById('signupModal').addEventListener('click', (e) => {
+        if (e.target.id === 'signupModal') closeModal('signupModal');
+      });
+      document.getElementById('loginModal').addEventListener('click', (e) => {
+        if (e.target.id === 'loginModal') closeModal('loginModal');
+      });
+
+      // Sign Up function per auth_system.json
+      function signupUser(event) {
+        event.preventDefault();
+        const username = document.getElementById('signup_username').value.trim();
+        const email = document.getElementById('signup_email').value.trim();
+        const password = document.getElementById('signup_password').value;
+
+        const users = JSON.parse(localStorage.getItem('users') || '[]');
+        
+        // Check if email already exists
+        if (users.find(u => u.email === email)) {
+          document.getElementById('signup_error').textContent = 'Email already registered';
+          document.getElementById('signup_error').style.display = 'block';
+          return;
+        }
+
+        // Check if username already exists
+        if (users.find(u => u.username === username)) {
+          document.getElementById('signup_error').textContent = 'Username already taken';
+          document.getElementById('signup_error').style.display = 'block';
+          return;
+        }
+
+        // Save new user
+        users.push({ username, email, password });
+        localStorage.setItem('users', JSON.stringify(users));
+
+        // Auto-login after signup
+        localStorage.setItem('currentUser', JSON.stringify({ username, email }));
+        document.getElementById('signup_success').textContent = 'Account created! Logging in...';
+        document.getElementById('signup_success').style.display = 'block';
+        
+        setTimeout(() => {
+          closeModal('signupModal');
+          checkAuthStatus();
+          loadRecentPresentations(); // Reload presentations for new user
+          location.reload();
+        }, 1000);
+      }
+
+      // Login function per auth_system.json
+      function loginUser(event) {
+        event.preventDefault();
+        const email = document.getElementById('login_email').value.trim();
+        const password = document.getElementById('login_password').value;
+
+        const users = JSON.parse(localStorage.getItem('users') || '[]');
+        const user = users.find(u => u.email === email && u.password === password);
+
+        if (!user) {
+          document.getElementById('login_error').textContent = 'Invalid email or password';
+          document.getElementById('login_error').style.display = 'block';
+          return;
+        }
+
+        // Store current user
+        localStorage.setItem('currentUser', JSON.stringify({ username: user.username, email: user.email }));
+        closeModal('loginModal');
+        checkAuthStatus();
+        loadRecentPresentations(); // Reload presentations for logged-in user
+        location.reload();
+      }
+
+      // Logout function per auth_system.json
+      document.getElementById('btnLogOut').addEventListener('click', () => {
+        localStorage.removeItem('currentUser');
+        checkAuthStatus();
+        loadRecentPresentations(); // Reload to show empty state
+        location.reload();
+      });
+
+      // Initialize auth status and load presentations on page load
+      checkAuthStatus();
       loadRecentPresentations();
     </script>
   </body>
