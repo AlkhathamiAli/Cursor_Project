@@ -65,6 +65,15 @@ function savePresentation() {
           "styles": { "fontSize": "16px", "minHeight": "250px", "border": "1px dashed #ccc" }
         }
       ]
+    },
+
+    "slidePreview": {
+      "hoverButtons": [
+        { "name": "New Slide", "action": "createNewSlide()" },
+        { "name": "Duplicate", "action": "duplicateCurrentSlide()" }
+      ],
+      "position": "below",
+      "visibility": "onHover"
     }
   },
 

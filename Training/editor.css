@@ -1,0 +1,54 @@
+body {
+    background: linear-gradient(145deg, #042c1a, #064a2c);
+    color: #e8f5e9;
+  }
+  
+  .editor-container {
+    background: rgba(255, 255, 255, 0.07);
+    backdrop-filter: blur(10px);
+    border-radius: 12px;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
+  }
+  
+  body[data-theme="dark-green"] {
+    background: #0b3d2e;
+  }
+  
+  body[data-theme="white"] {
+    background: #ffffff;
+    color: #000000;
+  }
+  
+  body[data-theme="black"] {
+    background: #000000;
+    color: #ffffff;
+  }
+
+  .slide-preview {
+    position: relative;
+    margin-bottom: 50px;
+  }
+
+  .hover-buttons {
+    display: none;
+    position: absolute;
+    bottom: -35px;
+    left: 0;
+    right: 0;
+    gap: 8px;
+    pointer-events: auto;
+    z-index: 1000;
+  }
+
+  .slide-preview:hover .hover-buttons,
+  .hover-buttons:hover {
+    display: flex;
+    animation: fadeIn 0.2s ease-in-out;
+    pointer-events: auto;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(5px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  

@@ -7,6 +7,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="./Training/editor.css">
     <style>
       :root {
         --bg: #ffffff;
@@ -32,10 +33,15 @@
       .topbar .btn.emerald { background:#10b981; border-color:#059669; color:#fff; }
 
       .main { display:grid; grid-template-columns: 260px 1fr; gap: 12px; padding: 12px; min-height:0; }
-      .sidebar { background: rgba(255, 255, 255, 0.07); backdrop-filter: blur(10px); border:1px solid rgba(255,255,255,0.1); border-radius:12px; padding:10px; overflow:auto; }
-      .slide-item { background: rgba(255, 255, 255, 0.1); border:1px solid rgba(255,255,255,0.1); border-radius:8px; padding:10px; margin-bottom:10px; cursor:pointer; transition: background .2s; color: #e8f5e9; }
-      .slide-item:hover { background: rgba(255, 255, 255, 0.15); }
-      .slide-item.active { outline:2px solid #2ecc71; background: rgba(46, 204, 113, 0.2); }
+      .sidebar { background: rgba(255, 255, 255, 0.07); backdrop-filter: blur(10px); border:1px solid rgba(255,255,255,0.1); border-radius:12px; padding:10px; padding-bottom: 60px; overflow-y: auto; overflow-x: visible; }
+      .slide-preview { background: rgba(255, 255, 255, 0.1); border:1px solid rgba(255,255,255,0.1); border-radius:8px; padding:10px; cursor:pointer; transition: background .2s; color: #e8f5e9; position: relative; }
+      .slide-preview:hover { background: rgba(255, 255, 255, 0.15); }
+      .slide-preview.active { outline:2px solid #2ecc71; background: rgba(46, 204, 113, 0.2); }
+      .hover-buttons { flex-direction: row; justify-content: center; }
+      .hover-buttons button { background: #1a73e8; color: #fff; border: none; border-radius: 4px; padding: 6px 12px; font-size: 12px; cursor: pointer; transition: background .2s; }
+      .hover-buttons button:hover { background: #1557b0; }
+      .hover-buttons button.duplicate-btn { background: #6b7280; }
+      .hover-buttons button.duplicate-btn:hover { background: #4b5563; }
 
       .editor { display:grid; grid-template-rows: auto 1fr; background: rgba(255, 255, 255, 0.07); backdrop-filter: blur(10px); border-radius:12px; box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4); }
       .toolbar { display:flex; align-items:center; gap:6px; padding:8px 12px; border-bottom:1px solid var(--border); background:#f0f3f5; flex-wrap:wrap; box-shadow:0 2px 6px rgba(0,0,0,0.05); }
@@ -113,8 +119,6 @@
   <body>
     <div class="layout">
       <div class="topbar">
-        <button class="btn blue" id="btnNew" data-action="new_slide">New Slide</button>
-        <button class="btn gray" id="btnDup" data-action="duplicate_slide">Duplicate</button>
         <button class="btn red" id="btnDel" data-action="delete_slide">Delete</button>
         <button class="btn light" id="btnReset" data-action="reset_slides">Reset</button>
         <button class="btn green" id="btnSave" data-action="save_presentation">Save</button>
@@ -169,7 +173,7 @@
         sidebar.innerHTML = '';
         slides.forEach((s, i) => {
           const el = document.createElement('div');
-          el.className = 'slide-item' + (i === active ? ' active' : '');
+          el.className = 'slide-preview' + (i === active ? ' active' : '');
           el.textContent = s.title || `Slide ${i+1}`;
           el.addEventListener('click', () => {
             capture();
@@ -177,6 +181,51 @@
             load();
             renderSidebar();
           });
+          
+          // Add hover buttons per Editor.json slidePreview
+          const hoverButtons = document.createElement('div');
+          hoverButtons.className = 'hover-buttons';
+          
+          // Keep buttons visible when hovering over them
+          let hideTimeout;
+          const showButtons = () => {
+            clearTimeout(hideTimeout);
+            hoverButtons.style.display = 'flex';
+          };
+          const hideButtons = () => {
+            hideTimeout = setTimeout(() => {
+              hoverButtons.style.display = 'none';
+            }, 100);
+          };
+          
+          el.addEventListener('mouseenter', showButtons);
+          el.addEventListener('mouseleave', hideButtons);
+          hoverButtons.addEventListener('mouseenter', showButtons);
+          hoverButtons.addEventListener('mouseleave', hideButtons);
+          
+          const newSlideBtn = document.createElement('button');
+          newSlideBtn.textContent = 'New Slide';
+          newSlideBtn.style.pointerEvents = 'auto';
+          newSlideBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            e.preventDefault();
+            createNewSlide(i);
+          });
+          
+          const duplicateBtn = document.createElement('button');
+          duplicateBtn.textContent = 'Duplicate';
+          duplicateBtn.className = 'duplicate-btn';
+          duplicateBtn.style.pointerEvents = 'auto';
+          duplicateBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            e.preventDefault();
+            duplicateCurrentSlide(i);
+          });
+          
+          hoverButtons.appendChild(newSlideBtn);
+          hoverButtons.appendChild(duplicateBtn);
+          el.appendChild(hoverButtons);
+          
           sidebar.appendChild(el);
         });
       }
@@ -454,23 +503,6 @@
       }
 
       // Topbar button actions per slides.json
-      document.getElementById('btnNew').addEventListener('click', () => {
-        capture();
-        slides.push({ title: `Slide ${slides.length+1}`, content: '' });
-        active = slides.length - 1;
-        load();
-        renderSidebar();
-      });
-
-      document.getElementById('btnDup').addEventListener('click', () => {
-        capture();
-        const s = slides[active];
-        slides.splice(active + 1, 0, { title: s.title + ' copy', content: s.content });
-        active += 1;
-        load();
-        renderSidebar();
-      });
-
       document.getElementById('btnDel').addEventListener('click', () => {
         if (slides.length <= 1) return;
         slides.splice(active, 1);
@@ -495,6 +527,24 @@
         capture();
         window.location.href = './templates.html';
       });
+
+      // Hover button functions per Editor.json slidePreview
+      function createNewSlide(index) {
+        capture();
+        slides.splice(index + 1, 0, { title: `Slide ${slides.length+1}`, content: '' });
+        active = index + 1;
+        load();
+        renderSidebar();
+      }
+
+      function duplicateCurrentSlide(index) {
+        capture();
+        const s = slides[index];
+        slides.splice(index + 1, 0, { title: s.title + ' copy', content: s.content });
+        active = index + 1;
+        load();
+        renderSidebar();
+      }
 
       // Auto-save on input
       titleBox.addEventListener('input', () => {
