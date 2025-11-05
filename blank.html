@@ -38,7 +38,7 @@
       .slide-preview:hover { background: rgba(255, 255, 255, 0.15); }
       .slide-preview.active { outline:2px solid #2ecc71; background: rgba(46, 204, 113, 0.2); }
       .hover-buttons { flex-direction: row; justify-content: center; }
-      .hover-buttons button { background: #1a73e8; color: #fff; border: none; border-radius: 4px; padding: 6px 12px; font-size: 12px; cursor: pointer; transition: background .2s; }
+      .hover-buttons button { background: #1a73e8; color: #fff; border: none; border-radius: 8px; padding: 6px 12px; font-size: 12px; cursor: pointer; transition: background .2s; }
       .hover-buttons button:hover { background: #1557b0; }
       .hover-buttons button.duplicate-btn { background: #6b7280; }
       .hover-buttons button.duplicate-btn:hover { background: #4b5563; }
@@ -194,8 +194,10 @@
           };
           const hideButtons = () => {
             hideTimeout = setTimeout(() => {
-              hoverButtons.style.display = 'none';
-            }, 100);
+              if (!el.matches(':hover') && !hoverButtons.matches(':hover')) {
+                hoverButtons.style.display = 'none';
+              }
+            }, 200);
           };
           
           el.addEventListener('mouseenter', showButtons);
@@ -221,6 +223,15 @@
             e.preventDefault();
             duplicateCurrentSlide(i);
           });
+          
+          // Also keep buttons visible when hovering over individual buttons
+          const keepVisible = () => {
+            clearTimeout(hideTimeout);
+            hoverButtons.style.display = 'flex';
+          };
+          
+          newSlideBtn.addEventListener('mouseenter', keepVisible);
+          duplicateBtn.addEventListener('mouseenter', keepVisible);
           
           hoverButtons.appendChild(newSlideBtn);
           hoverButtons.appendChild(duplicateBtn);
