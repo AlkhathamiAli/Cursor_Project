@@ -18,32 +18,38 @@
       }
       * { box-sizing: border-box; }
       html, body { height: 100%; }
-      body { margin: 0; font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif; color: var(--text); background: var(--panel); }
+      body { margin: 0; font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif; background: linear-gradient(145deg, #042c1a, #064a2c); color: #e8f5e9; }
 
       .layout { display: grid; grid-template-rows: 56px 1fr; height: 100%; }
-      .topbar { display:flex; align-items:center; gap:10px; padding: 8px 12px; background:#fff; border-bottom:1px solid var(--border); }
+      .topbar { display:flex; align-items:center; gap:10px; padding: 8px 12px; background: rgba(255, 255, 255, 0.07); backdrop-filter: blur(10px); border-bottom:1px solid rgba(255,255,255,0.1); }
       .topbar .btn { border:1px solid var(--border); background:#fff; border-radius:8px; padding:8px 12px; font-weight:700; cursor:pointer; transition: opacity .2s; }
       .topbar .btn:hover { opacity: 0.9; }
       .topbar .btn.blue { background:#1a73e8; border-color:#1a73e8; color:#fff; }
       .topbar .btn.gray { background:#f3f4f6; }
       .topbar .btn.red { background:#fee2e2; border-color:#fecaca; color:#991b1b; }
       .topbar .btn.light { background:#f9fafb; }
-      .topbar .btn.emerald { background:#10b981; border-color:#059669; color:#fff; }
       .topbar .btn.green { background:#10b981; border-color:#059669; color:#06221e; }
+      .topbar .btn.emerald { background:#10b981; border-color:#059669; color:#fff; }
 
       .main { display:grid; grid-template-columns: 260px 1fr; gap: 12px; padding: 12px; min-height:0; }
-      .sidebar { background:#fff; border:1px solid var(--border); border-radius:12px; padding:10px; overflow:auto; }
-      .slide-item { background:#fff; border:1px solid var(--border); border-radius:8px; padding:10px; margin-bottom:10px; cursor:pointer; transition: background .2s; }
-      .slide-item:hover { background:#f9fafb; }
-      .slide-item.active { outline:2px solid #1a73e8; background:#eff6ff; }
+      .sidebar { background: rgba(255, 255, 255, 0.07); backdrop-filter: blur(10px); border:1px solid rgba(255,255,255,0.1); border-radius:12px; padding:10px; overflow:auto; }
+      .slide-item { background: rgba(255, 255, 255, 0.1); border:1px solid rgba(255,255,255,0.1); border-radius:8px; padding:10px; margin-bottom:10px; cursor:pointer; transition: background .2s; color: #e8f5e9; }
+      .slide-item:hover { background: rgba(255, 255, 255, 0.15); }
+      .slide-item.active { outline:2px solid #2ecc71; background: rgba(46, 204, 113, 0.2); }
 
-      .editor { display:grid; grid-template-rows: 1fr; background:#fff; border:1px solid var(--border); border-radius:12px; }
+      .editor { display:grid; grid-template-rows: auto 1fr; background: rgba(255, 255, 255, 0.07); backdrop-filter: blur(10px); border-radius:12px; box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4); }
+      .toolbar { display:flex; align-items:center; gap:6px; padding:8px 12px; border-bottom:1px solid var(--border); background:#f0f3f5; flex-wrap:wrap; box-shadow:0 2px 6px rgba(0,0,0,0.05); }
+      .tool { border:1px solid #d8e0e3; background:#fff; border-radius:6px; padding:6px 10px; font-weight:700; cursor:pointer; font-size:13px; transition:all .2s; }
+      .tool:hover { background:#f7f8fa; }
+      .tool.active { background:#2ecc71; border-color:#2ecc71; color:#fff; }
+      .tool-select { border:1px solid #d8e0e3; background:#fff; border-radius:6px; padding:6px 8px; font-size:13px; cursor:pointer; }
+      .tool-color { width:32px; height:28px; border:1px solid #d8e0e3; border-radius:6px; cursor:pointer; }
       .canvas-wrap { display:grid; place-items:center; padding:24px; overflow:auto; }
-      .canvas { width:min(92vw, 960px); aspect-ratio:16/9; background:#fff; border:1px solid var(--border); border-radius:12px; padding:24px; display:grid; grid-template-rows: auto 1fr; gap:10px; }
+      .canvas { width:min(92vw, 960px); aspect-ratio:16/9; background:#fff; border:1px solid rgba(255,255,255,0.2); border-radius:12px; padding:24px; display:grid; grid-template-rows: auto 1fr; gap:10px; }
       
-      /* Title box per slides.json */
+      /* Title box per Editor.json */
       .title-box {
-        font-size: 32px;
+        font-size: 28px;
         font-weight: bold;
         border: 1px dashed #ccc;
         margin-bottom: 10px;
@@ -61,12 +67,12 @@
         border-style: solid;
       }
 
-      /* Text box per slides.json */
+      /* Text box per Editor.json */
       .text-box {
-        font-size: 18px;
+        font-size: 16px;
         border: 1px dashed #ccc;
         padding: 10px;
-        min-height: 200px;
+        min-height: 250px;
         outline: none;
         overflow-y: auto;
       }
@@ -109,14 +115,37 @@
         <button class="btn gray" id="btnDup" data-action="duplicate_slide">Duplicate</button>
         <button class="btn red" id="btnDel" data-action="delete_slide">Delete</button>
         <button class="btn light" id="btnReset" data-action="reset_slides">Reset</button>
-        <button class="btn emerald" id="btnSave" data-action="save_presentation">Save</button>
+        <button class="btn green" id="btnSave" data-action="save_presentation">Save</button>
+        <button class="btn green" id="btnSaveAs" data-action="save_as_file">Save As</button>
         <div style="flex:1"></div>
-        <button class="btn green" id="btnHome" data-action="go_home">Return Home</button>
+        <button class="btn emerald" id="btnHome" data-action="go_home">Return Home</button>
       </div>
 
       <div class="main">
         <aside class="sidebar" id="sidebar"></aside>
         <section class="editor">
+          <div class="toolbar" id="toolbar">
+            <button class="tool" data-action="bold" title="Bold">B</button>
+            <button class="tool" data-action="italic" title="Italic">I</button>
+            <button class="tool" data-action="underline" title="Underline">U</button>
+            <button class="tool" data-action="strikeThrough" title="Strikethrough">S</button>
+            <button class="tool" data-action="superscript" title="Superscript">x²</button>
+            <button class="tool" data-action="subscript" title="Subscript">x₂</button>
+            <select class="tool-select" id="fontSize" title="Font Size">
+              <option value="small">Small</option>
+              <option value="normal" selected>Normal</option>
+              <option value="large">Large</option>
+              <option value="huge">Huge</option>
+            </select>
+            <input type="color" class="tool-color" id="fontColor" value="#000000" title="Font Color">
+            <input type="color" class="tool-color" id="highlightColor" value="#ffff00" title="Highlight">
+            <button class="tool" data-action="justifyLeft" title="Align Left">◀</button>
+            <button class="tool" data-action="justifyCenter" title="Align Center">⬌</button>
+            <button class="tool" data-action="justifyRight" title="Align Right">▶</button>
+            <button class="tool" data-action="justifyFull" title="Justify">⬌⬌</button>
+            <button class="tool" data-action="insertUnorderedList" title="Bullet List">• List</button>
+            <button class="tool" data-action="insertOrderedList" title="Numbered List">1. List</button>
+          </div>
           <div class="canvas-wrap">
             <div class="canvas" id="canvas">
               <div class="title-box" contenteditable="true" id="titleBox" data-placeholder="Click to add title"></div>
@@ -169,6 +198,75 @@
         slides[active].content = textBox.textContent.trim() || '';
       }
 
+      // Toolbar interactions per Editor.json
+      function getActiveElement() {
+        const selection = window.getSelection();
+        if (selection.rangeCount > 0) {
+          return selection.getRangeAt(0).commonAncestorContainer;
+        }
+        return document.activeElement === titleBox ? titleBox : textBox;
+      }
+
+      // Formatting tools
+      document.querySelectorAll('[data-action]').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          e.preventDefault();
+          const action = btn.getAttribute('data-action');
+          const activeEl = getActiveElement();
+          
+          // Focus on the active element if needed
+          if (activeEl === titleBox || activeEl === textBox || titleBox.contains(activeEl) || textBox.contains(activeEl)) {
+            if (titleBox.contains(activeEl) || activeEl === titleBox) {
+              titleBox.focus();
+            } else {
+              textBox.focus();
+            }
+          }
+
+          // Execute command
+          if (action === 'bold') document.execCommand('bold', false);
+          else if (action === 'italic') document.execCommand('italic', false);
+          else if (action === 'underline') document.execCommand('underline', false);
+          else if (action === 'strikeThrough') document.execCommand('strikeThrough', false);
+          else if (action === 'superscript') document.execCommand('superscript', false);
+          else if (action === 'subscript') document.execCommand('subscript', false);
+          else if (action === 'justifyLeft') document.execCommand('justifyLeft', false);
+          else if (action === 'justifyCenter') document.execCommand('justifyCenter', false);
+          else if (action === 'justifyRight') document.execCommand('justifyRight', false);
+          else if (action === 'justifyFull') document.execCommand('justifyFull', false);
+          else if (action === 'insertUnorderedList') document.execCommand('insertUnorderedList', false);
+          else if (action === 'insertOrderedList') document.execCommand('insertOrderedList', false);
+        });
+      });
+
+      // Font size dropdown per Editor.json changeFontSize function
+      function changeFontSize(size) {
+        document.execCommand("fontSize", false, "7"); // placeholder
+        const elements = document.getElementsByTagName("font");
+        for (let i = 0; i < elements.length; i++) {
+          if (elements[i].size === "7") {
+            elements[i].removeAttribute("size");
+            elements[i].style.fontSize = size + "px";
+          }
+        }
+      }
+
+      document.getElementById('fontSize').addEventListener('change', (e) => {
+        const size = e.target.value;
+        const sizes = { small: '12', normal: '16', large: '24', huge: '32' };
+        changeFontSize(sizes[size]);
+      });
+
+      // Font color picker
+      document.getElementById('fontColor').addEventListener('change', (e) => {
+        document.execCommand('foreColor', false, e.target.value);
+      });
+
+      // Highlight color picker
+      document.getElementById('highlightColor').addEventListener('change', (e) => {
+        document.execCommand('backColor', false, e.target.value);
+      });
+
       // Save function per Editor.json and auth_system.json
       function savePresentation() {
         const currentUser = JSON.parse(localStorage.getItem('currentUser') || 'null');
@@ -200,6 +298,35 @@
         setTimeout(() => {
           saveNotification.classList.remove('show');
         }, 2000);
+      }
+
+      // Save As function per Editor.json
+      function saveAsFile() {
+        capture();
+        const title = titleBox.textContent.trim() || "Untitled";
+        const content = textBox.innerHTML || "";
+
+        const fileType = prompt("Enter file type: pdf or pptx").toLowerCase();
+
+        if (fileType === "pdf") {
+          const blob = new Blob([content], { type: "application/pdf" });
+          const url = URL.createObjectURL(blob);
+          const a = document.createElement("a");
+          a.href = url;
+          a.download = `${title}.pdf`;
+          a.click();
+          URL.revokeObjectURL(url);
+        } else if (fileType === "pptx") {
+          const blob = new Blob([content], { type: "application/vnd.openxmlformats-officedocument.presentationml.presentation" });
+          const url = URL.createObjectURL(blob);
+          const a = document.createElement("a");
+          a.href = url;
+          a.download = `${title}.pptx`;
+          a.click();
+          URL.revokeObjectURL(url);
+        } else {
+          alert("Invalid format. Use 'pdf' or 'pptx'.");
+        }
       }
 
       // Topbar button actions per slides.json
@@ -238,6 +365,7 @@
       });
 
       document.getElementById('btnSave').addEventListener('click', savePresentation);
+      document.getElementById('btnSaveAs').addEventListener('click', saveAsFile);
 
       document.getElementById('btnHome').addEventListener('click', () => {
         capture();
