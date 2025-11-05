@@ -7,6 +7,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link rel="stylesheet" href="./Training/editor.css">
     <style>
       :root {
@@ -25,6 +26,8 @@
       .topbar { display:flex; align-items:center; gap:10px; padding: 8px 12px; background: rgba(255, 255, 255, 0.07); backdrop-filter: blur(10px); border-bottom:1px solid rgba(255,255,255,0.1); }
       .topbar .btn { border:1px solid var(--border); background:#fff; border-radius:8px; padding:8px 12px; font-weight:700; cursor:pointer; transition: opacity .2s; }
       .topbar .btn:hover { opacity: 0.9; }
+      .toolbar-btn { display: flex; align-items: center; justify-content: center; gap: 6px; min-width: 40px; padding: 8px 12px; }
+      .toolbar-btn i { font-size: 16px; }
       .topbar .btn.blue { background:#1a73e8; border-color:#1a73e8; color:#fff; }
       .topbar .btn.gray { background:#f3f4f6; }
       .topbar .btn.red { background:#fee2e2; border-color:#fecaca; color:#991b1b; }
@@ -210,14 +213,28 @@
   <body>
     <div class="layout">
       <div class="topbar">
-        <button class="btn blue" id="btnBack" data-action="back" title="Back (Cmd+Z / Ctrl+Z)">◀</button>
-        <button class="btn blue" id="btnForward" data-action="forward" title="Forward (Cmd+Shift+Z / Ctrl+Shift+Z)">▶</button>
-        <button class="btn red" id="btnDel" data-action="delete_slide">Delete</button>
-        <button class="btn light" id="btnReset" data-action="reset_slides">Reset</button>
-        <button class="btn green" id="btnSave" data-action="save_presentation">Save</button>
-        <button class="btn green" id="btnSaveAs" data-action="save_as_file">Save As</button>
+        <button class="btn blue toolbar-btn" id="btnBack" data-action="back" title="Back (Cmd+Z / Ctrl+Z)">
+          <i class="fas fa-arrow-left"></i>
+        </button>
+        <button class="btn blue toolbar-btn" id="btnForward" data-action="forward" title="Forward (Cmd+Shift+Z / Ctrl+Shift+Z)">
+          <i class="fas fa-arrow-right"></i>
+        </button>
+        <button class="btn red toolbar-btn" id="btnDel" data-action="delete_slide" title="Delete Slide">
+          <i class="fas fa-trash"></i>
+        </button>
+        <button class="btn light toolbar-btn" id="btnReset" data-action="reset_slides" title="Reset Slides">
+          <i class="fas fa-rotate-right"></i>
+        </button>
+        <button class="btn green toolbar-btn" id="btnSave" data-action="save_presentation" title="Save Presentation">
+          <i class="fas fa-save"></i>
+        </button>
+        <button class="btn green toolbar-btn" id="btnSaveAs" data-action="save_as_file" title="Save As">
+          <i class="fas fa-folder-open"></i>
+        </button>
         <div style="flex:1"></div>
-        <button class="btn emerald" id="btnHome" data-action="go_home">Return Home</button>
+        <button class="btn emerald toolbar-btn" id="btnHome" data-action="go_home" title="Return Home">
+          <i class="fas fa-home"></i>
+        </button>
       </div>
 
       <div class="main">

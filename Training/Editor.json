@@ -19,14 +19,15 @@ function savePresentation() {
   "layout": {
     "topBar": {
       "buttons": [
-        { "label": "Back", "icon": "◀", "color": "blue", "action": "undoLastAction()" },
-        { "label": "Forward", "icon": "▶", "color": "blue", "action": "redoLastAction()" },
-        { "label": "New Slide", "color": "blue", "action": "new_slide" },
-        { "label": "Duplicate", "color": "gray", "action": "duplicate_slide" },
-        { "label": "Delete", "color": "red", "action": "delete_slide" },
-        { "label": "Reset", "color": "lightgray", "action": "reset_slides" },
-        { "label": "Save", "color": "green", "action": "save_presentation" },
-        { "label": "Return Home", "color": "emerald", "align": "right", "action": "go_home" }
+        { "label": "Back", "icon": "fa-arrow-left", "color": "blue", "action": "undoLastAction()" },
+        { "label": "Forward", "icon": "fa-arrow-right", "color": "blue", "action": "redoLastAction()" },
+        { "label": "New Slide", "icon": "fa-plus", "color": "blue", "action": "new_slide" },
+        { "label": "Duplicate", "icon": "fa-copy", "color": "gray", "action": "duplicate_slide" },
+        { "label": "Delete", "icon": "fa-trash", "color": "red", "action": "delete_slide" },
+        { "label": "Reset", "icon": "fa-rotate-right", "color": "lightgray", "action": "reset_slides" },
+        { "label": "Save", "icon": "fa-save", "color": "green", "action": "save_presentation" },
+        { "label": "Save As", "icon": "fa-folder-open", "color": "green", "action": "save_as_file" },
+        { "label": "Return Home", "icon": "fa-home", "color": "emerald", "align": "right", "action": "go_home" }
       ]
     },
     
