@@ -1,0 +1,18 @@
+{
+  "page": "settings",
+  "components": {
+    "backgroundSelector": {
+      "type": "dropdown",
+      "label": "Background Color",
+      "options": [
+        { "name": "Dark Green", "value": "#0b3d2e" },
+        { "name": "White", "value": "#ffffff" },
+        { "name": "Black", "value": "#000000" }
+      ],
+      "default": "#0b3d2e"
+    }
+  },
+  "navbar": {
+    "buttons": ["Settings"]
+  }
+}

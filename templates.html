@@ -26,18 +26,17 @@
       a { color: inherit; text-decoration: none; }
       img { max-width: 100%; display: block; }
 
-      /* Header */
+      /* Header per Home.json */
       header {
         position: sticky; top: 0; z-index: 10;
-        backdrop-filter: blur(25px);
-        background: rgba(0, 26, 18, 0.6);
+        background: #0b3d2e;
         border-bottom: 1px solid rgba(255,255,255,0.1);
       }
       .nav { max-width: 1200px; margin: 0 auto; padding: 12px 20px; display: flex; align-items: center; gap: 16px; position: relative; z-index: 1; }
-      .logo { font-weight: 700; letter-spacing: .2px; color: #E8F5E9; }
+      .logo { font-weight: 700; letter-spacing: .2px; color: white; }
       .menu { display: flex; gap: 12px; }
-      .menu a { color: #A5D6A7; font-weight: 600; padding: 8px 10px; border-radius: 8px; transition: color .2s; }
-      .menu a:hover { color: #E8F5E9; }
+      .menu a { color: white; font-weight: 600; padding: 8px 10px; border-radius: 8px; transition: opacity .2s; }
+      .menu a:hover { opacity: 0.8; }
       .spacer { flex: 1; }
 
       /* Layout */
@@ -115,6 +114,7 @@
       .auth-btn.green { background: #10b981; color: #06221e; }
       .auth-btn.emerald { background: #10b981; color: #fff; }
       .auth-btn.gray { background: #6b7280; color: #fff; }
+      .user-info { color: white; margin-right: 12px; }
 
       /* Auth Modal */
       .modal { display: none; position: fixed; inset: 0; z-index: 1000; backdrop-filter: blur(25px); background: rgba(0,0,0,0.5); }
@@ -132,7 +132,6 @@
       .form-submit.emerald { background: #10b981; color: #fff; }
       .error-message { color: #f87171; font-size: 12px; margin-top: 8px; }
       .success-message { color: #10b981; font-size: 12px; margin-top: 8px; }
-      .user-info { color: #A5D6A7; margin-right: 12px; }
     </style>
   </head>
   <body>
@@ -140,9 +139,8 @@
       <div class="nav">
         <div class="logo">SlideMaker</div>
         <nav class="menu" aria-label="Main">
-          <a href="#">Home</a>
-          <a href="#">My Slides</a>
-          <a href="#">Settings</a>
+          <a href="./templates.html">Home</a>
+          <a href="./settings.html">Settings</a>
         </nav>
         <div class="spacer"></div>
         <div class="auth-buttons" id="authButtons">
@@ -424,6 +422,31 @@
       // Initialize auth status and load presentations on page load
       checkAuthStatus();
       loadRecentPresentations();
+
+      // Load and apply saved background color from settings
+      const savedBg = localStorage.getItem('siteBackgroundColor') || '#0b3d2e';
+      if (savedBg !== '#0b3d2e') {
+        document.body.style.background = savedBg;
+        if (savedBg === '#ffffff') {
+          document.body.style.color = '#333';
+        } else if (savedBg === '#000000') {
+          document.body.style.color = '#E8F5E9';
+        }
+      }
+
+      // Listen for background color updates from settings page
+      window.addEventListener('message', (e) => {
+        if (e.data.type === 'updateBackground') {
+          document.body.style.background = e.data.color;
+          if (e.data.color === '#ffffff') {
+            document.body.style.color = '#333';
+          } else if (e.data.color === '#000000') {
+            document.body.style.color = '#E8F5E9';
+          } else {
+            document.body.style.color = '#E8F5E9';
+          }
+        }
+      });
     </script>
   </body>
   </html>

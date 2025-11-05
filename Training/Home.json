@@ -32,8 +32,9 @@
     "layout": {
       "header": {
         "logo": "SlideMaker",
-        "menu": ["Home", "My Slides", "Settings"],
-        "text_color": "#A5D6A7"
+        "menu": ["Home"],
+        "text_color": "white",
+        "backgroundColor": "#0b3d2e"
       },
       "sections": [
         {
@@ -72,5 +73,20 @@
       "Maintain glassmorphic background effects for depth.",
       "Ensure responsiveness and clean spacing."
     ]
+  }
+}
+
+{
+  "page": "home",
+  "navbar": {
+    "buttons": ["Home"],
+    "theme": {
+      "backgroundColor": "#0b3d2e",
+      "textColor": "white"
+    }
+  },
+  "style": {
+    "background": "#0b3d2e",
+    "textColor": "white"
   }
 }

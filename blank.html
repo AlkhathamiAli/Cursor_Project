@@ -51,6 +51,7 @@
       .title-box {
         font-size: 28px;
         font-weight: bold;
+        color: #000000;
         border: 1px dashed #ccc;
         margin-bottom: 10px;
         padding: 10px;
@@ -75,6 +76,7 @@
         min-height: 250px;
         outline: none;
         overflow-y: auto;
+        color: #000000;
       }
       .text-box[data-placeholder]:empty:before {
         content: attr(data-placeholder);
@@ -131,12 +133,7 @@
             <button class="tool" data-action="strikeThrough" title="Strikethrough">S</button>
             <button class="tool" data-action="superscript" title="Superscript">x²</button>
             <button class="tool" data-action="subscript" title="Subscript">x₂</button>
-            <select class="tool-select" id="fontSize" title="Font Size">
-              <option value="small">Small</option>
-              <option value="normal" selected>Normal</option>
-              <option value="large">Large</option>
-              <option value="huge">Huge</option>
-            </select>
+            <input type="number" class="tool-select" id="fontSize" title="Font Size" min="8" max="72" step="2" value="16" style="width: 80px;">
             <input type="color" class="tool-color" id="fontColor" value="#000000" title="Font Color">
             <input type="color" class="tool-color" id="highlightColor" value="#ffff00" title="Highlight">
             <button class="tool" data-action="justifyLeft" title="Align Left">◀</button>
@@ -159,8 +156,8 @@
     <div class="save-notification" id="saveNotification">Presentation saved!</div>
 
     <script>
-      // Model per slides.json: starting with one welcome slide
-      const slides = [{ title: 'Welcome', content: '' }];
+      // Model per Editor.json: starting with one slide titled "Title"
+      const slides = [{ title: 'Title', content: '' }];
       let active = 0;
 
       const sidebar = document.getElementById('sidebar');
@@ -186,7 +183,7 @@
 
       function load() {
         const slide = slides[active];
-        titleBox.textContent = slide.title || '';
+        titleBox.textContent = slide.title || 'Title';
         textBox.textContent = slide.content || '';
         // Trigger placeholder display if empty
         if (!titleBox.textContent.trim()) titleBox.innerHTML = '';
@@ -194,7 +191,7 @@
       }
 
       function capture() {
-        slides[active].title = titleBox.textContent.trim() || 'Untitled';
+        slides[active].title = titleBox.textContent.trim() || 'Title';
         slides[active].content = textBox.textContent.trim() || '';
       }
 
@@ -239,23 +236,150 @@
         });
       });
 
-      // Font size dropdown per Editor.json changeFontSize function
-      function changeFontSize(size) {
-        document.execCommand("fontSize", false, "7"); // placeholder
-        const elements = document.getElementsByTagName("font");
-        for (let i = 0; i < elements.length; i++) {
-          if (elements[i].size === "7") {
-            elements[i].removeAttribute("size");
-            elements[i].style.fontSize = size + "px";
+      // Store separate font sizes for title and text
+      let titleFontSize = 28;
+      let textFontSize = 16;
+      let currentActiveElement = textBox;
+
+      // Initialize default font sizes
+      titleBox.style.fontSize = titleFontSize + 'px';
+      textBox.style.fontSize = textFontSize + 'px';
+
+      // Function to get current font size from an element
+      function getCurrentFontSize(element) {
+        const computedStyle = window.getComputedStyle(element);
+        const fontSize = parseFloat(computedStyle.fontSize);
+        return Math.round(fontSize);
+      }
+
+      // Function to apply font size to an element
+      function applyFontSize(element, size) {
+        const selection = window.getSelection();
+        
+        // If there's selected text in the element, apply font size to selection
+        if (selection.rangeCount > 0 && !selection.isCollapsed && 
+            (element.contains(selection.anchorNode) || selection.anchorNode === element)) {
+          const range = selection.getRangeAt(0);
+          const span = document.createElement('span');
+          span.style.fontSize = size + 'px';
+          
+          try {
+            span.appendChild(range.extractContents());
+            range.insertNode(span);
+          } catch (e) {
+            document.execCommand("fontSize", false, "7");
+            setTimeout(() => {
+              const fonts = element.getElementsByTagName("font");
+              for (let i = fonts.length - 1; i >= 0; i--) {
+                if (fonts[i].size === "7") {
+                  const newSpan = document.createElement('span');
+                  newSpan.style.fontSize = size + 'px';
+                  newSpan.innerHTML = fonts[i].innerHTML;
+                  fonts[i].parentNode.replaceChild(newSpan, fonts[i]);
+                }
+              }
+            }, 10);
           }
+        } else {
+          // No selection - apply font size to the entire element
+          element.style.fontSize = size + 'px';
+          
+          // Wrap existing text nodes in spans to preserve formatting
+          const walker = document.createTreeWalker(element, NodeFilter.SHOW_TEXT, null);
+          const textNodes = [];
+          let node;
+          while (node = walker.nextNode()) {
+            const parent = node.parentElement;
+            if (!parent || !parent.style.fontSize) {
+              textNodes.push(node);
+            }
+          }
+          
+          textNodes.forEach(textNode => {
+            if (textNode.textContent.trim()) {
+              const span = document.createElement('span');
+              span.style.fontSize = size + 'px';
+              span.textContent = textNode.textContent;
+              textNode.parentNode.replaceChild(span, textNode);
+            }
+          });
         }
       }
 
-      document.getElementById('fontSize').addEventListener('change', (e) => {
-        const size = e.target.value;
-        const sizes = { small: '12', normal: '16', large: '24', huge: '32' };
-        changeFontSize(sizes[size]);
+      // Update font size input when focus changes
+      function updateFontSizeInput() {
+        const fontSizeInput = document.getElementById('fontSize');
+        if (currentActiveElement === titleBox) {
+          fontSizeInput.value = titleFontSize;
+        } else {
+          fontSizeInput.value = textFontSize;
+        }
+      }
+
+      // Track focus changes
+      titleBox.addEventListener('focus', () => {
+        currentActiveElement = titleBox;
+        updateFontSizeInput();
       });
+
+      textBox.addEventListener('focus', () => {
+        currentActiveElement = textBox;
+        updateFontSizeInput();
+      });
+
+      // Also check on selection changes
+      document.addEventListener('selectionchange', () => {
+        const selection = window.getSelection();
+        if (selection.rangeCount > 0) {
+          const anchorNode = selection.anchorNode;
+          if (titleBox.contains(anchorNode) || anchorNode === titleBox) {
+            if (currentActiveElement !== titleBox) {
+              currentActiveElement = titleBox;
+              updateFontSizeInput();
+            }
+          } else if (textBox.contains(anchorNode) || anchorNode === textBox) {
+            if (currentActiveElement !== textBox) {
+              currentActiveElement = textBox;
+              updateFontSizeInput();
+            }
+          }
+        }
+      });
+
+      // Font size input change handler
+      const fontSizeInput = document.getElementById('fontSize');
+      fontSizeInput.addEventListener('change', (e) => {
+        const size = parseInt(e.target.value);
+        if (!isNaN(size) && size >= 8 && size <= 72) {
+          if (currentActiveElement === titleBox) {
+            titleFontSize = size;
+            applyFontSize(titleBox, size);
+          } else {
+            textFontSize = size;
+            applyFontSize(textBox, size);
+          }
+        }
+      });
+      
+      // Validate input on blur
+      fontSizeInput.addEventListener('blur', (e) => {
+        const size = parseInt(e.target.value);
+        if (isNaN(size) || size < 8) {
+          e.target.value = currentActiveElement === titleBox ? titleFontSize : textFontSize;
+        } else if (size > 72) {
+          e.target.value = 72;
+          if (currentActiveElement === titleBox) {
+            titleFontSize = 72;
+            applyFontSize(titleBox, 72);
+          } else {
+            textFontSize = 72;
+            applyFontSize(textBox, 72);
+          }
+        }
+      });
+
+      // Initialize the input value
+      updateFontSizeInput();
 
       // Font color picker
       document.getElementById('fontColor').addEventListener('change', (e) => {
@@ -278,7 +402,7 @@
         }
 
         capture();
-        const title = titleBox.textContent.trim() || "Untitled";
+        const title = titleBox.textContent.trim() || "Title";
         const content = textBox.textContent.trim() || "";
         
         // Save to user-specific key per auth_system.json
@@ -303,7 +427,7 @@
       // Save As function per Editor.json
       function saveAsFile() {
         capture();
-        const title = titleBox.textContent.trim() || "Untitled";
+        const title = titleBox.textContent.trim() || "Title";
         const content = textBox.innerHTML || "";
 
         const fileType = prompt("Enter file type: pdf or pptx").toLowerCase();
@@ -357,7 +481,7 @@
 
       document.getElementById('btnReset').addEventListener('click', () => {
         if (confirm('Reset all slides? This cannot be undone.')) {
-          slides.splice(0, slides.length, { title: 'Welcome', content: '' });
+          slides.splice(0, slides.length, { title: 'Title', content: '' });
           active = 0;
           load();
           renderSidebar();
@@ -387,7 +511,7 @@
         try {
           const pres = JSON.parse(loadPres);
           // Set the title and content from saved presentation
-          slides[0].title = pres.title || 'Welcome';
+          slides[0].title = pres.title || 'Title';
           slides[0].content = pres.content || '';
           sessionStorage.removeItem('loadPresentation'); // Clear after loading
         } catch (e) {
