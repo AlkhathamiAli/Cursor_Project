@@ -1,0 +1,531 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Aramco Digital SlideMaker • Welcome</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+      * { 
+        box-sizing: border-box; 
+        margin: 0;
+        padding: 0;
+      }
+      
+      html, body {
+        height: 100%;
+        overflow: hidden;
+      }
+      
+      body {
+        font-family: Poppins, sans-serif;
+        background: linear-gradient(135deg, #001b12 0%, #0b3d2a 50%, #001b12 100%);
+        color: #e8f5e9;
+        position: relative;
+      }
+      
+      body::before {
+        content: '';
+        position: fixed;
+        inset: 0;
+        z-index: 0;
+        background: rgba(255, 255, 255, 0.03);
+        pointer-events: none;
+      }
+      
+      .auth-container {
+        height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        position: relative;
+        z-index: 1;
+        padding: 20px;
+      }
+      
+      .auth-box {
+        text-align: center;
+        background: rgba(255, 255, 255, 0.08);
+        padding: 60px 50px;
+        border-radius: 25px;
+        backdrop-filter: blur(15px);
+        -webkit-backdrop-filter: blur(15px);
+        box-shadow: 0 0 40px rgba(0, 0, 0, 0.3);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        animation: fadeIn 0.8s ease-in-out;
+        max-width: 450px;
+        width: 100%;
+      }
+      
+      .logo {
+        width: 80px;
+        height: 80px;
+        margin: 0 auto 30px;
+        background: linear-gradient(135deg, #00c853 0%, #00796b 100%);
+        border-radius: 20px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 2.5rem;
+        color: white;
+        box-shadow: 0 8px 20px rgba(0, 200, 83, 0.3);
+        animation: fadeIn 1s ease-in-out 0.2s both;
+      }
+      
+      .auth-box h1 {
+        color: #fff;
+        margin-bottom: 10px;
+        font-size: 2rem;
+        font-weight: 700;
+        animation: fadeIn 1s ease-in-out 0.3s both;
+        line-height: 1.2;
+      }
+      
+      .auth-box p {
+        color: #a9d9c1;
+        margin-bottom: 40px;
+        font-size: 1rem;
+        animation: fadeIn 1s ease-in-out 0.4s both;
+      }
+      
+      .auth-buttons {
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+        animation: fadeIn 1s ease-in-out 0.5s both;
+      }
+      
+      .btn {
+        display: block;
+        width: 100%;
+        padding: 14px 0;
+        font-size: 1rem;
+        font-weight: 600;
+        border-radius: 12px;
+        border: none;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        font-family: Poppins, sans-serif;
+      }
+      
+      .btn.signin {
+        background: linear-gradient(90deg, #00796b 0%, #00c853 100%);
+        color: white;
+        box-shadow: 0 4px 15px rgba(0, 200, 83, 0.3);
+      }
+      
+      .btn.signin:hover {
+        transform: scale(1.05);
+        box-shadow: 0 6px 20px rgba(0, 200, 83, 0.4);
+      }
+      
+      .btn.signup {
+        background: rgba(255, 255, 255, 0.15);
+        color: white;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+      }
+      
+      .btn.signup:hover {
+        transform: scale(1.05);
+        background: rgba(255, 255, 255, 0.2);
+      }
+      
+      .btn.visitor {
+        background: none;
+        border: 1px solid #4caf50;
+        color: #a9d9c1;
+        margin-top: 10px;
+        font-size: 0.9rem;
+        padding: 10px 0;
+      }
+      
+      .btn.visitor:hover {
+        transform: scale(1.05);
+        background: rgba(76, 175, 80, 0.1);
+        border-color: #00c853;
+        color: #00c853;
+      }
+      
+      @keyframes fadeIn {
+        from { 
+          opacity: 0; 
+          transform: translateY(15px); 
+        }
+        to { 
+          opacity: 1; 
+          transform: translateY(0); 
+        }
+      }
+      
+      /* Auth Modals */
+      .modal {
+        display: none;
+        position: fixed;
+        inset: 0;
+        z-index: 1000;
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        background: rgba(0, 0, 0, 0.6);
+        animation: fadeIn 0.3s ease;
+      }
+      
+      .modal.active {
+        display: grid;
+        place-items: center;
+      }
+      
+      .modal-content {
+        background: rgba(13, 47, 34, 0.95);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 20px;
+        padding: 40px;
+        width: min(90vw, 420px);
+        box-shadow: 0 8px 30px rgba(0, 0, 0, 0.4);
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+        color: #E8F5E9;
+        position: relative;
+        animation: fadeIn 0.4s ease 0.1s both;
+      }
+      
+      .modal-header {
+        margin-bottom: 30px;
+        text-align: center;
+      }
+      
+      .modal-title {
+        font-size: 1.8rem;
+        font-weight: 700;
+        margin: 0 0 8px;
+        color: #fff;
+      }
+      
+      .modal-subtitle {
+        color: #a9d9c1;
+        font-size: 0.95rem;
+      }
+      
+      .modal-close {
+        position: absolute;
+        top: 20px;
+        right: 20px;
+        background: transparent;
+        border: none;
+        color: #a9d9c1;
+        font-size: 24px;
+        cursor: pointer;
+        width: 35px;
+        height: 35px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+        transition: all 0.3s ease;
+      }
+      
+      .modal-close:hover {
+        background: rgba(255, 255, 255, 0.1);
+        color: #fff;
+      }
+      
+      .form-group {
+        margin-bottom: 20px;
+      }
+      
+      .form-label {
+        display: block;
+        margin-bottom: 8px;
+        color: #a9d9c1;
+        font-weight: 600;
+        font-size: 0.9rem;
+      }
+      
+      .form-input {
+        width: 100%;
+        padding: 12px 16px;
+        border-radius: 10px;
+        border: 1px solid rgba(255, 255, 255, 0.15);
+        background: rgba(0, 0, 0, 0.3);
+        color: #E8F5E9;
+        font-size: 1rem;
+        font-family: Poppins, sans-serif;
+        transition: all 0.3s ease;
+      }
+      
+      .form-input:focus {
+        outline: none;
+        border-color: #00c853;
+        background: rgba(0, 0, 0, 0.4);
+        box-shadow: 0 0 0 3px rgba(0, 200, 83, 0.1);
+      }
+      
+      .form-submit {
+        width: 100%;
+        padding: 14px;
+        border-radius: 10px;
+        border: none;
+        font-weight: 700;
+        cursor: pointer;
+        font-size: 1rem;
+        font-family: Poppins, sans-serif;
+        background: linear-gradient(90deg, #00796b 0%, #00c853 100%);
+        color: white;
+        transition: all 0.3s ease;
+        margin-top: 10px;
+      }
+      
+      .form-submit:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(0, 200, 83, 0.4);
+      }
+      
+      .error-message {
+        color: #f87171;
+        font-size: 0.85rem;
+        margin-top: 8px;
+        display: none;
+      }
+      
+      .error-message.show {
+        display: block;
+        animation: fadeIn 0.3s ease;
+      }
+      
+      .success-message {
+        color: #00c853;
+        font-size: 0.85rem;
+        margin-top: 8px;
+        display: none;
+      }
+      
+      .success-message.show {
+        display: block;
+        animation: fadeIn 0.3s ease;
+      }
+      
+      @media (max-width: 600px) {
+        .auth-box {
+          padding: 40px 30px;
+        }
+        
+        .auth-box h1 {
+          font-size: 1.8rem;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="auth-container">
+      <div class="auth-box">
+        <div class="logo">
+          <i class="fas fa-presentation"></i>
+        </div>
+        <h1>Welcome to Aramco Digital SlideMaker</h1>
+        <p>Create, edit, and share stunning presentations easily.</p>
+        <div class="auth-buttons">
+          <button class="btn signin" onclick="openModal('signinModal')">Sign In</button>
+          <button class="btn signup" onclick="openModal('signupModal')">Sign Up</button>
+          <button class="btn visitor" onclick="continueAsVisitor()">Continue as Visitor</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Sign In Modal -->
+    <div class="modal" id="signinModal">
+      <div class="modal-content">
+        <button class="modal-close" onclick="closeModal('signinModal')">&times;</button>
+        <div class="modal-header">
+          <h3 class="modal-title">Sign In</h3>
+          <p class="modal-subtitle">Welcome back! Please sign in to continue.</p>
+        </div>
+        <form id="signin_form" onsubmit="signInUser(event)">
+          <div class="form-group">
+            <label class="form-label" for="signin_email">Email</label>
+            <input class="form-input" type="email" id="signin_email" required placeholder="Enter your email">
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="signin_password">Password</label>
+            <input class="form-input" type="password" id="signin_password" required placeholder="Enter your password">
+          </div>
+          <div id="signin_error" class="error-message"></div>
+          <button type="submit" class="form-submit">Sign In</button>
+        </form>
+      </div>
+    </div>
+
+    <!-- Sign Up Modal -->
+    <div class="modal" id="signupModal">
+      <div class="modal-content">
+        <button class="modal-close" onclick="closeModal('signupModal')">&times;</button>
+        <div class="modal-header">
+          <h3 class="modal-title">Sign Up</h3>
+          <p class="modal-subtitle">Create your account to get started.</p>
+        </div>
+        <form id="signup_form" onsubmit="signUpUser(event)">
+          <div class="form-group">
+            <label class="form-label" for="signup_name">Name</label>
+            <input class="form-input" type="text" id="signup_name" required placeholder="Enter your name">
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="signup_email">Email</label>
+            <input class="form-input" type="email" id="signup_email" required placeholder="Enter your email">
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="signup_password">Password</label>
+            <input class="form-input" type="password" id="signup_password" required placeholder="Create a password">
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="signup_confirm">Confirm Password</label>
+            <input class="form-input" type="password" id="signup_confirm" required placeholder="Confirm your password">
+          </div>
+          <div id="signup_error" class="error-message"></div>
+          <div id="signup_success" class="success-message"></div>
+          <button type="submit" class="form-submit">Sign Up</button>
+        </form>
+      </div>
+    </div>
+
+    <script>
+      // Check if user is already authenticated
+      function checkAuth() {
+        const currentUser = JSON.parse(localStorage.getItem('currentUser') || 'null');
+        const isGuest = localStorage.getItem('guest') === 'true';
+        
+        if (currentUser || isGuest) {
+          window.location.href = './templates.html';
+        }
+      }
+      
+      // Check on page load
+      checkAuth();
+      
+      // Modal functions
+      function openModal(modalId) {
+        document.getElementById(modalId).classList.add('active');
+      }
+      
+      function closeModal(modalId) {
+        document.getElementById(modalId).classList.remove('active');
+        // Clear error messages
+        const errorEl = document.getElementById(modalId.replace('Modal', '_error'));
+        if (errorEl) {
+          errorEl.classList.remove('show');
+          errorEl.textContent = '';
+        }
+        const successEl = document.getElementById(modalId.replace('Modal', '_success'));
+        if (successEl) {
+          successEl.classList.remove('show');
+          successEl.textContent = '';
+        }
+      }
+      
+      // Close modals on outside click
+      document.getElementById('signinModal').addEventListener('click', (e) => {
+        if (e.target.id === 'signinModal') closeModal('signinModal');
+      });
+      
+      document.getElementById('signupModal').addEventListener('click', (e) => {
+        if (e.target.id === 'signupModal') closeModal('signupModal');
+      });
+      
+      // Sign In function
+      function signInUser(event) {
+        event.preventDefault();
+        const email = document.getElementById('signin_email').value.trim();
+        const password = document.getElementById('signin_password').value;
+        const errorEl = document.getElementById('signin_error');
+        
+        const users = JSON.parse(localStorage.getItem('users') || '[]');
+        const user = users.find(u => u.email === email && u.password === password);
+        
+        if (!user) {
+          errorEl.textContent = 'Invalid email or password';
+          errorEl.classList.add('show');
+          return;
+        }
+        
+        // Store current user
+        localStorage.setItem('currentUser', JSON.stringify({ 
+          username: user.username || user.name, 
+          email: user.email,
+          name: user.name || user.username 
+        }));
+        localStorage.removeItem('guest'); // Remove guest status if exists
+        
+        // Redirect to home
+        window.location.href = './templates.html';
+      }
+      
+      // Sign Up function
+      function signUpUser(event) {
+        event.preventDefault();
+        const name = document.getElementById('signup_name').value.trim();
+        const email = document.getElementById('signup_email').value.trim();
+        const password = document.getElementById('signup_password').value;
+        const confirm = document.getElementById('signup_confirm').value;
+        const errorEl = document.getElementById('signup_error');
+        const successEl = document.getElementById('signup_success');
+        
+        // Clear previous messages
+        errorEl.classList.remove('show');
+        successEl.classList.remove('show');
+        
+        // Validate passwords match
+        if (password !== confirm) {
+          errorEl.textContent = 'Passwords do not match';
+          errorEl.classList.add('show');
+          return;
+        }
+        
+        // Validate password length
+        if (password.length < 6) {
+          errorEl.textContent = 'Password must be at least 6 characters';
+          errorEl.classList.add('show');
+          return;
+        }
+        
+        const users = JSON.parse(localStorage.getItem('users') || '[]');
+        
+        // Check if email already exists
+        if (users.find(u => u.email === email)) {
+          errorEl.textContent = 'Email already registered';
+          errorEl.classList.add('show');
+          return;
+        }
+        
+        // Check if name/username already exists
+        if (users.find(u => (u.username || u.name) === name)) {
+          errorEl.textContent = 'Username already taken';
+          errorEl.classList.add('show');
+          return;
+        }
+        
+        // Save new user
+        users.push({ name, username: name, email, password });
+        localStorage.setItem('users', JSON.stringify(users));
+        
+        // Auto-login after signup
+        localStorage.setItem('currentUser', JSON.stringify({ username: name, email, name }));
+        localStorage.removeItem('guest'); // Remove guest status if exists
+        
+        successEl.textContent = 'Account created! Redirecting...';
+        successEl.classList.add('show');
+        
+        setTimeout(() => {
+          window.location.href = './templates.html';
+        }, 1000);
+      }
+      
+      // Continue as Visitor
+      function continueAsVisitor() {
+        localStorage.setItem('guest', 'true');
+        localStorage.removeItem('currentUser'); // Clear any existing user
+        window.location.href = './templates.html';
+      }
+    </script>
+  </body>
+</html>
+

@@ -274,7 +274,99 @@
         transform: translateY(-2px);
       }
       .canvas-wrap { display:grid; place-items:center; padding:24px; overflow:auto; }
-      .canvas { width:min(92vw, 960px); aspect-ratio:16/9; background:#ffffff; border-radius:10px; box-shadow: 0 0 25px rgba(0, 0, 0, 0.25); padding:24px; position: relative; }
+      .canvas { width:min(92vw, 960px); aspect-ratio:16/9; background:#ffffff; border-radius:10px; box-shadow: 0 0 25px rgba(0, 0, 0, 0.25); padding:24px; position: relative; background-size: cover; background-position: center; background-repeat: no-repeat; transition: background 0.6s ease-in-out; }
+      
+      /* Template Background Styles */
+      .canvas.marketing-template {
+        background-image: url('./CURSOR-Project/Background/B1.avif');
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        transition: background 0.6s ease-in-out;
+      }
+      
+      .canvas.marketing-template::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.2);
+        pointer-events: none;
+        border-radius: 10px;
+        z-index: 0;
+      }
+      
+      .canvas.business-template {
+        background-image: url('./CURSOR-Project/Background/business-bg.jpg');
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        transition: background 0.6s ease-in-out;
+      }
+      
+      .canvas.business-template::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.2);
+        pointer-events: none;
+        border-radius: 10px;
+        z-index: 0;
+      }
+      
+      .canvas.education-template {
+        background-image: url('./CURSOR-Project/Background/education-bg.jpg');
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        transition: background 0.6s ease-in-out;
+      }
+      
+      .canvas.education-template::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.2);
+        pointer-events: none;
+        border-radius: 10px;
+        z-index: 0;
+      }
+      
+      .canvas.project-template {
+        background-image: url('./CURSOR-Project/Background/project-bg.jpg');
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        transition: background 0.6s ease-in-out;
+      }
+      
+      .canvas.project-template::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.2);
+        pointer-events: none;
+        border-radius: 10px;
+        z-index: 0;
+      }
+      
+      /* Ensure content is above overlay */
+      .canvas .title-box,
+      .canvas .text-box {
+        position: relative;
+        z-index: 1;
+      }
       
       /* Title box per Editor.json */
       .title-box {
@@ -492,6 +584,18 @@
     <div class="save-notification" id="saveNotification">Presentation saved!</div>
 
     <script>
+      // Route Protection - Check authentication on page load
+      (function() {
+        const currentUser = JSON.parse(localStorage.getItem('currentUser') || 'null');
+        const isGuest = localStorage.getItem('guest') === 'true';
+        
+        // If not authenticated and not a guest, redirect to welcome page
+        if (!currentUser && !isGuest) {
+          window.location.href = './index.html';
+          return;
+        }
+      })();
+      
       // Model per Editor.json: starting with one slide titled "Title"
       const slides = [{ 
         title: 'Title', 
@@ -506,6 +610,40 @@
       const textBox = document.getElementById('textBox');
       const saveNotification = document.getElementById('saveNotification');
       const canvas = document.getElementById('canvas');
+      
+      // Template Background Detection and Application
+      (function() {
+        // Get template from query parameter
+        const urlParams = new URLSearchParams(window.location.search);
+        const templateParam = urlParams.get('template');
+        
+        // Also check sessionStorage for backward compatibility
+        const templateFromStorage = sessionStorage.getItem('selectedTemplate');
+        const templateName = templateParam || templateFromStorage;
+        
+        if (templateName) {
+          // Map template names to CSS classes
+          const templateMap = {
+            'marketing': 'marketing-template',
+            'business': 'business-template',
+            'education': 'education-template',
+            'project': 'project-template',
+            'business-pro': 'business-template',
+            'creative-bold': 'marketing-template',
+            'corporate-clean': 'business-template'
+          };
+          
+          const templateClass = templateMap[templateName.toLowerCase()];
+          
+          if (templateClass) {
+            // Remove any existing template classes
+            canvas.classList.remove('marketing-template', 'business-template', 'education-template', 'project-template');
+            
+            // Add the new template class
+            canvas.classList.add(templateClass);
+          }
+        }
+      })();
       
       // Track selected text box for keyboard deletion
       let selectedTextBox = null;
@@ -1484,8 +1622,13 @@
       // Save function per Editor.json and auth_system.json
       function savePresentation() {
         const currentUser = JSON.parse(localStorage.getItem('currentUser') || 'null');
+        const isGuest = localStorage.getItem('guest') === 'true';
         
         if (!currentUser) {
+          if (isGuest) {
+            alert('Please sign in to save presentations. Guests can only view and edit.');
+            return;
+          }
           alert('Please log in to save presentations.');
           window.location.href = './templates.html';
           return;

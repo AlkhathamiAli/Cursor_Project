@@ -7,8 +7,12 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
       * { box-sizing: border-box; }
+      html {
+        scroll-behavior: smooth;
+      }
       html, body {
         margin: 0;
         padding: 0;
@@ -30,51 +34,185 @@
       a { color: inherit; text-decoration: none; }
       img { max-width: 100%; display: block; }
 
-      /* Header per Home.json */
-      header {
-        position: sticky; top: 0; z-index: 9;
-        background: linear-gradient(90deg, #1E3A5F 0%, #0b3d2e 100%);
-        border-bottom: 1px solid rgba(255,255,255,0.1);
-        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
-        transition: all 0.3s ease;
-        position: relative;
-      }
-      .nav { max-width: 1200px; margin: 0 auto; padding: 12px 20px; display: flex; align-items: center; gap: 16px; position: relative; z-index: 1; }
-      .logo { font-weight: 700; letter-spacing: .2px; color: white; }
-      .menu { display: flex; gap: 12px; }
-      .menu a { color: white; font-weight: 600; padding: 8px 10px; border-radius: 8px; transition: opacity .2s; }
-      .menu a:hover { opacity: 0.8; }
-      .spacer { flex: 1; }
-      
-      /* Navbar Right Section */
-      .navbar-right {
+      /* Left Sidebar */
+      .sidebar {
+        position: fixed;
+        left: 0;
+        top: 0;
+        height: 100vh;
+        width: 220px;
+        background: linear-gradient(180deg, #0d2f22 0%, #123f2e 100%);
+        padding: 20px 20px 30px 20px;
         display: flex;
+        flex-direction: column;
         align-items: center;
-        justify-content: flex-end;
-        gap: 20px;
-        flex: 1;
-        padding-right: 20px;
+        z-index: 100;
+        box-shadow: 2px 0 10px rgba(0, 0, 0, 0.2);
       }
       
-      /* Logo in Navbar */
-      .aramco-logo {
-        margin-left: 20px;
-        margin-right: 60px;
-        height: 45px;
-        width: auto;
-        object-fit: contain;
-        filter: brightness(1.05);
-        transition: transform 0.2s ease, filter 0.2s ease;
+      .logo-container {
+        margin-bottom: 25px;
+        text-align: center;
+        width: 100%;
       }
-      .aramco-logo:hover {
+      
+      .sidebar-logo {
+        width: 120px;
+        max-width: 100%;
+        height: auto;
+        object-fit: contain;
+        transition: transform 0.3s ease, filter 0.3s ease;
+        filter: brightness(1.05);
+      }
+      
+      .sidebar-logo:hover {
         transform: scale(1.05);
         filter: brightness(1.2);
       }
       
+      .nav-menu {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        gap: 25px;
+        padding-top: 15px;
+        border-top: 1px solid rgba(255, 255, 255, 0.1);
+      }
+      
+      .sidebar .nav-menu a {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        color: #d1e7dc;
+        font-size: 1rem;
+        text-decoration: none;
+        padding: 10px;
+        border-radius: 10px;
+        transition: all 0.3s ease;
+      }
+      
+      .sidebar .nav-menu a:hover {
+        background: rgba(255, 255, 255, 0.1);
+        color: #00c853;
+        transform: translateX(5px);
+      }
+      
+      .sidebar .nav-menu a i {
+        font-size: 1.1rem;
+        width: 20px;
+        text-align: center;
+      }
+      
+      .sidebar .nav-menu a.active {
+        background: rgba(0, 200, 83, 0.15);
+        color: #00c853;
+      }
+      
+      /* Top Bar */
+      .topbar {
+        position: fixed;
+        top: 0;
+        left: 220px;
+        right: 0;
+        height: 70px;
+        background: rgba(0, 0, 0, 0.4);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+        padding: 0 40px;
+        color: #fff;
+        font-weight: 500;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+        z-index: 99;
+      }
+      
+      .topbar .welcome-text {
+        display: flex;
+        align-items: center;
+        gap: 18px;
+      }
+      
+      .topbar img.profile {
+        height: 35px;
+        width: 35px;
+        border-radius: 50%;
+        margin-left: 15px;
+        object-fit: cover;
+        border: 2px solid rgba(255, 255, 255, 0.3);
+      }
+      
+      .topbar .profile-icon {
+        height: 35px;
+        width: 35px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, #00c853 0%, #00a844 100%);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-size: 1.1rem;
+        margin-left: 15px;
+        border: 2px solid rgba(255, 255, 255, 0.3);
+      }
+      
+      .topbar .auth-buttons {
+        display: flex;
+        gap: 10px;
+      }
+      
+      .topbar .auth-btn {
+        padding: 8px 16px;
+        border-radius: 8px;
+        font-weight: 700;
+        cursor: pointer;
+        border: none;
+        transition: opacity .2s;
+        font-size: 14px;
+      }
+      
+      .topbar .auth-btn:hover {
+        opacity: 0.9;
+      }
+      
+      .topbar .auth-btn.green {
+        background: #10b981;
+        color: #06221e;
+      }
+      
+      .topbar .auth-btn.emerald {
+        background: #10b981;
+        color: #fff;
+      }
+      
+      /* Logout Button */
+      .logout-btn {
+        background: linear-gradient(90deg, #00796b 0%, #00c853 100%);
+        border: none;
+        border-radius: 10px;
+        color: #fff;
+        font-weight: 600;
+        font-size: 0.95rem;
+        padding: 10px 18px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        font-family: Poppins, sans-serif;
+      }
+      
+      .logout-btn:hover {
+        background: linear-gradient(90deg, #00a383 0%, #00e676 100%);
+        box-shadow: 0 4px 12px rgba(0, 255, 128, 0.3);
+        transform: translateY(-1px);
+      }
+      
       @media (max-width: 768px) {
-        .aramco-logo {
-          height: 40px;
-          margin-right: 20px;
+        .sidebar {
+          width: 180px;
+        }
+        .topbar {
+          left: 180px;
+          padding: 0 20px;
         }
       }
 
@@ -82,13 +220,92 @@
       section, .container, .template-examples {
         background: transparent;
       }
-      .container { max-width: 1200px; margin: 0 auto; padding: 40px 20px 120px 20px; position: relative; z-index: 1; }
-      .start-section { text-align: center; width: 100%; margin-bottom: 80px; }
+      .container { 
+        max-width: 1200px; 
+        margin: 0 auto; 
+        margin-left: 220px;
+        padding: 90px 20px 120px 20px; 
+        position: relative; 
+        z-index: 1;
+        opacity: 0;
+        animation: fadeInUp 0.8s ease-out forwards;
+      }
+      .start-section { 
+        text-align: center; 
+        width: 100%; 
+        margin-bottom: 80px;
+        opacity: 0;
+        animation: fadeInUp 0.8s ease-out 0.2s forwards;
+      }
+      
+      /* Introduction Animation Keyframes */
+      @keyframes fadeInUp {
+        from {
+          opacity: 0;
+          transform: translateY(30px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+      
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+        }
+        to {
+          opacity: 1;
+        }
+      }
+      
+      @keyframes slideInLeft {
+        from {
+          opacity: 0;
+          transform: translateX(-30px);
+        }
+        to {
+          opacity: 1;
+          transform: translateX(0);
+        }
+      }
+      
+      /* Staggered animations for sections */
+      .template-examples {
+        opacity: 0;
+        animation: fadeInUp 0.8s ease-out 0.4s forwards;
+      }
+      
+      .beautiful-templates {
+        opacity: 0;
+        animation: fadeInUp 0.8s ease-out 0.6s forwards;
+      }
+      
+      .recent-section {
+        opacity: 0;
+        animation: fadeInUp 0.8s ease-out 0.8s forwards;
+      }
+      
+      /* Sidebar animation */
+      .sidebar {
+        animation: slideInLeft 0.6s ease-out;
+      }
+      
+      /* Topbar animation */
+      .topbar {
+        animation: fadeIn 0.6s ease-out;
+      }
+      
+      @media (max-width: 768px) {
+        .container {
+          margin-left: 180px;
+        }
+      }
       
       /* Template Examples Section */
       .template-examples {
         margin-top: 120px;
-        padding: 60px 40px 120px 40px;
+        padding: 60px 0;
         text-align: center;
         color: #ffffff;
       }
@@ -97,62 +314,171 @@
         margin-bottom: 10px;
         color: #E8F5E9;
       }
-      .template-examples p {
+      .template-examples > p {
         font-size: 16px;
         margin-bottom: 40px;
         color: #A5D6A7;
       }
       .template-grid {
         display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
         gap: 30px;
         justify-items: center;
-        max-width: 1200px;
+        max-width: 1000px;
         margin: 0 auto;
       }
       .template-card {
-        background: rgba(255, 255, 255, 0.08);
-        border: 1px solid rgba(255,255,255,0.1);
-        border-radius: 12px;
-        padding: 20px;
-        width: 240px;
-        transition: transform 0.3s ease, box-shadow 0.3s ease;
-        backdrop-filter: blur(10px);
-      }
-      .template-card img {
+        background: rgba(255, 255, 255, 0.9);
+        border: 1px solid rgba(220, 220, 220, 0.8);
+        border-radius: 16px;
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.05);
+        padding: 25px;
+        text-align: left;
+        transition: all 0.3s ease;
         width: 100%;
-        height: 160px;
-        border-radius: 8px;
-        margin-bottom: 15px;
-        object-fit: cover;
-        background: rgba(255, 255, 255, 0.1);
-      }
-      .template-card h3 {
-        color: #E8F5E9;
-        font-size: 18px;
-        font-weight: 700;
-        margin: 0 0 15px 0;
+        max-width: 320px;
+        cursor: pointer;
       }
       .template-card:hover {
-        transform: translateY(-6px);
-        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
-        background: rgba(255, 255, 255, 0.12);
+        transform: translateY(-5px);
+        border-color: #00c853;
+        box-shadow: 0 12px 30px rgba(0, 200, 83, 0.2);
+      }
+      .template-card i,
+      .template-card img {
+        font-size: 40px;
+        color: #007aff;
+        margin-bottom: 10px;
+        display: block;
+      }
+      .template-card img {
+        width: 40px;
+        height: 40px;
+        object-fit: contain;
+      }
+      .template-card h3 {
+        font-size: 1.1rem;
+        font-weight: 600;
+        color: #1a1a1a;
+        margin-bottom: 8px;
+      }
+      .template-card p {
+        font-size: 0.95rem;
+        color: #555;
+        line-height: 1.4;
+        margin: 0;
       }
       .use-template {
-        background-color: #1E3A5F;
-        color: #ffffff;
-        border: none;
-        border-radius: 8px;
-        padding: 8px 16px;
+        display: none;
+      }
+      @media (max-width: 600px) {
+        .template-grid {
+          grid-template-columns: 1fr;
+        }
+      }
+      
+      /* Beautiful Templates Section */
+      .beautiful-templates {
+        text-align: center;
+        padding: 80px 0;
+        margin-top: 60px;
+      }
+      
+      .beautiful-templates h2 {
+        font-size: 2rem;
+        font-weight: 700;
+        color: #E8F5E9;
+        margin-bottom: 10px;
+      }
+      
+      .beautiful-templates p {
+        color: #b5d9c5;
+        font-size: 1.1rem;
+        margin-bottom: 40px;
+      }
+      
+      .template-gallery {
+        display: flex;
+        justify-content: center;
+        gap: 40px;
+        flex-wrap: wrap;
+        max-width: 1200px;
+        margin: 0 auto;
+      }
+      
+      .template-item {
+        background: rgba(255, 255, 255, 0.05);
+        border-radius: 16px;
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+        overflow: hidden;
+        transition: all 0.3s ease;
+        width: 320px;
         cursor: pointer;
-        font-weight: 600;
-        transition: background 0.2s ease;
+      }
+      
+      .template-item:hover {
+        box-shadow: 0 12px 35px rgba(0, 0, 0, 0.25);
+        transform: translateY(-5px);
+      }
+      
+      .template-item img {
         width: 100%;
-        font-size: 14px;
+        height: 200px;
+        display: block;
+        object-fit: cover;
+        background: linear-gradient(135deg, rgba(30, 58, 95, 0.8) 0%, rgba(11, 61, 46, 0.8) 100%);
+        transition: transform 0.3s ease;
       }
-      .use-template:hover {
-        background-color: #0b3d2e;
+      
+      .template-item:hover img {
+        transform: scale(1.05);
       }
+      
+      .template-item h3 {
+        margin: 15px 0;
+        padding: 0 20px 20px;
+        color: #fff;
+        font-size: 1.1rem;
+        font-weight: 600;
+      }
+      
+      .browse-btn {
+        margin-top: 50px;
+        padding: 12px 30px;
+        background: #4f8cff;
+        color: white;
+        font-size: 1rem;
+        font-weight: 600;
+        border: none;
+        border-radius: 12px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        font-family: Poppins, sans-serif;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+      }
+      
+      .browse-btn:hover {
+        background: #3a73e0;
+        box-shadow: 0 4px 20px rgba(79, 140, 255, 0.4);
+        transform: translateY(-2px);
+      }
+      
+      .browse-btn i {
+        font-size: 1.1rem;
+      }
+      
+      @media (max-width: 768px) {
+        .template-gallery {
+          gap: 20px;
+        }
+        .template-item {
+          width: 100%;
+          max-width: 320px;
+        }
+      }
+      
       h2 { font-size: 24px; margin: 0 0 8px; font-weight: 700; color: #E8F5E9; }
       .subtitle { color: #A5D6A7; font-size: 14px; margin-bottom: 32px; }
 
@@ -175,10 +501,86 @@
         transform: scale(1.05);
         box-shadow: 0 12px 35px rgba(0,0,0,0.4);
       }
+      .blank-presentation {
+        position: relative;
+        overflow: hidden;
+      }
+      
       .blank-presentation:hover {
         background: rgba(255, 255, 255, 0.15) !important;
         transform: scale(1.05);
         box-shadow: 0 12px 35px rgba(0,0,0,0.4);
+      }
+      
+      .blank-presentation:hover .tutorial-overlay {
+        opacity: 1;
+        transform: translateY(0);
+      }
+      
+      .tutorial-overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0, 0, 0, 0.85);
+        backdrop-filter: blur(5px);
+        color: #fff;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        padding: 20px;
+        opacity: 0;
+        transform: translateY(15px);
+        transition: all 0.4s ease;
+        z-index: 10;
+        border-radius: 16px;
+      }
+      
+      .tutorial-overlay h4 {
+        margin: 0 0 20px 0;
+        font-size: 1.2rem;
+        color: #00c853;
+        font-weight: 600;
+      }
+      
+      .tutorial-overlay .tutorial-step {
+        margin: 8px 0;
+        font-size: 0.95rem;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        animation: fadeInUp 0.6s ease forwards;
+        opacity: 0;
+      }
+      
+      .tutorial-overlay .tutorial-step:nth-child(2) {
+        animation-delay: 0.1s;
+      }
+      
+      .tutorial-overlay .tutorial-step:nth-child(3) {
+        animation-delay: 0.2s;
+      }
+      
+      .tutorial-overlay .tutorial-step:nth-child(4) {
+        animation-delay: 0.3s;
+      }
+      
+      .tutorial-overlay .tutorial-step i {
+        color: #00c853;
+        font-size: 1.1rem;
+      }
+      
+      @keyframes fadeInUp {
+        from { 
+          opacity: 0; 
+          transform: translateY(10px); 
+        }
+        to { 
+          opacity: 1; 
+          transform: translateY(0); 
+        }
       }
       .thumb { aspect-ratio: 16/9; background: transparent; display: grid; place-items: center; }
       .thumb.blank { background: linear-gradient(135deg, #d4e8dd 0%, #c5e1d0 100%); }
@@ -305,13 +707,18 @@
 
       /* Card or container glass effect */
       body.light-mode .card,
-      body.light-mode .template-card,
       body.light-mode .modal-content {
         background: rgba(255, 255, 255, 0.35);
         border: 1px solid rgba(255, 255, 255, 0.5);
         box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
         backdrop-filter: blur(15px);
         -webkit-backdrop-filter: blur(15px);
+      }
+      /* Template cards maintain their light glass style in all themes */
+      body.light-mode .template-card,
+      body.dark-theme .template-card {
+        background: rgba(255, 255, 255, 0.9);
+        border: 1px solid rgba(220, 220, 220, 0.8);
       }
 
       body.light-mode .card {
@@ -379,8 +786,28 @@
         color: #666 !important;
       }
 
-      body.light-mode .template-examples p {
+      body.light-mode .template-examples > p {
         color: #555 !important;
+      }
+      body.light-mode .template-examples h2 {
+        color: #1a1a1a !important;
+      }
+      
+      body.light-mode .beautiful-templates h2 {
+        color: #1a1a1a !important;
+      }
+      
+      body.light-mode .beautiful-templates p {
+        color: #555 !important;
+      }
+      
+      body.light-mode .template-item {
+        background: rgba(255, 255, 255, 0.8);
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+      }
+      
+      body.light-mode .template-item h3 {
+        color: #1a1a1a;
       }
 
       body.light-mode .chip {
@@ -391,28 +818,49 @@
     </style>
   </head>
   <body>
-    <header>
-      <div class="nav">
-        <div class="logo">SlideMaker</div>
-        <nav class="menu" aria-label="Main">
-          <a href="./templates.html">Home</a>
-          <a href="./settings.html">Settings</a>
-        </nav>
-        <div class="spacer"></div>
-        <div class="navbar-right">
-          <div class="auth-buttons" id="authButtons">
-            <button class="auth-btn green" id="btnSignUp" data-action="open_signup">Sign Up</button>
-            <button class="auth-btn emerald" id="btnLogIn" data-action="open_login">Log In</button>
-          </div>
-          <img src="./CURSOR-Project/public/aramco-digital.png" alt="Aramco Digital Logo" class="aramco-logo" />
-        </div>
-        <div class="navbar-right" id="userInfo" style="display: none;">
-          <span class="user-info" id="userName"></span>
-          <button class="auth-btn gray" id="btnLogOut" data-action="logout_user">Log Out</button>
-          <img src="./CURSOR-Project/public/aramco-digital.png" alt="Aramco Digital Logo" class="aramco-logo" />
+    <!-- Left Sidebar -->
+    <nav class="sidebar">
+      <div class="logo-container">
+        <img src="./CURSOR-Project/public/aramco-digital.png" alt="Aramco Digital Logo" class="sidebar-logo">
+      </div>
+      <div class="nav-menu">
+        <a href="./templates.html" class="active">
+          <i class="fas fa-home"></i>
+          <span>Home</span>
+        </a>
+        <a href="./templates.html#templates">
+          <i class="fas fa-layer-group"></i>
+          <span>Templates</span>
+        </a>
+        <a href="./templates.html#recent">
+          <i class="fas fa-folder-open"></i>
+          <span>My Presentations</span>
+        </a>
+        <a href="./settings.html">
+          <i class="fas fa-cog"></i>
+          <span>Settings</span>
+        </a>
+        <a href="#" onclick="alert('Help section coming soon!'); return false;">
+          <i class="fas fa-question-circle"></i>
+          <span>Help</span>
+        </a>
+      </div>
+    </nav>
+
+    <!-- Top Bar -->
+    <div class="topbar">
+      <div class="auth-buttons" id="authButtons">
+        <button class="auth-btn green" id="btnSignUp" data-action="open_signup">Sign Up</button>
+        <button class="auth-btn emerald" id="btnLogIn" data-action="open_login">Log In</button>
+      </div>
+      <div class="welcome-text" id="userInfo" style="display: none;">
+        <span id="userName">Welcome, Guest</span>
+        <button class="logout-btn" id="btnLogOut">Log Out</button>
+        <div class="profile-icon">
+          <i class="fas fa-user"></i>
         </div>
       </div>
-    </header>
+    </div>
 
     <main class="container">
       <section id="start" class="start-section">
@@ -427,39 +875,73 @@
               <div class="card-title">Blank Presentation</div>
               <div class="card-desc">Start from a clean slide</div>
             </div>
+            <div class="tutorial-overlay">
+              <h4>Quick Start Guide</h4>
+              <div class="tutorial-step">
+                <i class="fas fa-plus-circle"></i>
+                <span>Click + to add new slides</span>
+              </div>
+              <div class="tutorial-step">
+                <i class="fas fa-edit"></i>
+                <span>Use toolbar to edit text and styles</span>
+              </div>
+              <div class="tutorial-step">
+                <i class="fas fa-save"></i>
+                <span>Save your work to access it later</span>
+              </div>
+            </div>
           </a>
         </div>
       </section>
 
-      <section class="template-examples">
+      <section id="templates" class="template-examples">
         <h2>Template Examples</h2>
         <p>Choose a ready design to start quickly:</p>
         <div class="template-grid">
-          <div class="template-card">
-            <img src="./Training/template1.png" alt="Business Template" onerror="this.style.display='none'; this.nextElementSibling.style.display='grid';" />
-            <div style="display:none; width:100%; height:160px; background:linear-gradient(135deg, #1E3A5F 0%, #0b3d2e 100%); border-radius:8px; margin-bottom:15px; place-items:center; color:#fff; font-size:48px;">📊</div>
+          <div class="template-card" onclick="useTemplate('business')">
+            <i class="fas fa-briefcase"></i>
             <h3>Business Template</h3>
-            <button class="use-template" onclick="useTemplate('business')">Use Template</button>
+            <p>Professional slides for corporate presentations and meetings</p>
           </div>
-          <div class="template-card">
-            <img src="./Training/template2.png" alt="Education Template" onerror="this.style.display='none'; this.nextElementSibling.style.display='grid';" />
-            <div style="display:none; width:100%; height:160px; background:linear-gradient(135deg, #1E3A5F 0%, #0b3d2e 100%); border-radius:8px; margin-bottom:15px; place-items:center; color:#fff; font-size:48px;">📚</div>
+          <div class="template-card" onclick="useTemplate('education')">
+            <i class="fas fa-graduation-cap"></i>
             <h3>Education Template</h3>
-            <button class="use-template" onclick="useTemplate('education')">Use Template</button>
+            <p>Engaging designs perfect for educational content and lectures</p>
           </div>
-          <div class="template-card">
-            <img src="./Training/template3.png" alt="Marketing Template" onerror="this.style.display='none'; this.nextElementSibling.style.display='grid';" />
-            <div style="display:none; width:100%; height:160px; background:linear-gradient(135deg, #1E3A5F 0%, #0b3d2e 100%); border-radius:8px; margin-bottom:15px; place-items:center; color:#fff; font-size:48px;">📈</div>
+          <div class="template-card" onclick="useTemplate('marketing')">
+            <i class="fas fa-chart-line"></i>
             <h3>Marketing Template</h3>
-            <button class="use-template" onclick="useTemplate('marketing')">Use Template</button>
+            <p>Eye-catching layouts for marketing campaigns and pitches</p>
           </div>
-          <div class="template-card">
-            <img src="./Training/template4.png" alt="Minimal Template" onerror="this.style.display='none'; this.nextElementSibling.style.display='grid';" />
-            <div style="display:none; width:100%; height:160px; background:linear-gradient(135deg, #1E3A5F 0%, #0b3d2e 100%); border-radius:8px; margin-bottom:15px; place-items:center; color:#fff; font-size:48px;">✨</div>
-            <h3>Minimal Template</h3>
-            <button class="use-template" onclick="useTemplate('minimal')">Use Template</button>
+          <div class="template-card" onclick="useTemplate('project')">
+            <i class="fas fa-project-diagram"></i>
+            <h3>Project Template</h3>
+            <p>Structured layouts for project planning and progress tracking</p>
           </div>
         </div>
+      </section>
+
+      <section class="beautiful-templates">
+        <h2>Beautiful Templates</h2>
+        <p>Start with professionally designed templates and make them your own.</p>
+        <div class="template-gallery">
+          <div class="template-item" onclick="useTemplate('business-pro')">
+            <img src="https://via.placeholder.com/320x200/1E3A5F/ffffff?text=Business+Pro" alt="Business Pro Template">
+            <h3>Business Pro</h3>
+          </div>
+          <div class="template-item" onclick="useTemplate('creative-bold')">
+            <img src="https://via.placeholder.com/320x200/0b3d2e/ffffff?text=Creative+Bold" alt="Creative Bold Template">
+            <h3>Creative Bold</h3>
+          </div>
+          <div class="template-item" onclick="useTemplate('corporate-clean')">
+            <img src="https://via.placeholder.com/320x200/00796b/ffffff?text=Corporate+Clean" alt="Corporate Clean Template">
+            <h3>Corporate Clean</h3>
+          </div>
+        </div>
+        <button class="browse-btn" onclick="alert('Browse all templates feature coming soon!')">
+          Browse All Templates
+          <i class="fas fa-arrow-right"></i>
+        </button>
       </section>
 
       <section id="recent" class="recent-section">
@@ -520,6 +1002,18 @@
     </div>
 
     <script>
+      // Route Protection - Check authentication on page load
+      (function() {
+        const currentUser = JSON.parse(localStorage.getItem('currentUser') || 'null');
+        const isGuest = localStorage.getItem('guest') === 'true';
+        
+        // If not authenticated and not a guest, redirect to welcome page
+        if (!currentUser && !isGuest) {
+          window.location.href = './index.html';
+          return;
+        }
+      })();
+      
       // Per Home.json: open_blank_page navigates to blank editor
       document.querySelector('[data-action="open_blank_page"]').addEventListener('click', (e) => {
         e.preventDefault();
@@ -530,18 +1024,24 @@
       function useTemplate(templateName) {
         // Store template selection in sessionStorage
         sessionStorage.setItem('selectedTemplate', templateName);
-        // Navigate to blank editor
-        window.location.href = './blank.html';
+        // Navigate to blank editor with template parameter
+        window.location.href = `./blank.html?template=${templateName}`;
       }
 
       // Load and display saved presentations from localStorage (user-specific)
       function loadRecentPresentations() {
         const currentUser = JSON.parse(localStorage.getItem('currentUser') || 'null');
+        const isGuest = localStorage.getItem('guest') === 'true';
         let saved = [];
         
         if (currentUser) {
           // Load user-specific presentations
           saved = JSON.parse(localStorage.getItem(`presentations_${currentUser.username}`) || '[]');
+        } else if (isGuest) {
+          // If guest, show message that they need to sign in
+          const grid = document.getElementById('recentGrid');
+          grid.innerHTML = '<div class="empty-state">Sign in to save and access your presentations.</div>';
+          return;
         } else {
           // If not logged in, show empty state
           const grid = document.getElementById('recentGrid');
@@ -611,14 +1111,33 @@
       // Check if user is logged in on page load
       function checkAuthStatus() {
         const currentUser = JSON.parse(localStorage.getItem('currentUser') || 'null');
+        const isGuest = localStorage.getItem('guest') === 'true';
+        const logoutBtn = document.getElementById('btnLogOut');
+        
         if (currentUser) {
-          document.getElementById('authButtons').parentElement.style.display = 'none';
+          document.getElementById('authButtons').style.display = 'none';
           document.getElementById('userInfo').style.display = 'flex';
-          document.getElementById('userName').textContent = `Welcome, ${currentUser.username}`;
+          document.getElementById('userName').textContent = `Welcome, ${currentUser.username || currentUser.name}`;
+          // Show logout button for logged-in users
+          if (logoutBtn) logoutBtn.style.display = 'inline-block';
+        } else if (isGuest) {
+          document.getElementById('authButtons').style.display = 'none';
+          document.getElementById('userInfo').style.display = 'flex';
+          document.getElementById('userName').textContent = 'Welcome, Guest';
+          // Show logout button for guests too (they can return to access page)
+          if (logoutBtn) logoutBtn.style.display = 'inline-block';
         } else {
-          document.getElementById('authButtons').parentElement.style.display = 'flex';
+          document.getElementById('authButtons').style.display = 'flex';
           document.getElementById('userInfo').style.display = 'none';
         }
+      }
+      
+      // Logout handler function
+      function handleLogout() {
+        localStorage.removeItem('currentUser');
+        localStorage.removeItem('guest');
+        // Redirect to access/welcome page
+        window.location.href = './index.html';
       }
 
       // Modal functions
@@ -710,17 +1229,71 @@
         location.reload();
       }
 
-      // Logout function per auth_system.json
-      document.getElementById('btnLogOut').addEventListener('click', () => {
-        localStorage.removeItem('currentUser');
-        checkAuthStatus();
-        loadRecentPresentations(); // Reload to show empty state
-        location.reload();
-      });
+      // Logout function per auth_system.json - use the shared handleLogout function
+      const logoutBtn = document.getElementById('btnLogOut');
+      if (logoutBtn) {
+        logoutBtn.addEventListener('click', handleLogout);
+      }
 
       // Initialize auth status and load presentations on page load
       checkAuthStatus();
       loadRecentPresentations();
+      
+      // Introduction Animation - Animate cards and elements with staggered delays
+      function animateOnLoad() {
+        // Animate template cards
+        const templateCards = document.querySelectorAll('.template-card');
+        templateCards.forEach((card, index) => {
+          card.style.opacity = '0';
+          card.style.transform = 'translateY(20px)';
+          setTimeout(() => {
+            card.style.transition = 'all 0.6s ease-out';
+            card.style.opacity = '1';
+            card.style.transform = 'translateY(0)';
+          }, 800 + (index * 100)); // Start after main animation, stagger by 100ms
+        });
+        
+        // Animate beautiful template items
+        const templateItems = document.querySelectorAll('.template-item');
+        templateItems.forEach((item, index) => {
+          item.style.opacity = '0';
+          item.style.transform = 'translateY(20px)';
+          setTimeout(() => {
+            item.style.transition = 'all 0.6s ease-out';
+            item.style.opacity = '1';
+            item.style.transform = 'translateY(0)';
+          }, 1000 + (index * 100));
+        });
+        
+        // Animate blank presentation card
+        const blankCard = document.querySelector('.blank-presentation');
+        if (blankCard) {
+          blankCard.style.opacity = '0';
+          blankCard.style.transform = 'scale(0.95)';
+          setTimeout(() => {
+            blankCard.style.transition = 'all 0.6s ease-out';
+            blankCard.style.opacity = '1';
+            blankCard.style.transform = 'scale(1)';
+          }, 400);
+        }
+        
+        // Animate browse button
+        const browseBtn = document.querySelector('.browse-btn');
+        if (browseBtn) {
+          browseBtn.style.opacity = '0';
+          browseBtn.style.transform = 'translateY(10px)';
+          setTimeout(() => {
+            browseBtn.style.transition = 'all 0.6s ease-out';
+            browseBtn.style.opacity = '1';
+            browseBtn.style.transform = 'translateY(0)';
+          }, 1400);
+        }
+      }
+      
+      // Run animation on page load
+      window.addEventListener('load', () => {
+        setTimeout(animateOnLoad, 100); // Small delay to ensure DOM is ready
+      });
 
       // Load and apply saved background color from settings
       const savedBg = localStorage.getItem('siteBackgroundColor') || '#0b3d2e';

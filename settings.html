@@ -345,6 +345,18 @@
     </main>
 
     <script>
+      // Route Protection - Check authentication on page load
+      (function() {
+        const currentUser = JSON.parse(localStorage.getItem('currentUser') || 'null');
+        const isGuest = localStorage.getItem('guest') === 'true';
+        
+        // If not authenticated and not a guest, redirect to welcome page
+        if (!currentUser && !isGuest) {
+          window.location.href = './index.html';
+          return;
+        }
+      })();
+      
       // Load saved background color from localStorage
       const savedBg = localStorage.getItem('siteBackgroundColor') || '#0b3d2e';
       if (savedBg === '#000000') {
