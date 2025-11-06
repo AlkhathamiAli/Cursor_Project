@@ -36,25 +36,245 @@
       .topbar .btn.emerald { background:#10b981; border-color:#059669; color:#fff; }
 
       .main { display:grid; grid-template-columns: 260px 1fr; gap: 12px; padding: 12px; min-height:0; }
-      .sidebar { background: rgba(255, 255, 255, 0.07); backdrop-filter: blur(10px); border:1px solid rgba(255,255,255,0.1); border-radius:12px; padding:10px; padding-bottom: 60px; overflow-y: auto; overflow-x: visible; }
-      .slide-preview { background: rgba(255, 255, 255, 0.1); border:1px solid rgba(255,255,255,0.1); border-radius:8px; padding:10px; cursor:pointer; transition: background .2s; color: #e8f5e9; position: relative; }
-      .slide-preview:hover { background: rgba(255, 255, 255, 0.15); }
+      .sidebar { 
+        background: rgba(0, 40, 20, 0.85); 
+        backdrop-filter: blur(8px); 
+        border-right: 1px solid rgba(255, 255, 255, 0.05); 
+        border-radius:12px; 
+        padding:10px; 
+        padding-bottom: 60px; 
+        overflow-y: auto; 
+        overflow-x: visible; 
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+      }
+      .slide-item { 
+        position: relative; 
+        margin-bottom: 8px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        transition: all 0.3s ease;
+      }
+      .slide-preview { 
+        background: rgba(255, 255, 255, 0.05); 
+        border: 1px solid rgba(255, 255, 255, 0.15);
+        border-radius: 10px; 
+        padding: 10px 14px; 
+        cursor:pointer; 
+        transition: all 0.3s ease; 
+        color: #e8f5e9; 
+        width: 100%;
+      }
+      .slide-preview:hover { background: rgba(255, 255, 255, 0.1); }
       .slide-preview.active { outline:2px solid #2ecc71; background: rgba(46, 204, 113, 0.2); }
-      .hover-buttons { flex-direction: row; justify-content: center; }
-      .hover-buttons button { background: #1a73e8; color: #fff; border: none; border-radius: 8px; padding: 6px 12px; font-size: 12px; cursor: pointer; transition: background .2s; }
-      .hover-buttons button:hover { background: #1557b0; }
-      .hover-buttons button.duplicate-btn { background: #6b7280; }
-      .hover-buttons button.duplicate-btn:hover { background: #4b5563; }
+      .slide-action-bar { 
+        margin-top: 6px;
+        display: flex;
+        justify-content: center;
+        gap: 10px;
+        background: rgba(10, 60, 40, 0.9);
+        border-radius: 8px;
+        padding: 6px 0;
+        height: 0;
+        overflow: hidden;
+        opacity: 0;
+        transform: scaleY(0);
+        transform-origin: top;
+        transition: all 0.3s ease-in-out;
+        width: 100%;
+      }
+      .slide-item:hover .slide-action-bar {
+        height: auto;
+        opacity: 1;
+        transform: scaleY(1);
+        margin-bottom: 10px;
+      }
+      .slide-action-bar button {
+        background: rgba(255, 255, 255, 0.1);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        color: #e8f5e9;
+        font-size: 18px;
+        border-radius: 8px;
+        padding: 6px 10px;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-width: 40px;
+      }
+      .slide-action-bar button:hover {
+        background: rgba(46, 213, 115, 0.25);
+        color: #2ed573;
+        transform: scale(1.1);
+      }
+      .slide-action-bar button i {
+        font-size: 16px;
+      }
 
-      .editor { display:grid; grid-template-rows: auto 1fr; background: rgba(255, 255, 255, 0.07); backdrop-filter: blur(10px); border-radius:12px; box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4); }
-      .toolbar { display:flex; align-items:center; gap:6px; padding:8px 12px; border-bottom:1px solid var(--border); background:#f0f3f5; flex-wrap:wrap; box-shadow:0 2px 6px rgba(0,0,0,0.05); }
-      .tool { border:1px solid #d8e0e3; background:#fff; border-radius:6px; padding:6px 10px; font-weight:700; cursor:pointer; font-size:13px; transition:all .2s; }
-      .tool:hover { background:#f7f8fa; }
-      .tool.active { background:#2ecc71; border-color:#2ecc71; color:#fff; }
-      .tool-select { border:1px solid #d8e0e3; background:#fff; border-radius:6px; padding:6px 8px; font-size:13px; cursor:pointer; }
-      .tool-color { width:32px; height:28px; border:1px solid #d8e0e3; border-radius:6px; cursor:pointer; }
+      /* Dark metallic gradient background */
+      body.dark-theme {
+        background: linear-gradient(135deg, #0b0b0b 0%, #0d0d0d 40%, #000000 100%) !important;
+        background-attachment: fixed;
+        background-repeat: no-repeat;
+        background-size: cover;
+        color: #eaeaea;
+        position: relative;
+      }
+
+      body.dark-theme::before {
+        content: "";
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: radial-gradient(circle at 30% 20%, rgba(255, 255, 255, 0.05), transparent 60%);
+        pointer-events: none;
+        z-index: 0;
+      }
+
+      body.dark-theme > * {
+        position: relative;
+        z-index: 1;
+      }
+
+      /* Light mode background with frosted glass effect */
+      body.light-mode {
+        background: linear-gradient(135deg, rgba(255,255,255,0.85), rgba(240,240,240,0.8)) !important;
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        color: #1a1a1a;
+        transition: all 0.3s ease-in-out;
+        position: relative;
+      }
+
+      body.light-mode > * {
+        position: relative;
+        z-index: 1;
+      }
+
+      /* Card or container glass effect in light mode */
+      body.light-mode .editor {
+        background: rgba(255, 255, 255, 0.35);
+        border: 1px solid rgba(255, 255, 255, 0.5);
+        box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
+        backdrop-filter: blur(15px);
+        -webkit-backdrop-filter: blur(15px);
+      }
+
+      body.light-mode .sidebar {
+        background: rgba(255, 255, 255, 0.3);
+        backdrop-filter: blur(15px);
+        -webkit-backdrop-filter: blur(15px);
+        border-right: 1px solid rgba(0, 0, 0, 0.1);
+      }
+
+      body.light-mode .topbar {
+        background: rgba(255, 255, 255, 0.4);
+        backdrop-filter: blur(15px);
+        -webkit-backdrop-filter: blur(15px);
+        border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+      }
+
+      /* Navigation and text colors in light mode */
+      body.light-mode .tool,
+      body.light-mode .tool-select,
+      body.light-mode .slide-preview {
+        color: #1a1a1a !important;
+      }
+
+      body.light-mode .slide-preview {
+        background: rgba(255, 255, 255, 0.4);
+        border-color: rgba(0, 0, 0, 0.15);
+      }
+
+      body.light-mode .tool-select::placeholder {
+        color: #666 !important;
+      }
+
+      body.light-mode .title-box,
+      body.light-mode .text-box {
+        color: #000000 !important;
+      }
+
+      body.light-mode .topbar {
+        color: #1a1a1a !important;
+      }
+
+      .editor { display:grid; grid-template-rows: auto 1fr; background: rgba(255, 255, 255, 0.05); backdrop-filter: blur(12px); border-radius:12px; box-shadow: 0 4px 30px rgba(0, 0, 0, 0.2); }
+      .toolbar { 
+        display: flex;
+        align-items: center;
+        justify-content: flex-start;
+        gap: 8px;
+        background: rgba(5, 60, 35, 0.95);
+        padding: 10px 20px;
+        border-radius: 12px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+        backdrop-filter: blur(8px);
+        flex-wrap: wrap;
+      }
+      .tool { 
+        background: rgba(255, 255, 255, 0.1);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        color: #e8f5e9;
+        font-weight: 600;
+        font-size: 15px;
+        border-radius: 8px;
+        padding: 8px 12px;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        min-width: 40px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .tool:hover { 
+        background: rgba(255, 255, 255, 0.25);
+        transform: translateY(-2px);
+      }
+      .tool.active { 
+        background: #1c7c54;
+        color: #fff;
+        border-color: #2ed573;
+      }
+      .tool i {
+        font-size: 14px;
+      }
+      .tool-select { 
+        background: rgba(255, 255, 255, 0.1);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        color: #e8f5e9;
+        border-radius: 8px;
+        padding: 8px 12px;
+        font-size: 13px;
+        cursor: pointer;
+        font-weight: 600;
+      }
+      .tool-select::placeholder {
+        color: rgba(232, 245, 233, 0.6);
+      }
+      .tool-select:hover {
+        background: rgba(255, 255, 255, 0.25);
+      }
+      .tool-color { 
+        width: 40px; 
+        height: 36px; 
+        background: rgba(255, 255, 255, 0.1);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        border-radius: 8px; 
+        cursor: pointer;
+        transition: all 0.2s ease;
+      }
+      .tool-color:hover {
+        background: rgba(255, 255, 255, 0.25);
+        transform: translateY(-2px);
+      }
       .canvas-wrap { display:grid; place-items:center; padding:24px; overflow:auto; }
-      .canvas { width:min(92vw, 960px); aspect-ratio:16/9; background:#fff; border:1px solid rgba(255,255,255,0.2); border-radius:12px; padding:24px; position: relative; }
+      .canvas { width:min(92vw, 960px); aspect-ratio:16/9; background:#ffffff; border-radius:10px; box-shadow: 0 0 25px rgba(0, 0, 0, 0.25); padding:24px; position: relative; }
       
       /* Title box per Editor.json */
       .title-box {
@@ -241,22 +461,23 @@
         <aside class="sidebar" id="sidebar"></aside>
         <section class="editor">
           <div class="toolbar" id="toolbar">
-            <button class="tool" data-action="bold" title="Bold">B</button>
-            <button class="tool" data-action="italic" title="Italic">I</button>
-            <button class="tool" data-action="underline" title="Underline">U</button>
-            <button class="tool" data-action="strikeThrough" title="Strikethrough">S</button>
-            <button class="tool" data-action="superscript" title="Superscript">x²</button>
-            <button class="tool" data-action="subscript" title="Subscript">x₂</button>
-            <input type="number" class="tool-select" id="fontSize" title="Font Size" min="8" max="72" step="2" value="16" style="width: 80px;">
+            <button class="tool" data-action="bold" title="Bold"><i class="fas fa-bold"></i></button>
+            <button class="tool" data-action="italic" title="Italic"><i class="fas fa-italic"></i></button>
+            <button class="tool" data-action="underline" title="Underline"><i class="fas fa-underline"></i></button>
+            <button class="tool" data-action="strikeThrough" title="Strikethrough"><i class="fas fa-strikethrough"></i></button>
+            <button class="tool" data-action="subscript" title="Subscript"><i class="fas fa-subscript"></i></button>
+            <button class="tool" data-action="superscript" title="Superscript"><i class="fas fa-superscript"></i></button>
+            <input type="number" class="tool-select" id="fontSize" title="Font Size" min="8" max="72" step="2" value="16" style="width: 80px; color: #e8f5e9;">
             <input type="color" class="tool-color" id="fontColor" value="#000000" title="Font Color">
             <input type="color" class="tool-color" id="highlightColor" value="#ffff00" title="Highlight">
-            <button class="tool" data-action="justifyLeft" title="Align Left">◀</button>
-            <button class="tool" data-action="justifyCenter" title="Align Center">⬌</button>
-            <button class="tool" data-action="justifyRight" title="Align Right">▶</button>
-            <button class="tool" data-action="justifyFull" title="Justify">⬌⬌</button>
-            <button class="tool" data-action="insertUnorderedList" title="Bullet List">• List</button>
-            <button class="tool" data-action="insertOrderedList" title="Numbered List">1. List</button>
-            <button class="tool" data-action="addTextBox" title="Add Text Box" style="background: #1a73e8; color: #fff;">📝 Text Box</button>
+            <button class="tool" data-action="highlight" title="Highlight"><i class="fas fa-highlighter"></i></button>
+            <button class="tool" data-action="justifyLeft" title="Align Left"><i class="fas fa-align-left"></i></button>
+            <button class="tool" data-action="justifyCenter" title="Align Center"><i class="fas fa-align-center"></i></button>
+            <button class="tool" data-action="justifyRight" title="Align Right"><i class="fas fa-align-right"></i></button>
+            <button class="tool" data-action="justifyFull" title="Justify"><i class="fas fa-align-justify"></i></button>
+            <button class="tool" data-action="insertUnorderedList" title="Bullet List"><i class="fas fa-list-ul"></i></button>
+            <button class="tool" data-action="insertOrderedList" title="Numbered List"><i class="fas fa-list-ol"></i></button>
+            <button class="tool" data-action="addTextBox" title="Add Text Box"><i class="fas fa-text-width"></i> Text Box</button>
           </div>
           <div class="canvas-wrap">
             <div class="canvas" id="canvas">
@@ -462,6 +683,11 @@
       function renderSidebar() {
         sidebar.innerHTML = '';
         slides.forEach((s, i) => {
+          // Create slide-item container
+          const slideItem = document.createElement('div');
+          slideItem.className = 'slide-item';
+          
+          // Create slide preview
           const el = document.createElement('div');
           el.className = 'slide-preview' + (i === active ? ' active' : '');
           el.textContent = s.title || `Slide ${i+1}`;
@@ -472,62 +698,39 @@
             renderSidebar();
           });
           
-          // Add hover buttons per Editor.json slidePreview
-          const hoverButtons = document.createElement('div');
-          hoverButtons.className = 'hover-buttons';
+          // Create slide action bar container
+          const slideActionBar = document.createElement('div');
+          slideActionBar.className = 'slide-action-bar';
           
-          // Keep buttons visible when hovering over them
-          let hideTimeout;
-          const showButtons = () => {
-            clearTimeout(hideTimeout);
-            hoverButtons.style.display = 'flex';
-          };
-          const hideButtons = () => {
-            hideTimeout = setTimeout(() => {
-              if (!el.matches(':hover') && !hoverButtons.matches(':hover')) {
-                hoverButtons.style.display = 'none';
-              }
-            }, 200);
-          };
-          
-          el.addEventListener('mouseenter', showButtons);
-          el.addEventListener('mouseleave', hideButtons);
-          hoverButtons.addEventListener('mouseenter', showButtons);
-          hoverButtons.addEventListener('mouseleave', hideButtons);
-          
+          // New Slide button with icon
           const newSlideBtn = document.createElement('button');
-          newSlideBtn.textContent = 'New Slide';
-          newSlideBtn.style.pointerEvents = 'auto';
+          newSlideBtn.className = 'new-slide';
+          newSlideBtn.title = 'New Slide';
+          newSlideBtn.innerHTML = '<i class="fas fa-plus"></i>';
           newSlideBtn.addEventListener('click', (e) => {
             e.stopPropagation();
             e.preventDefault();
             createNewSlide(i);
           });
           
+          // Duplicate button with icon
           const duplicateBtn = document.createElement('button');
-          duplicateBtn.textContent = 'Duplicate';
-          duplicateBtn.className = 'duplicate-btn';
-          duplicateBtn.style.pointerEvents = 'auto';
+          duplicateBtn.className = 'duplicate-slide';
+          duplicateBtn.title = 'Duplicate';
+          duplicateBtn.innerHTML = '<i class="fas fa-copy"></i>';
           duplicateBtn.addEventListener('click', (e) => {
             e.stopPropagation();
             e.preventDefault();
             duplicateCurrentSlide(i);
           });
           
-          // Also keep buttons visible when hovering over individual buttons
-          const keepVisible = () => {
-            clearTimeout(hideTimeout);
-            hoverButtons.style.display = 'flex';
-          };
+          slideActionBar.appendChild(newSlideBtn);
+          slideActionBar.appendChild(duplicateBtn);
           
-          newSlideBtn.addEventListener('mouseenter', keepVisible);
-          duplicateBtn.addEventListener('mouseenter', keepVisible);
+          slideItem.appendChild(el);
+          slideItem.appendChild(slideActionBar);
           
-          hoverButtons.appendChild(newSlideBtn);
-          hoverButtons.appendChild(duplicateBtn);
-          el.appendChild(hoverButtons);
-          
-          sidebar.appendChild(el);
+          sidebar.appendChild(slideItem);
         });
       }
 
@@ -1442,6 +1645,45 @@
           console.error('Error loading presentation:', e);
         }
       }
+
+      // Load and apply saved background color from settings
+      const savedBg = localStorage.getItem('siteBackgroundColor');
+      if (savedBg) {
+        if (savedBg === '#000000') {
+          document.body.classList.add('dark-theme');
+          document.body.style.background = '';
+          document.body.style.color = '';
+        } else if (savedBg === '#ffffff') {
+          document.body.classList.add('light-mode');
+          document.body.style.background = '';
+          document.body.style.color = '';
+        } else {
+          document.body.style.background = savedBg;
+        }
+      }
+
+      // Listen for background color updates from settings page
+      window.addEventListener('message', (e) => {
+        if (e.data.type === 'updateBackground') {
+          const color = e.data.color;
+          document.body.classList.remove('dark-theme', 'light-mode');
+          
+          if (color === '#000000') {
+            document.body.classList.add('dark-theme');
+            document.body.style.background = '';
+            document.body.style.color = '';
+          } else if (color === '#ffffff') {
+            document.body.classList.add('light-mode');
+            document.body.style.background = '';
+            document.body.style.color = '';
+          } else {
+            document.body.style.background = color;
+            if (color !== '#0b3d2e') {
+              document.body.style.color = '#e8f5e9';
+            }
+          }
+        }
+      });
 
       // Init
       renderSidebar();

@@ -9,13 +9,17 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
       * { box-sizing: border-box; }
-      html, body { height: 100%; margin: 0; }
+      html, body {
+        margin: 0;
+        padding: 0;
+        min-height: 100%;
+        background: linear-gradient(135deg, rgba(4, 44, 26, 0.95) 0%, rgba(6, 74, 44, 0.9) 50%, rgba(11, 61, 46, 0.95) 100%);
+        color: #e8f5e9;
+        overflow-x: hidden;
+      }
       body {
         font-family: Poppins, sans-serif;
-        background: linear-gradient(135deg, #001a12 0%, #002519 50%, #003020 100%);
         position: relative;
-        color: #E8F5E9;
-        overflow-x: hidden;
       }
       body::before {
         content: '';
@@ -28,9 +32,12 @@
 
       /* Header per Home.json */
       header {
-        position: sticky; top: 0; z-index: 10;
-        background: #0b3d2e;
+        position: sticky; top: 0; z-index: 9;
+        background: linear-gradient(90deg, #1E3A5F 0%, #0b3d2e 100%);
         border-bottom: 1px solid rgba(255,255,255,0.1);
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+        transition: all 0.3s ease;
+        position: relative;
       }
       .nav { max-width: 1200px; margin: 0 auto; padding: 12px 20px; display: flex; align-items: center; gap: 16px; position: relative; z-index: 1; }
       .logo { font-weight: 700; letter-spacing: .2px; color: white; }
@@ -38,10 +45,114 @@
       .menu a { color: white; font-weight: 600; padding: 8px 10px; border-radius: 8px; transition: opacity .2s; }
       .menu a:hover { opacity: 0.8; }
       .spacer { flex: 1; }
+      
+      /* Navbar Right Section */
+      .navbar-right {
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+        gap: 20px;
+        flex: 1;
+        padding-right: 20px;
+      }
+      
+      /* Logo in Navbar */
+      .aramco-logo {
+        margin-left: 20px;
+        margin-right: 60px;
+        height: 45px;
+        width: auto;
+        object-fit: contain;
+        filter: brightness(1.05);
+        transition: transform 0.2s ease, filter 0.2s ease;
+      }
+      .aramco-logo:hover {
+        transform: scale(1.05);
+        filter: brightness(1.2);
+      }
+      
+      @media (max-width: 768px) {
+        .aramco-logo {
+          height: 40px;
+          margin-right: 20px;
+        }
+      }
 
       /* Layout */
-      .container { max-width: 1200px; margin: 0 auto; padding: 40px 20px; position: relative; z-index: 1; }
-      .start-section { text-align: center; width: 100%; margin-bottom: 60px; }
+      section, .container, .template-examples {
+        background: transparent;
+      }
+      .container { max-width: 1200px; margin: 0 auto; padding: 40px 20px 120px 20px; position: relative; z-index: 1; }
+      .start-section { text-align: center; width: 100%; margin-bottom: 80px; }
+      
+      /* Template Examples Section */
+      .template-examples {
+        margin-top: 120px;
+        padding: 60px 40px 120px 40px;
+        text-align: center;
+        color: #ffffff;
+      }
+      .template-examples h2 {
+        font-size: 28px;
+        margin-bottom: 10px;
+        color: #E8F5E9;
+      }
+      .template-examples p {
+        font-size: 16px;
+        margin-bottom: 40px;
+        color: #A5D6A7;
+      }
+      .template-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+        gap: 30px;
+        justify-items: center;
+        max-width: 1200px;
+        margin: 0 auto;
+      }
+      .template-card {
+        background: rgba(255, 255, 255, 0.08);
+        border: 1px solid rgba(255,255,255,0.1);
+        border-radius: 12px;
+        padding: 20px;
+        width: 240px;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        backdrop-filter: blur(10px);
+      }
+      .template-card img {
+        width: 100%;
+        height: 160px;
+        border-radius: 8px;
+        margin-bottom: 15px;
+        object-fit: cover;
+        background: rgba(255, 255, 255, 0.1);
+      }
+      .template-card h3 {
+        color: #E8F5E9;
+        font-size: 18px;
+        font-weight: 700;
+        margin: 0 0 15px 0;
+      }
+      .template-card:hover {
+        transform: translateY(-6px);
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+        background: rgba(255, 255, 255, 0.12);
+      }
+      .use-template {
+        background-color: #1E3A5F;
+        color: #ffffff;
+        border: none;
+        border-radius: 8px;
+        padding: 8px 16px;
+        cursor: pointer;
+        font-weight: 600;
+        transition: background 0.2s ease;
+        width: 100%;
+        font-size: 14px;
+      }
+      .use-template:hover {
+        background-color: #0b3d2e;
+      }
       h2 { font-size: 24px; margin: 0 0 8px; font-weight: 700; color: #E8F5E9; }
       .subtitle { color: #A5D6A7; font-size: 14px; margin-bottom: 32px; }
 
@@ -64,15 +175,20 @@
         transform: scale(1.05);
         box-shadow: 0 12px 35px rgba(0,0,0,0.4);
       }
-      .thumb { aspect-ratio: 16/9; background: #ffffff; display: grid; place-items: center; }
-      .thumb.blank { background: #fff; }
-      /* Minimal flat light-green plus icon */
+      .blank-presentation:hover {
+        background: rgba(255, 255, 255, 0.15) !important;
+        transform: scale(1.05);
+        box-shadow: 0 12px 35px rgba(0,0,0,0.4);
+      }
+      .thumb { aspect-ratio: 16/9; background: transparent; display: grid; place-items: center; }
+      .thumb.blank { background: linear-gradient(135deg, #d4e8dd 0%, #c5e1d0 100%); }
+      /* Plus icon with dark blue color */
       .icon-plus { position: relative; width: 56px; height: 56px; }
       .icon-plus::before,
       .icon-plus::after {
         content: '';
         position: absolute;
-        background: #9CCC65;
+        background: #1E3A5F;
         border-radius: 2px;
       }
       .icon-plus::before {
@@ -108,7 +224,7 @@
       .empty-state { text-align: center; color: #A5D6A7; padding: 40px 20px; }
 
       /* Auth Buttons */
-      .auth-buttons { display: flex; gap: 10px; }
+      .auth-buttons { display: flex; gap: 10px; margin-right: 30px; }
       .auth-btn { padding: 8px 16px; border-radius: 8px; font-weight: 700; cursor: pointer; border: none; transition: opacity .2s; }
       .auth-btn:hover { opacity: 0.9; }
       .auth-btn.green { background: #10b981; color: #06221e; }
@@ -132,6 +248,146 @@
       .form-submit.emerald { background: #10b981; color: #fff; }
       .error-message { color: #f87171; font-size: 12px; margin-top: 8px; }
       .success-message { color: #10b981; font-size: 12px; margin-top: 8px; }
+
+      /* Dark metallic gradient background */
+      body.dark-theme {
+        background: linear-gradient(135deg, #0b0b0b 0%, #0d0d0d 40%, #000000 100%) !important;
+        background-attachment: fixed;
+        background-repeat: no-repeat;
+        background-size: cover;
+        color: #eaeaea;
+        position: relative;
+      }
+
+      body.dark-theme::before {
+        content: "";
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: radial-gradient(circle at 30% 20%, rgba(255, 255, 255, 0.05), transparent 60%);
+        pointer-events: none;
+        z-index: 0;
+      }
+
+      body.dark-theme > * {
+        position: relative;
+        z-index: 1;
+      }
+
+      header.dark-theme {
+        background: linear-gradient(135deg, #0b0b0b 0%, #0d0d0d 40%, #000000 100%) !important;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      }
+
+      /* Light mode background with frosted glass effect */
+      body.light-mode {
+        background: linear-gradient(135deg, rgba(255,255,255,0.85), rgba(240,240,240,0.8)) !important;
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        color: #1a1a1a;
+        transition: all 0.3s ease-in-out;
+        position: relative;
+      }
+
+      body.light-mode > * {
+        position: relative;
+        z-index: 1;
+      }
+
+      header.light-mode {
+        background: rgba(255, 255, 255, 0.4) !important;
+        backdrop-filter: blur(15px);
+        -webkit-backdrop-filter: blur(15px);
+        border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+      }
+
+      /* Card or container glass effect */
+      body.light-mode .card,
+      body.light-mode .template-card,
+      body.light-mode .modal-content {
+        background: rgba(255, 255, 255, 0.35);
+        border: 1px solid rgba(255, 255, 255, 0.5);
+        box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
+        backdrop-filter: blur(15px);
+        -webkit-backdrop-filter: blur(15px);
+      }
+
+      body.light-mode .card {
+        color: #1a1a1a;
+      }
+
+      body.light-mode .card:hover {
+        background: rgba(255, 255, 255, 0.5);
+        box-shadow: 0 12px 35px rgba(0, 0, 0, 0.15);
+      }
+
+      /* Navigation colors */
+      .nav a, .nav span, .logo {
+        color: inherit;
+        transition: color 0.3s ease;
+      }
+
+      body.light-mode .nav a,
+      body.light-mode .nav span,
+      body.light-mode .logo {
+        color: #222;
+      }
+
+      body.dark-theme .nav a,
+      body.dark-theme .nav span,
+      body.dark-theme .logo {
+        color: #eaeaea;
+      }
+
+      /* Headings */
+      body.light-mode h1, 
+      body.light-mode h2, 
+      body.light-mode h3 {
+        color: #111;
+      }
+
+      body.dark-theme h1, 
+      body.dark-theme h2, 
+      body.dark-theme h3 {
+        color: #f5f5f5;
+      }
+
+      /* Text colors in light mode */
+      body.light-mode .subtitle {
+        color: #555 !important;
+      }
+
+      body.light-mode .card-title {
+        color: #1a1a1a !important;
+      }
+
+      body.light-mode .card-desc {
+        color: #555 !important;
+      }
+
+      body.light-mode .muted {
+        color: #666 !important;
+      }
+
+      body.light-mode .back-link {
+        color: #1a1a1a !important;
+      }
+
+      body.light-mode .empty-state {
+        color: #666 !important;
+      }
+
+      body.light-mode .template-examples p {
+        color: #555 !important;
+      }
+
+      body.light-mode .chip {
+        color: #1a1a1a !important;
+        background: rgba(255, 255, 255, 0.5);
+        border-color: rgba(0, 0, 0, 0.15);
+      }
     </style>
   </head>
   <body>
@@ -143,13 +399,17 @@
           <a href="./settings.html">Settings</a>
         </nav>
         <div class="spacer"></div>
-        <div class="auth-buttons" id="authButtons">
-          <button class="auth-btn green" id="btnSignUp" data-action="open_signup">Sign Up</button>
-          <button class="auth-btn emerald" id="btnLogIn" data-action="open_login">Log In</button>
+        <div class="navbar-right">
+          <div class="auth-buttons" id="authButtons">
+            <button class="auth-btn green" id="btnSignUp" data-action="open_signup">Sign Up</button>
+            <button class="auth-btn emerald" id="btnLogIn" data-action="open_login">Log In</button>
+          </div>
+          <img src="./CURSOR-Project/public/aramco-digital.png" alt="Aramco Digital Logo" class="aramco-logo" />
         </div>
-        <div class="auth-buttons" id="userInfo" style="display: none;">
+        <div class="navbar-right" id="userInfo" style="display: none;">
           <span class="user-info" id="userName"></span>
           <button class="auth-btn gray" id="btnLogOut" data-action="logout_user">Log Out</button>
+          <img src="./CURSOR-Project/public/aramco-digital.png" alt="Aramco Digital Logo" class="aramco-logo" />
         </div>
       </div>
     </header>
@@ -159,7 +419,7 @@
         <h2>Create a New Presentation</h2>
         <p class="subtitle">Start a new deck instantly.</p>
         <div class="card-wrapper">
-          <a class="card" data-action="open_blank_page" href="#">
+          <a class="card blank-presentation" data-action="open_blank_page" href="#">
             <div class="thumb blank">
               <div class="icon-plus"></div>
             </div>
@@ -168,6 +428,37 @@
               <div class="card-desc">Start from a clean slide</div>
             </div>
           </a>
+        </div>
+      </section>
+
+      <section class="template-examples">
+        <h2>Template Examples</h2>
+        <p>Choose a ready design to start quickly:</p>
+        <div class="template-grid">
+          <div class="template-card">
+            <img src="./Training/template1.png" alt="Business Template" onerror="this.style.display='none'; this.nextElementSibling.style.display='grid';" />
+            <div style="display:none; width:100%; height:160px; background:linear-gradient(135deg, #1E3A5F 0%, #0b3d2e 100%); border-radius:8px; margin-bottom:15px; place-items:center; color:#fff; font-size:48px;">📊</div>
+            <h3>Business Template</h3>
+            <button class="use-template" onclick="useTemplate('business')">Use Template</button>
+          </div>
+          <div class="template-card">
+            <img src="./Training/template2.png" alt="Education Template" onerror="this.style.display='none'; this.nextElementSibling.style.display='grid';" />
+            <div style="display:none; width:100%; height:160px; background:linear-gradient(135deg, #1E3A5F 0%, #0b3d2e 100%); border-radius:8px; margin-bottom:15px; place-items:center; color:#fff; font-size:48px;">📚</div>
+            <h3>Education Template</h3>
+            <button class="use-template" onclick="useTemplate('education')">Use Template</button>
+          </div>
+          <div class="template-card">
+            <img src="./Training/template3.png" alt="Marketing Template" onerror="this.style.display='none'; this.nextElementSibling.style.display='grid';" />
+            <div style="display:none; width:100%; height:160px; background:linear-gradient(135deg, #1E3A5F 0%, #0b3d2e 100%); border-radius:8px; margin-bottom:15px; place-items:center; color:#fff; font-size:48px;">📈</div>
+            <h3>Marketing Template</h3>
+            <button class="use-template" onclick="useTemplate('marketing')">Use Template</button>
+          </div>
+          <div class="template-card">
+            <img src="./Training/template4.png" alt="Minimal Template" onerror="this.style.display='none'; this.nextElementSibling.style.display='grid';" />
+            <div style="display:none; width:100%; height:160px; background:linear-gradient(135deg, #1E3A5F 0%, #0b3d2e 100%); border-radius:8px; margin-bottom:15px; place-items:center; color:#fff; font-size:48px;">✨</div>
+            <h3>Minimal Template</h3>
+            <button class="use-template" onclick="useTemplate('minimal')">Use Template</button>
+          </div>
         </div>
       </section>
 
@@ -234,6 +525,14 @@
         e.preventDefault();
         window.location.href = './blank.html';
       });
+
+      // Use Template function
+      function useTemplate(templateName) {
+        // Store template selection in sessionStorage
+        sessionStorage.setItem('selectedTemplate', templateName);
+        // Navigate to blank editor
+        window.location.href = './blank.html';
+      }
 
       // Load and display saved presentations from localStorage (user-specific)
       function loadRecentPresentations() {
@@ -313,11 +612,11 @@
       function checkAuthStatus() {
         const currentUser = JSON.parse(localStorage.getItem('currentUser') || 'null');
         if (currentUser) {
-          document.getElementById('authButtons').style.display = 'none';
+          document.getElementById('authButtons').parentElement.style.display = 'none';
           document.getElementById('userInfo').style.display = 'flex';
           document.getElementById('userName').textContent = `Welcome, ${currentUser.username}`;
         } else {
-          document.getElementById('authButtons').style.display = 'flex';
+          document.getElementById('authButtons').parentElement.style.display = 'flex';
           document.getElementById('userInfo').style.display = 'none';
         }
       }
@@ -426,24 +725,43 @@
       // Load and apply saved background color from settings
       const savedBg = localStorage.getItem('siteBackgroundColor') || '#0b3d2e';
       if (savedBg !== '#0b3d2e') {
-        document.body.style.background = savedBg;
-        if (savedBg === '#ffffff') {
-          document.body.style.color = '#333';
-        } else if (savedBg === '#000000') {
-          document.body.style.color = '#E8F5E9';
+        if (savedBg === '#000000') {
+          document.body.classList.add('dark-theme');
+          document.body.style.background = '';
+          document.body.style.color = '';
+          document.querySelector('header').classList.add('dark-theme');
+        } else if (savedBg === '#ffffff') {
+          document.body.classList.add('light-mode');
+          document.body.style.background = '';
+          document.body.style.color = '';
+          document.querySelector('header').classList.add('light-mode');
+        } else {
+          document.body.style.background = savedBg;
         }
       }
 
       // Listen for background color updates from settings page
       window.addEventListener('message', (e) => {
         if (e.data.type === 'updateBackground') {
-          document.body.style.background = e.data.color;
-          if (e.data.color === '#ffffff') {
-            document.body.style.color = '#333';
-          } else if (e.data.color === '#000000') {
-            document.body.style.color = '#E8F5E9';
+          const color = e.data.color;
+          document.body.classList.remove('dark-theme', 'light-mode');
+          document.querySelector('header').classList.remove('dark-theme', 'light-mode');
+          
+          if (color === '#000000') {
+            document.body.classList.add('dark-theme');
+            document.body.style.background = '';
+            document.body.style.color = '';
+            document.querySelector('header').classList.add('dark-theme');
+          } else if (color === '#ffffff') {
+            document.body.classList.add('light-mode');
+            document.body.style.background = '';
+            document.body.style.color = '';
+            document.querySelector('header').classList.add('light-mode');
           } else {
-            document.body.style.color = '#E8F5E9';
+            document.body.style.background = color;
+            if (color !== '#0b3d2e') {
+              document.body.style.color = '#e8f5e9';
+            }
           }
         }
       });

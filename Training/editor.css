@@ -4,10 +4,96 @@ body {
   }
   
   .editor-container {
-    background: rgba(255, 255, 255, 0.07);
-    backdrop-filter: blur(10px);
+    background: rgba(255, 255, 255, 0.05);
     border-radius: 12px;
-    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(12px);
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.2);
+  }
+  
+  .sidebar {
+    background: rgba(0, 40, 20, 0.85);
+    border-right: 1px solid rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(8px);
+  }
+  
+  .toolbar {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 8px;
+    background: rgba(5, 60, 35, 0.95);
+    padding: 10px 20px;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+    backdrop-filter: blur(8px);
+  }
+  
+  .toolbar button {
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: #e8f5e9;
+    font-weight: 600;
+    font-size: 15px;
+    border-radius: 8px;
+    padding: 8px 12px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    min-width: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .toolbar button:hover {
+    background: rgba(255, 255, 255, 0.25);
+    transform: translateY(-2px);
+  }
+  
+  .toolbar button.active {
+    background: #1c7c54;
+    color: #fff;
+    border-color: #2ed573;
+  }
+  
+  .toolbar button i {
+    font-size: 14px;
+  }
+  
+  .toolbar .tool-select {
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: #e8f5e9;
+    border-radius: 8px;
+    padding: 8px 12px;
+    font-size: 13px;
+    cursor: pointer;
+    font-weight: 600;
+  }
+  
+  .toolbar .tool-select:hover {
+    background: rgba(255, 255, 255, 0.25);
+  }
+  
+  .toolbar .tool-color {
+    width: 40px;
+    height: 36px;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+  
+  .toolbar .tool-color:hover {
+    background: rgba(255, 255, 255, 0.25);
+    transform: translateY(-2px);
+  }
+  
+  .slide-container,
+  .canvas {
+    background: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0 0 25px rgba(0, 0, 0, 0.25);
   }
   
   body[data-theme="dark-green"] {
@@ -24,31 +110,70 @@ body {
     color: #ffffff;
   }
 
-  .slide-preview {
+  .slide-item {
     position: relative;
-    margin-bottom: 50px;
-  }
-
-  .hover-buttons {
-    display: none;
-    position: absolute;
-    bottom: -35px;
-    left: 0;
-    right: 0;
-    gap: 8px;
-    pointer-events: auto;
-    z-index: 1000;
-  }
-
-  .slide-preview:hover .hover-buttons,
-  .hover-buttons:hover {
+    margin-bottom: 8px;
     display: flex;
-    animation: fadeIn 0.2s ease-in-out;
-    pointer-events: auto;
+    flex-direction: column;
+    align-items: center;
+    transition: all 0.3s ease;
   }
 
-  @keyframes fadeIn {
-    from { opacity: 0; transform: translateY(-5px); }
-    to { opacity: 1; transform: translateY(0); }
+  .slide-preview {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 10px;
+    transition: all 0.3s ease;
+    padding: 10px 14px;
+    width: 100%;
+  }
+
+  .slide-item:hover .slide-action-bar {
+    height: auto;
+    opacity: 1;
+    transform: scaleY(1);
+    margin-bottom: 10px;
+  }
+
+  .slide-action-bar {
+    margin-top: 6px;
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    background: rgba(10, 60, 40, 0.9);
+    border-radius: 8px;
+    padding: 6px 0;
+    height: 0;
+    overflow: hidden;
+    opacity: 0;
+    transform: scaleY(0);
+    transform-origin: top;
+    transition: all 0.3s ease-in-out;
+    width: 100%;
+  }
+
+  .slide-action-bar button {
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: #e8f5e9;
+    font-size: 18px;
+    border-radius: 8px;
+    padding: 6px 10px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 40px;
+  }
+
+  .slide-action-bar button:hover {
+    background: rgba(46, 213, 115, 0.25);
+    color: #2ed573;
+    transform: scale(1.1);
+  }
+
+  .slide-action-bar button i {
+    font-size: 16px;
   }
   

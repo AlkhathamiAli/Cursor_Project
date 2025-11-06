@@ -55,26 +55,108 @@
         font-size: 16px;
       }
 
-      .form-select {
-        width: 100%;
-        padding: 12px 16px;
-        border-radius: 8px;
-        border: 1px solid rgba(255,255,255,0.1);
-        background: rgba(0,0,0,0.2);
+      .color-options {
+        display: flex;
+        flex-direction: column;
+        gap: 0;
+        border-radius: 12px;
+        overflow: hidden;
+        background: rgba(255, 255, 255, 0.03);
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+      }
+
+      .color-option {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 16px 20px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        background: rgba(255, 255, 255, 0.05);
+        backdrop-filter: blur(20px);
+        border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+        position: relative;
+        overflow: hidden;
+      }
+
+      .color-option:last-child {
+        border-bottom: none;
+      }
+
+      .color-option::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 100%);
+        opacity: 0;
+        transition: opacity 0.3s ease;
+        z-index: 0;
+      }
+
+      .color-option:hover::before {
+        opacity: 1;
+      }
+
+      .color-option:hover {
+        background: rgba(255, 255, 255, 0.12);
+        transform: translateX(4px);
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+      }
+
+      .color-option[data-selected="true"] {
+        background: linear-gradient(135deg, rgba(46, 213, 115, 0.3) 0%, rgba(16, 185, 129, 0.2) 100%);
+        backdrop-filter: blur(25px);
+        border-left: 3px solid #2ed573;
+        box-shadow: inset 0 0 20px rgba(46, 213, 115, 0.1);
+      }
+
+      .color-option.focused {
+        background: linear-gradient(135deg, rgba(59, 130, 246, 0.4) 0%, rgba(37, 99, 235, 0.3) 100%);
+        backdrop-filter: blur(25px);
+        box-shadow: 0 0 20px rgba(59, 130, 246, 0.3), inset 0 0 20px rgba(59, 130, 246, 0.1);
+      }
+
+      .check-icon {
+        width: 20px;
+        height: 20px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #2ed573;
+        font-weight: 700;
+        font-size: 14px;
+        position: relative;
+        z-index: 1;
+      }
+
+      .color-label {
         color: #E8F5E9;
         font-size: 16px;
-        font-family: Poppins, sans-serif;
-        cursor: pointer;
+        font-weight: 500;
+        position: relative;
+        z-index: 1;
       }
 
-      .form-select:focus {
-        outline: none;
-        border-color: #10b981;
+      .color-option.focused .color-label {
+        color: #ffffff;
       }
 
-      .form-select option {
-        background: #0b3d2e;
-        color: #E8F5E9;
+      /* Light mode text colors for better readability */
+      body.light-mode .color-label {
+        color: #1a1a1a !important;
+      }
+
+      body.light-mode .color-option.focused .color-label {
+        color: #ffffff !important;
+      }
+
+      body.light-mode .color-option[data-selected="true"] .color-label {
+        color: #1a1a1a !important;
+      }
+
+      body.light-mode .check-icon {
+        color: #10b981 !important;
       }
 
       .back-link {
@@ -87,6 +169,140 @@
 
       .back-link:hover {
         color: #E8F5E9;
+      }
+
+      /* Dark metallic gradient background */
+      body.dark-theme {
+        background: linear-gradient(135deg, #0b0b0b 0%, #0d0d0d 40%, #000000 100%);
+        background-attachment: fixed;
+        background-repeat: no-repeat;
+        background-size: cover;
+        color: #eaeaea;
+        position: relative;
+      }
+
+      body.dark-theme::before {
+        content: "";
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: radial-gradient(circle at 30% 20%, rgba(255, 255, 255, 0.05), transparent 60%);
+        pointer-events: none;
+        z-index: 0;
+      }
+
+      body.dark-theme > * {
+        position: relative;
+        z-index: 1;
+      }
+
+      header.dark-theme {
+        background: linear-gradient(135deg, #0b0b0b 0%, #0d0d0d 40%, #000000 100%);
+        border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      }
+
+      /* Light mode background with frosted glass effect */
+      body.light-mode {
+        background: linear-gradient(135deg, rgba(255,255,255,0.85), rgba(240,240,240,0.8));
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        color: #1a1a1a;
+        transition: all 0.3s ease-in-out;
+        position: relative;
+      }
+
+      body.light-mode > * {
+        position: relative;
+        z-index: 1;
+      }
+
+      header.light-mode {
+        background: rgba(255, 255, 255, 0.4);
+        backdrop-filter: blur(15px);
+        -webkit-backdrop-filter: blur(15px);
+        border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+      }
+
+      /* Card or container glass effect */
+      .settings-card {
+        background: rgba(255, 255, 255, 0.35);
+        border: 1px solid rgba(255, 255, 255, 0.5);
+        border-radius: 14px;
+        box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
+        backdrop-filter: blur(15px);
+        -webkit-backdrop-filter: blur(15px);
+      }
+
+      /* Navigation colors */
+      .nav a, .nav span, .logo {
+        color: inherit;
+        transition: color 0.3s ease;
+      }
+
+      body.light-mode .nav a,
+      body.light-mode .nav span,
+      body.light-mode .logo {
+        color: #222;
+      }
+
+      body.dark-theme .nav a,
+      body.dark-theme .nav span,
+      body.dark-theme .logo {
+        color: #eaeaea;
+      }
+
+      /* Headings */
+      body.light-mode h1, 
+      body.light-mode h2, 
+      body.light-mode h3 {
+        color: #1a1a1a !important;
+      }
+
+      body.dark-theme h1, 
+      body.dark-theme h2, 
+      body.dark-theme h3 {
+        color: #f5f5f5;
+      }
+
+      /* Form labels and inputs in light mode */
+      body.light-mode .form-label {
+        color: #1a1a1a !important;
+      }
+
+      body.light-mode .form-select {
+        background: rgba(255, 255, 255, 0.6);
+        border-color: rgba(0, 0, 0, 0.15);
+        color: #1a1a1a;
+      }
+
+      body.light-mode .back-link {
+        color: #1a1a1a !important;
+      }
+
+      /* Color options in light mode */
+      body.light-mode .color-option {
+        background: rgba(255, 255, 255, 0.5);
+        border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+      }
+
+      body.light-mode .color-option:hover {
+        background: rgba(255, 255, 255, 0.7);
+      }
+
+      body.light-mode .color-option[data-selected="true"] {
+        background: linear-gradient(135deg, rgba(16, 185, 129, 0.3) 0%, rgba(46, 213, 115, 0.2) 100%);
+        border-left: 3px solid #10b981;
+      }
+
+      body.light-mode .color-option.focused {
+        background: linear-gradient(135deg, rgba(59, 130, 246, 0.4) 0%, rgba(37, 99, 235, 0.3) 100%);
+      }
+
+      body.light-mode .color-options {
+        background: rgba(255, 255, 255, 0.3);
+        border: 1px solid rgba(0, 0, 0, 0.1);
       }
     </style>
   </head>
@@ -108,11 +324,20 @@
       <div class="settings-card">
         <div class="form-group">
           <label class="form-label" for="backgroundSelector">Background Color</label>
-          <select class="form-select" id="backgroundSelector">
-            <option value="#0b3d2e" selected>Dark Green</option>
-            <option value="#ffffff">White</option>
-            <option value="#000000">Black</option>
-          </select>
+          <div class="color-options" id="backgroundSelector">
+            <div class="color-option" data-color="#0b3d2e" data-selected="true">
+              <span class="check-icon">✓</span>
+              <span class="color-label">Dark Green</span>
+            </div>
+            <div class="color-option" data-color="#ffffff">
+              <span class="check-icon"></span>
+              <span class="color-label">Light</span>
+            </div>
+            <div class="color-option" data-color="#000000">
+              <span class="check-icon"></span>
+              <span class="color-label">Dark</span>
+            </div>
+          </div>
         </div>
       </div>
 
@@ -122,49 +347,146 @@
     <script>
       // Load saved background color from localStorage
       const savedBg = localStorage.getItem('siteBackgroundColor') || '#0b3d2e';
-      document.body.style.background = savedBg;
-      document.querySelector('header').style.background = savedBg;
+      if (savedBg === '#000000') {
+        document.body.classList.add('dark-theme');
+        document.body.style.background = '';
+        document.body.style.color = '';
+        document.querySelector('header').classList.add('dark-theme');
+        document.querySelector('header').style.background = '';
+      } else if (savedBg === '#ffffff') {
+        document.body.classList.add('light-mode');
+        document.body.style.background = '';
+        document.body.style.color = '';
+        document.querySelector('header').classList.add('light-mode');
+        document.querySelector('header').style.background = '';
+      } else {
+        document.body.style.background = savedBg;
+        document.querySelector('header').style.background = savedBg;
+      }
       
-      // Set dropdown to saved value
-      const selector = document.getElementById('backgroundSelector');
-      selector.value = savedBg;
-
-      // Update background color when dropdown changes
-      selector.addEventListener('change', (e) => {
-        const color = e.target.value;
-        
-        // Update body background
-        document.body.style.background = color;
-        
-        // Update header background (unless it's white/black, then use a darker version)
-        if (color === '#ffffff') {
-          document.querySelector('header').style.background = '#f0f0f0';
-          document.querySelector('header').style.color = '#333';
-          document.querySelector('.logo').style.color = '#333';
-          document.querySelectorAll('.menu a').forEach(a => a.style.color = '#333');
-        } else if (color === '#000000') {
-          document.querySelector('header').style.background = '#1a1a1a';
+      // Set selected option based on saved value
+      const options = document.querySelectorAll('.color-option');
+      options.forEach(option => {
+        option.removeAttribute('data-selected');
+        option.classList.remove('focused');
+        const checkIcon = option.querySelector('.check-icon');
+        if (option.getAttribute('data-color') === savedBg) {
+          option.setAttribute('data-selected', 'true');
+          checkIcon.textContent = '✓';
         } else {
-          document.querySelector('header').style.background = color;
-          document.querySelector('.logo').style.color = 'white';
-          document.querySelectorAll('.menu a').forEach(a => a.style.color = 'white');
+          checkIcon.textContent = '';
         }
-        
-        // Save to localStorage
-        localStorage.setItem('siteBackgroundColor', color);
-        
-        // Also update templates.html if it's open
-        if (window.opener) {
-          window.opener.postMessage({ type: 'updateBackground', color: color }, '*');
-        }
+      });
+
+      // Update background color when option is clicked
+      options.forEach(option => {
+        option.addEventListener('click', () => {
+          const color = option.getAttribute('data-color');
+          
+          // Update all options
+          options.forEach(opt => {
+            opt.removeAttribute('data-selected');
+            opt.classList.remove('focused');
+            const icon = opt.querySelector('.check-icon');
+            if (opt === option) {
+              opt.setAttribute('data-selected', 'true');
+              icon.textContent = '✓';
+            } else {
+              icon.textContent = '';
+            }
+          });
+          
+          // Update body background
+          document.body.classList.remove('dark-theme', 'light-mode');
+          document.querySelector('header').classList.remove('dark-theme', 'light-mode');
+          
+          if (color === '#000000') {
+            document.body.classList.add('dark-theme');
+            document.body.style.background = '';
+            document.body.style.color = '';
+            document.querySelector('header').classList.add('dark-theme');
+            document.querySelector('header').style.background = '';
+          } else if (color === '#ffffff') {
+            document.body.classList.add('light-mode');
+            document.body.style.background = '';
+            document.body.style.color = '';
+            document.querySelector('header').classList.add('light-mode');
+            document.querySelector('header').style.background = '';
+          } else {
+            document.body.style.background = color;
+            document.querySelector('header').style.background = color;
+            document.querySelector('.logo').style.color = 'white';
+            document.querySelectorAll('.menu a').forEach(a => a.style.color = 'white');
+          }
+          
+          // Save to localStorage
+          localStorage.setItem('siteBackgroundColor', color);
+          
+          // Also update templates.html if it's open
+          if (window.opener) {
+            window.opener.postMessage({ type: 'updateBackground', color: color }, '*');
+          }
+        });
+
+        // Add focus effect on hover
+        option.addEventListener('mouseenter', () => {
+          if (!option.hasAttribute('data-selected')) {
+            option.classList.add('focused');
+          }
+        });
+
+        option.addEventListener('mouseleave', () => {
+          option.classList.remove('focused');
+        });
+
+        // Keyboard navigation
+        option.addEventListener('keydown', (e) => {
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            option.click();
+          }
+        });
+
+        option.setAttribute('tabindex', '0');
       });
 
       // Listen for messages from other windows
       window.addEventListener('message', (e) => {
         if (e.data.type === 'updateBackground') {
-          document.body.style.background = e.data.color;
-          document.querySelector('header').style.background = e.data.color;
-          selector.value = e.data.color;
+          const color = e.data.color;
+          
+          document.body.classList.remove('dark-theme', 'light-mode');
+          document.querySelector('header').classList.remove('dark-theme', 'light-mode');
+          
+          if (color === '#000000') {
+            document.body.classList.add('dark-theme');
+            document.body.style.background = '';
+            document.body.style.color = '';
+            document.querySelector('header').classList.add('dark-theme');
+            document.querySelector('header').style.background = '';
+          } else if (color === '#ffffff') {
+            document.body.classList.add('light-mode');
+            document.body.style.background = '';
+            document.body.style.color = '';
+            document.querySelector('header').classList.add('light-mode');
+            document.querySelector('header').style.background = '';
+          } else {
+            document.body.style.background = color;
+            document.querySelector('header').style.background = color;
+          }
+          
+          // Update selected option
+          options.forEach(option => {
+            option.removeAttribute('data-selected');
+            option.classList.remove('focused');
+            const checkIcon = option.querySelector('.check-icon');
+            if (option.getAttribute('data-color') === color) {
+              option.setAttribute('data-selected', 'true');
+              checkIcon.textContent = '✓';
+            } else {
+              checkIcon.textContent = '';
+            }
+          });
         }
       });
     </script>
