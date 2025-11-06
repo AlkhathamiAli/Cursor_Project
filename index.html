@@ -45,6 +45,75 @@
         z-index: 1;
         padding: 20px;
       }
+      /* Optional soft blur behind the card */
+      .access-page::before {
+        content: "";
+        position: absolute;
+        top: 0; left: 0; width: 100%; height: 100%;
+        backdrop-filter: blur(2px);
+        z-index: 0;
+        pointer-events: none;
+      }
+      /* Side animated slides layout */
+      .slides-left, .slides-right {
+        position: absolute;
+        top: 0;
+        height: 100%;
+        width: 280px; /* wider for visibility */
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+        gap: 40px; /* more spacing */
+        z-index: 0;
+        opacity: 0.9; /* slightly more visible */
+        filter: blur(0.4px);
+        pointer-events: none; /* keep focus on the card */
+      }
+      .slides-left { left: 12%; }
+      .slides-right { right: 12%; }
+
+      /* Inner tracks for seamless infinite looping */
+      .slides-left .track,
+      .slides-right .track {
+        display: flex;
+        flex-direction: column;
+        gap: 40px;
+      }
+      .slides-left .track { animation: marqueeDown 25s linear infinite; }
+      .slides-right .track { animation: marqueeUp 25s linear infinite; }
+
+      /* Individual slide thumbnails */
+      .slide {
+        width: 260px; /* larger thumbnails */
+        height: 150px;
+        object-fit: cover;
+        border-radius: 14px;
+        box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+        opacity: 0.95;
+        transition: transform 0.3s ease, opacity 0.5s ease;
+      }
+      .slide:hover { transform: scale(1.06); opacity: 1; }
+
+      /* Stagger timings */
+      /* stagger delays by using wrappers' overall animation; no per-image animation needed */
+
+      /* Hover/pause on interaction with the card */
+      /* Keep animations running even on hover (no pause) */
+
+      /* Seamless marquee animations: move by half the duplicated track */
+      @keyframes marqueeUp { /* bottom -> top */
+        0% { transform: translateY(0); }
+        100% { transform: translateY(-50%); }
+      }
+      @keyframes marqueeDown { /* top -> bottom */
+        0% { transform: translateY(-50%); }
+        100% { transform: translateY(0); }
+      }
+
+      /* Hide side animations on small screens */
+      @media (max-width: 900px) {
+        .slides-left, .slides-right { display: none; }
+      }
       
       .auth-box {
         text-align: center;
@@ -116,6 +185,14 @@
         color: white;
         box-shadow: 0 4px 15px rgba(0, 200, 83, 0.3);
       }
+      
+      /* Log In button (secondary style) */
+      .btn.login {
+        background: rgba(255, 255, 255, 0.15);
+        color: #fff;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+      }
+      .btn.login:hover { transform: translateY(-2px); }
       
       .btn.signin:hover {
         transform: scale(1.05);
@@ -318,7 +395,23 @@
     </style>
   </head>
   <body>
-    <div class="auth-container">
+    <div class="auth-container access-page">
+      <!-- Left animated slides (duplicated for seamless loop) -->
+      <div class="slides-left">
+        <div class="track">
+          <img src="./CURSOR-Project/accessTobackground/B1.jpg" alt="slide" class="slide" />
+          <img src="./CURSOR-Project/accessTobackground/B2.jpg" alt="slide" class="slide" />
+          <img src="./CURSOR-Project/accessTobackground/B3.jpg" alt="slide" class="slide" />
+          <img src="./CURSOR-Project/accessTobackground/B4.jpg" alt="slide" class="slide" />
+          <img src="./CURSOR-Project/accessTobackground/B5.jpg" alt="slide" class="slide" />
+          <!-- duplicate -->
+          <img src="./CURSOR-Project/accessTobackground/B1.jpg" alt="slide" class="slide" />
+          <img src="./CURSOR-Project/accessTobackground/B2.jpg" alt="slide" class="slide" />
+          <img src="./CURSOR-Project/accessTobackground/B3.jpg" alt="slide" class="slide" />
+          <img src="./CURSOR-Project/accessTobackground/B4.jpg" alt="slide" class="slide" />
+          <img src="./CURSOR-Project/accessTobackground/B5.jpg" alt="slide" class="slide" />
+        </div>
+      </div>
       <div class="auth-box">
         <div class="logo">
           <i class="fas fa-presentation"></i>
@@ -327,8 +420,24 @@
         <p>Create, edit, and share stunning presentations easily.</p>
         <div class="auth-buttons">
           <button class="btn signin" onclick="openModal('signinModal')">Sign In</button>
-          <button class="btn signup" onclick="openModal('signupModal')">Sign Up</button>
+          <button class="btn login" onclick="openModal('signinModal')">Log In</button>
           <button class="btn visitor" onclick="continueAsVisitor()">Continue as Visitor</button>
+        </div>
+      </div>
+      <!-- Right animated slides (duplicated for seamless loop) -->
+      <div class="slides-right">
+        <div class="track">
+          <img src="./CURSOR-Project/accessTobackground/B6.jpg" alt="slide" class="slide" />
+          <img src="./CURSOR-Project/accessTobackground/B7.jpg" alt="slide" class="slide" />
+          <img src="./CURSOR-Project/accessTobackground/B8.jpg" alt="slide" class="slide" />
+          <img src="./CURSOR-Project/accessTobackground/B9.jpg" alt="slide" class="slide" />
+          <img src="./CURSOR-Project/accessTobackground/B10.jpg" alt="slide" class="slide" />
+          <!-- duplicate -->
+          <img src="./CURSOR-Project/accessTobackground/B6.jpg" alt="slide" class="slide" />
+          <img src="./CURSOR-Project/accessTobackground/B7.jpg" alt="slide" class="slide" />
+          <img src="./CURSOR-Project/accessTobackground/B8.jpg" alt="slide" class="slide" />
+          <img src="./CURSOR-Project/accessTobackground/B9.jpg" alt="slide" class="slide" />
+          <img src="./CURSOR-Project/accessTobackground/B10.jpg" alt="slide" class="slide" />
         </div>
       </div>
     </div>
@@ -356,37 +465,7 @@
       </div>
     </div>
 
-    <!-- Sign Up Modal -->
-    <div class="modal" id="signupModal">
-      <div class="modal-content">
-        <button class="modal-close" onclick="closeModal('signupModal')">&times;</button>
-        <div class="modal-header">
-          <h3 class="modal-title">Sign Up</h3>
-          <p class="modal-subtitle">Create your account to get started.</p>
-        </div>
-        <form id="signup_form" onsubmit="signUpUser(event)">
-          <div class="form-group">
-            <label class="form-label" for="signup_name">Name</label>
-            <input class="form-input" type="text" id="signup_name" required placeholder="Enter your name">
-          </div>
-          <div class="form-group">
-            <label class="form-label" for="signup_email">Email</label>
-            <input class="form-input" type="email" id="signup_email" required placeholder="Enter your email">
-          </div>
-          <div class="form-group">
-            <label class="form-label" for="signup_password">Password</label>
-            <input class="form-input" type="password" id="signup_password" required placeholder="Create a password">
-          </div>
-          <div class="form-group">
-            <label class="form-label" for="signup_confirm">Confirm Password</label>
-            <input class="form-input" type="password" id="signup_confirm" required placeholder="Confirm your password">
-          </div>
-          <div id="signup_error" class="error-message"></div>
-          <div id="signup_success" class="success-message"></div>
-          <button type="submit" class="form-submit">Sign Up</button>
-        </form>
-      </div>
-    </div>
+    
 
     <script>
       // Check if user is already authenticated
@@ -427,10 +506,6 @@
         if (e.target.id === 'signinModal') closeModal('signinModal');
       });
       
-      document.getElementById('signupModal').addEventListener('click', (e) => {
-        if (e.target.id === 'signupModal') closeModal('signupModal');
-      });
-      
       // Sign In function
       function signInUser(event) {
         event.preventDefault();
@@ -459,65 +534,7 @@
         window.location.href = './templates.html';
       }
       
-      // Sign Up function
-      function signUpUser(event) {
-        event.preventDefault();
-        const name = document.getElementById('signup_name').value.trim();
-        const email = document.getElementById('signup_email').value.trim();
-        const password = document.getElementById('signup_password').value;
-        const confirm = document.getElementById('signup_confirm').value;
-        const errorEl = document.getElementById('signup_error');
-        const successEl = document.getElementById('signup_success');
-        
-        // Clear previous messages
-        errorEl.classList.remove('show');
-        successEl.classList.remove('show');
-        
-        // Validate passwords match
-        if (password !== confirm) {
-          errorEl.textContent = 'Passwords do not match';
-          errorEl.classList.add('show');
-          return;
-        }
-        
-        // Validate password length
-        if (password.length < 6) {
-          errorEl.textContent = 'Password must be at least 6 characters';
-          errorEl.classList.add('show');
-          return;
-        }
-        
-        const users = JSON.parse(localStorage.getItem('users') || '[]');
-        
-        // Check if email already exists
-        if (users.find(u => u.email === email)) {
-          errorEl.textContent = 'Email already registered';
-          errorEl.classList.add('show');
-          return;
-        }
-        
-        // Check if name/username already exists
-        if (users.find(u => (u.username || u.name) === name)) {
-          errorEl.textContent = 'Username already taken';
-          errorEl.classList.add('show');
-          return;
-        }
-        
-        // Save new user
-        users.push({ name, username: name, email, password });
-        localStorage.setItem('users', JSON.stringify(users));
-        
-        // Auto-login after signup
-        localStorage.setItem('currentUser', JSON.stringify({ username: name, email, name }));
-        localStorage.removeItem('guest'); // Remove guest status if exists
-        
-        successEl.textContent = 'Account created! Redirecting...';
-        successEl.classList.add('show');
-        
-        setTimeout(() => {
-          window.location.href = './templates.html';
-        }, 1000);
-      }
+      
       
       // Continue as Visitor
       function continueAsVisitor() {

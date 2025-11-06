@@ -31,6 +31,22 @@
         background: rgba(255, 255, 255, 0.05);
         pointer-events: none;
       }
+      /* Subtle animated background overlay */
+      body::after {
+        content: '';
+        position: fixed; inset: 0; z-index: 0;
+        background: radial-gradient(circle at 20% 20%, #064e3b, #052e25 60%, #001b15);
+        background-size: 200% 200%;
+        animation: gradientShift 28s ease-in-out infinite;
+        opacity: 0.35; /* keep subtle for readability */
+        pointer-events: none;
+      }
+
+      @keyframes gradientShift {
+        0%   { background-position: 0% 50%; }
+        50%  { background-position: 100% 50%; }
+        100% { background-position: 0% 50%; }
+      }
       a { color: inherit; text-decoration: none; }
       img { max-width: 100%; display: block; }
 
