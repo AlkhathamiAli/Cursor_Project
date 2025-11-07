@@ -1,0 +1,82 @@
+{
+    "project": {
+      "name": "SlideMaker Auth System",
+      "description": "Adds Sign Up and Log In system so each user can store and view their own presentations privately."
+    },
+  
+    "pages": [
+      {
+        "id": "auth",
+        "title": "Authentication Page",
+        "layout": {
+          "background": {
+            "type": "gradient",
+            "colors": ["#001a12", "#00281a", "#003524"],
+            "overlay": "rgba(255,255,255,0.05)",
+            "effect": "glassmorphic blur(25px)"
+          },
+          "card": {
+            "background": "rgba(17,51,34,0.6)",
+            "border": "1px solid rgba(255,255,255,0.1)",
+            "text_color": "#E8F5E9",
+            "backdrop_filter": "blur(20px)",
+            "shadow": "0 8px 25px rgba(0,0,0,0.3)"
+          },
+          "forms": [
+            {
+              "id": "signup_form",
+              "title": "Create Account",
+              "fields": [
+                { "label": "Username", "type": "text", "id": "signup_username" },
+                { "label": "Email", "type": "email", "id": "signup_email" },
+                { "label": "Password", "type": "password", "id": "signup_password" }
+              ],
+              "button": { "label": "Sign Up", "color": "green", "action": "signup_user" }
+            },
+            {
+              "id": "login_form",
+              "title": "Log In",
+              "fields": [
+                { "label": "Email", "type": "email", "id": "login_email" },
+                { "label": "Password", "type": "password", "id": "login_password" }
+              ],
+              "button": { "label": "Log In", "color": "emerald", "action": "login_user" }
+            }
+          ]
+        }
+      },
+  
+      {
+        "id": "home",
+        "update": {
+          "header": {
+            "buttons": [
+              { "label": "Sign Up", "color": "green", "action": "open_signup" },
+              { "label": "Log In", "color": "emerald", "action": "open_login" },
+              { "label": "Log Out", "color": "gray", "action": "logout_user" }
+            ]
+          }
+        }
+      }
+    ],
+  
+    "interactions": {
+      "actions": [
+        "signup_user → saves username, email, and password to localStorage under 'users'",
+        "login_user → verifies credentials and stores currentUser in localStorage",
+        "logout_user → removes currentUser from localStorage and redirects to auth page",
+        "save_presentation → saves presentations under currentUser key in localStorage (e.g., 'presentations_<username>')"
+      ]
+    },
+  
+    "ai_guidelines": {
+      "instructions": [
+        "Add authentication modals or pages for Sign Up and Log In.",
+        "Store user data locally using localStorage for simulation.",
+        "When a user logs in, filter and display only their saved presentations.",
+        "Include Log Out button in the header once logged in.",
+        "Ensure the design matches the dark forest glassmorphic theme."
+      ]
+    }
+  }
+  

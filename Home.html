@@ -17,11 +17,10 @@
         margin: 0;
         padding: 0;
         min-height: 100%;
-        background:
-          radial-gradient(circle at 20% 18%, rgba(0, 150, 110, 0.35), transparent 55%),
-          radial-gradient(circle at 80% 25%, rgba(20, 120, 200, 0.28), transparent 60%),
-          radial-gradient(circle at 60% 80%, rgba(0, 180, 110, 0.25), transparent 65%),
-          linear-gradient(118deg, rgba(0, 51, 32, 0.75) 0%, rgba(0, 51, 32, 0.68) 45%, rgba(7, 46, 92, 0.72) 55%, rgba(7, 46, 92, 0.82) 100%);
+        background: url('./CURSOR-Project/Background/B2.jpg') no-repeat center center fixed;
+        background-size: cover;
+        background-attachment: fixed;
+        background-color: #012d22;
         color: #e8f5e9;
         overflow-x: hidden;
       }
@@ -32,9 +31,7 @@
       body::before {
         content: '';
         position: fixed; inset: 0; z-index: 0;
-        background: linear-gradient(140deg, rgba(0, 30, 20, 0.35), rgba(5, 30, 55, 0.28));
-        backdrop-filter: blur(12px);
-        -webkit-backdrop-filter: blur(12px);
+        background: linear-gradient(160deg, rgba(0, 25, 15, 0.55), rgba(0, 40, 25, 0.35));
         pointer-events: none;
       }
       a { color: inherit; text-decoration: none; }
@@ -47,26 +44,19 @@
         top: 0;
         height: 100vh;
         width: 220px;
-        background: linear-gradient(180deg, rgba(0, 55, 33, 0.8) 0%, rgba(0, 35, 48, 0.85) 100%);
+        background: linear-gradient(180deg, #0d2f22 0%, #123f2e 100%);
         padding: 20px 20px 30px 20px;
         display: flex;
         flex-direction: column;
         align-items: center;
         z-index: 100;
-        box-shadow: 2px 0 12px rgba(0, 0, 0, 0.35);
-        border-right: 1px solid rgba(0, 255, 150, 0.1);
-        backdrop-filter: blur(10px);
-        -webkit-backdrop-filter: blur(10px);
+        box-shadow: 2px 0 10px rgba(0, 0, 0, 0.2);
       }
       
       .logo-container {
         margin-bottom: 25px;
+        text-align: center;
         width: 100%;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        padding-top: 10px;
       }
       
       .sidebar-logo {
@@ -76,7 +66,6 @@
         object-fit: contain;
         transition: transform 0.3s ease, filter 0.3s ease;
         filter: brightness(1.05);
-        margin: 0 auto;
       }
       
       .sidebar-logo:hover {
@@ -352,10 +341,6 @@
         width: 100%;
         max-width: 320px;
         cursor: pointer;
-        opacity: 0;
-        transform: translateY(20px);
-        animation: fadeInUp 0.8s ease-out forwards;
-        animation-delay: var(--delay, 0s);
       }
       .template-card:hover {
         transform: translateY(-5px);
@@ -389,10 +374,6 @@
       .use-template {
         display: none;
       }
-      .template-grid .template-card:nth-child(1) { --delay: 0s; }
-      .template-grid .template-card:nth-child(2) { --delay: 0.15s; }
-      .template-grid .template-card:nth-child(3) { --delay: 0.3s; }
-      .template-grid .template-card:nth-child(4) { --delay: 0.45s; }
       @media (max-width: 600px) {
         .template-grid {
           grid-template-columns: 1fr;
@@ -479,10 +460,6 @@
         display: inline-flex;
         align-items: center;
         gap: 8px;
-        opacity: 0;
-        transform: translateY(20px);
-        animation: fadeInUp 0.8s ease-out forwards;
-        animation-delay: 0.6s;
       }
       
       .browse-btn:hover {
@@ -511,20 +488,16 @@
       /* Single centered card */
       .card-wrapper { display: flex; justify-content: center; align-items: center; }
       .card {
-        background: rgba(0, 55, 40, 0.65);
-        border: 1px solid rgba(0,255,150,0.08);
+        background: rgba(17, 51, 34, 0.6);
+        border: 1px solid rgba(255,255,255,0.1);
         border-radius: 16px;
         box-shadow: 0 8px 25px rgba(0,0,0,0.3);
-        backdrop-filter: blur(12px);
+        backdrop-filter: blur(20px);
         overflow: hidden;
         transition: background .3s ease, transform .3s ease, box-shadow .3s ease;
         color: #E8F5E9;
         width: min(90vw, 320px);
         cursor: pointer;
-        opacity: 0;
-        transform: translateY(20px);
-        animation: fadeInUp 0.8s ease-out forwards;
-        animation-delay: 0.3s;
       }
       .card:hover {
         background: rgba(26, 64, 45, 0.8);
@@ -1271,6 +1244,30 @@
       
       // Introduction Animation - Animate cards and elements with staggered delays
       function animateOnLoad() {
+        // Animate template cards
+        const templateCards = document.querySelectorAll('.template-card');
+        templateCards.forEach((card, index) => {
+          card.style.opacity = '0';
+          card.style.transform = 'translateY(20px)';
+          setTimeout(() => {
+            card.style.transition = 'all 0.6s ease-out';
+            card.style.opacity = '1';
+            card.style.transform = 'translateY(0)';
+          }, 800 + (index * 100)); // Start after main animation, stagger by 100ms
+        });
+        
+        // Animate beautiful template items
+        const templateItems = document.querySelectorAll('.template-item');
+        templateItems.forEach((item, index) => {
+          item.style.opacity = '0';
+          item.style.transform = 'translateY(20px)';
+          setTimeout(() => {
+            item.style.transition = 'all 0.6s ease-out';
+            item.style.opacity = '1';
+            item.style.transform = 'translateY(0)';
+          }, 1000 + (index * 100));
+        });
+        
         // Animate blank presentation card
         const blankCard = document.querySelector('.blank-presentation');
         if (blankCard) {
