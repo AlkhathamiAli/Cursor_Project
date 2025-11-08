@@ -7,6 +7,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <script src="./translations.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
       * { box-sizing: border-box; }
@@ -856,23 +857,23 @@
       <div class="nav-menu">
         <a href="./templates.html" class="active">
           <i class="fas fa-home"></i>
-          <span>Home</span>
+          <span data-translate="common.home">Home</span>
         </a>
         <a href="./templates.html#templates">
           <i class="fas fa-layer-group"></i>
-          <span>Templates</span>
+          <span data-translate="common.templates">Templates</span>
         </a>
         <a href="./templates.html#recent">
           <i class="fas fa-folder-open"></i>
-          <span>My Presentations</span>
+          <span data-translate="common.myPresentations">My Presentations</span>
         </a>
         <a href="./settings.html">
           <i class="fas fa-cog"></i>
-          <span>Settings</span>
+          <span data-translate="common.settings">Settings</span>
         </a>
-        <a href="#" onclick="alert('Help section coming soon!'); return false;">
+        <a href="#" onclick="alert(window.getTranslation ? window.getTranslation('common.helpComingSoon') : 'Help section coming soon!'); return false;">
           <i class="fas fa-question-circle"></i>
-          <span>Help</span>
+          <span data-translate="common.help">Help</span>
         </a>
       </div>
         </nav>
@@ -880,12 +881,12 @@
     <!-- Top Bar -->
     <div class="topbar">
           <div class="auth-buttons" id="authButtons">
-            <button class="auth-btn green" id="btnSignUp" data-action="open_signup">Sign Up</button>
-            <button class="auth-btn emerald" id="btnLogIn" data-action="open_login">Log In</button>
+            <button class="auth-btn green" id="btnSignUp" data-action="open_signup" data-translate="common.signUp">Sign Up</button>
+            <button class="auth-btn emerald" id="btnLogIn" data-action="open_login" data-translate="common.logIn">Log In</button>
           </div>
       <div class="welcome-text" id="userInfo" style="display: none;">
         <span id="userName">Welcome, Guest</span>
-        <button class="logout-btn" id="btnLogOut">Log Out</button>
+        <button class="logout-btn" id="btnLogOut" data-translate="common.logout">Log Out</button>
         <div class="profile-icon">
           <i class="fas fa-user"></i>
         </div>
@@ -894,30 +895,30 @@
 
     <main class="container">
       <section id="start" class="start-section">
-        <h2>Create a New Presentation</h2>
-        <p class="subtitle">Start a new deck instantly.</p>
+        <h2 data-translate="home.newPresentationTitle">Create a New Presentation</h2>
+        <p class="subtitle" data-translate="home.newPresentationSubtitle">Start a new deck instantly.</p>
         <div class="card-wrapper">
           <a class="card blank-presentation" data-action="open_blank_page" href="#">
             <div class="thumb blank">
               <div class="icon-plus"></div>
             </div>
             <div class="card-body">
-              <div class="card-title">Blank Presentation</div>
-              <div class="card-desc">Start from a clean slide</div>
+              <div class="card-title" data-translate="home.blankTitle">Blank Presentation</div>
+              <div class="card-desc" data-translate="home.blankSubtitle">Start from a clean slide</div>
             </div>
             <div class="tutorial-overlay">
-              <h4>Quick Start Guide</h4>
+              <h4 data-translate="home.quickStartTitle">Quick Start Guide</h4>
               <div class="tutorial-step">
                 <i class="fas fa-plus-circle"></i>
-                <span>Click + to add new slides</span>
+                <span data-translate="home.quickStartAdd">Click + to add new slides</span>
               </div>
               <div class="tutorial-step">
                 <i class="fas fa-edit"></i>
-                <span>Use toolbar to edit text and styles</span>
+                <span data-translate="home.quickStartEdit">Use toolbar to edit text and styles</span>
               </div>
               <div class="tutorial-step">
                 <i class="fas fa-save"></i>
-                <span>Save your work to access it later</span>
+                <span data-translate="home.quickStartSave">Save your work to access it later</span>
               </div>
             </div>
           </a>
@@ -925,60 +926,60 @@
       </section>
 
       <section id="templates" class="template-examples">
-        <h2>Template Examples</h2>
-        <p>Choose a ready design to start quickly:</p>
+        <h2 data-translate="home.templateExamplesTitle">Template Examples</h2>
+        <p data-translate="home.templateExamplesSubtitle">Choose a ready design to start quickly:</p>
         <div class="template-grid">
           <div class="template-card" onclick="useTemplate('business')">
             <i class="fas fa-briefcase"></i>
-            <h3>Business Template</h3>
-            <p>Professional slides for corporate presentations and meetings</p>
+            <h3 data-translate="home.templateBusinessTitle">Business Template</h3>
+            <p data-translate="home.templateBusinessDesc">Professional slides for corporate presentations and meetings</p>
           </div>
           <div class="template-card" onclick="useTemplate('education')">
             <i class="fas fa-graduation-cap"></i>
-            <h3>Education Template</h3>
-            <p>Engaging designs perfect for educational content and lectures</p>
+            <h3 data-translate="home.templateEducationTitle">Education Template</h3>
+            <p data-translate="home.templateEducationDesc">Engaging designs perfect for educational content and lectures</p>
           </div>
           <div class="template-card" onclick="useTemplate('marketing')">
             <i class="fas fa-chart-line"></i>
-            <h3>Marketing Template</h3>
-            <p>Eye-catching layouts for marketing campaigns and pitches</p>
+            <h3 data-translate="home.templateMarketingTitle">Marketing Template</h3>
+            <p data-translate="home.templateMarketingDesc">Eye-catching layouts for marketing campaigns and pitches</p>
           </div>
           <div class="template-card" onclick="useTemplate('project')">
             <i class="fas fa-project-diagram"></i>
-            <h3>Project Template</h3>
-            <p>Structured layouts for project planning and progress tracking</p>
+            <h3 data-translate="home.templateProjectTitle">Project Template</h3>
+            <p data-translate="home.templateProjectDesc">Structured layouts for project planning and progress tracking</p>
           </div>
         </div>
       </section>
 
       <section class="beautiful-templates">
-        <h2>Beautiful Templates</h2>
-        <p>Start with professionally designed templates and make them your own.</p>
+        <h2 data-translate="home.beautifulTitle">Beautiful Templates</h2>
+        <p data-translate="home.beautifulSubtitle">Start with professionally designed templates and make them your own.</p>
         <div class="template-gallery">
           <div class="template-item" onclick="useTemplate('business-pro')">
             <img src="https://via.placeholder.com/320x200/1E3A5F/ffffff?text=Business+Pro" alt="Business Pro Template">
-            <h3>Business Pro</h3>
+            <h3 data-translate="home.beautifulBusinessTitle">Business Pro</h3>
           </div>
           <div class="template-item" onclick="useTemplate('creative-bold')">
             <img src="https://via.placeholder.com/320x200/0b3d2e/ffffff?text=Creative+Bold" alt="Creative Bold Template">
-            <h3>Creative Bold</h3>
+            <h3 data-translate="home.beautifulCreativeTitle">Creative Bold</h3>
           </div>
           <div class="template-item" onclick="useTemplate('corporate-clean')">
             <img src="https://via.placeholder.com/320x200/00796b/ffffff?text=Corporate+Clean" alt="Corporate Clean Template">
-            <h3>Corporate Clean</h3>
+            <h3 data-translate="home.beautifulCorporateTitle">Corporate Clean</h3>
           </div>
         </div>
-        <button class="browse-btn" onclick="alert('Browse all templates feature coming soon!')">
-          Browse All Templates
+        <button class="browse-btn" onclick="alert(window.getTranslation ? window.getTranslation('common.browseComingSoon') : 'Browse all templates feature coming soon!')">
+          <span data-translate="home.browseAll">Browse All Templates</span>
           <i class="fas fa-arrow-right"></i>
         </button>
       </section>
 
       <section id="recent" class="recent-section">
-        <h2>Recent Presentations</h2>
-        <p class="subtitle">Access your latest decks quickly.</p>
+        <h2 data-translate="home.recentTitle">Recent Presentations</h2>
+        <p class="subtitle" data-translate="home.recentSubtitle">Access your latest decks quickly.</p>
         <div class="recent-grid" id="recentGrid">
-          <div class="empty-state">No saved presentations yet. Create and save your first one!</div>
+          <div class="empty-state" data-translate="home.recentEmpty">No saved presentations yet. Create and save your first one!</div>
         </div>
       </section>
     </main>
@@ -988,24 +989,24 @@
       <div class="modal-content" style="position: relative;">
         <button class="modal-close" onclick="closeModal('signupModal')">&times;</button>
         <div class="modal-header">
-          <h3 class="modal-title">Create Account</h3>
+          <h3 class="modal-title" data-translate="auth.createAccountTitle">Create Account</h3>
         </div>
         <form id="signup_form" onsubmit="signupUser(event)">
           <div class="form-group">
-            <label class="form-label" for="signup_username">Username</label>
-            <input class="form-input" type="text" id="signup_username" required>
+            <label class="form-label" for="signup_username" data-translate="common.username">Username</label>
+            <input class="form-input" type="text" id="signup_username" required placeholder="Enter your username" data-translate-placeholder="auth.usernamePlaceholder">
           </div>
           <div class="form-group">
-            <label class="form-label" for="signup_email">Email</label>
-            <input class="form-input" type="email" id="signup_email" required>
+            <label class="form-label" for="signup_email" data-translate="common.email">Email</label>
+            <input class="form-input" type="email" id="signup_email" required placeholder="Enter your email" data-translate-placeholder="auth.emailPlaceholder">
           </div>
           <div class="form-group">
-            <label class="form-label" for="signup_password">Password</label>
-            <input class="form-input" type="password" id="signup_password" required>
+            <label class="form-label" for="signup_password" data-translate="common.password">Password</label>
+            <input class="form-input" type="password" id="signup_password" required placeholder="Enter your password" data-translate-placeholder="auth.passwordPlaceholder">
           </div>
           <div id="signup_error" class="error-message" style="display: none;"></div>
           <div id="signup_success" class="success-message" style="display: none;"></div>
-          <button type="submit" class="form-submit green">Sign Up</button>
+          <button type="submit" class="form-submit green" data-translate="common.signUp">Sign Up</button>
         </form>
       </div>
     </div>
@@ -1014,19 +1015,19 @@
       <div class="modal-content" style="position: relative;">
         <button class="modal-close" onclick="closeModal('loginModal')">&times;</button>
         <div class="modal-header">
-          <h3 class="modal-title">Log In</h3>
+          <h3 class="modal-title" data-translate="auth.signInTitle">Log In</h3>
         </div>
         <form id="login_form" onsubmit="loginUser(event)">
           <div class="form-group">
-            <label class="form-label" for="login_email">Email</label>
-            <input class="form-input" type="email" id="login_email" required>
+            <label class="form-label" for="login_email" data-translate="common.email">Email</label>
+            <input class="form-input" type="email" id="login_email" required placeholder="Enter your email" data-translate-placeholder="auth.emailPlaceholder">
           </div>
           <div class="form-group">
-            <label class="form-label" for="login_password">Password</label>
-            <input class="form-input" type="password" id="login_password" required>
+            <label class="form-label" for="login_password" data-translate="common.password">Password</label>
+            <input class="form-input" type="password" id="login_password" required placeholder="Enter your password" data-translate-placeholder="auth.passwordPlaceholder">
           </div>
           <div id="login_error" class="error-message" style="display: none;"></div>
-          <button type="submit" class="form-submit emerald">Log In</button>
+          <button type="submit" class="form-submit emerald" data-translate="common.logIn">Log In</button>
         </form>
       </div>
     </div>
@@ -1043,6 +1044,27 @@
           return;
         }
       })();
+      
+      let currentLanguage = window.getCurrentLanguage ? window.getCurrentLanguage() : (localStorage.getItem('siteLanguage') || 'en');
+      const translate = (key) => window.getTranslation ? window.getTranslation(key, currentLanguage) : key;
+      const formatTranslation = (key, ...args) => {
+        let text = translate(key);
+        args.forEach(value => {
+          text = text.replace('%s', value);
+        });
+        return text;
+      };
+
+      if (typeof window.initTranslations === 'function') {
+        window.onLanguageChange = (lang) => {
+          currentLanguage = lang;
+          updateUserGreeting();
+          loadRecentPresentations();
+        };
+        window.initTranslations();
+      } else if (typeof window.applyTranslations === 'function') {
+        window.applyTranslations(currentLanguage);
+      }
       
       // Per Home.json: open_blank_page navigates to blank editor
       document.querySelector('[data-action="open_blank_page"]').addEventListener('click', (e) => {
@@ -1070,19 +1092,19 @@
         } else if (isGuest) {
           // If guest, show message that they need to sign in
           const grid = document.getElementById('recentGrid');
-          grid.innerHTML = '<div class="empty-state">Sign in to save and access your presentations.</div>';
+          grid.innerHTML = `<div class="empty-state">${translate('home.recentSignIn')}</div>`;
           return;
         } else {
           // If not logged in, show empty state
           const grid = document.getElementById('recentGrid');
-          grid.innerHTML = '<div class="empty-state">Please log in to view your saved presentations.</div>';
+          grid.innerHTML = `<div class="empty-state">${translate('home.recentLogin')}</div>`;
           return;
         }
 
         const grid = document.getElementById('recentGrid');
         
         if (saved.length === 0) {
-          grid.innerHTML = '<div class="empty-state">No saved presentations yet. Create and save your first one!</div>';
+          grid.innerHTML = `<div class="empty-state">${translate('home.recentEmpty')}</div>`;
           return;
         }
 
@@ -1093,17 +1115,19 @@
         sorted.forEach((pres, index) => {
           const card = document.createElement('div');
           card.className = 'card recent-card';
+          const title = pres.title || translate('common.untitled');
+          const dateLabel = pres.date ? formatTranslation('common.lastEdited', pres.date) : formatTranslation('common.lastEdited', translate('common.unknown'));
           card.innerHTML = `
-            <div class="thumb" data-title="${pres.title || 'Untitled'}">
-              <div style="width:100%;height:100%;background:linear-gradient(135deg, rgba(17,51,34,0.8), rgba(26,64,45,0.8));display:grid;place-items:center;color:#fff;font-weight:600;font-size:14px;">${pres.title || 'Untitled'}</div>
+            <div class="thumb" data-title="${title}">
+              <div style="width:100%;height:100%;background:linear-gradient(135deg, rgba(17,51,34,0.8), rgba(26,64,45,0.8));display:grid;place-items:center;color:#fff;font-weight:600;font-size:14px;">${title}</div>
             </div>
             <div class="card-body">
-              <div class="card-title">${pres.title || 'Untitled'}</div>
-              <div class="muted">Last edited ${pres.date || 'Unknown'}</div>
+              <div class="card-title">${title}</div>
+              <div class="muted">${dateLabel}</div>
             </div>
             <div class="hover-actions">
-              <button class="chip" data-open="${index}">Open</button>
-              <button class="chip danger" data-delete="${index}">Delete</button>
+              <button class="chip" data-open="${index}">${translate('common.open')}</button>
+              <button class="chip danger" data-delete="${index}">${translate('common.delete')}</button>
             </div>
           `;
           grid.appendChild(card);
@@ -1124,7 +1148,10 @@
           btn.addEventListener('click', (e) => {
             e.stopPropagation();
             const idx = parseInt(btn.getAttribute('data-delete'));
-            if (confirm(`Delete "${sorted[idx].title || 'Untitled'}"?`)) {
+            const pres = sorted[idx];
+            const title = pres.title || translate('common.untitled');
+            const confirmMsg = formatTranslation('common.confirmDelete', title);
+            if (confirm(confirmMsg)) {
               const currentUser = JSON.parse(localStorage.getItem('currentUser') || 'null');
               if (currentUser) {
                 saved.splice(saved.indexOf(sorted[idx]), 1);
@@ -1139,26 +1166,43 @@
       // ===== Authentication System =====
       
       // Check if user is logged in on page load
+      function updateUserGreeting() {
+        const userNameEl = document.getElementById('userName');
+        if (!userNameEl) return;
+        const currentUser = JSON.parse(localStorage.getItem('currentUser') || 'null');
+        const isGuest = localStorage.getItem('guest') === 'true';
+        const welcomeLabel = translate('common.welcome');
+        if (currentUser) {
+          userNameEl.textContent = `${welcomeLabel}, ${currentUser.username || currentUser.name}`;
+        } else if (isGuest) {
+          userNameEl.textContent = `${welcomeLabel}, ${translate('common.guest')}`;
+        } else {
+          userNameEl.textContent = `${welcomeLabel}, ${translate('common.guest')}`;
+        }
+      }
+
       function checkAuthStatus() {
         const currentUser = JSON.parse(localStorage.getItem('currentUser') || 'null');
         const isGuest = localStorage.getItem('guest') === 'true';
         const logoutBtn = document.getElementById('btnLogOut');
+        const authButtons = document.getElementById('authButtons');
+        const userInfo = document.getElementById('userInfo');
         
         if (currentUser) {
-          document.getElementById('authButtons').style.display = 'none';
-          document.getElementById('userInfo').style.display = 'flex';
-          document.getElementById('userName').textContent = `Welcome, ${currentUser.username || currentUser.name}`;
+          if (authButtons) authButtons.style.display = 'none';
+          if (userInfo) userInfo.style.display = 'flex';
+          updateUserGreeting();
           // Show logout button for logged-in users
           if (logoutBtn) logoutBtn.style.display = 'inline-block';
         } else if (isGuest) {
-          document.getElementById('authButtons').style.display = 'none';
-          document.getElementById('userInfo').style.display = 'flex';
-          document.getElementById('userName').textContent = 'Welcome, Guest';
+          if (authButtons) authButtons.style.display = 'none';
+          if (userInfo) userInfo.style.display = 'flex';
+          updateUserGreeting();
           // Show logout button for guests too (they can return to access page)
           if (logoutBtn) logoutBtn.style.display = 'inline-block';
         } else {
-          document.getElementById('authButtons').style.display = 'flex';
-          document.getElementById('userInfo').style.display = 'none';
+          if (authButtons) authButtons.style.display = 'flex';
+          if (userInfo) userInfo.style.display = 'none';
         }
       }
       
@@ -1207,15 +1251,23 @@
         
         // Check if email already exists
         if (users.find(u => u.email === email)) {
-          document.getElementById('signup_error').textContent = 'Email already registered';
-          document.getElementById('signup_error').style.display = 'block';
+          const errorEl = document.getElementById('signup_error');
+          if (errorEl) {
+            errorEl.textContent = translate('auth.emailExists');
+            errorEl.style.display = 'block';
+            errorEl.classList.add('show');
+          }
           return;
         }
 
         // Check if username already exists
         if (users.find(u => u.username === username)) {
-          document.getElementById('signup_error').textContent = 'Username already taken';
-          document.getElementById('signup_error').style.display = 'block';
+          const errorEl = document.getElementById('signup_error');
+          if (errorEl) {
+            errorEl.textContent = translate('auth.usernameExists');
+            errorEl.style.display = 'block';
+            errorEl.classList.add('show');
+          }
           return;
         }
 
@@ -1225,8 +1277,12 @@
 
         // Auto-login after signup
         localStorage.setItem('currentUser', JSON.stringify({ username, email }));
-        document.getElementById('signup_success').textContent = 'Account created! Logging in...';
-        document.getElementById('signup_success').style.display = 'block';
+        const successEl = document.getElementById('signup_success');
+        if (successEl) {
+          successEl.textContent = translate('auth.accountCreated');
+          successEl.style.display = 'block';
+          successEl.classList.add('show');
+        }
         
         setTimeout(() => {
           closeModal('signupModal');
@@ -1246,8 +1302,11 @@
         const user = users.find(u => u.email === email && u.password === password);
 
         if (!user) {
-          document.getElementById('login_error').textContent = 'Invalid email or password';
-          document.getElementById('login_error').style.display = 'block';
+          const errorEl = document.getElementById('login_error');
+          if (errorEl) {
+            errorEl.textContent = translate('auth.invalidCredentials');
+            errorEl.style.display = 'block';
+          }
           return;
         }
 

@@ -7,6 +7,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <script src="./translations.js"></script>
     <style>
       * { box-sizing: border-box; }
       html, body { height: 100%; margin: 0; }
@@ -233,6 +234,25 @@
         box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
         backdrop-filter: blur(15px);
         -webkit-backdrop-filter: blur(15px);
+        margin-bottom: 24px;
+      }
+
+      .about-list {
+        list-style: none;
+        padding: 0;
+        margin: 12px 0 0;
+        font-size: 15px;
+        line-height: 1.8;
+        color: inherit;
+      }
+
+      .about-list a {
+        color: #2ed573;
+        text-decoration: none;
+      }
+
+      .about-list a:hover {
+        text-decoration: underline;
       }
 
       /* Navigation colors */
@@ -309,39 +329,76 @@
   <body>
     <header>
       <div class="nav">
-        <div class="logo">SlideMaker</div>
+        <div class="logo" data-translate="common.slideMaker">SlideMaker</div>
         <nav class="menu" aria-label="Main">
-          <a href="./templates.html">Home</a>
-          <a href="#" class="active">Settings</a>
+          <a href="./templates.html" data-translate="common.home">Home</a>
+          <a href="#" class="active" data-translate="common.settings">Settings</a>
         </nav>
         <div class="spacer"></div>
       </div>
     </header>
 
     <main class="container">
-      <h1>Settings</h1>
+      <h1 data-translate="settings.title">Settings</h1>
       
       <div class="settings-card">
         <div class="form-group">
-          <label class="form-label" for="backgroundSelector">Background Color</label>
+          <label class="form-label" for="backgroundSelector" data-translate="settings.backgroundColor">Background Color</label>
           <div class="color-options" id="backgroundSelector">
             <div class="color-option" data-color="#0b3d2e" data-selected="true">
               <span class="check-icon">✓</span>
-              <span class="color-label">Dark Green</span>
+              <span class="color-label" data-translate="settings.darkGreen">Dark Green</span>
             </div>
             <div class="color-option" data-color="#ffffff">
               <span class="check-icon"></span>
-              <span class="color-label">Light</span>
+              <span class="color-label" data-translate="settings.light">Light</span>
             </div>
             <div class="color-option" data-color="#000000">
               <span class="check-icon"></span>
-              <span class="color-label">Dark</span>
+              <span class="color-label" data-translate="settings.dark">Dark</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="languageSelector" data-translate="settings.language">Language</label>
+          <div class="color-options" id="languageSelector">
+            <div class="color-option" data-lang="en" data-selected="true">
+              <span class="check-icon">✓</span>
+              <span class="color-label" data-translate="settings.english">English</span>
+            </div>
+            <div class="color-option" data-lang="ar">
+              <span class="check-icon"></span>
+              <span class="color-label" data-translate="settings.arabic">Arabic</span>
             </div>
           </div>
         </div>
       </div>
 
-      <a href="./templates.html" class="back-link">← Back to Home</a>
+      <div class="settings-card" id="aboutCard">
+        <div class="form-group">
+          <label class="form-label" data-translate="settings.aboutTitle">About App</label>
+          <ul class="about-list">
+            <li>
+              <span data-translate="settings.version">Version</span>:
+              <strong id="appVersion">1.0.0</strong>
+            </li>
+            <li>
+              <span data-translate="settings.developer">Developed by</span>:
+              <strong id="devName">Mohammed Al-Otaibi</strong>
+            </li>
+            <li>
+              <span data-translate="settings.contact">Contact</span>:
+              <a id="contactEmail" href="mailto:your-email@example.com">your-email@example.com</a>
+            </li>
+            <li>
+              <a href="#" id="privacyPolicyLink" data-translate="settings.privacyPolicy">Privacy Policy</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+ 
+      <a href="./templates.html" class="back-link" data-translate="settings.backToHome">← Back to Home</a>
     </main>
 
     <script>
@@ -356,6 +413,21 @@
           return;
         }
       })();
+      
+      let currentLanguage = window.getCurrentLanguage ? window.getCurrentLanguage() : (localStorage.getItem('siteLanguage') || document.documentElement.lang || 'en');
+      const translate = (key) => window.getTranslation ? window.getTranslation(key, currentLanguage) : key;
+
+      if (typeof window.initTranslations === 'function') {
+        window.onLanguageChange = (lang) => {
+          currentLanguage = lang;
+          if (typeof window.applyTranslations === 'function') {
+            window.applyTranslations(lang);
+          }
+        };
+        window.initTranslations();
+      } else if (typeof window.applyTranslations === 'function') {
+        window.applyTranslations(currentLanguage);
+      }
       
       // Load saved background color from localStorage
       const savedBg = localStorage.getItem('siteBackgroundColor') || '#0b3d2e';
@@ -500,6 +572,126 @@
             }
           });
         }
+        if (e.data.type === 'updateLanguage') {
+          const lang = e.data.language;
+          localStorage.setItem('siteLanguage', lang);
+          currentLanguage = lang;
+          if (typeof window.applyTranslations === 'function') {
+            window.applyTranslations(lang);
+          }
+          document.querySelectorAll('#languageSelector .color-option').forEach(option => {
+            option.removeAttribute('data-selected');
+            option.classList.remove('focused');
+            const checkIcon = option.querySelector('.check-icon');
+            if (option.getAttribute('data-lang') === lang) {
+              option.setAttribute('data-selected', 'true');
+              checkIcon.textContent = '✓';
+            } else {
+              checkIcon.textContent = '';
+            }
+          });
+        }
+      });
+
+      // About card dynamic fields
+      const ABOUT_APP_VERSION = '1.0.0';
+      const ABOUT_DEV_NAMES = ['Mohammed Al-Otaibi', 'Ahmed Al-Asmari', 'Ali Al-Khathami'];
+      const ABOUT_CONTACT_EMAIL = 'Mohammedfake56@gmail.com';
+
+      const versionEl = document.getElementById('appVersion');
+      const devNameEl = document.getElementById('devName');
+      const contactEl = document.getElementById('contactEmail');
+      const privacyLinkEl = document.getElementById('privacyPolicyLink');
+
+      if (versionEl) versionEl.textContent = ABOUT_APP_VERSION;
+      if (devNameEl) devNameEl.innerHTML = ABOUT_DEV_NAMES.join('<br>');
+      if (contactEl) {
+        contactEl.textContent = ABOUT_CONTACT_EMAIL;
+        contactEl.href = 'mailto:' + ABOUT_CONTACT_EMAIL;
+      }
+
+      if (privacyLinkEl) {
+        privacyLinkEl.addEventListener('click', (event) => {
+          event.preventDefault();
+          alert(translate('common.privacyComingSoon'));
+        });
+      }
+
+      const savedLang = localStorage.getItem('siteLanguage') || currentLanguage;
+      currentLanguage = savedLang;
+      if (typeof window.applyTranslations === 'function') {
+        window.applyTranslations(savedLang);
+      }
+
+      // Language selector functionality
+      const langOptions = document.querySelectorAll('#languageSelector .color-option');
+      langOptions.forEach(option => {
+        option.removeAttribute('data-selected');
+        option.classList.remove('focused');
+        const checkIcon = option.querySelector('.check-icon');
+        if (option.getAttribute('data-lang') === savedLang) {
+          option.setAttribute('data-selected', 'true');
+          checkIcon.textContent = '✓';
+        } else {
+          checkIcon.textContent = '';
+        }
+      });
+
+      langOptions.forEach(option => {
+        option.addEventListener('click', () => {
+          const lang = option.getAttribute('data-lang');
+          
+          // Update all options
+          langOptions.forEach(opt => {
+            opt.removeAttribute('data-selected');
+            opt.classList.remove('focused');
+            const icon = opt.querySelector('.check-icon');
+            if (opt === option) {
+              opt.setAttribute('data-selected', 'true');
+              icon.textContent = '✓';
+            } else {
+              icon.textContent = '';
+            }
+          });
+          
+          // Save to localStorage
+          localStorage.setItem('siteLanguage', lang);
+          currentLanguage = lang;
+          
+          // Apply translations
+          if (typeof window.applyTranslations === 'function') {
+            window.applyTranslations(lang);
+          }
+          
+          // Notify other windows
+          if (window.opener) {
+            window.opener.postMessage({ type: 'updateLanguage', language: lang }, '*');
+          }
+          
+          // Broadcast to all windows
+          window.postMessage({ type: 'updateLanguage', language: lang }, '*');
+        });
+
+        // Add focus effect on hover
+        option.addEventListener('mouseenter', () => {
+          if (!option.hasAttribute('data-selected')) {
+            option.classList.add('focused');
+          }
+        });
+
+        option.addEventListener('mouseleave', () => {
+          option.classList.remove('focused');
+        });
+
+        // Keyboard navigation
+        option.addEventListener('keydown', (e) => {
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            option.click();
+          }
+        });
+
+        option.setAttribute('tabindex', '0');
       });
     </script>
   </body>

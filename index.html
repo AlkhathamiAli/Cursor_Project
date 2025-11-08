@@ -7,6 +7,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <script src="./translations.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
       * { 
@@ -107,12 +108,6 @@
         transform: scale(1.03);
         box-shadow: 0 10px 25px rgba(0,255,150,0.3);
       }
-
-      /* Stagger timings */
-      /* stagger delays by using wrappers' overall animation; no per-image animation needed */
-
-      /* Hover/pause on interaction with the card */
-      /* Keep animations running even on hover (no pause) */
 
       /* Seamless marquee animations: move by half the duplicated track */
       @keyframes marqueeUp { /* bottom -> top */
@@ -467,12 +462,12 @@
         <div class="access-icon">
           <img src="./CURSOR-Project/public/Saudi-Aramco.png" alt="Aramco Digital Logo" class="aramco-logo" />
         </div>
-        <h1>Welcome to Aramco Digital SlideMaker</h1>
-        <p>Create, edit, and share stunning presentations easily.</p>
+        <h1 data-translate="access.welcomeTitle">Welcome to Aramco Digital SlideMaker</h1>
+        <p data-translate="access.subtitle">Create, edit, and share stunning presentations easily.</p>
         <div class="auth-buttons">
-          <button class="btn signin" onclick="openModal('signinModal')">Sign In</button>
-          <button class="btn login" onclick="openModal('signinModal')">Log In</button>
-          <button class="btn visitor" onclick="continueAsVisitor()">Continue as Visitor</button>
+          <button class="btn signin" onclick="openModal('signinModal')" data-translate="common.signIn">Sign In</button>
+          <button class="btn login" onclick="openModal('signinModal')" data-translate="common.logIn">Log In</button>
+          <button class="btn visitor" onclick="continueAsVisitor()" data-translate="common.continueVisitor">Continue as Visitor</button>
         </div>
       </div>
       <!-- Right animated slides (duplicated for seamless loop) -->
@@ -498,20 +493,20 @@
       <div class="modal-content">
         <button class="modal-close" onclick="closeModal('signinModal')">&times;</button>
         <div class="modal-header">
-          <h3 class="modal-title">Sign In</h3>
-          <p class="modal-subtitle">Welcome back! Please sign in to continue.</p>
+          <h3 class="modal-title" data-translate="auth.signInTitle">Sign In</h3>
+          <p class="modal-subtitle" data-translate="auth.signInSubtitle">Welcome back! Please sign in to continue.</p>
         </div>
         <form id="signin_form" onsubmit="signInUser(event)">
           <div class="form-group">
-            <label class="form-label" for="signin_email">Email</label>
+            <label class="form-label" for="signin_email" data-translate="common.email">Email</label>
             <input class="form-input" type="email" id="signin_email" required placeholder="Enter your email">
           </div>
           <div class="form-group">
-            <label class="form-label" for="signin_password">Password</label>
+            <label class="form-label" for="signin_password" data-translate="common.password">Password</label>
             <input class="form-input" type="password" id="signin_password" required placeholder="Enter your password">
           </div>
           <div id="signin_error" class="error-message"></div>
-          <button type="submit" class="form-submit">Sign In</button>
+          <button type="submit" class="form-submit" data-translate="common.signIn">Sign In</button>
         </form>
       </div>
     </div>
@@ -531,6 +526,21 @@
       
       // Check on page load
       checkAuth();
+
+      let currentLanguage = window.getCurrentLanguage ? window.getCurrentLanguage() : (localStorage.getItem('siteLanguage') || 'en');
+      const translate = (key) => window.getTranslation ? window.getTranslation(key, currentLanguage) : key;
+
+      if (typeof window.initTranslations === 'function') {
+        window.onLanguageChange = (lang) => {
+          currentLanguage = lang;
+          if (typeof window.applyTranslations === 'function') {
+            window.applyTranslations(lang);
+          }
+        };
+        window.initTranslations();
+      } else if (typeof window.applyTranslations === 'function') {
+        window.applyTranslations(currentLanguage);
+      }
       
       // Modal functions
       function openModal(modalId) {
@@ -568,8 +578,10 @@
         const user = users.find(u => u.email === email && u.password === password);
         
         if (!user) {
-          errorEl.textContent = 'Invalid email or password';
-          errorEl.classList.add('show');
+          if (errorEl) {
+            errorEl.textContent = translate('auth.invalidCredentials');
+            errorEl.classList.add('show');
+          }
           return;
         }
         
@@ -596,4 +608,3 @@
     </script>
   </body>
 </html>
-
