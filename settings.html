@@ -1,0 +1,675 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>SlideMaker • Settings</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <script src="./translations.js"></script>
+    <style>
+      * { box-sizing: border-box; }
+      html, body { height: 100%; margin: 0; }
+      body {
+        font-family: Poppins, sans-serif;
+        background: #0b3d2e;
+        color: #E8F5E9;
+        transition: background-color 0.3s ease;
+      }
+
+      /* Header per settings.json */
+      header {
+        position: sticky; top: 0; z-index: 10;
+        background: #0b3d2e;
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+      }
+      .nav { max-width: 1200px; margin: 0 auto; padding: 12px 20px; display: flex; align-items: center; gap: 16px; }
+      .logo { font-weight: 700; letter-spacing: .2px; color: white; }
+      .menu { display: flex; gap: 12px; }
+      .menu a { color: white; font-weight: 600; padding: 8px 10px; border-radius: 8px; transition: opacity .2s; }
+      .menu a:hover { opacity: 0.8; }
+      .spacer { flex: 1; }
+
+      /* Settings page */
+      .container { max-width: 800px; margin: 0 auto; padding: 40px 20px; }
+      h1 { font-size: 32px; margin: 0 0 40px; color: #E8F5E9; }
+      
+      .settings-card {
+        background: rgba(17, 51, 34, 0.6);
+        border: 1px solid rgba(255,255,255,0.1);
+        border-radius: 16px;
+        padding: 32px;
+        backdrop-filter: blur(20px);
+        box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+      }
+
+      .form-group {
+        margin-bottom: 24px;
+      }
+
+      .form-label {
+        display: block;
+        margin-bottom: 12px;
+        color: #E8F5E9;
+        font-weight: 600;
+        font-size: 16px;
+      }
+
+      .color-options {
+        display: flex;
+        flex-direction: column;
+        gap: 0;
+        border-radius: 12px;
+        overflow: hidden;
+        background: rgba(255, 255, 255, 0.03);
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+      }
+
+      .color-option {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 16px 20px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        background: rgba(255, 255, 255, 0.05);
+        backdrop-filter: blur(20px);
+        border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+        position: relative;
+        overflow: hidden;
+      }
+
+      .color-option:last-child {
+        border-bottom: none;
+      }
+
+      .color-option::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 100%);
+        opacity: 0;
+        transition: opacity 0.3s ease;
+        z-index: 0;
+      }
+
+      .color-option:hover::before {
+        opacity: 1;
+      }
+
+      .color-option:hover {
+        background: rgba(255, 255, 255, 0.12);
+        transform: translateX(4px);
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+      }
+
+      .color-option[data-selected="true"] {
+        background: linear-gradient(135deg, rgba(46, 213, 115, 0.3) 0%, rgba(16, 185, 129, 0.2) 100%);
+        backdrop-filter: blur(25px);
+        border-left: 3px solid #2ed573;
+        box-shadow: inset 0 0 20px rgba(46, 213, 115, 0.1);
+      }
+
+      .color-option.focused {
+        background: linear-gradient(135deg, rgba(59, 130, 246, 0.4) 0%, rgba(37, 99, 235, 0.3) 100%);
+        backdrop-filter: blur(25px);
+        box-shadow: 0 0 20px rgba(59, 130, 246, 0.3), inset 0 0 20px rgba(59, 130, 246, 0.1);
+      }
+
+      .check-icon {
+        width: 20px;
+        height: 20px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #2ed573;
+        font-weight: 700;
+        font-size: 14px;
+        position: relative;
+        z-index: 1;
+      }
+
+      .color-label {
+        color: #E8F5E9;
+        font-size: 16px;
+        font-weight: 500;
+        position: relative;
+        z-index: 1;
+      }
+
+      .color-option.focused .color-label {
+        color: #ffffff;
+      }
+
+      /* Light mode text colors for better readability */
+      body.light-mode .color-label {
+        color: #1a1a1a !important;
+      }
+
+      body.light-mode .color-option.focused .color-label {
+        color: #ffffff !important;
+      }
+
+      body.light-mode .color-option[data-selected="true"] .color-label {
+        color: #1a1a1a !important;
+      }
+
+      body.light-mode .check-icon {
+        color: #10b981 !important;
+      }
+
+      .back-link {
+        display: inline-block;
+        margin-top: 24px;
+        color: #A5D6A7;
+        text-decoration: none;
+        font-weight: 600;
+      }
+
+      .back-link:hover {
+        color: #E8F5E9;
+      }
+
+      /* Dark metallic gradient background */
+      body.dark-theme {
+        background: linear-gradient(135deg, #0b0b0b 0%, #0d0d0d 40%, #000000 100%);
+        background-attachment: fixed;
+        background-repeat: no-repeat;
+        background-size: cover;
+        color: #eaeaea;
+        position: relative;
+      }
+
+      body.dark-theme::before {
+        content: "";
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: radial-gradient(circle at 30% 20%, rgba(255, 255, 255, 0.05), transparent 60%);
+        pointer-events: none;
+        z-index: 0;
+      }
+
+      body.dark-theme > * {
+        position: relative;
+        z-index: 1;
+      }
+
+      header.dark-theme {
+        background: linear-gradient(135deg, #0b0b0b 0%, #0d0d0d 40%, #000000 100%);
+        border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      }
+
+      /* Light mode background with frosted glass effect */
+      body.light-mode {
+        background: linear-gradient(135deg, rgba(255,255,255,0.85), rgba(240,240,240,0.8));
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        color: #1a1a1a;
+        transition: all 0.3s ease-in-out;
+        position: relative;
+      }
+
+      body.light-mode > * {
+        position: relative;
+        z-index: 1;
+      }
+
+      header.light-mode {
+        background: rgba(255, 255, 255, 0.4);
+        backdrop-filter: blur(15px);
+        -webkit-backdrop-filter: blur(15px);
+        border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+      }
+
+      /* Card or container glass effect */
+      .settings-card {
+        background: rgba(255, 255, 255, 0.35);
+        border: 1px solid rgba(255, 255, 255, 0.5);
+        border-radius: 14px;
+        box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
+        backdrop-filter: blur(15px);
+        -webkit-backdrop-filter: blur(15px);
+        margin-bottom: 24px;
+      }
+
+      .about-list {
+        list-style: none;
+        padding: 0;
+        margin: 12px 0 0;
+        font-size: 15px;
+        line-height: 1.8;
+        color: inherit;
+      }
+
+      .about-list a {
+        color: #2ed573;
+        text-decoration: none;
+      }
+
+      .about-list a:hover {
+        text-decoration: underline;
+      }
+
+      /* Navigation colors */
+      .nav a, .nav span, .logo {
+        color: inherit;
+        transition: color 0.3s ease;
+      }
+
+      body.light-mode .nav a,
+      body.light-mode .nav span,
+      body.light-mode .logo {
+        color: #222;
+      }
+
+      body.dark-theme .nav a,
+      body.dark-theme .nav span,
+      body.dark-theme .logo {
+        color: #eaeaea;
+      }
+
+      /* Headings */
+      body.light-mode h1, 
+      body.light-mode h2, 
+      body.light-mode h3 {
+        color: #1a1a1a !important;
+      }
+
+      body.dark-theme h1, 
+      body.dark-theme h2, 
+      body.dark-theme h3 {
+        color: #f5f5f5;
+      }
+
+      /* Form labels and inputs in light mode */
+      body.light-mode .form-label {
+        color: #1a1a1a !important;
+      }
+
+      body.light-mode .form-select {
+        background: rgba(255, 255, 255, 0.6);
+        border-color: rgba(0, 0, 0, 0.15);
+        color: #1a1a1a;
+      }
+
+      body.light-mode .back-link {
+        color: #1a1a1a !important;
+      }
+
+      /* Color options in light mode */
+      body.light-mode .color-option {
+        background: rgba(255, 255, 255, 0.5);
+        border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+      }
+
+      body.light-mode .color-option:hover {
+        background: rgba(255, 255, 255, 0.7);
+      }
+
+      body.light-mode .color-option[data-selected="true"] {
+        background: linear-gradient(135deg, rgba(16, 185, 129, 0.3) 0%, rgba(46, 213, 115, 0.2) 100%);
+        border-left: 3px solid #10b981;
+      }
+
+      body.light-mode .color-option.focused {
+        background: linear-gradient(135deg, rgba(59, 130, 246, 0.4) 0%, rgba(37, 99, 235, 0.3) 100%);
+      }
+
+      body.light-mode .color-options {
+        background: rgba(255, 255, 255, 0.3);
+        border: 1px solid rgba(0, 0, 0, 0.1);
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <div class="nav">
+        <div class="logo" data-translate="common.slideMaker">SlideMaker</div>
+        <nav class="menu" aria-label="Main">
+          <a href="./templates.html" data-translate="common.home">Home</a>
+          <a href="#" class="active" data-translate="common.settings">Settings</a>
+        </nav>
+        <div class="spacer"></div>
+      </div>
+    </header>
+
+    <main class="container">
+      <h1 data-translate="settings.title">Settings</h1>
+      
+      <div class="settings-card">
+        <div class="form-group">
+          <label class="form-label" for="backgroundSelector" data-translate="settings.backgroundColor">Background Color</label>
+          <div class="color-options" id="backgroundSelector">
+            <div class="color-option" data-color="#0b3d2e" data-selected="true">
+              <span class="check-icon">✓</span>
+              <span class="color-label" data-translate="settings.darkGreen">Dark Green</span>
+            </div>
+            <div class="color-option" data-color="#ffffff">
+              <span class="check-icon"></span>
+              <span class="color-label" data-translate="settings.light">Light</span>
+            </div>
+            <div class="color-option" data-color="#000000">
+              <span class="check-icon"></span>
+              <span class="color-label" data-translate="settings.dark">Dark</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="languageSelector" data-translate="settings.language">Language</label>
+          <div class="color-options" id="languageSelector">
+            <div class="color-option" data-lang="en" data-selected="true">
+              <span class="check-icon">✓</span>
+              <span class="color-label" data-translate="settings.english">English</span>
+            </div>
+            <div class="color-option" data-lang="ar">
+              <span class="check-icon"></span>
+              <span class="color-label" data-translate="settings.arabic">Arabic</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="settings-card" id="aboutCard">
+        <div class="form-group">
+          <label class="form-label" data-translate="settings.aboutTitle">About App</label>
+          <ul class="about-list">
+            <li>
+              <span data-translate="settings.version">Version</span>:
+              <strong id="appVersion">1.0.0</strong>
+            </li>
+            <li>
+              <span data-translate="settings.developer">Developed by</span>:
+              <strong id="devName">Mohammed Al-Otaibi</strong>
+            </li>
+            <li>
+              <span data-translate="settings.contact">Contact</span>:
+              <a id="contactEmail" href="mailto:your-email@example.com">your-email@example.com</a>
+            </li>
+            <li>
+              <a href="#" id="privacyPolicyLink" data-translate="settings.privacyPolicy">Privacy Policy</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+ 
+      <a href="./templates.html" class="back-link" data-translate="settings.backToHome">← Back to Home</a>
+    </main>
+
+    <script>
+      // Route Protection - Check authentication on page load
+      (function() {
+        const currentUser = JSON.parse(localStorage.getItem('currentUser') || 'null');
+        const isGuest = localStorage.getItem('guest') === 'true';
+        
+        // If not authenticated and not a guest, redirect to welcome page
+        if (!currentUser && !isGuest) {
+          window.location.href = './index.html';
+          return;
+        }
+      })();
+      
+      // Load saved background color from localStorage
+      const savedBg = localStorage.getItem('siteBackgroundColor') || '#0b3d2e';
+      if (savedBg === '#000000') {
+        document.body.classList.add('dark-theme');
+        document.body.style.background = '';
+        document.body.style.color = '';
+        document.querySelector('header').classList.add('dark-theme');
+        document.querySelector('header').style.background = '';
+      } else if (savedBg === '#ffffff') {
+        document.body.classList.add('light-mode');
+        document.body.style.background = '';
+        document.body.style.color = '';
+        document.querySelector('header').classList.add('light-mode');
+        document.querySelector('header').style.background = '';
+      } else {
+        document.body.style.background = savedBg;
+        document.querySelector('header').style.background = savedBg;
+      }
+      
+      // Set selected option based on saved value
+      const options = document.querySelectorAll('.color-option');
+      options.forEach(option => {
+        option.removeAttribute('data-selected');
+        option.classList.remove('focused');
+        const checkIcon = option.querySelector('.check-icon');
+        if (option.getAttribute('data-color') === savedBg) {
+          option.setAttribute('data-selected', 'true');
+          checkIcon.textContent = '✓';
+        } else {
+          checkIcon.textContent = '';
+        }
+      });
+
+      // Update background color when option is clicked
+      options.forEach(option => {
+        option.addEventListener('click', () => {
+          const color = option.getAttribute('data-color');
+          
+          // Update all options
+          options.forEach(opt => {
+            opt.removeAttribute('data-selected');
+            opt.classList.remove('focused');
+            const icon = opt.querySelector('.check-icon');
+            if (opt === option) {
+              opt.setAttribute('data-selected', 'true');
+              icon.textContent = '✓';
+            } else {
+              icon.textContent = '';
+            }
+          });
+          
+          // Update body background
+          document.body.classList.remove('dark-theme', 'light-mode');
+          document.querySelector('header').classList.remove('dark-theme', 'light-mode');
+          
+          if (color === '#000000') {
+            document.body.classList.add('dark-theme');
+            document.body.style.background = '';
+            document.body.style.color = '';
+            document.querySelector('header').classList.add('dark-theme');
+            document.querySelector('header').style.background = '';
+          } else if (color === '#ffffff') {
+            document.body.classList.add('light-mode');
+            document.body.style.background = '';
+            document.body.style.color = '';
+            document.querySelector('header').classList.add('light-mode');
+            document.querySelector('header').style.background = '';
+          } else {
+            document.body.style.background = color;
+            document.querySelector('header').style.background = color;
+            document.querySelector('.logo').style.color = 'white';
+            document.querySelectorAll('.menu a').forEach(a => a.style.color = 'white');
+          }
+          
+          // Save to localStorage
+          localStorage.setItem('siteBackgroundColor', color);
+          
+          // Also update templates.html if it's open
+          if (window.opener) {
+            window.opener.postMessage({ type: 'updateBackground', color: color }, '*');
+          }
+        });
+
+        // Add focus effect on hover
+        option.addEventListener('mouseenter', () => {
+          if (!option.hasAttribute('data-selected')) {
+            option.classList.add('focused');
+          }
+        });
+
+        option.addEventListener('mouseleave', () => {
+          option.classList.remove('focused');
+        });
+
+        // Keyboard navigation
+        option.addEventListener('keydown', (e) => {
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            option.click();
+          }
+        });
+
+        option.setAttribute('tabindex', '0');
+      });
+
+      // Listen for messages from other windows
+      window.addEventListener('message', (e) => {
+        if (e.data.type === 'updateBackground') {
+          const color = e.data.color;
+          
+          document.body.classList.remove('dark-theme', 'light-mode');
+          document.querySelector('header').classList.remove('dark-theme', 'light-mode');
+          
+          if (color === '#000000') {
+            document.body.classList.add('dark-theme');
+            document.body.style.background = '';
+            document.body.style.color = '';
+            document.querySelector('header').classList.add('dark-theme');
+            document.querySelector('header').style.background = '';
+          } else if (color === '#ffffff') {
+            document.body.classList.add('light-mode');
+            document.body.style.background = '';
+            document.body.style.color = '';
+            document.querySelector('header').classList.add('light-mode');
+            document.querySelector('header').style.background = '';
+          } else {
+            document.body.style.background = color;
+            document.querySelector('header').style.background = color;
+          }
+          
+          // Update selected option
+          options.forEach(option => {
+            option.removeAttribute('data-selected');
+            option.classList.remove('focused');
+            const checkIcon = option.querySelector('.check-icon');
+            if (option.getAttribute('data-color') === color) {
+              option.setAttribute('data-selected', 'true');
+              checkIcon.textContent = '✓';
+            } else {
+              checkIcon.textContent = '';
+            }
+          });
+        }
+        if (e.data.type === 'updateLanguage') {
+          const lang = e.data.language;
+          localStorage.setItem('siteLanguage', lang);
+          applyTranslations(lang);
+        }
+      });
+
+      // About card dynamic fields
+      const ABOUT_APP_VERSION = '1.0.0';
+      const ABOUT_DEV_NAMES = ['Mohammed Al-Otaibi', 'Ahmed Al-Asmari', 'Ali Al-Khathami'];
+      const ABOUT_CONTACT_EMAIL = 'Mohammedfake56@gmail.com';
+
+      const versionEl = document.getElementById('appVersion');
+      const devNameEl = document.getElementById('devName');
+      const contactEl = document.getElementById('contactEmail');
+      const privacyLinkEl = document.getElementById('privacyPolicyLink');
+
+      if (versionEl) versionEl.textContent = ABOUT_APP_VERSION;
+      if (devNameEl) devNameEl.innerHTML = ABOUT_DEV_NAMES.join('<br>');
+      if (contactEl) {
+        contactEl.textContent = ABOUT_CONTACT_EMAIL;
+        contactEl.href = 'mailto:' + ABOUT_CONTACT_EMAIL;
+      }
+
+      if (privacyLinkEl) {
+        privacyLinkEl.addEventListener('click', (event) => {
+          event.preventDefault();
+          const lang = localStorage.getItem('siteLanguage') || document.documentElement.lang || 'en';
+          const dict = (window.translations && window.translations[lang]) || window.translations.en;
+          const message = (dict && dict['common.privacyComingSoon']) || 'Privacy policy coming soon.';
+          alert(message);
+        });
+      }
+
+      if (typeof window.applyTranslations === 'function') {
+        window.applyTranslations(localStorage.getItem('siteLanguage') || document.documentElement.lang || 'en');
+      }
+
+      // Make translations available globally
+      window.translations = translations;
+      
+      // Load saved language
+      const savedLang = localStorage.getItem('siteLanguage') || 'en';
+      applyTranslations(savedLang);
+
+      // Language selector functionality
+      const langOptions = document.querySelectorAll('#languageSelector .color-option');
+      langOptions.forEach(option => {
+        option.removeAttribute('data-selected');
+        option.classList.remove('focused');
+        const checkIcon = option.querySelector('.check-icon');
+        if (option.getAttribute('data-lang') === savedLang) {
+          option.setAttribute('data-selected', 'true');
+          checkIcon.textContent = '✓';
+        } else {
+          checkIcon.textContent = '';
+        }
+      });
+
+      langOptions.forEach(option => {
+        option.addEventListener('click', () => {
+          const lang = option.getAttribute('data-lang');
+          
+          // Update all options
+          langOptions.forEach(opt => {
+            opt.removeAttribute('data-selected');
+            opt.classList.remove('focused');
+            const icon = opt.querySelector('.check-icon');
+            if (opt === option) {
+              opt.setAttribute('data-selected', 'true');
+              icon.textContent = '✓';
+            } else {
+              icon.textContent = '';
+            }
+          });
+          
+          // Save to localStorage
+          localStorage.setItem('siteLanguage', lang);
+          
+          // Apply translations
+          applyTranslations(lang);
+          
+          // Notify other windows
+          if (window.opener) {
+            window.opener.postMessage({ type: 'updateLanguage', language: lang }, '*');
+          }
+          
+          // Broadcast to all windows
+          window.postMessage({ type: 'updateLanguage', language: lang }, '*');
+        });
+
+        // Add focus effect on hover
+        option.addEventListener('mouseenter', () => {
+          if (!option.hasAttribute('data-selected')) {
+            option.classList.add('focused');
+          }
+        });
+
+        option.addEventListener('mouseleave', () => {
+          option.classList.remove('focused');
+        });
+
+        // Keyboard navigation
+        option.addEventListener('keydown', (e) => {
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            option.click();
+          }
+        });
+
+        option.setAttribute('tabindex', '0');
+      });
+    </script>
+  </body>
+  </html>
+
