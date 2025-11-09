@@ -69,6 +69,7 @@
 
       'access.welcomeTitle': 'Welcome to Aramco Digital SlideMaker',
       'access.subtitle': 'Create, edit, and share stunning presentations easily.',
+      'access.tagline': 'Empowering seamless presentation design with AI precision.',
 
       'settings.title': 'Settings',
       'settings.backgroundColor': 'Background Color',
@@ -155,6 +156,7 @@
 
       'access.welcomeTitle': 'مرحباً بك في منصة أرامكو الرقمية لصناعة العروض',
       'access.subtitle': 'أنشئ، حرّر، وشارك عروضاً تقديمية مذهلة بسهولة.',
+      'access.tagline': 'نمكنك من ابتكار عروض متكاملة بدقة الذكاء الاصطناعي.',
 
       'settings.title': 'الإعدادات',
       'settings.backgroundColor': 'لون الخلفية',

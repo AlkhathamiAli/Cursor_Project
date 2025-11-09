@@ -8,6 +8,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
     <script src="./translations.js"></script>
+    <link rel="stylesheet" href="./assets/theme.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
       * { 
@@ -19,22 +20,6 @@
       html, body {
         height: 100%;
         overflow: hidden;
-      }
-      
-      body {
-        font-family: Poppins, sans-serif;
-        background: linear-gradient(135deg, #001b12 0%, #0b3d2a 50%, #001b12 100%);
-        color: #e8f5e9;
-        position: relative;
-      }
-      
-      body::before {
-        content: '';
-        position: fixed;
-        inset: 0;
-        z-index: 0;
-        background: rgba(255, 255, 255, 0.03);
-        pointer-events: none;
       }
       
       .auth-container {
@@ -129,6 +114,11 @@
         100% { transform: scale(1) translateY(-10px); }
       }
 
+      @keyframes glowPulse {
+        0%, 100% { opacity: 0.65; transform: scale(1); }
+        50% { opacity: 0.95; transform: scale(1.05); }
+      }
+
       @keyframes logoIntro {
         0% {
           opacity: 0;
@@ -140,24 +130,33 @@
         }
       }
 
+      @media (max-width: 1200px) {
+        .slides-left, .slides-right {
+          opacity: 0.45;
+          transform: scale(0.92);
+        }
+      }
+
       /* Hide side animations on small screens */
       @media (max-width: 900px) {
         .slides-left, .slides-right { display: none; }
         .slide-preview { width: 220px; }
+        .auth-box {
+          padding: 42px 32px;
+        }
       }
       
       .auth-box {
         text-align: center;
-        background: rgba(255, 255, 255, 0.08);
-        padding: 60px 50px;
-        border-radius: 25px;
-        backdrop-filter: blur(15px);
-        -webkit-backdrop-filter: blur(15px);
-        box-shadow: 0 0 40px rgba(0, 0, 0, 0.3);
-        border: 1px solid rgba(255, 255, 255, 0.1);
+        padding: 64px 56px;
+        border-radius: 28px;
         animation: fadeIn 0.8s ease-in-out;
-        max-width: 450px;
+        max-width: 460px;
         width: 100%;
+        position: relative;
+        overflow: visible;
+        border: 1px solid rgba(0, 222, 168, 0.22);
+        box-shadow: 0 24px 60px rgba(0, 50, 30, 0.45);
       }
       
       .access-icon {
@@ -198,7 +197,7 @@
         animation: fadeIn 1s ease-in-out 0.3s both;
         line-height: 1.2;
       }
-      
+
       .auth-box p {
         color: #a9d9c1;
         margin-bottom: 40px;
@@ -211,65 +210,6 @@
         flex-direction: column;
         gap: 15px;
         animation: fadeIn 1s ease-in-out 0.5s both;
-      }
-      
-      .btn {
-        display: block;
-        width: 100%;
-        padding: 14px 0;
-        font-size: 1rem;
-        font-weight: 600;
-        border-radius: 12px;
-        border: none;
-        cursor: pointer;
-        transition: all 0.3s ease;
-        font-family: Poppins, sans-serif;
-      }
-      
-      .btn.signin {
-        background: linear-gradient(90deg, #00796b 0%, #00c853 100%);
-        color: white;
-        box-shadow: 0 4px 15px rgba(0, 200, 83, 0.3);
-      }
-      
-      /* Log In button (secondary style) */
-      .btn.login {
-        background: rgba(255, 255, 255, 0.15);
-        color: #fff;
-        border: 1px solid rgba(255, 255, 255, 0.2);
-      }
-      .btn.login:hover { transform: translateY(-2px); }
-      
-      .btn.signin:hover {
-        transform: scale(1.05);
-        box-shadow: 0 6px 20px rgba(0, 200, 83, 0.4);
-      }
-      
-      .btn.signup {
-        background: rgba(255, 255, 255, 0.15);
-        color: white;
-        border: 1px solid rgba(255, 255, 255, 0.2);
-      }
-      
-      .btn.signup:hover {
-        transform: scale(1.05);
-        background: rgba(255, 255, 255, 0.2);
-      }
-      
-      .btn.visitor {
-        background: none;
-        border: 1px solid #4caf50;
-        color: #a9d9c1;
-        margin-top: 10px;
-        font-size: 0.9rem;
-        padding: 10px 0;
-      }
-      
-      .btn.visitor:hover {
-        transform: scale(1.05);
-        background: rgba(76, 175, 80, 0.1);
-        border-color: #00c853;
-        color: #00c853;
       }
       
       @keyframes fadeIn {
@@ -440,7 +380,7 @@
       }
     </style>
   </head>
-  <body>
+  <body class="page-container">
     <div class="auth-container access-page">
       <!-- Left animated slides (duplicated for seamless loop) -->
       <div class="slides-left">
@@ -458,15 +398,15 @@
           <div class="slide-preview" style="--i: 10"><img src="./CURSOR-Project/accessTobackground/B5.jpg" alt="slide" /></div>
         </div>
       </div>
-      <div class="auth-box">
+      <div class="auth-box surface-panel">
         <div class="access-icon">
           <img src="./CURSOR-Project/public/Saudi-Aramco.png" alt="Aramco Digital Logo" class="aramco-logo" />
         </div>
         <h1 data-translate="access.welcomeTitle">Welcome to Aramco Digital SlideMaker</h1>
         <p data-translate="access.subtitle">Create, edit, and share stunning presentations easily.</p>
         <div class="auth-buttons">
-          <button class="btn signin" onclick="openModal('signinModal')" data-translate="common.signIn">Sign In</button>
           <button class="btn login" onclick="openModal('signinModal')" data-translate="common.logIn">Log In</button>
+          <button class="btn signin" onclick="openModal('signinModal')" data-translate="common.signIn">Sign In</button>
           <button class="btn visitor" onclick="continueAsVisitor()" data-translate="common.continueVisitor">Continue as Visitor</button>
         </div>
       </div>
@@ -499,11 +439,11 @@
         <form id="signin_form" onsubmit="signInUser(event)">
           <div class="form-group">
             <label class="form-label" for="signin_email" data-translate="common.email">Email</label>
-            <input class="form-input" type="email" id="signin_email" required placeholder="Enter your email">
+            <input class="form-input" type="email" id="signin_email" required placeholder="Enter your email" data-translate-placeholder="auth.emailPlaceholder">
           </div>
           <div class="form-group">
             <label class="form-label" for="signin_password" data-translate="common.password">Password</label>
-            <input class="form-input" type="password" id="signin_password" required placeholder="Enter your password">
+            <input class="form-input" type="password" id="signin_password" required placeholder="Enter your password" data-translate-placeholder="auth.passwordPlaceholder">
           </div>
           <div id="signin_error" class="error-message"></div>
           <button type="submit" class="form-submit" data-translate="common.signIn">Sign In</button>

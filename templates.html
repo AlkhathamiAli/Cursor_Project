@@ -9,6 +9,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
     <script src="./translations.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="./assets/theme.css">
     <style>
       * { box-sizing: border-box; }
       html {
@@ -18,25 +19,7 @@
         margin: 0;
         padding: 0;
         min-height: 100%;
-        background:
-          radial-gradient(circle at 20% 18%, rgba(0, 150, 110, 0.35), transparent 55%),
-          radial-gradient(circle at 80% 25%, rgba(20, 120, 200, 0.28), transparent 60%),
-          radial-gradient(circle at 60% 80%, rgba(0, 180, 110, 0.25), transparent 65%),
-          linear-gradient(118deg, rgba(0, 51, 32, 0.75) 0%, rgba(0, 51, 32, 0.68) 45%, rgba(7, 46, 92, 0.72) 55%, rgba(7, 46, 92, 0.82) 100%);
-        color: #e8f5e9;
         overflow-x: hidden;
-      }
-      body {
-        font-family: Poppins, sans-serif;
-        position: relative;
-      }
-      body::before {
-        content: '';
-        position: fixed; inset: 0; z-index: 0;
-        background: linear-gradient(140deg, rgba(0, 30, 20, 0.35), rgba(5, 30, 55, 0.28));
-        backdrop-filter: blur(12px);
-        -webkit-backdrop-filter: blur(12px);
-        pointer-events: none;
       }
       a { color: inherit; text-decoration: none; }
       img { max-width: 100%; display: block; }
@@ -203,22 +186,7 @@
       
       /* Logout Button */
       .logout-btn {
-        background: linear-gradient(90deg, #00796b 0%, #00c853 100%);
-        border: none;
-        border-radius: 10px;
-        color: #fff;
-        font-weight: 600;
-        font-size: 0.95rem;
-        padding: 10px 18px;
-        cursor: pointer;
-        transition: all 0.3s ease;
-        font-family: Poppins, sans-serif;
-      }
-      
-      .logout-btn:hover {
-        background: linear-gradient(90deg, #00a383 0%, #00e676 100%);
-        box-shadow: 0 4px 12px rgba(0, 255, 128, 0.3);
-        transform: translateY(-1px);
+        margin-left: 15px;
       }
       
       @media (max-width: 768px) {
@@ -450,7 +418,12 @@
         display: block;
         object-fit: cover;
         background: linear-gradient(135deg, rgba(30, 58, 95, 0.8) 0%, rgba(11, 61, 46, 0.8) 100%);
-        transition: transform 0.3s ease;
+        opacity: 0;
+        transition: transform 0.3s ease, opacity 0.4s ease;
+      }
+
+      .template-item img.loaded {
+        opacity: 1;
       }
       
       .template-item:hover img {
@@ -468,15 +441,6 @@
       .browse-btn {
         margin-top: 50px;
         padding: 12px 30px;
-        background: #4f8cff;
-        color: white;
-        font-size: 1rem;
-        font-weight: 600;
-        border: none;
-        border-radius: 12px;
-        cursor: pointer;
-        transition: all 0.3s ease;
-        font-family: Poppins, sans-serif;
         display: inline-flex;
         align-items: center;
         gap: 8px;
@@ -484,12 +448,6 @@
         transform: translateY(20px);
         animation: fadeInUp 0.8s ease-out forwards;
         animation-delay: 0.6s;
-      }
-      
-      .browse-btn:hover {
-        background: #3a73e0;
-        box-shadow: 0 4px 20px rgba(79, 140, 255, 0.4);
-        transform: translateY(-2px);
       }
       
       .browse-btn i {
@@ -658,11 +616,11 @@
 
       /* Auth Buttons */
       .auth-buttons { display: flex; gap: 10px; margin-right: 30px; }
-      .auth-btn { padding: 8px 16px; border-radius: 8px; font-weight: 700; cursor: pointer; border: none; transition: opacity .2s; }
-      .auth-btn:hover { opacity: 0.9; }
-      .auth-btn.green { background: #10b981; color: #06221e; }
-      .auth-btn.emerald { background: #10b981; color: #fff; }
-      .auth-btn.gray { background: #6b7280; color: #fff; }
+      .auth-btn { padding: 8px 16px; border-radius: 12px; font-weight: 700; cursor: pointer; border: none; transition: transform .2s ease; }
+      .auth-btn:hover { transform: scale(1.02); }
+      .auth-btn.green,
+      .auth-btn.emerald,
+      .auth-btn.gray { background: transparent; color: inherit; }
       .user-info { color: white; margin-right: 12px; }
 
       /* Auth Modal */
@@ -676,9 +634,7 @@
       .form-label { display: block; margin-bottom: 6px; color: #A5D6A7; font-weight: 600; }
       .form-input { width: 100%; padding: 10px 12px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.1); background: rgba(0,0,0,0.2); color: #E8F5E9; font-size: 14px; }
       .form-input:focus { outline: none; border-color: #10b981; }
-      .form-submit { width: 100%; padding: 12px; border-radius: 8px; border: none; font-weight: 700; cursor: pointer; font-size: 16px; }
-      .form-submit.green { background: #10b981; color: #06221e; }
-      .form-submit.emerald { background: #10b981; color: #fff; }
+      .form-submit { width: 100%; padding: 12px; border-radius: 12px; border: none; font-weight: 700; cursor: pointer; font-size: 16px; }
       .error-message { color: #f87171; font-size: 12px; margin-top: 8px; }
       .success-message { color: #10b981; font-size: 12px; margin-top: 8px; }
 
@@ -848,7 +804,7 @@
       }
     </style>
   </head>
-  <body>
+  <body class="page-container">
     <!-- Left Sidebar -->
     <nav class="sidebar">
       <div class="logo-container">
@@ -881,12 +837,12 @@
     <!-- Top Bar -->
     <div class="topbar">
           <div class="auth-buttons" id="authButtons">
-            <button class="auth-btn green" id="btnSignUp" data-action="open_signup" data-translate="common.signUp">Sign Up</button>
-            <button class="auth-btn emerald" id="btnLogIn" data-action="open_login" data-translate="common.logIn">Log In</button>
+            <button class="btn btn-secondary auth-btn green" id="btnSignUp" data-action="open_signup" data-translate="common.signUp">Sign Up</button>
+            <button class="btn btn-primary auth-btn emerald" id="btnLogIn" data-action="open_login" data-translate="common.logIn">Log In</button>
           </div>
       <div class="welcome-text" id="userInfo" style="display: none;">
         <span id="userName">Welcome, Guest</span>
-        <button class="logout-btn" id="btnLogOut" data-translate="common.logout">Log Out</button>
+        <button class="btn btn-primary logout-btn" id="btnLogOut" data-translate="common.logout">Log Out</button>
         <div class="profile-icon">
           <i class="fas fa-user"></i>
         </div>
@@ -957,19 +913,40 @@
         <p data-translate="home.beautifulSubtitle">Start with professionally designed templates and make them your own.</p>
         <div class="template-gallery">
           <div class="template-item" onclick="useTemplate('business-pro')">
-            <img src="https://via.placeholder.com/320x200/1E3A5F/ffffff?text=Business+Pro" alt="Business Pro Template">
+            <img
+              class="lazy-template-img"
+              src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw=="
+              data-src="https://via.placeholder.com/320x200/1E3A5F/ffffff?text=Business+Pro"
+              alt="Business Pro Template"
+              width="320"
+              height="200"
+              loading="lazy">
             <h3 data-translate="home.beautifulBusinessTitle">Business Pro</h3>
           </div>
           <div class="template-item" onclick="useTemplate('creative-bold')">
-            <img src="https://via.placeholder.com/320x200/0b3d2e/ffffff?text=Creative+Bold" alt="Creative Bold Template">
+            <img
+              class="lazy-template-img"
+              src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw=="
+              data-src="https://via.placeholder.com/320x200/0b3d2e/ffffff?text=Creative+Bold"
+              alt="Creative Bold Template"
+              width="320"
+              height="200"
+              loading="lazy">
             <h3 data-translate="home.beautifulCreativeTitle">Creative Bold</h3>
           </div>
           <div class="template-item" onclick="useTemplate('corporate-clean')">
-            <img src="https://via.placeholder.com/320x200/00796b/ffffff?text=Corporate+Clean" alt="Corporate Clean Template">
+            <img
+              class="lazy-template-img"
+              src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw=="
+              data-src="https://via.placeholder.com/320x200/00796b/ffffff?text=Corporate+Clean"
+              alt="Corporate Clean Template"
+              width="320"
+              height="200"
+              loading="lazy">
             <h3 data-translate="home.beautifulCorporateTitle">Corporate Clean</h3>
           </div>
         </div>
-        <button class="browse-btn" onclick="alert(window.getTranslation ? window.getTranslation('common.browseComingSoon') : 'Browse all templates feature coming soon!')">
+        <button class="btn btn-primary browse-btn" onclick="alert(window.getTranslation ? window.getTranslation('common.browseComingSoon') : 'Browse all templates feature coming soon!')">
           <span data-translate="home.browseAll">Browse All Templates</span>
           <i class="fas fa-arrow-right"></i>
         </button>
@@ -1006,7 +983,7 @@
           </div>
           <div id="signup_error" class="error-message" style="display: none;"></div>
           <div id="signup_success" class="success-message" style="display: none;"></div>
-          <button type="submit" class="form-submit green" data-translate="common.signUp">Sign Up</button>
+          <button type="submit" class="btn btn-primary form-submit green" data-translate="common.signUp">Sign Up</button>
         </form>
       </div>
     </div>
@@ -1027,7 +1004,7 @@
             <input class="form-input" type="password" id="login_password" required placeholder="Enter your password" data-translate-placeholder="auth.passwordPlaceholder">
           </div>
           <div id="login_error" class="error-message" style="display: none;"></div>
-          <button type="submit" class="form-submit emerald" data-translate="common.logIn">Log In</button>
+          <button type="submit" class="btn btn-primary form-submit emerald" data-translate="common.logIn">Log In</button>
         </form>
       </div>
     </div>
@@ -1327,6 +1304,8 @@
       // Initialize auth status and load presentations on page load
       checkAuthStatus();
       loadRecentPresentations();
+      initPageAnimations();
+      scheduleGalleryLazyLoad();
       
       // Introduction Animation - Animate cards and elements with staggered delays
       function animateOnLoad() {
@@ -1355,10 +1334,53 @@
         }
       }
       
-      // Run animation on page load
-      window.addEventListener('load', () => {
-        setTimeout(animateOnLoad, 100); // Small delay to ensure DOM is ready
-      });
+      let animationsInitialized = false;
+      function initPageAnimations() {
+        if (animationsInitialized) return;
+        animationsInitialized = true;
+        requestAnimationFrame(() => animateOnLoad());
+      }
+
+      let templateGalleryInitialized = false;
+      function setupLazyTemplateGallery() {
+        if (templateGalleryInitialized) return;
+        const images = Array.from(document.querySelectorAll('.template-gallery img[data-src]'));
+        if (!images.length) return;
+        templateGalleryInitialized = true;
+
+        const loadImage = (img) => {
+          if (!img.dataset.src) return;
+          const finalize = () => img.classList.add('loaded');
+          img.addEventListener('load', finalize, { once: true });
+          img.src = img.dataset.src;
+          img.removeAttribute('data-src');
+          if (img.complete) {
+            finalize();
+          }
+        };
+
+        if ('IntersectionObserver' in window) {
+          const observer = new IntersectionObserver((entries, obs) => {
+            entries.forEach(entry => {
+              if (entry.isIntersecting) {
+                loadImage(entry.target);
+                obs.unobserve(entry.target);
+              }
+            });
+          }, { rootMargin: '160px 0px' });
+          images.forEach(img => observer.observe(img));
+        } else {
+          images.forEach(loadImage);
+        }
+      }
+
+      function scheduleGalleryLazyLoad() {
+        if ('requestIdleCallback' in window) {
+          requestIdleCallback(() => setupLazyTemplateGallery(), { timeout: 600 });
+        } else {
+          setTimeout(setupLazyTemplateGallery, 200);
+        }
+      }
 
       // Load and apply saved background color from settings
       const savedBg = localStorage.getItem('siteBackgroundColor') || '#0b3d2e';
