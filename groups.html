@@ -1,0 +1,5453 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>SlideMaker • Groups</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="./assets/theme.css">
+    <style>
+      * { box-sizing: border-box; }
+      html, body {
+        margin: 0;
+        padding: 0;
+        min-height: 100%;
+      }
+
+      body {
+        font-family: 'Poppins', sans-serif;
+        color: #e8f5ed;
+        background: radial-gradient(circle at 18% 25%, rgba(0, 255, 186, 0.18), transparent 45%),
+                    radial-gradient(circle at 82% 80%, rgba(0, 140, 255, 0.18), transparent 55%),
+                    linear-gradient(140deg, #062824 0%, #081b2b 38%, #0c4028 100%);
+      }
+
+      .page-shell {
+        display: flex;
+        min-height: 100vh;
+      }
+
+      nav.sidebar {
+        width: 240px;
+        background: rgba(4, 35, 30, 0.92);
+        border-right: 1px solid rgba(0, 255, 150, 0.12);
+        box-shadow: 2px 0 16px rgba(0, 0, 0, 0.35);
+        padding: 28px 20px;
+        display: flex;
+        flex-direction: column;
+        gap: 28px;
+        position: fixed;
+        inset: 0 auto 0 0;
+        z-index: 40;
+      }
+
+      .content {
+        flex: 1 1 auto;
+        margin-left: 240px;
+        padding: 36px 48px 80px;
+        display: flex;
+        flex-direction: column;
+        gap: 40px;
+      }
+
+      .logo-container {
+        display: flex;
+        justify-content: center;
+      }
+
+      .logo-container img {
+        width: clamp(140px, 12vw, 200px);
+        height: auto;
+      }
+
+      .nav-menu {
+        display: flex;
+        flex-direction: column;
+        gap: 18px;
+      }
+
+      .nav-menu a {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 10px 12px;
+        border-radius: 10px;
+        color: #cfeee5;
+        text-decoration: none;
+        transition: background 0.25s ease, transform 0.25s ease;
+      }
+
+      .nav-menu a:hover,
+      .nav-menu a.active {
+        background: rgba(0, 200, 83, 0.2);
+        color: #00ff9f;
+        transform: translateX(6px);
+      }
+
+      .page-heading {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 20px;
+      }
+
+      .page-heading h1 {
+        margin: 0;
+        font-size: clamp(28px, 4vw, 40px);
+        font-weight: 700;
+      }
+
+      .primary-action {
+        appearance: none;
+        border: none;
+        border-radius: 999px;
+        padding: 12px 24px;
+        font-size: 1rem;
+        font-weight: 600;
+        font-family: inherit;
+        color: #021711;
+        background: linear-gradient(135deg, #00ffb5, #26c6ff);
+        box-shadow: 0 12px 32px rgba(0, 255, 186, 0.28);
+        cursor: pointer;
+        transition: transform 0.2s ease, box-shadow 0.2s ease, filter 0.2s ease;
+      }
+
+      .primary-action:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 16px 40px rgba(0, 255, 186, 0.32);
+        filter: brightness(1.05);
+      }
+
+      .workspace {
+        flex: 1 1 auto;
+        border-radius: 24px;
+        border: 1px solid rgba(0, 255, 150, 0.08);
+        background: rgba(5, 30, 27, 0.42);
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+        padding: 40px;
+        display: flex;
+        flex-direction: column;
+        gap: 32px;
+      }
+
+      .workspace-layout {
+        display: flex;
+        gap: 32px;
+        align-items: stretch;
+      }
+
+      .chat-panel {
+        width: clamp(260px, 22vw, 320px);
+        border-radius: 24px;
+        border: 1px solid rgba(0, 255, 150, 0.08);
+        background: rgba(6, 32, 28, 0.48);
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+        padding: 32px 28px;
+        display: flex;
+        flex-direction: column;
+        gap: 18px;
+        box-shadow: 0 12px 36px rgba(0, 0, 0, 0.32);
+      }
+
+      .chat-panel h2 {
+        margin: 0;
+        font-size: 1.15rem;
+        font-weight: 600;
+      }
+
+      .chat-panel .chat-placeholder {
+        flex: 1 1 auto;
+        border-radius: 18px;
+        border: 1px dashed rgba(0, 255, 150, 0.25);
+        background: rgba(5, 26, 22, 0.4);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 24px;
+        text-align: center;
+        color: rgba(200, 242, 228, 0.75);
+        font-size: 0.95rem;
+        line-height: 1.5;
+      }
+
+      .ai-panel {
+        width: clamp(260px, 22vw, 320px);
+        border-radius: 24px;
+        border: 1px solid rgba(0, 255, 150, 0.08);
+        background: rgba(6, 20, 28, 0.48);
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+        padding: 32px 28px;
+        display: flex;
+        flex-direction: column;
+        gap: 18px;
+        box-shadow: 0 12px 36px rgba(0, 0, 0, 0.32);
+      }
+
+      .ai-panel h2 {
+        margin: 0;
+        font-size: 1.2rem;
+        font-weight: 600;
+      }
+
+      .ai-placeholder {
+        flex: 1 1 auto;
+        border-radius: 18px;
+        border: 1px dashed rgba(0, 255, 150, 0.25);
+        background: rgba(4, 16, 24, 0.6);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 24px;
+        text-align: center;
+        color: rgba(200, 242, 228, 0.7);
+        font-size: 0.95rem;
+        line-height: 1.5;
+      }
+
+      .group-empty-state {
+        margin: auto;
+        text-align: center;
+        max-width: 540px;
+      }
+
+      .group-empty-state h2 {
+        margin: 0 0 16px;
+        font-size: clamp(24px, 3vw, 34px);
+        font-weight: 700;
+      }
+
+      .group-empty-state p {
+        margin: 0;
+        color: rgba(200, 242, 228, 0.9);
+        font-size: 1rem;
+      }
+
+      .group-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+        gap: 24px;
+      }
+
+      .group-card {
+        border-radius: 20px;
+        padding: 24px;
+        background: rgba(9, 45, 38, 0.82);
+        border: 1px solid rgba(0, 255, 150, 0.12);
+        box-shadow: 0 10px 28px rgba(0, 0, 0, 0.35);
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+      }
+
+      .group-card.archived {
+        opacity: 0.55;
+        filter: grayscale(0.2);
+      }
+
+      .group-card.recently-focused {
+        outline: 2px solid rgba(0, 255, 150, 0.6);
+        outline-offset: 2px;
+        transition: outline 0.4s ease;
+      }
+
+      .group-card.pinned {
+        border: 1px solid rgba(0, 255, 150, 0.35);
+        box-shadow: 0 14px 34px rgba(0, 255, 150, 0.2);
+      }
+
+      .group-title-text {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+      }
+
+      .group-pin-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        margin-left: 10px;
+        padding: 4px 8px;
+        border-radius: 999px;
+        border: 1px solid rgba(0, 255, 150, 0.28);
+        background: rgba(0, 255, 150, 0.12);
+        font-size: 0.72rem;
+        color: rgba(0, 255, 150, 0.85);
+        text-transform: uppercase;
+        letter-spacing: 0.6px;
+      }
+
+      .group-cover {
+        position: relative;
+        width: 100%;
+        height: 140px;
+        border-radius: 16px;
+        border: 1px solid rgba(0, 255, 150, 0.18);
+        background: rgba(0, 255, 150, 0.08);
+        overflow: hidden;
+      }
+
+      .group-cover img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+
+      .group-cover-placeholder {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: rgba(0, 255, 150, 0.35);
+        font-size: 1.8rem;
+      }
+
+      .group-card h3 {
+        margin: 0;
+        font-size: 1.2rem;
+        font-weight: 600;
+      }
+
+      .group-card p {
+        margin: 0;
+        color: rgba(200, 242, 228, 0.82);
+        font-size: 0.95rem;
+      }
+
+      .group-actions {
+        display: flex;
+        justify-content: flex-start;
+        margin-top: 12px;
+        gap: 12px;
+        flex-wrap: wrap;
+      }
+
+      .btn-ghost {
+        appearance: none;
+        border-radius: 999px;
+        border: 1px solid rgba(0, 255, 150, 0.24);
+        background: rgba(4, 25, 21, 0.6);
+        color: rgba(200, 242, 228, 0.95);
+        font-weight: 600;
+        padding: 8px 16px;
+        font-family: inherit;
+        cursor: pointer;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        transition: transform 0.2s ease, box-shadow 0.2s ease, border 0.2s ease;
+      }
+
+      .btn-ghost:hover {
+        transform: translateY(-2px);
+        border-color: rgba(0, 255, 150, 0.5);
+        box-shadow: 0 10px 26px rgba(0, 255, 150, 0.14);
+      }
+
+      .modal-backdrop {
+        position: fixed;
+        inset: 0;
+        background: rgba(4, 19, 16, 0.72);
+        backdrop-filter: blur(16px);
+        -webkit-backdrop-filter: blur(16px);
+        display: none;
+        align-items: center;
+        justify-content: center;
+        padding: 24px;
+        z-index: 100;
+      }
+
+      .modal-backdrop.visible {
+        display: flex;
+      }
+
+      .modal {
+        background: rgba(8, 31, 27, 0.94);
+        border-radius: 24px;
+        border: 1px solid rgba(0, 255, 150, 0.2);
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.45);
+        max-width: 420px;
+        width: 100%;
+        padding: 32px;
+        display: flex;
+        flex-direction: column;
+        gap: 24px;
+      }
+
+      .modal h2 {
+        margin: 0;
+        font-size: 1.5rem;
+      }
+
+      .modal-subtitle {
+        margin: -10px 0 6px;
+        font-size: 0.95rem;
+        color: rgba(200, 242, 228, 0.75);
+      }
+
+      .form-field {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+      }
+
+      .form-field label {
+        font-size: 0.95rem;
+        font-weight: 600;
+        color: rgba(210, 244, 232, 0.92);
+      }
+
+      .form-field input,
+      .form-field textarea {
+        font-family: inherit;
+        font-size: 1rem;
+        padding: 12px 14px;
+        border-radius: 12px;
+        border: 1px solid rgba(0, 255, 150, 0.25);
+        background: rgba(5, 30, 27, 0.72);
+        color: #e8f5ed;
+        outline: none;
+        transition: border 0.2s ease, box-shadow 0.2s ease;
+      }
+
+      .form-field input:focus,
+      .form-field textarea:focus {
+        border-color: rgba(0, 255, 150, 0.6);
+        box-shadow: 0 0 0 3px rgba(0, 255, 150, 0.18);
+      }
+
+      .form-field textarea {
+        resize: vertical;
+        min-height: 120px;
+      }
+
+      .form-field select {
+        font-family: inherit;
+        font-size: 1rem;
+        padding: 12px 14px;
+        border-radius: 12px;
+        border: 1px solid rgba(0, 255, 150, 0.25);
+        background: rgba(5, 30, 27, 0.72);
+        color: #e8f5ed;
+        outline: none;
+        cursor: pointer;
+        transition: border 0.2s ease, box-shadow 0.2s ease;
+      }
+
+      .form-field select:focus {
+        border-color: rgba(0, 255, 150, 0.6);
+        box-shadow: 0 0 0 3px rgba(0, 255, 150, 0.18);
+      }
+
+      .active-members {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        margin: 4px 0 16px;
+      }
+
+      .active-members .active-label {
+        font-size: 0.85rem;
+        font-weight: 600;
+        color: rgba(200, 242, 228, 0.7);
+        text-transform: uppercase;
+        letter-spacing: 0.6px;
+      }
+
+      .active-avatars {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+
+      .avatar {
+        width: 34px;
+        height: 34px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, rgba(0, 255, 150, 0.24), rgba(33, 174, 253, 0.24));
+        color: #e8f5ed;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 0.85rem;
+        font-weight: 600;
+        box-shadow: 0 6px 16px rgba(0, 0, 0, 0.25);
+        border: 1px solid rgba(0, 255, 150, 0.35);
+        position: relative;
+      }
+
+      .avatar-extra {
+        background: rgba(5, 30, 27, 0.72);
+        color: rgba(200, 242, 228, 0.85);
+      }
+
+      .invite-link-row {
+        display: flex;
+        gap: 10px;
+      }
+
+      .invite-link-row input {
+        flex: 1 1 auto;
+      }
+
+      .members-list {
+        margin-top: 16px;
+        padding-top: 16px;
+        border-top: 1px solid rgba(0, 255, 150, 0.1);
+      }
+
+      .members-list h4 {
+        margin: 0 0 12px;
+        font-size: 0.9rem;
+        font-weight: 600;
+        color: rgba(200, 242, 228, 0.9);
+      }
+
+      .member-item {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 8px 0;
+        font-size: 0.9rem;
+      }
+
+      .member-info {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        flex: 1;
+      }
+
+      .member-email {
+        color: rgba(200, 242, 228, 0.85);
+      }
+
+      .role-badge {
+        padding: 4px 10px;
+        border-radius: 12px;
+        font-size: 0.75rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+      }
+
+      .role-owner {
+        background: rgba(255, 193, 7, 0.2);
+        color: #ffc107;
+        border: 1px solid rgba(255, 193, 7, 0.3);
+      }
+
+      .role-editor {
+        background: rgba(0, 255, 150, 0.2);
+        color: #00ff9f;
+        border: 1px solid rgba(0, 255, 150, 0.3);
+      }
+
+      .role-viewer {
+        background: rgba(140, 200, 255, 0.2);
+        color: #8cc8ff;
+        border: 1px solid rgba(140, 200, 255, 0.3);
+      }
+
+      .slides-section {
+        margin-top: 16px;
+        padding-top: 18px;
+        border-top: 1px solid rgba(0, 255, 150, 0.1);
+        display: flex;
+        flex-direction: column;
+        gap: 14px;
+      }
+
+      .slides-header {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+
+      .slides-header h4 {
+        margin: 0;
+        font-size: 0.95rem;
+        font-weight: 600;
+      }
+
+      .slides-count {
+        font-size: 0.8rem;
+        color: rgba(200, 242, 228, 0.65);
+        padding: 4px 10px;
+        border-radius: 999px;
+        border: 1px solid rgba(0, 255, 150, 0.18);
+        background: rgba(5, 28, 24, 0.45);
+      }
+
+      .slides-list {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+      }
+
+      .slides-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+        gap: 16px;
+      }
+
+      .slide-thumb {
+        border-radius: 16px;
+        border: 1px solid rgba(0, 255, 150, 0.16);
+        background: rgba(6, 28, 25, 0.55);
+        padding: 14px;
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+        box-shadow: 0 12px 28px rgba(0, 0, 0, 0.22);
+      }
+
+      .slide-thumb-index {
+        align-self: flex-start;
+        padding: 4px 10px;
+        border-radius: 999px;
+        font-size: 0.75rem;
+        font-weight: 600;
+        background: rgba(0, 255, 150, 0.18);
+        color: #00ff9f;
+        border: 1px solid rgba(0, 255, 150, 0.32);
+      }
+
+      .slide-thumb-canvas {
+        border-radius: 10px;
+        background: linear-gradient(145deg, rgba(0, 255, 150, 0.16), rgba(33, 174, 253, 0.12));
+        border: 1px solid rgba(0, 255, 150, 0.1);
+        aspect-ratio: 16 / 9;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .slide-thumb-canvas::after {
+        content: '';
+        position: absolute;
+        inset: 14%;
+        border: 1px dashed rgba(0, 255, 150, 0.25);
+        border-radius: 12px;
+      }
+
+      .slide-thumb-title {
+        font-size: 0.9rem;
+        font-weight: 500;
+        color: rgba(225, 245, 239, 0.92);
+      }
+
+      .slide-item {
+        display: flex;
+        gap: 14px;
+        align-items: flex-start;
+        padding: 14px 16px;
+        border-radius: 12px;
+        border: 1px solid rgba(0, 255, 150, 0.12);
+        background: rgba(8, 30, 26, 0.6);
+      }
+
+      .slide-index {
+        width: 24px;
+        height: 24px;
+        border-radius: 50%;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 0.75rem;
+        font-weight: 600;
+        background: rgba(0, 255, 150, 0.22);
+        color: #00ff9f;
+      }
+
+      .slide-title {
+        font-size: 0.9rem;
+        font-weight: 500;
+        color: rgba(225, 245, 239, 0.9);
+      }
+
+      .slide-details {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        flex: 1;
+      }
+
+      .slide-assignment {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        flex-wrap: wrap;
+        font-size: 0.85rem;
+      }
+
+      .slide-assignment label {
+        font-weight: 600;
+        color: rgba(200, 242, 228, 0.8);
+      }
+
+      .slide-assignment select {
+        font-family: inherit;
+        font-size: 0.85rem;
+        padding: 8px 12px;
+        border-radius: 10px;
+        border: 1px solid rgba(0, 255, 150, 0.25);
+        background: rgba(5, 26, 23, 0.72);
+        color: #e8f5ed;
+        cursor: pointer;
+        min-width: 160px;
+      }
+
+      .slide-assignment select:focus {
+        outline: none;
+        border-color: rgba(0, 255, 150, 0.55);
+        box-shadow: 0 0 0 3px rgba(0, 255, 150, 0.16);
+      }
+
+      .slide-assignee-pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 4px 10px;
+        border-radius: 999px;
+        font-size: 0.75rem;
+        font-weight: 600;
+        background: rgba(0, 255, 150, 0.18);
+        color: #00ff9f;
+        border: 1px solid rgba(0, 255, 150, 0.28);
+      }
+
+      .slide-status-row {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        flex-wrap: wrap;
+        font-size: 0.85rem;
+      }
+
+      .slide-status-row label {
+        font-weight: 600;
+        color: rgba(200, 242, 228, 0.8);
+      }
+
+      .slide-status-select {
+        font-family: inherit;
+        font-size: 0.85rem;
+        padding: 8px 12px;
+        border-radius: 10px;
+        border: 1px solid rgba(0, 255, 150, 0.25);
+        background: rgba(5, 26, 23, 0.72);
+        color: #e8f5ed;
+        cursor: pointer;
+        min-width: 160px;
+      }
+
+      .slide-status-select:focus {
+        outline: none;
+        border-color: rgba(33, 174, 253, 0.55);
+        box-shadow: 0 0 0 3px rgba(33, 174, 253, 0.18);
+      }
+
+      .status-pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 4px 10px;
+        border-radius: 999px;
+        font-size: 0.75rem;
+        font-weight: 600;
+        border: 1px solid transparent;
+      }
+
+      .status-pill.completed {
+        background: rgba(0, 255, 150, 0.18);
+        color: #00ff9f;
+        border-color: rgba(0, 255, 150, 0.28);
+      }
+
+      .status-pill.in-progress {
+        background: rgba(33, 174, 253, 0.18);
+        color: #21aefd;
+        border-color: rgba(33, 174, 253, 0.28);
+      }
+
+      .status-pill.not-started {
+        background: rgba(200, 242, 228, 0.12);
+        color: rgba(200, 242, 228, 0.82);
+        border-color: rgba(200, 242, 228, 0.2);
+      }
+
+      .slides-progress {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        padding: 16px;
+        border-radius: 16px;
+        border: 1px solid rgba(0, 255, 150, 0.12);
+        background: rgba(6, 26, 23, 0.55);
+      }
+
+      .progress-bar {
+        position: relative;
+        width: 100%;
+        height: 12px;
+        border-radius: 999px;
+        background: rgba(0, 255, 150, 0.08);
+        overflow: hidden;
+      }
+
+      .progress-fill {
+        position: absolute;
+        inset: 0;
+        width: 0%;
+        border-radius: 999px;
+        background: linear-gradient(135deg, rgba(0, 255, 150, 0.8), rgba(33, 174, 253, 0.8));
+        transition: width 0.4s ease;
+      }
+
+      .progress-meta {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+        font-size: 0.82rem;
+        color: rgba(200, 242, 228, 0.8);
+      }
+
+      .progress-count {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 4px 10px;
+        border-radius: 999px;
+        background: rgba(0, 255, 150, 0.12);
+        color: rgba(200, 242, 228, 0.85);
+        border: 1px solid rgba(0, 255, 150, 0.16);
+      }
+
+      .version-history {
+        margin-top: 20px;
+        padding-top: 20px;
+        border-top: 1px solid rgba(0, 255, 150, 0.12);
+        display: flex;
+        flex-direction: column;
+        gap: 14px;
+      }
+
+      .version-history h4 {
+        margin: 0;
+        font-size: 0.95rem;
+        font-weight: 600;
+      }
+
+      .version-list {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+      }
+
+      .version-item {
+        padding: 14px 16px;
+        border-radius: 14px;
+        border: 1px solid rgba(0, 255, 150, 0.12);
+        background: rgba(7, 28, 24, 0.55);
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+        box-shadow: 0 10px 24px rgba(0, 0, 0, 0.25);
+      }
+
+      .version-title {
+        font-size: 0.95rem;
+        font-weight: 600;
+        color: rgba(225, 245, 239, 0.92);
+      }
+
+      .version-meta {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        font-size: 0.8rem;
+        color: rgba(200, 242, 228, 0.75);
+      }
+
+      .version-meta span {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 4px 10px;
+        border-radius: 999px;
+        border: 1px solid rgba(0, 255, 150, 0.18);
+        background: rgba(0, 255, 150, 0.1);
+      }
+
+      .version-empty {
+        font-size: 0.85rem;
+        color: rgba(200, 242, 228, 0.6);
+        border: 1px dashed rgba(0, 255, 150, 0.2);
+        border-radius: 12px;
+        padding: 12px 14px;
+        text-align: center;
+      }
+
+      .assets-library {
+        margin-top: 20px;
+        padding-top: 20px;
+        border-top: 1px solid rgba(0, 255, 150, 0.12);
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+      }
+
+      .assets-library h4 {
+        margin: 0;
+        font-size: 0.95rem;
+        font-weight: 600;
+      }
+
+      .assets-upload-area {
+        border: 2px dashed rgba(0, 255, 150, 0.25);
+        border-radius: 14px;
+        padding: 20px;
+        text-align: center;
+        background: rgba(5, 26, 23, 0.4);
+        transition: border-color 0.2s ease, background 0.2s ease;
+        cursor: pointer;
+      }
+
+      .assets-upload-area:hover {
+        border-color: rgba(0, 255, 150, 0.4);
+        background: rgba(5, 26, 23, 0.55);
+      }
+
+      .assets-upload-area.dragover {
+        border-color: rgba(0, 255, 150, 0.6);
+        background: rgba(0, 255, 150, 0.08);
+      }
+
+      .assets-upload-icon {
+        font-size: 2rem;
+        color: rgba(0, 255, 150, 0.6);
+        margin-bottom: 8px;
+      }
+
+      .assets-upload-text {
+        font-size: 0.9rem;
+        color: rgba(200, 242, 228, 0.85);
+        margin-bottom: 4px;
+      }
+
+      .assets-upload-hint {
+        font-size: 0.75rem;
+        color: rgba(200, 242, 228, 0.6);
+      }
+
+      .assets-upload-input {
+        display: none;
+      }
+
+      .assets-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+        gap: 12px;
+      }
+
+      .asset-item {
+        position: relative;
+        border-radius: 12px;
+        border: 1px solid rgba(0, 255, 150, 0.16);
+        background: rgba(7, 28, 24, 0.55);
+        overflow: hidden;
+        cursor: pointer;
+        transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+        aspect-ratio: 1;
+      }
+
+      .asset-item:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 10px 28px rgba(0, 255, 150, 0.2);
+        border-color: rgba(0, 255, 150, 0.35);
+      }
+
+      .asset-preview {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+      }
+
+      .asset-placeholder {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: rgba(0, 255, 150, 0.08);
+        color: rgba(0, 255, 150, 0.6);
+        font-size: 1.5rem;
+      }
+
+      .asset-info {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        padding: 8px;
+        background: linear-gradient(to top, rgba(4, 19, 16, 0.95), transparent);
+        font-size: 0.7rem;
+        color: rgba(200, 242, 228, 0.9);
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+
+      .asset-actions {
+        position: absolute;
+        top: 4px;
+        right: 4px;
+        display: flex;
+        gap: 4px;
+        opacity: 0;
+        transition: opacity 0.2s ease;
+      }
+
+      .asset-item:hover .asset-actions {
+        opacity: 1;
+      }
+
+      .asset-action-btn {
+        width: 24px;
+        height: 24px;
+        border-radius: 6px;
+        border: none;
+        background: rgba(4, 19, 16, 0.9);
+        color: rgba(200, 242, 228, 0.9);
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 0.7rem;
+        transition: background 0.2s ease, transform 0.2s ease;
+      }
+
+      .asset-action-btn:hover {
+        background: rgba(0, 255, 150, 0.3);
+        transform: scale(1.1);
+      }
+
+      .assets-empty {
+        font-size: 0.85rem;
+        color: rgba(200, 242, 228, 0.6);
+        border: 1px dashed rgba(0, 255, 150, 0.2);
+        border-radius: 12px;
+        padding: 20px;
+        text-align: center;
+      }
+
+      .activity-log {
+        margin-top: 20px;
+        padding: 20px;
+        border-radius: 20px;
+        border: 1px solid rgba(0, 255, 150, 0.12);
+        background: rgba(5, 26, 23, 0.55);
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+      }
+
+      .activity-log h4 {
+        margin: 0;
+        font-size: 0.95rem;
+        font-weight: 600;
+      }
+
+      .activity-items {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+      }
+
+      .activity-entry {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+        padding: 12px 14px;
+        border-radius: 14px;
+        border: 1px solid rgba(0, 255, 150, 0.14);
+        background: rgba(6, 26, 23, 0.52);
+      }
+
+      .activity-message {
+        font-size: 0.86rem;
+        color: rgba(232, 245, 237, 0.92);
+      }
+
+      .activity-meta {
+        font-size: 0.74rem;
+        color: rgba(200, 242, 228, 0.6);
+      }
+
+      .activity-empty {
+        font-size: 0.82rem;
+        color: rgba(200, 242, 228, 0.6);
+        text-align: center;
+      }
+
+      .pinned-groups {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        padding: 16px 20px;
+        border-radius: 18px;
+        border: 1px solid rgba(0, 255, 150, 0.14);
+        background: rgba(6, 26, 23, 0.45);
+      }
+
+      .pinned-label {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        font-size: 0.9rem;
+        font-weight: 600;
+        color: rgba(200, 242, 228, 0.85);
+      }
+
+      .pinned-items {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+      }
+
+      .pinned-group-button {
+        appearance: none;
+        border-radius: 999px;
+        border: 1px solid rgba(0, 255, 150, 0.22);
+        background: rgba(4, 24, 21, 0.7);
+        color: rgba(200, 242, 228, 0.9);
+        font-family: inherit;
+        font-size: 0.82rem;
+        font-weight: 600;
+        padding: 6px 14px;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        cursor: pointer;
+        transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+      }
+
+      .pinned-group-button:hover {
+        transform: translateY(-2px);
+        border-color: rgba(0, 255, 150, 0.4);
+        box-shadow: 0 8px 20px rgba(0, 255, 150, 0.18);
+      }
+
+      .pin-indicator {
+        color: rgba(0, 255, 150, 0.85);
+      }
+
+      .btn-ghost.is-pinned {
+        border-color: rgba(0, 255, 150, 0.38);
+        background: rgba(0, 255, 150, 0.12);
+        color: rgba(0, 255, 150, 0.85);
+      }
+
+      .btn-ghost.archive-button {
+        border-color: rgba(255, 193, 7, 0.32);
+        color: rgba(255, 193, 7, 0.9);
+      }
+
+      .btn-ghost.archive-button:hover {
+        border-color: rgba(255, 193, 7, 0.5);
+        box-shadow: 0 8px 24px rgba(255, 193, 7, 0.18);
+      }
+
+      .btn-ghost.danger-button {
+        border-color: rgba(255, 99, 132, 0.38);
+        color: rgba(255, 99, 132, 0.9);
+      }
+
+      .btn-ghost.danger-button:hover {
+        border-color: rgba(255, 99, 132, 0.55);
+        box-shadow: 0 8px 24px rgba(255, 99, 132, 0.22);
+      }
+
+      .brand-kit {
+        margin-top: 20px;
+        padding: 20px;
+        border-radius: 20px;
+        border: 1px solid rgba(0, 255, 150, 0.12);
+        background: rgba(5, 26, 23, 0.55);
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+      }
+
+      .brand-header {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+      }
+
+      .brand-header h4 {
+        margin: 0;
+        font-size: 1rem;
+        font-weight: 600;
+      }
+
+      .brand-header p {
+        margin: 0;
+        font-size: 0.85rem;
+        color: rgba(200, 242, 228, 0.65);
+      }
+
+      .brand-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+        gap: 18px;
+      }
+
+      .brand-card {
+        border-radius: 18px;
+        border: 1px solid rgba(0, 255, 150, 0.14);
+        background: rgba(6, 26, 23, 0.55);
+        padding: 18px;
+        display: flex;
+        flex-direction: column;
+        gap: 14px;
+        box-shadow: 0 12px 28px rgba(0, 0, 0, 0.22);
+      }
+
+      .brand-card h5 {
+        margin: 0;
+        font-size: 0.92rem;
+        font-weight: 600;
+        color: rgba(225, 245, 239, 0.9);
+      }
+
+      .brand-color-picker {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+
+      .brand-color-picker label {
+        font-size: 0.8rem;
+        font-weight: 600;
+        color: rgba(200, 242, 228, 0.75);
+        min-width: 110px;
+      }
+
+      .brand-color-picker input[type="color"] {
+        appearance: none;
+        width: 42px;
+        height: 42px;
+        border-radius: 12px;
+        border: 2px solid rgba(0, 255, 150, 0.32);
+        background: none;
+        cursor: pointer;
+      }
+
+      .brand-color-picker input[type="color"]::-webkit-color-swatch {
+        border: none;
+        border-radius: 9px;
+      }
+
+      .brand-color-picker input[type="color"]::-webkit-color-swatch-wrapper {
+        padding: 0;
+        border-radius: 9px;
+      }
+
+      .brand-color-picker .hex-input {
+        font-family: inherit;
+        font-size: 0.85rem;
+        padding: 8px 12px;
+        border-radius: 10px;
+        border: 1px solid rgba(0, 255, 150, 0.22);
+        background: rgba(4, 24, 21, 0.72);
+        color: #e8f5ed;
+        width: 110px;
+      }
+
+      .brand-logo-upload {
+        border: 2px dashed rgba(0, 255, 150, 0.25);
+        border-radius: 14px;
+        padding: 18px;
+        text-align: center;
+        background: rgba(5, 26, 23, 0.4);
+        transition: border-color 0.2s ease, background 0.2s ease;
+        cursor: pointer;
+      }
+
+      .brand-logo-upload:hover {
+        border-color: rgba(0, 255, 150, 0.4);
+        background: rgba(5, 26, 23, 0.55);
+      }
+
+      .brand-logo-upload.dragover {
+        border-color: rgba(0, 255, 150, 0.6);
+        background: rgba(0, 255, 150, 0.08);
+      }
+
+      .brand-logo-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+        gap: 14px;
+      }
+
+      .brand-logo-item {
+        position: relative;
+        border-radius: 14px;
+        border: 1px solid rgba(0, 255, 150, 0.14);
+        background: rgba(7, 28, 24, 0.55);
+        padding: 14px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 120px;
+        overflow: hidden;
+        cursor: pointer;
+        transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+      }
+
+      .brand-logo-item:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 10px 28px rgba(0, 255, 150, 0.16);
+        border-color: rgba(0, 255, 150, 0.28);
+      }
+
+      .brand-logo-item img {
+        max-width: 100%;
+        max-height: 100%;
+        object-fit: contain;
+      }
+
+      .brand-logo-actions {
+        position: absolute;
+        top: 6px;
+        right: 6px;
+        display: flex;
+        gap: 4px;
+        opacity: 0;
+        transition: opacity 0.2s ease;
+      }
+
+      .brand-logo-item:hover .brand-logo-actions {
+        opacity: 1;
+      }
+
+      .brand-apply-row {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        flex-wrap: wrap;
+      }
+
+      .brand-meta {
+        font-size: 0.78rem;
+        color: rgba(200, 242, 228, 0.7);
+      }
+
+      .export-panel {
+        margin-top: 20px;
+        padding: 20px;
+        border-radius: 20px;
+        border: 1px solid rgba(0, 255, 150, 0.12);
+        background: rgba(5, 26, 23, 0.55);
+        display: flex;
+        flex-direction: column;
+        gap: 18px;
+      }
+
+      .export-header h4 {
+        margin: 0;
+        font-size: 1rem;
+        font-weight: 600;
+      }
+
+      .export-header p {
+        margin: 0;
+        font-size: 0.85rem;
+        color: rgba(200, 242, 228, 0.65);
+      }
+
+      .styles-panel {
+        margin-top: 20px;
+        padding: 20px;
+        border-radius: 20px;
+        border: 1px solid rgba(0, 255, 150, 0.12);
+        background: rgba(5, 26, 23, 0.55);
+        display: flex;
+        flex-direction: column;
+        gap: 18px;
+      }
+
+      .styles-header {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+      }
+
+      .styles-header p {
+        margin: 6px 0 0;
+        font-size: 0.85rem;
+        color: rgba(200, 242, 228, 0.65);
+      }
+
+      .styles-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+        gap: 16px;
+      }
+
+      .text-style-card {
+        border-radius: 18px;
+        border: 1px solid rgba(0, 255, 150, 0.14);
+        background: rgba(6, 26, 23, 0.55);
+        padding: 16px;
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+        box-shadow: 0 12px 28px rgba(0, 0, 0, 0.22);
+      }
+
+      .text-style-card h5 {
+        margin: 0;
+        font-size: 0.92rem;
+        font-weight: 600;
+        color: rgba(225, 245, 239, 0.9);
+      }
+
+      .style-controls {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+      }
+
+      .style-controls label {
+        font-size: 0.78rem;
+        font-weight: 600;
+        color: rgba(200, 242, 228, 0.75);
+      }
+
+      .style-select {
+        font-family: inherit;
+        font-size: 0.85rem;
+        padding: 8px 12px;
+        border-radius: 10px;
+        border: 1px solid rgba(0, 255, 150, 0.22);
+        background: rgba(4, 24, 21, 0.72);
+        color: #e8f5ed;
+        cursor: pointer;
+        transition: border 0.2s ease, box-shadow 0.2s ease;
+      }
+
+      .style-select:focus {
+        outline: none;
+        border-color: rgba(0, 255, 150, 0.55);
+        box-shadow: 0 0 0 3px rgba(0, 255, 150, 0.16);
+      }
+
+      .style-preview {
+        border-radius: 14px;
+        border: 1px solid rgba(0, 255, 150, 0.14);
+        background: rgba(0, 255, 150, 0.06);
+        padding: 14px;
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+      }
+
+      .style-preview h5 {
+        margin: 0;
+        font-size: 1.1rem;
+        font-weight: 700;
+        color: rgba(225, 245, 239, 0.95);
+      }
+
+      .style-preview p {
+        margin: 0;
+        font-size: 0.82rem;
+        color: rgba(200, 242, 228, 0.8);
+      }
+
+      .style-applied-meta {
+        font-size: 0.78rem;
+        color: rgba(200, 242, 228, 0.7);
+      }
+
+      .apply-styles-button {
+        align-self: flex-start;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+      }
+
+      .style-actions {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        flex-wrap: wrap;
+      }
+
+      .export-actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+      }
+
+      .export-button {
+        appearance: none;
+        border-radius: 999px;
+        border: 1px solid rgba(0, 255, 150, 0.22);
+        background: rgba(4, 24, 21, 0.7);
+        color: rgba(200, 242, 228, 0.9);
+        font-family: inherit;
+        font-size: 0.85rem;
+        font-weight: 600;
+        padding: 8px 16px;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        cursor: pointer;
+        transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+      }
+
+      .export-button:hover {
+        transform: translateY(-2px);
+        border-color: rgba(0, 255, 150, 0.4);
+        box-shadow: 0 8px 20px rgba(0, 255, 150, 0.18);
+      }
+
+      .export-status {
+        font-size: 0.78rem;
+        color: rgba(200, 242, 228, 0.7);
+      }
+
+      .feedback-list {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        max-height: 220px;
+        overflow-y: auto;
+        border: 1px solid rgba(0, 255, 150, 0.12);
+        border-radius: 12px;
+        padding: 12px;
+        background: rgba(5, 26, 23, 0.55);
+      }
+
+      .feedback-list label {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        font-size: 0.85rem;
+        color: rgba(200, 242, 228, 0.85);
+      }
+
+      .feedback-status {
+        font-size: 0.8rem;
+        color: rgba(200, 242, 228, 0.7);
+      }
+
+      .theme-settings {
+        margin-top: 20px;
+        padding: 20px;
+        border-radius: 20px;
+        border: 1px solid rgba(0, 255, 150, 0.12);
+        background: rgba(5, 26, 23, 0.55);
+        display: flex;
+        flex-direction: column;
+        gap: 18px;
+      }
+
+      .theme-settings h4 {
+        margin: 0;
+        font-size: 1rem;
+        font-weight: 600;
+      }
+
+      .theme-options-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+        gap: 16px;
+      }
+
+      .theme-option {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        font-size: 0.85rem;
+      }
+
+      .theme-option label {
+        font-weight: 600;
+        color: rgba(200, 242, 228, 0.8);
+      }
+
+      .theme-option select {
+        font-family: inherit;
+        font-size: 0.9rem;
+        padding: 10px 12px;
+        border-radius: 12px;
+        border: 1px solid rgba(0, 255, 150, 0.24);
+        background: rgba(4, 24, 21, 0.7);
+        color: #e8f5ed;
+        cursor: pointer;
+      }
+
+      .theme-option select:focus {
+        outline: none;
+        border-color: rgba(0, 255, 150, 0.55);
+        box-shadow: 0 0 0 3px rgba(0, 255, 150, 0.16);
+      }
+
+      .theme-preview {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 18px;
+        align-items: stretch;
+      }
+
+      .theme-preview-card {
+        border-radius: 18px;
+        border: 1px solid rgba(0, 255, 150, 0.18);
+        background: rgba(6, 24, 22, 0.6);
+        padding: 16px;
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+        position: relative;
+        box-shadow: 0 12px 28px rgba(0, 0, 0, 0.22);
+      }
+
+      .theme-preview-title {
+        font-size: 0.9rem;
+        font-weight: 600;
+        color: rgba(225, 245, 239, 0.9);
+      }
+
+      .preview-slide {
+        border-radius: 14px;
+        border: 1px solid rgba(0, 255, 150, 0.18);
+        background: rgba(0, 0, 0, 0.18);
+        padding: 16px;
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .preview-slide::after {
+        content: '';
+        position: absolute;
+        inset: 12%;
+        border-radius: 10px;
+        border: 1px dashed rgba(255, 255, 255, 0.18);
+      }
+
+      .preview-slide h5 {
+        margin: 0;
+        font-size: 0.85rem;
+        font-weight: 600;
+        color: rgba(255, 255, 255, 0.92);
+      }
+
+      .preview-slide p {
+        margin: 0;
+        font-size: 0.75rem;
+        color: rgba(240, 255, 250, 0.8);
+      }
+
+      .apply-theme-button {
+        align-self: flex-start;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        appearance: none;
+        border: 1px solid rgba(0, 255, 150, 0.28);
+        background: rgba(5, 26, 23, 0.6);
+        color: rgba(200, 242, 228, 0.92);
+        padding: 10px 18px;
+        border-radius: 999px;
+        font-weight: 600;
+        font-family: inherit;
+        cursor: pointer;
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+      }
+
+      .apply-theme-button:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 10px 28px rgba(0, 255, 150, 0.18);
+      }
+
+      .slides-empty {
+        font-size: 0.85rem;
+        color: rgba(200, 242, 228, 0.6);
+        border: 1px dashed rgba(0, 255, 150, 0.2);
+        border-radius: 12px;
+        padding: 12px 14px;
+        text-align: center;
+      }
+
+      .comments-section {
+        margin-top: 14px;
+        padding-top: 18px;
+        border-top: 1px solid rgba(0, 255, 150, 0.1);
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+      }
+
+      .comments-header h4 {
+        margin: 0;
+        font-size: 0.95rem;
+        font-weight: 600;
+      }
+
+      .comments-header p {
+        margin: 6px 0 0;
+        font-size: 0.85rem;
+        color: rgba(200, 242, 228, 0.65);
+      }
+
+      .comment-list {
+        display: flex;
+        flex-direction: column;
+        gap: 14px;
+      }
+
+      .comment-item {
+        border-radius: 14px;
+        border: 1px solid rgba(0, 255, 150, 0.12);
+        background: rgba(9, 35, 30, 0.6);
+        padding: 14px 16px;
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+      }
+
+      .comment-meta {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        align-items: center;
+      }
+
+      .target-badge {
+        padding: 4px 10px;
+        border-radius: 12px;
+        font-size: 0.75rem;
+        font-weight: 600;
+        background: rgba(0, 255, 150, 0.16);
+        color: #00ff9f;
+        letter-spacing: 0.3px;
+      }
+
+      .comment-mentions {
+        display: flex;
+        gap: 6px;
+        flex-wrap: wrap;
+      }
+
+      .mention-chip {
+        display: inline-flex;
+        align-items: center;
+        padding: 4px 10px;
+        border-radius: 999px;
+        font-size: 0.75rem;
+        font-weight: 600;
+        background: rgba(140, 200, 255, 0.18);
+        color: #8cc8ff;
+        border: 1px solid rgba(140, 200, 255, 0.32);
+      }
+
+      .mention-chip.inline {
+        background: transparent;
+        border: none;
+        padding: 0;
+        color: #8cc8ff;
+      }
+
+      .comment-text {
+        margin: 0;
+        font-size: 0.9rem;
+        color: rgba(225, 245, 239, 0.9);
+        line-height: 1.45;
+      }
+
+      .comment-empty {
+        font-size: 0.85rem;
+        color: rgba(200, 242, 228, 0.6);
+        border: 1px dashed rgba(0, 255, 150, 0.2);
+        border-radius: 12px;
+        padding: 12px 14px;
+        text-align: center;
+      }
+
+      .comment-form {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+        padding: 16px;
+        border-radius: 16px;
+        border: 1px solid rgba(0, 255, 150, 0.1);
+        background: rgba(6, 28, 25, 0.45);
+      }
+
+      .comment-form .form-field textarea {
+        min-height: 90px;
+      }
+
+      .comment-actions {
+        display: flex;
+        justify-content: flex-end;
+      }
+
+      .comment-actions .btn-primary {
+        padding: 10px 22px;
+      }
+
+      .modal-actions {
+        display: flex;
+        justify-content: flex-end;
+        gap: 12px;
+      }
+
+      .modal-actions button {
+        appearance: none;
+        border-radius: 10px;
+        border: 1px solid transparent;
+        padding: 10px 20px;
+        font-weight: 600;
+        font-family: inherit;
+        cursor: pointer;
+        transition: transform 0.2s ease, box-shadow 0.2s ease, filter 0.2s ease;
+      }
+
+      .modal-actions button:hover {
+        transform: translateY(-1px);
+      }
+
+      .btn-secondary {
+        background: transparent;
+        border-color: rgba(0, 255, 150, 0.34);
+        color: rgba(200, 242, 228, 0.9);
+      }
+
+      .btn-secondary:hover {
+        box-shadow: 0 8px 20px rgba(0, 255, 150, 0.12);
+      }
+
+      .btn-primary {
+        background: linear-gradient(135deg, #00ffb5, #21aefd);
+        color: #05231b;
+        box-shadow: 0 10px 30px rgba(0, 255, 150, 0.25);
+        border: none;
+      }
+
+      .btn-primary:hover {
+        box-shadow: 0 14px 36px rgba(0, 255, 150, 0.3);
+        filter: brightness(1.02);
+      }
+
+      @media (max-width: 992px) {
+        nav.sidebar {
+          position: relative;
+          width: 100%;
+          flex-direction: row;
+          align-items: center;
+          justify-content: space-between;
+        }
+
+        .content {
+          margin-left: 0;
+          padding: 24px;
+        }
+
+        .workspace-layout {
+          flex-direction: column;
+        }
+
+        .chat-panel {
+          width: 100%;
+        }
+
+        .nav-menu {
+          flex-direction: row;
+          flex-wrap: wrap;
+          gap: 12px;
+        }
+
+        .nav-menu a {
+          padding: 8px 10px;
+        }
+      }
+
+      .content-layout {
+        display: flex;
+        gap: 32px;
+        align-items: flex-start;
+      }
+
+      .main-column {
+        flex: 1 1 auto;
+        display: flex;
+        flex-direction: column;
+        gap: 24px;
+      }
+
+      .right-sidebar {
+        width: clamp(260px, 24vw, 360px);
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+        position: sticky;
+        top: 24px;
+        max-height: calc(100vh - 48px);
+      }
+
+      .group-overview {
+        display: flex;
+        flex-direction: column;
+        gap: 18px;
+      }
+
+      .group-title-row {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+      }
+
+      .group-title-badges {
+        display: inline-flex;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 6px;
+      }
+
+      .group-quick-meta {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+        font-size: 0.82rem;
+        color: rgba(200, 242, 228, 0.72);
+      }
+
+      .group-quick-meta span {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+      }
+
+      .group-advanced {
+        margin-top: 16px;
+        border-radius: 18px;
+        border: 1px solid rgba(0, 255, 150, 0.12);
+        background: rgba(4, 20, 24, 0.48);
+      }
+
+      .group-advanced > summary {
+        cursor: pointer;
+        padding: 14px 18px;
+        font-weight: 600;
+        color: rgba(200, 242, 228, 0.9);
+        list-style: none;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+
+      .group-advanced > summary::-webkit-details-marker {
+        display: none;
+      }
+
+      .group-advanced[open] > summary {
+        border-bottom: 1px solid rgba(0, 255, 150, 0.12);
+      }
+
+      .group-panels {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+        padding: 14px 18px 18px;
+      }
+
+      details.section-collapse {
+        border-radius: 14px;
+        border: 1px solid rgba(0, 255, 150, 0.12);
+        background: rgba(6, 26, 23, 0.45);
+      }
+
+      details.section-collapse summary {
+        list-style: none;
+        cursor: pointer;
+        padding: 12px 16px;
+        color: rgba(200, 242, 228, 0.92);
+        font-weight: 600;
+        border-bottom: 1px solid rgba(0, 255, 150, 0.1);
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+
+      details.section-collapse[open] summary {
+        border-bottom: none;
+      }
+
+      details.section-collapse .panel-body {
+        padding: 16px;
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+      }
+
+      .group-advanced-actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        align-items: center;
+      }
+
+      .btn-secondary.danger {
+        border-color: rgba(255, 99, 132, 0.32);
+        color: rgba(255, 204, 211, 0.92);
+      }
+
+      .btn-secondary.danger:hover {
+        border-color: rgba(255, 99, 132, 0.52);
+        box-shadow: 0 8px 20px rgba(255, 99, 132, 0.18);
+      }
+
+      .group-status-tag {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 4px 8px;
+        border-radius: 999px;
+        border: 1px solid rgba(200, 200, 200, 0.22);
+        background: rgba(200, 200, 200, 0.12);
+        color: rgba(200, 200, 200, 0.82);
+        font-size: 0.72rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+      }
+
+      @media (max-width: 992px) {
+        .content-layout {
+          flex-direction: column;
+        }
+
+        .right-sidebar {
+          position: static;
+          width: 100%;
+          max-height: none;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="page-shell">
+      <nav class="sidebar">
+        <div class="logo-container">
+          <img src="./CURSOR-Project/public/aramco-digital.O&amp;D.PNG" alt="Aramco Digital Logo">
+        </div>
+        <div class="nav-menu">
+          <a href="./Home.html">
+            <i class="fas fa-home"></i>
+            Home
+          </a>
+          <a href="./groups.html" class="active">
+            <i class="fas fa-users"></i>
+            Groups
+          </a>
+        </div>
+      </nav>
+      <main class="content">
+        <div class="page-heading">
+            <h1>Groups Workspace</h1>
+          <button class="primary-action" id="newGroupButton">
+            <i class="fas fa-plus"></i>
+            New Group
+          </button>
+          </div>
+        <div class="pinned-groups" id="pinnedGroupsBar" hidden>
+          <span class="pinned-label">
+            <i class="fas fa-thumbtack pin-indicator"></i>
+            Pinned Projects
+          </span>
+          <div class="pinned-items" id="pinnedGroupsItems"></div>
+        </div>
+        <div class="workspace-layout">
+          <section class="workspace">
+            <div class="group-empty-state" id="groupsEmptyState">
+              <h2>No groups yet</h2>
+              <p>Create your first collaborative workspace to start planning your presentation.</p>
+            </div>
+            <div class="group-grid" id="groupList" hidden></div>
+        </section>
+          <aside class="chat-panel" aria-label="Team chat panel">
+            <h2>Team Chat</h2>
+            <div class="chat-placeholder">
+              Team discussion coming soon.<br>
+              Invite members now to get the conversation started.
+            </div>
+          </aside>
+          <aside class="ai-panel" aria-label="AI assistant panel">
+            <h2>AI Assistant</h2>
+            <div class="ai-placeholder">
+              AI Assistant coming soon.<br>
+              We'll help you design slides, suggest templates, and summarize presentations here.
+            </div>
+          </aside>
+        </div>
+      </main>
+    </div>
+
+    <div class="modal-backdrop" id="groupModalBackdrop" role="dialog" aria-modal="true" aria-hidden="true">
+      <div class="modal">
+        <h2>Create New Group</h2>
+        <form id="groupForm">
+          <div class="form-field">
+            <label for="groupNameInput">Group Name</label>
+            <input id="groupNameInput" name="groupName" type="text" placeholder="Marketing Pitch Team" required>
+          </div>
+          <div class="form-field">
+            <label for="groupDescriptionInput">Description</label>
+            <textarea id="groupDescriptionInput" name="groupDescription" placeholder="Describe your presentation goals and key collaborators." required></textarea>
+          </div>
+          <div class="modal-actions">
+            <button type="button" class="btn-secondary" id="cancelGroupButton">Cancel</button>
+            <button type="submit" class="btn-primary">Create Group</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <div class="modal-backdrop" id="inviteModalBackdrop" role="dialog" aria-modal="true" aria-hidden="true">
+      <div class="modal">
+        <h2>Invite Members</h2>
+        <p class="modal-subtitle" id="inviteModalGroupName"></p>
+        <form id="inviteForm">
+          <div class="form-field">
+            <label for="inviteEmailsInput">Invite by Email</label>
+            <textarea id="inviteEmailsInput" name="inviteEmails" placeholder="Add email addresses separated by commas"></textarea>
+          </div>
+          <div class="form-field">
+            <label for="memberRoleSelect">Role</label>
+            <select id="memberRoleSelect" name="memberRole">
+              <option value="viewer">Viewer - Can view presentations only</option>
+              <option value="editor" selected>Editor - Can edit presentations</option>
+              <option value="owner">Owner - Full access and management</option>
+            </select>
+          </div>
+          <div class="form-field">
+            <label for="inviteLinkInput">Invite Link</label>
+            <div class="invite-link-row">
+              <input id="inviteLinkInput" type="text" readonly placeholder="Generate a shareable link">
+              <button type="button" class="btn-secondary" id="generateInviteLinkButton">Generate</button>
+            </div>
+          </div>
+          <div class="form-field" id="inviteFeedback" hidden></div>
+          <div class="modal-actions">
+            <button type="button" class="btn-secondary" id="closeInviteButton">Close</button>
+            <button type="submit" class="btn-primary">Send Invites</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <div class="modal-backdrop" id="shareModalBackdrop" role="dialog" aria-modal="true" aria-hidden="true">
+      <div class="modal">
+        <h2>Share Presentation</h2>
+        <p class="modal-subtitle" id="shareModalGroupName"></p>
+        <div class="form-field">
+          <label for="shareViewLinkInput">View Link</label>
+          <div class="invite-link-row">
+            <input id="shareViewLinkInput" type="text" readonly>
+            <button type="button" class="btn-secondary" id="copyShareViewButton">Copy</button>
+          </div>
+        </div>
+        <div class="form-field">
+          <label for="shareEditLinkInput">Edit Link</label>
+          <div class="invite-link-row">
+            <input id="shareEditLinkInput" type="text" readonly>
+            <button type="button" class="btn-secondary" id="copyShareEditButton">Copy</button>
+          </div>
+        </div>
+        <div class="modal-actions">
+          <button type="button" class="btn-secondary" id="refreshShareLinksButton">Regenerate Links</button>
+          <button type="button" class="btn-primary" id="closeShareButton">Done</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal-backdrop" id="feedbackModalBackdrop" role="dialog" aria-modal="true" aria-hidden="true">
+      <div class="modal">
+        <h2>Request Feedback</h2>
+        <p class="modal-subtitle" id="feedbackModalGroupName"></p>
+        <div class="form-field">
+          <label>Select reviewers</label>
+          <div class="feedback-list" id="feedbackMemberList"></div>
+        </div>
+        <div class="form-field">
+          <label for="feedbackMessageInput">Message</label>
+          <textarea id="feedbackMessageInput" placeholder="Let reviewers know what areas need attention..."></textarea>
+        </div>
+        <div class="feedback-status" id="feedbackStatusMessage"></div>
+        <div class="modal-actions">
+          <button type="button" class="btn-secondary" id="closeFeedbackButton">Cancel</button>
+          <button type="button" class="btn-primary" id="sendFeedbackButton">Send Request</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal-backdrop" id="settingsModalBackdrop" role="dialog" aria-modal="true" aria-hidden="true">
+      <div class="modal">
+        <h2>Group Settings</h2>
+        <form id="settingsForm">
+          <div class="form-field">
+            <label for="settingsNameInput">Group Name</label>
+            <input id="settingsNameInput" type="text" required>
+          </div>
+          <div class="form-field">
+            <label for="settingsDescriptionInput">Description</label>
+            <textarea id="settingsDescriptionInput" placeholder="Describe the focus of this group..."></textarea>
+          </div>
+          <div class="form-field">
+            <label>Cover Image</label>
+            <div class="brand-logo-upload" id="settingsCoverUploadArea">
+              <div class="assets-upload-icon"><i class="fas fa-image"></i></div>
+              <div class="assets-upload-text">Click or drag an image here</div>
+              <div class="assets-upload-hint">Suggested: 1200×600 PNG or JPG</div>
+              <input id="settingsCoverInput" type="file" accept="image/*" class="assets-upload-input">
+            </div>
+            <div class="group-cover" id="settingsCoverPreview">
+              <div class="group-cover-placeholder"><i class="fas fa-image"></i></div>
+            </div>
+            <button type="button" class="btn-secondary" id="removeCoverButton">Remove Cover</button>
+          </div>
+          <div class="feedback-status" id="settingsStatusMessage"></div>
+          <div class="modal-actions">
+            <button type="button" class="btn-secondary" id="closeSettingsButton">Cancel</button>
+            <button type="submit" class="btn-primary">Save Changes</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <script>
+      (function () {
+        const modalBackdrop = document.getElementById('groupModalBackdrop');
+        const newGroupButton = document.getElementById('newGroupButton');
+        const cancelGroupButton = document.getElementById('cancelGroupButton');
+        const groupForm = document.getElementById('groupForm');
+        const groupList = document.getElementById('groupList');
+        const emptyState = document.getElementById('groupsEmptyState');
+        const groupNameInput = document.getElementById('groupNameInput');
+        const groupDescriptionInput = document.getElementById('groupDescriptionInput');
+        const inviteModalBackdrop = document.getElementById('inviteModalBackdrop');
+        const inviteModalGroupName = document.getElementById('inviteModalGroupName');
+        const inviteForm = document.getElementById('inviteForm');
+        const inviteEmailsInput = document.getElementById('inviteEmailsInput');
+        const inviteLinkInput = document.getElementById('inviteLinkInput');
+        const memberRoleSelect = document.getElementById('memberRoleSelect');
+        const generateInviteLinkButton = document.getElementById('generateInviteLinkButton');
+        const closeInviteButton = document.getElementById('closeInviteButton');
+        const inviteFeedback = document.getElementById('inviteFeedback');
+        const shareModalBackdrop = document.getElementById('shareModalBackdrop');
+        const shareModalGroupName = document.getElementById('shareModalGroupName');
+        const shareViewLinkInput = document.getElementById('shareViewLinkInput');
+        const shareEditLinkInput = document.getElementById('shareEditLinkInput');
+        const copyShareViewButton = document.getElementById('copyShareViewButton');
+        const copyShareEditButton = document.getElementById('copyShareEditButton');
+        const refreshShareLinksButton = document.getElementById('refreshShareLinksButton');
+        const closeShareButton = document.getElementById('closeShareButton');
+        const feedbackModalBackdrop = document.getElementById('feedbackModalBackdrop');
+        const feedbackModalGroupName = document.getElementById('feedbackModalGroupName');
+        const feedbackMemberList = document.getElementById('feedbackMemberList');
+        const feedbackMessageInput = document.getElementById('feedbackMessageInput');
+        const feedbackStatusMessage = document.getElementById('feedbackStatusMessage');
+        const closeFeedbackButton = document.getElementById('closeFeedbackButton');
+        const sendFeedbackButton = document.getElementById('sendFeedbackButton');
+        const pinnedGroupsBar = document.getElementById('pinnedGroupsBar');
+        const pinnedGroupsItems = document.getElementById('pinnedGroupsItems');
+        const settingsModalBackdrop = document.getElementById('settingsModalBackdrop');
+        const settingsForm = document.getElementById('settingsForm');
+        const settingsNameInput = document.getElementById('settingsNameInput');
+        const settingsDescriptionInput = document.getElementById('settingsDescriptionInput');
+        const settingsCoverUploadArea = document.getElementById('settingsCoverUploadArea');
+        const settingsCoverInput = document.getElementById('settingsCoverInput');
+        const settingsCoverPreview = document.getElementById('settingsCoverPreview');
+        const removeCoverButton = document.getElementById('removeCoverButton');
+        const settingsStatusMessage = document.getElementById('settingsStatusMessage');
+        const closeSettingsButton = document.getElementById('closeSettingsButton');
+
+        let activeInviteGroup = '';
+        let activeShareGroup = '';
+        let activeFeedbackGroup = '';
+        let activeSettingsGroup = '';
+        let pendingCoverImage = null;
+        const groupMembers = new Map(); // Store members for each group: groupName -> [{email, role, name, username}]
+        const groupActiveMembers = new Map(); // Store currently active members: groupName -> [{email, name, username}]
+        const groupComments = new Map(); // Store comments per group: groupName -> [{target, text, mentions}]
+        const groupSlides = new Map(); // Store slides per group: groupName -> [{id, title, assignee, status, updatedAt}]
+        const groupVersions = new Map(); // Store version history per group: groupName -> [{id, name, updatedBy, updatedAt}]
+        const groupMetadata = new Map(); // Store group metadata such as name, description, cover image
+        const groupThemes = new Map(); // Store theme config per group: groupName -> {colorScheme, layoutStyle, backgroundStyle, lastApplied}
+        const groupTextStyles = new Map(); // Store shared text styles per group
+        const groupBrandKits = new Map(); // Store brand kit data per group
+        const groupAssets = new Map(); // Store assets per group: groupName -> [{id, name, type, url, uploadedBy, uploadedAt}]
+        const groupShareLinks = new Map(); // Store share links per group
+        const groupExportHistory = new Map(); // Store export records per group
+        const groupFeedbackHistory = new Map(); // Store feedback requests per group
+        const groupActivityLog = new Map(); // Store activity entries per group
+
+        const THEME_COLOR_SCHEMES = {
+          emerald: {
+            label: 'Emerald Glow',
+            accent: '#00ffb5',
+            secondary: '#0d8f6d',
+            preview: 'linear-gradient(135deg, rgba(0,255,150,0.55), rgba(2,45,37,0.85))'
+          },
+          azure: {
+            label: 'Azure Horizon',
+            accent: '#21aefd',
+            secondary: '#0c4c8a',
+            preview: 'linear-gradient(135deg, rgba(33,174,253,0.55), rgba(5,31,54,0.88))'
+          },
+          sunset: {
+            label: 'Sunset Flame',
+            accent: '#ff8a65',
+            secondary: '#b33939',
+            preview: 'linear-gradient(135deg, rgba(255,138,101,0.55), rgba(41,17,35,0.88))'
+          },
+          orchid: {
+            label: 'Orchid Bloom',
+            accent: '#c77dff',
+            secondary: '#5a189a',
+            preview: 'linear-gradient(135deg, rgba(199,125,255,0.55), rgba(36,20,61,0.9))'
+          }
+        };
+
+        const THEME_LAYOUT_STYLES = {
+          modern: { label: 'Modern Minimal', description: 'Clean layout with generous spacing.' },
+          magazine: { label: 'Magazine Spread', description: 'Layered cards with overlapping elements.' },
+          cinematic: { label: 'Cinematic Focus', description: 'Bold typography with large imagery.' },
+          technical: { label: 'Technical Blueprint', description: 'Grid-aligned sections with annotations.' }
+        };
+
+        const THEME_BACKGROUND_STYLES = {
+          aurora: {
+            label: 'Aurora Waves',
+            value: 'radial-gradient(circle at 20% 20%, rgba(0,255,150,0.18), transparent 40%), radial-gradient(circle at 80% 80%, rgba(33,174,253,0.18), transparent 55%), linear-gradient(140deg, #041b24 0%, #062d33 38%, #0c4031 100%)'
+          },
+          midnight: {
+            label: 'Midnight Fade',
+            value: 'linear-gradient(160deg, #05081f 0%, #161b3a 55%, #041f3d 100%)'
+          },
+          desert: {
+            label: 'Desert Dawn',
+            value: 'linear-gradient(150deg, #3c1053 0%, #ad5389 50%, #f6d365 100%)'
+          },
+          glacier: {
+            label: 'Glacier Mist',
+            value: 'linear-gradient(145deg, #011a27 0%, #063852 40%, #115173 100%)'
+          }
+        };
+
+        const AVAILABLE_FONTS = {
+          Poppins: 'Poppins, "Helvetica Neue", Arial, sans-serif',
+          Inter: '"Inter", "Segoe UI", sans-serif',
+          Roboto: '"Roboto", "Helvetica Neue", Arial, sans-serif',
+          Montserrat: '"Montserrat", "Trebuchet MS", sans-serif',
+          Lato: '"Lato", "Helvetica Neue", Arial, sans-serif',
+          'Playfair Display': '"Playfair Display", "Times New Roman", serif',
+          Merriweather: '"Merriweather", "Georgia", serif',
+          Georgia: 'Georgia, "Times New Roman", serif'
+        };
+
+        const AVAILABLE_LINE_HEIGHTS = ['1.3', '1.4', '1.5', '1.6', '1.8'];
+
+        const TEXT_STYLE_ROLES = [
+          {
+            key: 'heading',
+            label: 'Heading Style',
+            sampleHeading: 'Heading Preview',
+            sampleBody: 'Impactful statements and slide titles.',
+            sizes: ['48', '44', '40', '36', '32', '28'],
+            supportsLineHeight: false
+          },
+          {
+            key: 'body',
+            label: 'Body Style',
+            sampleHeading: 'Body Text Preview',
+            sampleBody: 'Use this style for supporting details and storytelling.',
+            sizes: ['26', '24', '22', '20', '18', '16'],
+            supportsLineHeight: true
+          },
+          {
+            key: 'caption',
+            label: 'Caption Style',
+            sampleHeading: 'Caption Preview',
+            sampleBody: 'Supplementary labels, annotations, and data notes.',
+            sizes: ['20', '18', '16', '14', '12', '10'],
+            supportsLineHeight: false
+          }
+        ];
+
+        const EXPORT_FORMATS = [
+          { key: 'pdf', label: 'PDF', icon: 'fa-file-pdf', extension: 'pdf', mime: 'application/pdf' },
+          { key: 'pptx', label: 'PPTX', icon: 'fa-file-powerpoint', extension: 'pptx', mime: 'application/vnd.openxmlformats-officedocument.presentationml.presentation' },
+          { key: 'html', label: 'HTML', icon: 'fa-code', extension: 'html', mime: 'text/html' }
+        ];
+
+        function getDefaultBrandKit() {
+          return {
+            primaryColor: '#00ffb5',
+            secondaryColor: '#21aefd',
+            logos: [],
+            lastApplied: null
+          };
+        }
+
+        function toggleModal(visible) {
+          modalBackdrop.classList.toggle('visible', visible);
+          modalBackdrop.setAttribute('aria-hidden', String(!visible));
+          if (visible) {
+            groupNameInput.focus();
+          }
+        }
+
+        function toggleInviteModal(visible, groupName = '') {
+          inviteModalBackdrop.classList.toggle('visible', visible);
+          inviteModalBackdrop.setAttribute('aria-hidden', String(!visible));
+          if (visible) {
+            activeInviteGroup = groupName;
+            const displayName = groupMetadata.get(groupName)?.name || groupName;
+            inviteModalGroupName.textContent = displayName ? `for "${displayName}"` : '';
+            memberRoleSelect.value = 'editor'; // Reset to default
+            inviteEmailsInput.focus();
+          } else {
+            activeInviteGroup = '';
+            inviteForm.reset();
+            inviteLinkInput.value = '';
+            memberRoleSelect.value = 'editor';
+            inviteFeedback.hidden = true;
+            inviteFeedback.textContent = '';
+          }
+        }
+
+        function toggleShareModal(visible, groupName = '') {
+          shareModalBackdrop.classList.toggle('visible', visible);
+          shareModalBackdrop.setAttribute('aria-hidden', String(!visible));
+          if (visible) {
+            activeShareGroup = groupName;
+            const displayName = groupMetadata.get(groupName)?.name || groupName;
+            shareModalGroupName.textContent = displayName ? `for "${displayName}"` : '';
+            const links = getShareLinks(groupName);
+            updateShareModalInputs(links);
+            shareViewLinkInput.focus();
+            shareViewLinkInput.select();
+          } else {
+            activeShareGroup = '';
+            shareModalGroupName.textContent = '';
+            shareViewLinkInput.value = '';
+            shareEditLinkInput.value = '';
+          }
+        }
+
+        function toggleFeedbackModal(visible, groupName = '') {
+          feedbackModalBackdrop.classList.toggle('visible', visible);
+          feedbackModalBackdrop.setAttribute('aria-hidden', String(!visible));
+          if (visible) {
+            activeFeedbackGroup = groupName;
+            const displayName = groupMetadata.get(groupName)?.name || groupName;
+            feedbackModalGroupName.textContent = displayName ? `for "${displayName}"` : '';
+            renderFeedbackMemberOptions(groupName);
+            feedbackMessageInput.value = '';
+            feedbackStatusMessage.textContent = '';
+            if (feedbackMemberList.tabIndex >= 0) {
+              feedbackMemberList.focus();
+            } else {
+              closeFeedbackButton.focus();
+            }
+          } else {
+            activeFeedbackGroup = '';
+            feedbackModalGroupName.textContent = '';
+            feedbackMemberList.innerHTML = '';
+            feedbackMemberList.tabIndex = -1;
+            feedbackMessageInput.value = '';
+            feedbackStatusMessage.textContent = '';
+            feedbackStatusMessage.style.color = '';
+          }
+        }
+
+        function updateGroupCover(card, coverImage) {
+          if (!card) {
+            return;
+          }
+          const coverEl = card.querySelector('.group-cover');
+          if (!coverEl) {
+            return;
+          }
+          coverEl.innerHTML = '';
+          if (coverImage) {
+            const img = document.createElement('img');
+            img.src = coverImage;
+            img.alt = 'Group cover';
+            coverEl.appendChild(img);
+          } else {
+            const placeholder = document.createElement('div');
+            placeholder.className = 'group-cover-placeholder';
+            placeholder.innerHTML = '<i class="fas fa-image"></i>';
+            coverEl.appendChild(placeholder);
+          }
+        }
+
+        function updateGroupCardFromMetadata(card, metadata) {
+          if (!card || !metadata) {
+            return;
+          }
+          const pinned = !!metadata.pinned;
+          const archived = !!metadata.archived;
+          card.dataset.pinned = pinned ? 'true' : 'false';
+          card.dataset.archived = archived ? 'true' : 'false';
+          card.classList.toggle('pinned', pinned);
+          card.classList.toggle('archived', archived);
+
+          const titleEl = card.querySelector('h3');
+          if (titleEl) {
+            titleEl.textContent = metadata.name || metadata.originalName || card.dataset.groupName;
+          }
+
+          const descEl = card.querySelector('.group-description');
+          if (descEl) {
+            descEl.textContent = metadata.description || 'Use this space to describe the group focus.';
+          }
+
+          updateGroupCover(card, metadata.coverImage || null);
+          updatePinButtonState(card.dataset.groupName);
+          updateArchiveButtonState(card.dataset.groupName);
+        }
+
+        function reorderGroupCards() {
+          const cards = Array.from(groupList.children);
+          cards.sort((a, b) => {
+            const metaA = groupMetadata.get(a.dataset.groupName) || {};
+            const metaB = groupMetadata.get(b.dataset.groupName) || {};
+            const pinDiff = (metaB.pinned ? 1 : 0) - (metaA.pinned ? 1 : 0);
+            if (pinDiff !== 0) {
+              return pinDiff;
+            }
+            const archiveDiff = (metaA.archived ? 1 : 0) - (metaB.archived ? 1 : 0);
+            if (archiveDiff !== 0) {
+              return archiveDiff;
+            }
+            const nameA = (metaA.name || a.dataset.groupName || '').toLowerCase();
+            const nameB = (metaB.name || b.dataset.groupName || '').toLowerCase();
+            if (nameA < nameB) return -1;
+            if (nameA > nameB) return 1;
+            return 0;
+          });
+          cards.forEach((card) => {
+            groupList.appendChild(card);
+          });
+          renderPinnedGroups();
+        }
+
+        function togglePinGroup(groupName) {
+          if (!groupName) {
+            return;
+          }
+          const metadata = groupMetadata.get(groupName);
+          if (!metadata) {
+            return;
+          }
+          metadata.pinned = !metadata.pinned;
+          groupMetadata.set(groupName, metadata);
+
+          appendActivity(groupName, metadata.pinned ? 'Pinned this group for quick access' : 'Unpinned this group');
+
+          const card = document.querySelector(`[data-group-name="${groupName}"]`);
+          if (card) {
+            updateGroupCardFromMetadata(card, metadata);
+            renderActivityLog(card, groupName);
+          }
+
+          reorderGroupCards();
+        }
+
+        function toggleSettingsModal(visible, groupName = '') {
+          settingsModalBackdrop.classList.toggle('visible', visible);
+          settingsModalBackdrop.setAttribute('aria-hidden', String(!visible));
+          if (visible) {
+            activeSettingsGroup = groupName;
+            const metadata = groupMetadata.get(groupName) || {
+              name: groupName,
+              description: '',
+              coverImage: null
+            };
+            settingsNameInput.value = metadata.name || groupName;
+            settingsDescriptionInput.value = metadata.description || '';
+            pendingCoverImage = metadata.coverImage || null;
+            updateSettingsCoverPreview(pendingCoverImage);
+            settingsStatusMessage.textContent = '';
+            settingsStatusMessage.style.color = '';
+            settingsNameInput.focus();
+            settingsNameInput.select();
+          } else {
+            activeSettingsGroup = '';
+            pendingCoverImage = null;
+            settingsForm.reset();
+            updateSettingsCoverPreview(null);
+            settingsStatusMessage.textContent = '';
+            settingsStatusMessage.style.color = '';
+            settingsCoverUploadArea.classList.remove('dragover');
+          }
+        }
+
+        function updateSettingsCoverPreview(image) {
+          settingsCoverPreview.innerHTML = '';
+          if (image) {
+            const img = document.createElement('img');
+            img.src = image;
+            img.alt = 'Cover preview';
+            settingsCoverPreview.appendChild(img);
+          } else {
+            const placeholder = document.createElement('div');
+            placeholder.className = 'group-cover-placeholder';
+            placeholder.innerHTML = '<i class="fas fa-image"></i>';
+            settingsCoverPreview.appendChild(placeholder);
+          }
+        }
+
+        function handleSettingsCoverFile(file) {
+          if (!file || !file.type.startsWith('image/')) {
+            settingsStatusMessage.textContent = 'Please select a valid image file.';
+            settingsStatusMessage.style.color = 'rgba(255, 170, 170, 0.9)';
+            return;
+          }
+          const reader = new FileReader();
+          reader.onload = (event) => {
+            pendingCoverImage = event.target.result;
+            updateSettingsCoverPreview(pendingCoverImage);
+            settingsStatusMessage.textContent = '';
+            settingsStatusMessage.style.color = '';
+          };
+          reader.readAsDataURL(file);
+        }
+
+        function handleEscape(event) {
+          if (event.key === 'Escape' && modalBackdrop.classList.contains('visible')) {
+            toggleModal(false);
+          }
+          if (event.key === 'Escape' && inviteModalBackdrop.classList.contains('visible')) {
+            toggleInviteModal(false);
+          }
+          if (event.key === 'Escape' && shareModalBackdrop.classList.contains('visible')) {
+            toggleShareModal(false);
+          }
+          if (event.key === 'Escape' && feedbackModalBackdrop.classList.contains('visible')) {
+            toggleFeedbackModal(false);
+          }
+          if (event.key === 'Escape' && settingsModalBackdrop.classList.contains('visible')) {
+            toggleSettingsModal(false);
+          }
+        }
+
+        function handleBackdropClick(event) {
+          if (event.target === modalBackdrop) {
+            toggleModal(false);
+          }
+          if (event.target === inviteModalBackdrop) {
+            toggleInviteModal(false);
+          }
+          if (event.target === shareModalBackdrop) {
+            toggleShareModal(false);
+          }
+          if (event.target === feedbackModalBackdrop) {
+            toggleFeedbackModal(false);
+          }
+          if (event.target === settingsModalBackdrop) {
+            toggleSettingsModal(false);
+          }
+        }
+
+        function formatMemberName(email) {
+          const localPart = email.split('@')[0] || '';
+          if (!localPart) return 'Member';
+          const parts = localPart
+            .replace(/[._-]+/g, ' ')
+            .split(' ')
+            .filter(Boolean)
+            .map((segment) => segment.charAt(0).toUpperCase() + segment.slice(1));
+          return parts.join(' ') || 'Member';
+        }
+
+        function generateUsername(email) {
+          const localPart = email.split('@')[0] || '';
+          if (!localPart) return 'member';
+          const sanitized = localPart
+            .toLowerCase()
+            .replace(/[^a-z0-9._-]/g, '');
+          return sanitized || 'member';
+        }
+
+        function getInitials(name) {
+          const words = name.trim().split(/\s+/);
+          if (!words.length) return '?';
+          if (words.length === 1) {
+            return words[0].slice(0, 2).toUpperCase();
+          }
+          return (words[0][0] + words[1][0]).toUpperCase();
+        }
+
+        function getRoleBadgeClass(role) {
+          return `role-badge role-${role}`;
+        }
+
+        function getRoleDisplayName(role) {
+          const roleNames = {
+            owner: 'Owner',
+            editor: 'Editor',
+            viewer: 'Viewer'
+          };
+          return roleNames[role] || role;
+        }
+
+        function getDefaultTheme() {
+          return {
+            colorScheme: 'emerald',
+            layoutStyle: 'modern',
+            backgroundStyle: 'aurora',
+            lastApplied: false
+          };
+        }
+
+        function getThemeConfig(groupName) {
+          if (!groupThemes.has(groupName)) {
+            groupThemes.set(groupName, { ...getDefaultTheme() });
+          }
+          return groupThemes.get(groupName);
+        }
+
+        function getDefaultTextStyles() {
+          return {
+            heading: { font: 'Poppins', size: '36' },
+            body: { font: 'Inter', size: '18', lineHeight: '1.5' },
+            caption: { font: 'Inter', size: '14' },
+            lastApplied: null
+          };
+        }
+
+        function getTextStylesConfig(groupName) {
+          if (!groupTextStyles.has(groupName)) {
+            groupTextStyles.set(groupName, JSON.parse(JSON.stringify(getDefaultTextStyles())));
+          }
+          return groupTextStyles.get(groupName);
+        }
+
+        function getBrandKitConfig(groupName) {
+          if (!groupBrandKits.has(groupName)) {
+            groupBrandKits.set(groupName, JSON.parse(JSON.stringify(getDefaultBrandKit())));
+          }
+          return groupBrandKits.get(groupName);
+        }
+
+        function applyThemePreview(section, theme) {
+          const colorScheme = THEME_COLOR_SCHEMES[theme.colorScheme] || THEME_COLOR_SCHEMES.emerald;
+          const backgroundStyle = THEME_BACKGROUND_STYLES[theme.backgroundStyle] || THEME_BACKGROUND_STYLES.aurora;
+          const layout = THEME_LAYOUT_STYLES[theme.layoutStyle] || THEME_LAYOUT_STYLES.modern;
+
+          const previewCard = section.querySelector('.theme-preview-card');
+          const previewSlide = section.querySelector('.preview-slide');
+          const previewTitle = section.querySelector('.theme-preview-title');
+          const previewBody = section.querySelector('.preview-slide p');
+          const layoutMeta = section.querySelector('.theme-preview-layout');
+
+          if (previewCard) {
+            previewCard.style.borderColor = colorScheme.accent;
+            previewCard.style.background = colorScheme.preview;
+          }
+          if (previewSlide) {
+            previewSlide.style.background = `linear-gradient(135deg, ${colorScheme.accent}33, ${colorScheme.secondary}55)`;
+            previewSlide.style.borderColor = `${colorScheme.accent}66`;
+          }
+          if (previewTitle) {
+            previewTitle.textContent = `${colorScheme.label} · ${layout.label}`;
+          }
+          if (previewBody) {
+            previewBody.textContent = layout.description || 'A presentation theme tuned for clarity and impact.';
+          }
+          if (layoutMeta) {
+            layoutMeta.textContent = `Background: ${backgroundStyle.label}`;
+          }
+        }
+
+        function applyThemeToDocument(theme) {
+          const colorScheme = THEME_COLOR_SCHEMES[theme.colorScheme] || THEME_COLOR_SCHEMES.emerald;
+          const backgroundStyle = THEME_BACKGROUND_STYLES[theme.backgroundStyle] || THEME_BACKGROUND_STYLES.aurora;
+
+          document.documentElement.style.setProperty('--presentation-accent', colorScheme.accent);
+          document.documentElement.style.setProperty('--presentation-secondary', colorScheme.secondary);
+          document.body.style.background = backgroundStyle.value;
+          document.body.dataset.presentationLayout = theme.layoutStyle;
+        }
+
+        function applyBrandColorsToDocument(brandKit) {
+          if (!brandKit) {
+            return;
+          }
+          document.documentElement.style.setProperty('--brand-primary', brandKit.primaryColor || '#00ffb5');
+          document.documentElement.style.setProperty('--brand-secondary', brandKit.secondaryColor || '#21aefd');
+        }
+
+        function applyTextStylesToDocument(styles) {
+          if (!styles) {
+            return;
+          }
+
+          const headingFont = AVAILABLE_FONTS[styles.heading?.font] || AVAILABLE_FONTS.Poppins;
+          const bodyFont = AVAILABLE_FONTS[styles.body?.font] || AVAILABLE_FONTS.Inter;
+          const captionFont = AVAILABLE_FONTS[styles.caption?.font] || bodyFont;
+
+          document.documentElement.style.setProperty('--presentation-heading-font', headingFont);
+          document.documentElement.style.setProperty('--presentation-heading-size', `${styles.heading?.size || 36}px`);
+          document.documentElement.style.setProperty('--presentation-body-font', bodyFont);
+          document.documentElement.style.setProperty('--presentation-body-size', `${styles.body?.size || 18}px`);
+          document.documentElement.style.setProperty('--presentation-body-line-height', styles.body?.lineHeight || '1.5');
+          document.documentElement.style.setProperty('--presentation-caption-font', captionFont);
+          document.documentElement.style.setProperty('--presentation-caption-size', `${styles.caption?.size || 14}px`);
+        }
+
+        function formatTimestamp(timestamp) {
+          if (!timestamp) {
+            return '';
+          }
+          try {
+            const formatter = new Intl.DateTimeFormat(undefined, {
+              dateStyle: 'medium',
+              timeStyle: 'short'
+            });
+            return formatter.format(new Date(timestamp));
+          } catch (error) {
+            return new Date(timestamp).toLocaleString();
+          }
+        }
+
+        function normalizeHexColor(value, fallback = '#00ffb5') {
+          if (typeof value !== 'string') {
+            return fallback;
+          }
+          let hex = value.trim();
+          if (!hex) {
+            return fallback;
+          }
+          if (!hex.startsWith('#')) {
+            hex = `#${hex}`;
+          }
+          hex = hex.replace(/[^#0-9a-fA-F]/g, '');
+          if (hex.length === 4) {
+            hex = `#${hex[1]}${hex[1]}${hex[2]}${hex[2]}${hex[3]}${hex[3]}`;
+          }
+          if (hex.length !== 7) {
+            return fallback;
+          }
+          return hex.toUpperCase();
+        }
+
+        function generateShareToken() {
+          return Math.random().toString(36).slice(2, 10);
+        }
+
+        function buildShareLink(groupName, mode, token) {
+          const metadata = groupMetadata.get(groupName);
+          const slugSource = metadata?.name || groupName || 'presentation';
+          const slug = encodeURIComponent(slugSource);
+          return `https://app.slidemaker.com/share/${slug}/${mode}/${token}`;
+        }
+
+        function generateShareLinks(groupName) {
+          const viewToken = generateShareToken();
+          const editToken = generateShareToken();
+          return {
+            view: buildShareLink(groupName, 'view', viewToken),
+            edit: buildShareLink(groupName, 'edit', editToken),
+            updatedAt: Date.now()
+          };
+        }
+
+        function getShareLinks(groupName) {
+          if (!groupShareLinks.has(groupName)) {
+            groupShareLinks.set(groupName, generateShareLinks(groupName));
+          }
+          return groupShareLinks.get(groupName);
+        }
+
+        function updateShareModalInputs(links) {
+          if (!links) {
+            return;
+          }
+          shareViewLinkInput.value = links.view;
+          shareEditLinkInput.value = links.edit;
+        }
+
+        function refreshShareLinks(groupName) {
+          const links = generateShareLinks(groupName);
+          groupShareLinks.set(groupName, links);
+          if (activeShareGroup === groupName) {
+            updateShareModalInputs(links);
+          }
+          appendActivity(groupName, 'Regenerated share links');
+          const card = document.querySelector(`[data-group-name="${groupName}"]`);
+          if (card) {
+            renderActivityLog(card, groupName);
+          }
+          return links;
+        }
+
+        function copyShareLink(button, value) {
+          if (!value) {
+            return;
+          }
+          navigator.clipboard.writeText(value).then(() => {
+            const original = button.innerHTML;
+            button.innerHTML = '<i class="fas fa-check"></i>';
+            setTimeout(() => {
+              button.innerHTML = original;
+            }, 1000);
+          });
+        }
+
+        function renderPinnedGroups() {
+          if (!pinnedGroupsBar || !pinnedGroupsItems) {
+            return;
+          }
+          const pinnedEntries = Array.from(groupMetadata.entries())
+            .filter(([name, meta]) => meta?.pinned && !meta.archived && document.querySelector(`[data-group-name="${name}"]`))
+            .sort((a, b) => {
+              const nameA = (a[1]?.name || a[0] || '').toLowerCase();
+              const nameB = (b[1]?.name || b[0] || '').toLowerCase();
+              if (nameA < nameB) return -1;
+              if (nameA > nameB) return 1;
+              return 0;
+            });
+
+          pinnedGroupsItems.innerHTML = '';
+          if (!pinnedEntries.length) {
+            pinnedGroupsBar.hidden = true;
+            return;
+          }
+
+          pinnedGroupsBar.hidden = false;
+          pinnedEntries.forEach(([groupName, meta]) => {
+            const displayName = meta?.name || groupName;
+            const button = document.createElement('button');
+            button.className = 'pinned-group-button';
+            button.innerHTML = `<i class="fas fa-folder-open"></i>${displayName}`;
+            button.addEventListener('click', () => {
+              const targetCard = document.querySelector(`[data-group-name="${groupName}"]`);
+              if (targetCard) {
+                targetCard.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                targetCard.classList.add('recently-focused');
+                setTimeout(() => targetCard.classList.remove('recently-focused'), 800);
+              }
+            });
+            pinnedGroupsItems.appendChild(button);
+          });
+        }
+
+        function updatePinButtonState(groupName) {
+          const card = document.querySelector(`[data-group-name="${groupName}"]`);
+          if (!card) {
+            return;
+          }
+          const button = card.querySelector('.pin-button');
+          if (!button) {
+            return;
+          }
+          const metadata = groupMetadata.get(groupName) || {};
+          const pinned = !!metadata.pinned;
+          button.classList.toggle('is-pinned', pinned);
+          button.innerHTML = pinned
+            ? '<i class="fas fa-thumbtack"></i>Unpin Project'
+            : '<i class="fas fa-thumbtack"></i>Pin Project';
+        }
+
+        function updateArchiveButtonState(groupName) {
+          const card = document.querySelector(`[data-group-name="${groupName}"]`);
+          if (!card) {
+            return;
+          }
+          const button = card.querySelector('.archive-button');
+          const metadata = groupMetadata.get(groupName) || {};
+          const archived = !!metadata.archived;
+          card.classList.toggle('archived', archived);
+          if (button) {
+            button.innerHTML = archived
+              ? '<i class="fas fa-box-open"></i>Unarchive'
+              : '<i class="fas fa-archive"></i>Archive';
+          }
+        }
+
+        function togglePinnedGroup(groupName) {
+          if (!groupName) {
+            return;
+          }
+          let metadata = groupMetadata.get(groupName);
+          if (!metadata) {
+            metadata = { name: groupName, description: '', coverImage: null, pinned: false, archived: false };
+          }
+          metadata.pinned = !metadata.pinned;
+          if (metadata.pinned && metadata.archived) {
+            metadata.archived = false;
+          }
+          groupMetadata.set(groupName, metadata);
+
+          appendActivity(groupName, metadata.pinned ? 'Pinned this group for quick access' : 'Removed project from pinned list');
+
+          const card = document.querySelector(`[data-group-name="${groupName}"]`);
+          if (card) {
+            updateGroupCardFromMetadata(card, metadata);
+            renderActivityLog(card, groupName);
+          }
+
+          updatePinButtonState(groupName);
+          updateArchiveButtonState(groupName);
+          reorderGroupCards();
+        }
+
+        function toggleArchiveGroup(groupName) {
+          if (!groupName) {
+            return;
+          }
+          let metadata = groupMetadata.get(groupName);
+          if (!metadata) {
+            metadata = { name: groupName, description: '', coverImage: null, pinned: false, archived: false };
+          }
+          const newState = !metadata.archived;
+          metadata.archived = newState;
+          if (newState && metadata.pinned) {
+            metadata.pinned = false;
+          }
+          groupMetadata.set(groupName, metadata);
+          appendActivity(groupName, newState ? 'Archived this group' : 'Restored this group');
+
+          const card = document.querySelector(`[data-group-name="${groupName}"]`);
+          if (card) {
+            updateGroupCardFromMetadata(card, metadata);
+            renderActivityLog(card, groupName);
+          }
+
+          updatePinButtonState(groupName);
+          updateArchiveButtonState(groupName);
+          reorderGroupCards();
+        }
+
+        function deleteGroup(groupName) {
+          if (!groupName) {
+            return;
+          }
+          const metadata = groupMetadata.get(groupName);
+          const displayName = metadata?.name || groupName;
+          if (!confirm(`Delete "${displayName}" permanently? This cannot be undone.`)) {
+            return;
+          }
+
+          const card = document.querySelector(`[data-group-name="${groupName}"]`);
+          if (card && card.parentNode) {
+            card.parentNode.removeChild(card);
+          }
+
+          const maps = [
+            groupMetadata,
+            groupMembers,
+            groupActiveMembers,
+            groupSlides,
+            groupVersions,
+            groupComments,
+            groupTextStyles,
+            groupBrandKits,
+            groupAssets,
+            groupExportHistory,
+            groupFeedbackHistory,
+            groupThemes,
+            groupActivityLog
+          ];
+          maps.forEach((map) => map.delete(groupName));
+          groupShareLinks.delete(groupName);
+
+          if (activeShareGroup === groupName) {
+            toggleShareModal(false);
+          }
+          if (activeFeedbackGroup === groupName) {
+            toggleFeedbackModal(false);
+          }
+          if (activeSettingsGroup === groupName) {
+            toggleSettingsModal(false);
+          }
+
+          renderPinnedGroups();
+          reorderGroupCards();
+
+          if (!groupList.children.length) {
+            groupsEmptyState.hidden = false;
+          }
+        }
+
+
+        function appendActivity(groupName, message) {
+          if (!groupName || !message) {
+            return;
+          }
+          if (!groupActivityLog.has(groupName)) {
+            groupActivityLog.set(groupName, []);
+          }
+          const entries = groupActivityLog.get(groupName);
+          entries.unshift({
+            id: Date.now() + Math.random(),
+            message,
+            timestamp: Date.now()
+          });
+          if (entries.length > 40) {
+            entries.length = 40;
+          }
+        }
+
+        function renderActivityLog(card, groupName) {
+          if (!card) {
+            return;
+          }
+          const currentGroup = card.dataset.groupName || groupName;
+          const entries = groupActivityLog.get(currentGroup) || [];
+          let section = card.querySelector('.activity-log');
+          if (!section) {
+            section = document.createElement('section');
+            section.className = 'activity-log';
+            const title = document.createElement('h4');
+            title.textContent = 'Activity Log';
+            section.appendChild(title);
+            const list = document.createElement('div');
+            list.className = 'activity-items';
+            section.appendChild(list);
+            const reference = card.querySelector('.comments-section');
+            if (reference) {
+              card.insertBefore(section, reference);
+            } else {
+              card.appendChild(section);
+            }
+          }
+
+          const list = section.querySelector('.activity-items');
+          if (!list) {
+            return;
+          }
+          list.innerHTML = '';
+
+          if (!entries.length) {
+            const empty = document.createElement('div');
+            empty.className = 'activity-empty';
+            empty.textContent = 'No activity recorded yet.';
+            list.appendChild(empty);
+            return;
+          }
+
+          entries.slice(0, 15).forEach((entry) => {
+            const item = document.createElement('div');
+            item.className = 'activity-entry';
+            const message = document.createElement('span');
+            message.className = 'activity-message';
+            message.textContent = entry.message;
+            const meta = document.createElement('span');
+            meta.className = 'activity-meta';
+            meta.textContent = formatTimestamp(entry.timestamp);
+            item.appendChild(message);
+            item.appendChild(meta);
+            list.appendChild(item);
+          });
+        }
+
+        function renderFeedbackMemberOptions(groupName) {
+          const members = groupMembers.get(groupName) || [];
+          const history = groupFeedbackHistory.get(groupName);
+          feedbackMemberList.innerHTML = '';
+
+          if (!members.length) {
+            const empty = document.createElement('div');
+            empty.className = 'feedback-status';
+            empty.textContent = 'No team members yet. Invite collaborators to request feedback.';
+            feedbackMemberList.appendChild(empty);
+            feedbackMemberList.tabIndex = -1;
+            return;
+          }
+
+          feedbackMemberList.tabIndex = 0;
+          members.forEach((member) => {
+            const label = document.createElement('label');
+            const checkbox = document.createElement('input');
+            checkbox.type = 'checkbox';
+            checkbox.value = member.email;
+            checkbox.checked = history?.recipients?.includes(member.email) || false;
+            label.appendChild(checkbox);
+
+            const info = document.createElement('span');
+            info.textContent = `${member.name || member.email} (${member.role || 'Member'})`;
+            label.appendChild(info);
+
+            feedbackMemberList.appendChild(label);
+          });
+
+          if (history?.message) {
+            feedbackMessageInput.value = history.message;
+            feedbackStatusMessage.textContent = `Last request sent ${formatTimestamp(history.timestamp)} to ${history.recipients.length} teammate(s).`;
+          }
+        }
+
+        function handleFeedbackRequest() {
+          if (!activeFeedbackGroup) {
+            return;
+          }
+          const recipients = Array.from(feedbackMemberList.querySelectorAll('input[type="checkbox"]:checked')).map((input) => input.value);
+          if (!recipients.length) {
+            feedbackStatusMessage.textContent = 'Select at least one teammate to request feedback.';
+            feedbackStatusMessage.style.color = 'rgba(255, 170, 170, 0.9)';
+            return;
+          }
+          const message = feedbackMessageInput.value.trim() || 'Could you review our slides when you have a moment?';
+          const timestamp = Date.now();
+          groupFeedbackHistory.set(activeFeedbackGroup, { recipients, message, timestamp });
+
+          const members = groupMembers.get(activeFeedbackGroup) || [];
+          const names = recipients
+            .map((email) => members.find((member) => member.email === email)?.name || email)
+            .join(', ');
+          appendActivity(activeFeedbackGroup, `Requested feedback from ${names || `${recipients.length} teammate(s)`}`);
+          const card = document.querySelector(`[data-group-name="${activeFeedbackGroup}"]`);
+          if (card) {
+            renderActivityLog(card, activeFeedbackGroup);
+          }
+
+          feedbackStatusMessage.textContent = 'Feedback request sent!';
+          feedbackStatusMessage.style.color = '#00ffb5';
+
+          setTimeout(() => {
+            toggleFeedbackModal(false);
+            feedbackStatusMessage.style.color = '';
+          }, 1000);
+        }
+
+        function handleSettingsSubmit() {
+          if (!activeSettingsGroup) {
+            return;
+          }
+          const oldName = activeSettingsGroup;
+          const newNameInput = settingsNameInput.value.trim();
+          const descriptionInput = settingsDescriptionInput.value.trim();
+
+          if (!newNameInput) {
+            settingsStatusMessage.textContent = 'Group name cannot be empty.';
+            settingsStatusMessage.style.color = 'rgba(255, 170, 170, 0.9)';
+            return;
+          }
+
+          const targetName = oldName;
+
+          let metadata = groupMetadata.get(targetName);
+          if (!metadata) {
+            metadata = { name: targetName, description: '', coverImage: null };
+            groupMetadata.set(targetName, metadata);
+          }
+          const oldDisplayName = metadata.name || targetName;
+          const oldDescription = metadata.description || '';
+          const oldCover = metadata.coverImage || null;
+
+          metadata.name = newNameInput;
+          metadata.description = descriptionInput;
+          metadata.coverImage = pendingCoverImage || null;
+
+          const card = document.querySelector(`[data-group-name="${targetName}"]`);
+          if (card) {
+            updateGroupCardFromMetadata(card, metadata);
+            renderBrandKit(card, targetName);
+            renderExportOptions(card, targetName);
+            renderTextStylesPanel(card, targetName);
+            renderVersionHistory(card, targetName);
+            renderAssetsLibrary(card, targetName);
+            renderSlides(card, targetName);
+            renderMembersList(card, targetName);
+            renderActiveMembers(card, targetName);
+            renderActivityLog(card, targetName);
+          }
+
+          const updates = [];
+          if (oldDisplayName !== newNameInput) {
+            updates.push(`Renamed group to "${newNameInput}"`);
+            refreshShareLinks(targetName);
+          }
+          if (oldDescription !== descriptionInput) {
+            updates.push('Updated group description');
+          }
+          if ((oldCover || null) !== (metadata.coverImage || null)) {
+            updates.push(metadata.coverImage ? 'Updated cover image' : 'Removed cover image');
+          }
+          if (!updates.length) {
+            updates.push('Updated group settings');
+          }
+          updates.forEach((entry) => appendActivity(targetName, entry));
+          const activityCard = document.querySelector(`[data-group-name="${targetName}"]`);
+          if (activityCard) {
+            renderActivityLog(activityCard, targetName);
+          }
+
+          reorderGroupCards();
+
+          settingsStatusMessage.textContent = 'Changes saved.';
+          settingsStatusMessage.style.color = '#00ffb5';
+
+          reorderGroupCards();
+
+          setTimeout(() => {
+            toggleSettingsModal(false);
+          }, 900);
+        }
+
+        function getMemberByUsername(groupName, username) {
+          if (!username) {
+            return undefined;
+          }
+          const members = groupMembers.get(groupName) || [];
+          return members.find(
+            (member) => (member.username || '').toLowerCase() === username.toLowerCase()
+          );
+        }
+
+        function assignSlideToMember(groupName, slideId, username) {
+          const slides = groupSlides.get(groupName) || [];
+          const slide = slides.find((item) => item.id === slideId);
+          if (!slide) {
+            return;
+          }
+
+          if (!username) {
+            slide.assignee = null;
+          } else {
+            const member = getMemberByUsername(groupName, username);
+            if (!member) {
+              return;
+            }
+            slide.assignee = {
+              username: member.username,
+              name: member.name,
+              email: member.email
+            };
+          }
+
+          slide.updatedAt = Date.now();
+          groupSlides.set(groupName, slides);
+
+          const card = document.querySelector(`[data-group-name="${groupName}"]`);
+          if (card) {
+            renderSlides(card, groupName);
+          }
+        }
+
+        function getSlideStatusInfo(status) {
+          switch ((status || 'not-started')) {
+            case 'completed':
+              return { value: 'completed', label: 'Completed', pillClass: 'status-pill completed' };
+            case 'in-progress':
+              return { value: 'in-progress', label: 'In Progress', pillClass: 'status-pill in-progress' };
+            default:
+              return { value: 'not-started', label: 'Not Started', pillClass: 'status-pill not-started' };
+          }
+        }
+
+        function updateSlideStatus(groupName, slideId, status) {
+          const slides = groupSlides.get(groupName) || [];
+          const slide = slides.find((item) => item.id === slideId);
+          if (!slide) {
+            return;
+          }
+
+          const { value } = getSlideStatusInfo(status);
+          slide.status = value;
+          slide.updatedAt = Date.now();
+          groupSlides.set(groupName, slides);
+
+          const card = document.querySelector(`[data-group-name="${groupName}"]`);
+          if (card) {
+            renderSlides(card, groupName);
+          }
+        }
+
+        function renderVersionHistory(card, groupName) {
+          const versions = groupVersions.get(groupName) || [];
+          let section = card.querySelector('.version-history');
+
+          if (!section) {
+            section = document.createElement('section');
+            section.className = 'version-history';
+
+            const header = document.createElement('div');
+            const title = document.createElement('h4');
+            title.textContent = 'Version History';
+            header.appendChild(title);
+
+            const list = document.createElement('div');
+            list.className = 'version-list';
+
+            section.appendChild(header);
+            section.appendChild(list);
+
+            const slidesSection = card.querySelector('.slides-section');
+            const commentsSection = card.querySelector('.comments-section');
+            if (slidesSection) {
+              slidesSection.insertAdjacentElement('afterend', section);
+            } else if (commentsSection) {
+              card.insertBefore(section, commentsSection);
+            } else {
+              card.appendChild(section);
+            }
+          }
+
+          const listContainer = section.querySelector('.version-list');
+          listContainer.innerHTML = '';
+
+          if (!versions.length) {
+            let emptyState = section.querySelector('.version-empty');
+            if (!emptyState) {
+              emptyState = document.createElement('div');
+              emptyState.className = 'version-empty';
+              section.appendChild(emptyState);
+            }
+            emptyState.textContent = 'No previous versions yet. Add one to track your progress.';
+            listContainer.style.display = 'none';
+            return;
+          }
+
+          const existingEmpty = section.querySelector('.version-empty');
+          if (existingEmpty) {
+            existingEmpty.remove();
+          }
+          listContainer.style.display = 'flex';
+
+          versions.forEach((version) => {
+            const item = document.createElement('article');
+            item.className = 'version-item';
+
+            const title = document.createElement('div');
+            title.className = 'version-title';
+            title.textContent = version.name;
+
+            const meta = document.createElement('div');
+            meta.className = 'version-meta';
+
+            const updatedBy = document.createElement('span');
+            updatedBy.textContent = `Updated by ${version.updatedBy}`;
+
+            const updatedAt = document.createElement('span');
+            updatedAt.textContent = formatTimestamp(version.updatedAt);
+
+            meta.appendChild(updatedBy);
+            meta.appendChild(updatedAt);
+
+            item.appendChild(title);
+            item.appendChild(meta);
+
+            listContainer.appendChild(item);
+          });
+        }
+
+        function renderTextStylesPanel(card, groupName) {
+          const styles = getTextStylesConfig(groupName);
+          TEXT_STYLE_ROLES.forEach((role) => {
+            if (!styles[role.key]) {
+              styles[role.key] = {
+                font: role.key === 'body' ? 'Inter' : 'Poppins',
+                size: role.sizes[0]
+              };
+            }
+          });
+          if (!styles.body.lineHeight) {
+            styles.body.lineHeight = '1.5';
+          }
+
+          let section = card.querySelector('.styles-panel');
+
+          if (!section) {
+            section = document.createElement('section');
+            section.className = 'styles-panel';
+
+            const header = document.createElement('div');
+            header.className = 'styles-header';
+            const title = document.createElement('h4');
+            title.textContent = 'Fonts & Text Styles';
+            const subtitle = document.createElement('p');
+            subtitle.textContent = 'Keep headings, body copy, and captions consistent across every slide.';
+            header.appendChild(title);
+            header.appendChild(subtitle);
+
+            const grid = document.createElement('div');
+            grid.className = 'styles-grid';
+
+            TEXT_STYLE_ROLES.forEach((role) => {
+              const styleCard = document.createElement('div');
+              styleCard.className = 'text-style-card';
+              styleCard.dataset.role = role.key;
+
+              const roleTitle = document.createElement('h5');
+              roleTitle.textContent = role.label;
+
+              const controls = document.createElement('div');
+              controls.className = 'style-controls';
+
+              const fontLabel = document.createElement('label');
+              fontLabel.textContent = 'Font Family';
+              const fontSelect = document.createElement('select');
+              fontSelect.className = 'style-select style-font-select';
+              fontSelect.dataset.role = role.key;
+              Object.keys(AVAILABLE_FONTS).forEach((fontKey) => {
+                const option = document.createElement('option');
+                option.value = fontKey;
+                option.textContent = fontKey;
+                fontSelect.appendChild(option);
+              });
+
+              const sizeLabel = document.createElement('label');
+              sizeLabel.textContent = 'Font Size';
+              const sizeSelect = document.createElement('select');
+              sizeSelect.className = 'style-select style-size-select';
+              sizeSelect.dataset.role = role.key;
+              role.sizes.forEach((size) => {
+                const option = document.createElement('option');
+                option.value = size;
+                option.textContent = `${size}px`;
+                sizeSelect.appendChild(option);
+              });
+
+              controls.appendChild(fontLabel);
+              controls.appendChild(fontSelect);
+              controls.appendChild(sizeLabel);
+              controls.appendChild(sizeSelect);
+
+              if (role.supportsLineHeight) {
+                const lhLabel = document.createElement('label');
+                lhLabel.textContent = 'Line Height';
+                const lhSelect = document.createElement('select');
+                lhSelect.className = 'style-select style-line-height-select';
+                lhSelect.dataset.role = role.key;
+                AVAILABLE_LINE_HEIGHTS.forEach((lh) => {
+                  const option = document.createElement('option');
+                  option.value = lh;
+                  option.textContent = lh;
+                  lhSelect.appendChild(option);
+                });
+                controls.appendChild(lhLabel);
+                controls.appendChild(lhSelect);
+              }
+
+              const preview = document.createElement('div');
+              preview.className = 'style-preview';
+              const previewHeading = document.createElement('h5');
+              previewHeading.textContent = role.sampleHeading;
+              previewHeading.className = 'style-preview-heading';
+              const previewBody = document.createElement('p');
+              previewBody.textContent = role.sampleBody;
+              previewBody.className = 'style-preview-body';
+              preview.appendChild(previewHeading);
+              preview.appendChild(previewBody);
+
+              styleCard.appendChild(roleTitle);
+              styleCard.appendChild(controls);
+              styleCard.appendChild(preview);
+
+              grid.appendChild(styleCard);
+            });
+
+            const actionsRow = document.createElement('div');
+            actionsRow.className = 'style-actions';
+            const applyButton = document.createElement('button');
+            applyButton.type = 'button';
+            applyButton.className = 'apply-theme-button apply-styles-button';
+            applyButton.innerHTML = '<i class="fas fa-font"></i>Apply Shared Styles';
+            applyButton.dataset.role = 'apply-styles';
+
+            const appliedMeta = document.createElement('span');
+            appliedMeta.className = 'style-applied-meta';
+
+            actionsRow.appendChild(applyButton);
+            actionsRow.appendChild(appliedMeta);
+
+            section.appendChild(header);
+            section.appendChild(grid);
+            section.appendChild(actionsRow);
+
+            const assetsSection = card.querySelector('.assets-library');
+            const versionSection = card.querySelector('.version-history');
+            const commentsSection = card.querySelector('.comments-section');
+            if (assetsSection) {
+              card.insertBefore(section, assetsSection);
+            } else if (versionSection) {
+              versionSection.insertAdjacentElement('afterend', section);
+            } else if (commentsSection) {
+              card.insertBefore(section, commentsSection);
+            } else {
+              card.appendChild(section);
+            }
+          }
+
+          const applyButton = section.querySelector('.apply-styles-button');
+          const appliedMeta = section.querySelector('.style-applied-meta');
+
+          const updatePreview = () => {
+            TEXT_STYLE_ROLES.forEach((role) => {
+              const cardEl = section.querySelector(`.text-style-card[data-role="${role.key}"]`);
+              if (!cardEl) {
+                return;
+              }
+              const previewHeading = cardEl.querySelector('.style-preview-heading');
+              const previewBody = cardEl.querySelector('.style-preview-body');
+              const roleStyles = styles[role.key] || {};
+              const fontStack = AVAILABLE_FONTS[roleStyles.font] || AVAILABLE_FONTS.Poppins;
+              if (previewHeading) {
+                previewHeading.style.fontFamily = fontStack;
+                previewHeading.style.fontSize = `${roleStyles.size || role.sizes[0]}px`;
+              }
+              if (previewBody) {
+                const bodyStyles =
+                  role.key === 'heading'
+                    ? styles.body || roleStyles
+                    : roleStyles;
+                const bodyFontStack =
+                  AVAILABLE_FONTS[bodyStyles.font] ||
+                  AVAILABLE_FONTS[styles.body?.font] ||
+                  AVAILABLE_FONTS.Inter;
+                previewBody.style.fontFamily = bodyFontStack;
+                previewBody.style.fontSize = `${bodyStyles.size || role.sizes[role.sizes.length - 1]}px`;
+                previewBody.style.lineHeight = bodyStyles.lineHeight || styles.body?.lineHeight || '1.5';
+              }
+            });
+          };
+
+          const syncControls = () => {
+            TEXT_STYLE_ROLES.forEach((role) => {
+              const fontSelect = section.querySelector(`.style-font-select[data-role="${role.key}"]`);
+              const sizeSelect = section.querySelector(`.style-size-select[data-role="${role.key}"]`);
+              const lineHeightSelect = section.querySelector(`.style-line-height-select[data-role="${role.key}"]`);
+              if (fontSelect) {
+                fontSelect.value = styles[role.key]?.font || Object.keys(AVAILABLE_FONTS)[0];
+              }
+              if (sizeSelect) {
+                sizeSelect.value = styles[role.key]?.size || role.sizes[0];
+              }
+              if (lineHeightSelect) {
+                lineHeightSelect.value = styles[role.key]?.lineHeight || styles.body?.lineHeight || '1.5';
+              }
+            });
+
+            if (appliedMeta) {
+              appliedMeta.textContent = styles.lastApplied
+                ? `Last applied: ${formatTimestamp(styles.lastApplied)}`
+                : 'Shared styles not applied yet.';
+            }
+
+            if (applyButton) {
+              applyButton.innerHTML = styles.lastApplied
+                ? '<i class="fas fa-font"></i>Reapply Shared Styles'
+                : '<i class="fas fa-font"></i>Apply Shared Styles';
+            }
+
+            updatePreview();
+          };
+
+          TEXT_STYLE_ROLES.forEach((role) => {
+            const fontSelect = section.querySelector(`.style-font-select[data-role="${role.key}"]`);
+            const sizeSelect = section.querySelector(`.style-size-select[data-role="${role.key}"]`);
+            const lineHeightSelect = section.querySelector(`.style-line-height-select[data-role="${role.key}"]`);
+
+            if (fontSelect && !fontSelect.dataset.bound) {
+              fontSelect.addEventListener('change', (event) => {
+                styles[role.key].font = event.target.value;
+                groupTextStyles.set(groupName, styles);
+                syncControls();
+              });
+              fontSelect.dataset.bound = 'true';
+            }
+
+            if (sizeSelect && !sizeSelect.dataset.bound) {
+              sizeSelect.addEventListener('change', (event) => {
+                styles[role.key].size = event.target.value;
+                groupTextStyles.set(groupName, styles);
+                syncControls();
+              });
+              sizeSelect.dataset.bound = 'true';
+            }
+
+            if (lineHeightSelect && !lineHeightSelect.dataset.bound) {
+              lineHeightSelect.addEventListener('change', (event) => {
+                styles.body.lineHeight = event.target.value;
+                groupTextStyles.set(groupName, styles);
+                syncControls();
+              });
+              lineHeightSelect.dataset.bound = 'true';
+            }
+          });
+
+          if (applyButton && !applyButton.dataset.bound) {
+            applyButton.addEventListener('click', () => {
+              applyTextStylesToDocument(styles);
+              styles.lastApplied = Date.now();
+              groupTextStyles.set(groupName, styles);
+              syncControls();
+              applyButton.innerHTML = '<i class="fas fa-check"></i>Styles Applied';
+              setTimeout(() => {
+                syncControls();
+              }, 1200);
+            });
+            applyButton.dataset.bound = 'true';
+          }
+
+          syncControls();
+        }
+
+        function renderBrandKit(card, groupName) {
+          const currentGroupName = card.dataset.groupName || groupName;
+          const kit = getBrandKitConfig(currentGroupName);
+          kit.primaryColor = normalizeHexColor(kit.primaryColor, '#00FFB5');
+          kit.secondaryColor = normalizeHexColor(kit.secondaryColor, '#21AEFD');
+
+          let section = card.querySelector('.brand-kit');
+
+          if (!section) {
+            section = document.createElement('section');
+            section.className = 'brand-kit';
+
+            const header = document.createElement('div');
+            header.className = 'brand-header';
+            const title = document.createElement('h4');
+            title.textContent = 'Brand Kit';
+            const subtitle = document.createElement('p');
+            subtitle.textContent = 'Upload logos and lock in color palettes so every slide stays on-brand.';
+            header.appendChild(title);
+            header.appendChild(subtitle);
+
+            const grid = document.createElement('div');
+            grid.className = 'brand-grid';
+
+            const colorsCard = document.createElement('div');
+            colorsCard.className = 'brand-card';
+            const colorsTitle = document.createElement('h5');
+            colorsTitle.textContent = 'Color Palette';
+
+            const primaryRow = document.createElement('div');
+            primaryRow.className = 'brand-color-picker';
+            const primaryLabel = document.createElement('label');
+            primaryLabel.textContent = 'Primary Color';
+            const primaryInput = document.createElement('input');
+            primaryInput.type = 'color';
+            primaryInput.className = 'brand-primary-input';
+            const primaryHex = document.createElement('input');
+            primaryHex.type = 'text';
+            primaryHex.maxLength = 7;
+            primaryHex.className = 'hex-input brand-primary-hex';
+
+            primaryRow.appendChild(primaryLabel);
+            primaryRow.appendChild(primaryInput);
+            primaryRow.appendChild(primaryHex);
+
+            const secondaryRow = document.createElement('div');
+            secondaryRow.className = 'brand-color-picker';
+            const secondaryLabel = document.createElement('label');
+            secondaryLabel.textContent = 'Secondary Color';
+            const secondaryInput = document.createElement('input');
+            secondaryInput.type = 'color';
+            secondaryInput.className = 'brand-secondary-input';
+            const secondaryHex = document.createElement('input');
+            secondaryHex.type = 'text';
+            secondaryHex.maxLength = 7;
+            secondaryHex.className = 'hex-input brand-secondary-hex';
+
+            secondaryRow.appendChild(secondaryLabel);
+            secondaryRow.appendChild(secondaryInput);
+            secondaryRow.appendChild(secondaryHex);
+
+            colorsCard.appendChild(colorsTitle);
+            colorsCard.appendChild(primaryRow);
+            colorsCard.appendChild(secondaryRow);
+
+            const logosCard = document.createElement('div');
+            logosCard.className = 'brand-card';
+            const logosTitle = document.createElement('h5');
+            logosTitle.textContent = 'Brand Logos';
+            const uploadArea = document.createElement('div');
+            uploadArea.className = 'brand-logo-upload';
+            uploadArea.innerHTML = `
+              <div class="assets-upload-icon"><i class="fas fa-cloud-upload-alt"></i></div>
+              <div class="assets-upload-text">Click or drag logo files here</div>
+              <div class="assets-upload-hint">SVG, PNG, JPG supported</div>
+            `;
+            const logoInput = document.createElement('input');
+            logoInput.type = 'file';
+            logoInput.accept = 'image/*';
+            logoInput.multiple = true;
+            logoInput.className = 'assets-upload-input brand-logo-input';
+            uploadArea.appendChild(logoInput);
+
+            const logoGrid = document.createElement('div');
+            logoGrid.className = 'brand-logo-grid';
+
+            logosCard.appendChild(logosTitle);
+            logosCard.appendChild(uploadArea);
+            logosCard.appendChild(logoGrid);
+
+            grid.appendChild(colorsCard);
+            grid.appendChild(logosCard);
+
+            const applyRow = document.createElement('div');
+            applyRow.className = 'brand-apply-row';
+            const applyBtn = document.createElement('button');
+            applyBtn.type = 'button';
+            applyBtn.className = 'apply-theme-button';
+            applyBtn.innerHTML = '<i class="fas fa-palette"></i>Apply Brand Colors';
+            applyBtn.dataset.role = 'apply-brand';
+            const meta = document.createElement('span');
+            meta.className = 'brand-meta';
+
+            applyRow.appendChild(applyBtn);
+            applyRow.appendChild(meta);
+
+            section.appendChild(header);
+            section.appendChild(grid);
+            section.appendChild(applyRow);
+
+            const stylesPanel = card.querySelector('.styles-panel');
+            const assetsSection = card.querySelector('.assets-library');
+            if (stylesPanel) {
+              card.insertBefore(section, stylesPanel);
+            } else if (assetsSection) {
+              card.insertBefore(section, assetsSection);
+            } else {
+              card.appendChild(section);
+            }
+
+            uploadArea.addEventListener('click', () => logoInput.click());
+            uploadArea.addEventListener('dragover', (event) => {
+              event.preventDefault();
+              uploadArea.classList.add('dragover');
+            });
+            uploadArea.addEventListener('dragleave', () => uploadArea.classList.remove('dragover'));
+            uploadArea.addEventListener('drop', (event) => {
+              event.preventDefault();
+              uploadArea.classList.remove('dragover');
+              const files = Array.from(event.dataTransfer.files);
+              if (files.length) {
+                handleBrandLogoUpload(card.dataset.groupName || groupName, files);
+              }
+            });
+            logoInput.addEventListener('change', (event) => {
+              const files = Array.from(event.target.files);
+              if (files.length) {
+                handleBrandLogoUpload(card.dataset.groupName || groupName, files);
+                logoInput.value = '';
+              }
+            });
+          }
+
+          const primaryInput = section.querySelector('.brand-primary-input');
+          const primaryHex = section.querySelector('.brand-primary-hex');
+          const secondaryInput = section.querySelector('.brand-secondary-input');
+          const secondaryHex = section.querySelector('.brand-secondary-hex');
+          const logoGrid = section.querySelector('.brand-logo-grid');
+          const applyBtn = section.querySelector('.apply-theme-button[data-role="apply-brand"]');
+          const meta = section.querySelector('.brand-meta');
+
+          const syncColorInputs = () => {
+            if (primaryInput) {
+              primaryInput.value = kit.primaryColor;
+            }
+            if (primaryHex) {
+              primaryHex.value = kit.primaryColor;
+            }
+            if (secondaryInput) {
+              secondaryInput.value = kit.secondaryColor;
+            }
+            if (secondaryHex) {
+              secondaryHex.value = kit.secondaryColor;
+            }
+            if (meta) {
+              meta.textContent = kit.lastApplied
+                ? `Colors last applied: ${formatTimestamp(kit.lastApplied)}`
+                : 'Colors not applied yet.';
+            }
+            if (applyBtn) {
+              applyBtn.innerHTML = kit.lastApplied
+                ? '<i class="fas fa-palette"></i>Reapply Brand Colors'
+                : '<i class="fas fa-palette"></i>Apply Brand Colors';
+            }
+          };
+
+          const renderLogos = () => {
+            if (!logoGrid) {
+              return;
+            }
+            logoGrid.innerHTML = '';
+            if (!kit.logos.length) {
+              const emptyState = document.createElement('div');
+              emptyState.className = 'assets-empty';
+              emptyState.textContent = 'No brand logos added yet.';
+              logoGrid.appendChild(emptyState);
+              return;
+            }
+            kit.logos.forEach((logo) => {
+              const item = document.createElement('div');
+              item.className = 'brand-logo-item';
+              item.title = logo.name;
+              const img = document.createElement('img');
+              img.src = logo.url;
+              img.alt = logo.name;
+              item.appendChild(img);
+
+              const actions = document.createElement('div');
+              actions.className = 'brand-logo-actions';
+
+              const copyBtn = document.createElement('button');
+              copyBtn.className = 'asset-action-btn';
+              copyBtn.innerHTML = '<i class="fas fa-copy"></i>';
+              copyBtn.title = 'Copy URL';
+              copyBtn.addEventListener('click', (event) => {
+                event.stopPropagation();
+                navigator.clipboard.writeText(logo.url).then(() => {
+                  copyBtn.innerHTML = '<i class="fas fa-check"></i>';
+                  setTimeout(() => {
+                    copyBtn.innerHTML = '<i class="fas fa-copy"></i>';
+                  }, 1000);
+                });
+              });
+
+              const deleteBtn = document.createElement('button');
+              deleteBtn.className = 'asset-action-btn';
+              deleteBtn.innerHTML = '<i class="fas fa-trash"></i>';
+              deleteBtn.title = 'Delete';
+              deleteBtn.addEventListener('click', (event) => {
+                event.stopPropagation();
+                if (confirm(`Remove logo "${logo.name}"?`)) {
+                  deleteBrandLogo(card.dataset.groupName || groupName, logo.id);
+                }
+              });
+
+              actions.appendChild(copyBtn);
+              actions.appendChild(deleteBtn);
+              item.appendChild(actions);
+
+              item.addEventListener('click', () => {
+                window.open(logo.url, '_blank');
+              });
+
+              logoGrid.appendChild(item);
+            });
+          };
+
+          if (primaryInput && !primaryInput.dataset.bound) {
+            primaryInput.addEventListener('input', (event) => {
+              kit.primaryColor = normalizeHexColor(event.target.value, kit.primaryColor);
+              groupBrandKits.set(card.dataset.groupName || groupName, kit);
+              syncColorInputs();
+            });
+            primaryInput.dataset.bound = 'true';
+          }
+          if (primaryHex && !primaryHex.dataset.bound) {
+            primaryHex.addEventListener('blur', (event) => {
+              kit.primaryColor = normalizeHexColor(event.target.value, kit.primaryColor);
+              groupBrandKits.set(card.dataset.groupName || groupName, kit);
+              syncColorInputs();
+            });
+            primaryHex.dataset.bound = 'true';
+          }
+          if (secondaryInput && !secondaryInput.dataset.bound) {
+            secondaryInput.addEventListener('input', (event) => {
+              kit.secondaryColor = normalizeHexColor(event.target.value, kit.secondaryColor);
+              groupBrandKits.set(card.dataset.groupName || groupName, kit);
+              syncColorInputs();
+            });
+            secondaryInput.dataset.bound = 'true';
+          }
+          if (secondaryHex && !secondaryHex.dataset.bound) {
+            secondaryHex.addEventListener('blur', (event) => {
+              kit.secondaryColor = normalizeHexColor(event.target.value, kit.secondaryColor);
+              groupBrandKits.set(card.dataset.groupName || groupName, kit);
+              syncColorInputs();
+            });
+            secondaryHex.dataset.bound = 'true';
+          }
+
+          if (applyBtn && !applyBtn.dataset.bound) {
+            applyBtn.addEventListener('click', () => {
+              applyBrandColorsToDocument(kit);
+              kit.lastApplied = Date.now();
+              const currentGroup = card.dataset.groupName || groupName;
+              groupBrandKits.set(currentGroup, kit);
+              syncColorInputs();
+              applyBtn.innerHTML = '<i class="fas fa-check"></i>Brand Colors Applied';
+              appendActivity(currentGroup, 'Applied brand colors');
+              const activityCard = document.querySelector(`[data-group-name="${currentGroup}"]`);
+              if (activityCard) {
+                renderActivityLog(activityCard, currentGroup);
+              }
+              setTimeout(() => {
+                syncColorInputs();
+              }, 1200);
+            });
+            applyBtn.dataset.bound = 'true';
+          }
+
+          syncColorInputs();
+          renderLogos();
+        }
+
+        function handleBrandLogoUpload(groupName, files) {
+          const kit = getBrandKitConfig(groupName);
+          const currentUser = 'You';
+
+          files.forEach((file) => {
+            if (!file.type.startsWith('image/')) {
+              alert(`${file.name} is not an image file.`);
+              return;
+            }
+            const reader = new FileReader();
+            reader.onload = (event) => {
+              kit.logos.push({
+                id: Date.now() + Math.random(),
+                name: file.name,
+                url: event.target.result,
+                uploadedBy: currentUser,
+                uploadedAt: Date.now()
+              });
+              groupBrandKits.set(groupName, kit);
+              const card = document.querySelector(`[data-group-name="${groupName}"]`);
+              if (card) {
+                renderBrandKit(card, groupName);
+                appendActivity(groupName, `Uploaded brand logo: ${file.name}`);
+                renderActivityLog(card, groupName);
+              }
+            };
+            reader.readAsDataURL(file);
+          });
+        }
+
+        function deleteBrandLogo(groupName, logoId) {
+          const kit = getBrandKitConfig(groupName);
+          const existing = kit.logos.find((logo) => logo.id === logoId);
+          kit.logos = kit.logos.filter((logo) => logo.id !== logoId);
+          groupBrandKits.set(groupName, kit);
+          const card = document.querySelector(`[data-group-name="${groupName}"]`);
+          if (card) {
+            renderBrandKit(card, groupName);
+            if (existing) {
+              appendActivity(groupName, `Removed brand logo: ${existing.name}`);
+              renderActivityLog(card, groupName);
+            }
+          }
+        }
+
+        function renderExportOptions(card, groupName) {
+          const currentGroup = card.dataset.groupName || groupName;
+          let section = card.querySelector('.export-panel');
+          if (!section) {
+            section = document.createElement('section');
+            section.className = 'export-panel';
+
+            const header = document.createElement('div');
+            header.className = 'export-header';
+            const title = document.createElement('h4');
+            title.textContent = 'Export Presentation';
+            const subtitle = document.createElement('p');
+            subtitle.textContent = 'Download a copy of your slide deck in multiple formats.';
+            header.appendChild(title);
+            header.appendChild(subtitle);
+
+            const actionsRow = document.createElement('div');
+            actionsRow.className = 'export-actions';
+            EXPORT_FORMATS.forEach((format) => {
+              const button = document.createElement('button');
+              button.type = 'button';
+              button.className = 'export-button';
+              button.dataset.format = format.key;
+              button.innerHTML = `<i class="fas ${format.icon}"></i>${format.label}`;
+              actionsRow.appendChild(button);
+            });
+
+            const status = document.createElement('span');
+            status.className = 'export-status';
+
+            section.appendChild(header);
+            section.appendChild(actionsRow);
+            section.appendChild(status);
+
+            const brandSection = card.querySelector('.brand-kit');
+            const stylesSection = card.querySelector('.styles-panel');
+            if (stylesSection) {
+              card.insertBefore(section, stylesSection);
+            } else if (brandSection) {
+              brandSection.insertAdjacentElement('afterend', section);
+            } else {
+              card.appendChild(section);
+            }
+          }
+
+          const history = groupExportHistory.get(currentGroup);
+          const statusEl = section.querySelector('.export-status');
+          if (statusEl) {
+            statusEl.textContent = history
+              ? `Last export: ${EXPORT_FORMATS.find((f) => f.key === history.format)?.label || history.format} · ${formatTimestamp(history.timestamp)}`
+              : 'No exports generated yet.';
+          }
+
+          section.querySelectorAll('.export-button').forEach((button) => {
+            button.onclick = () => {
+              const formatKey = button.dataset.format;
+              const format = EXPORT_FORMATS.find((item) => item.key === formatKey);
+              if (format) {
+                handleExport(card.dataset.groupName || groupName, format, statusEl, button);
+              }
+            };
+          });
+        }
+
+        function handleExport(groupName, format, statusEl, button) {
+          const original = button.innerHTML;
+          button.disabled = true;
+          button.innerHTML = '<i class="fas fa-spinner fa-spin"></i>Preparing...';
+
+          setTimeout(() => {
+            const safeName = (groupName || 'presentation').replace(/[^a-z0-9]/gi, '_');
+            const fileName = `${safeName || 'presentation'}.${format.extension}`;
+            const exportContent = [
+              'SlideMaker Export',
+              `Group: ${groupName}`,
+              `Format: ${format.label}`,
+              `Generated: ${new Date().toLocaleString()}`
+            ].join('\n');
+
+            const blob = new Blob([exportContent], { type: 'text/plain;charset=utf-8' });
+            const url = URL.createObjectURL(blob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = fileName;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            URL.revokeObjectURL(url);
+
+            const timestamp = Date.now();
+            groupExportHistory.set(groupName, { format: format.key, timestamp });
+
+            if (statusEl) {
+              statusEl.textContent = `Last export: ${format.label} · ${formatTimestamp(timestamp)}`;
+            }
+
+           appendActivity(groupName, `Exported presentation as ${format.label}`);
+           const exportCard = document.querySelector(`[data-group-name="${groupName}"]`);
+           if (exportCard) {
+             renderActivityLog(exportCard, groupName);
+           }
+
+            button.disabled = false;
+            button.innerHTML = '<i class="fas fa-check"></i>Exported!';
+            setTimeout(() => {
+              button.innerHTML = original;
+            }, 1200);
+          }, 900);
+        }
+
+        function renderAssetsLibrary(card, groupName) {
+          const currentGroup = card.dataset.groupName || groupName;
+          const assets = groupAssets.get(currentGroup) || [];
+          let section = card.querySelector('.assets-library');
+
+          if (!section) {
+            section = document.createElement('section');
+            section.className = 'assets-library';
+
+            const header = document.createElement('div');
+            const title = document.createElement('h4');
+            title.textContent = 'Shared Assets Library';
+            header.appendChild(title);
+
+            const uploadArea = document.createElement('div');
+            uploadArea.className = 'assets-upload-area';
+            
+            const uploadIcon = document.createElement('div');
+            uploadIcon.className = 'assets-upload-icon';
+            uploadIcon.innerHTML = '<i class="fas fa-cloud-upload-alt"></i>';
+            
+            const uploadText = document.createElement('div');
+            uploadText.className = 'assets-upload-text';
+            uploadText.textContent = 'Click or drag files here to upload';
+            
+            const uploadHint = document.createElement('div');
+            uploadHint.className = 'assets-upload-hint';
+            uploadHint.textContent = 'Supports images, logos, and icons (PNG, JPG, SVG)';
+            
+            const fileInput = document.createElement('input');
+            fileInput.type = 'file';
+            fileInput.className = 'assets-upload-input';
+            fileInput.accept = 'image/*';
+            fileInput.multiple = true;
+
+            uploadArea.appendChild(uploadIcon);
+            uploadArea.appendChild(uploadText);
+            uploadArea.appendChild(uploadHint);
+            uploadArea.appendChild(fileInput);
+
+            const grid = document.createElement('div');
+            grid.className = 'assets-grid';
+
+            section.appendChild(header);
+            section.appendChild(uploadArea);
+            section.appendChild(grid);
+
+            const versionHistory = card.querySelector('.version-history');
+            const commentsSection = card.querySelector('.comments-section');
+            if (versionHistory) {
+              versionHistory.insertAdjacentElement('afterend', section);
+            } else if (commentsSection) {
+              card.insertBefore(section, commentsSection);
+            } else {
+              card.appendChild(section);
+            }
+
+            uploadArea.addEventListener('click', () => {
+              fileInput.click();
+            });
+
+            uploadArea.addEventListener('dragover', (e) => {
+              e.preventDefault();
+              uploadArea.classList.add('dragover');
+            });
+
+            uploadArea.addEventListener('dragleave', () => {
+              uploadArea.classList.remove('dragover');
+            });
+
+            uploadArea.addEventListener('drop', (e) => {
+              e.preventDefault();
+              uploadArea.classList.remove('dragover');
+              const files = Array.from(e.dataTransfer.files);
+              if (files.length) {
+                handleAssetUpload(currentGroup, files);
+              }
+            });
+
+            fileInput.addEventListener('change', (e) => {
+              const files = Array.from(e.target.files);
+              if (files.length) {
+                handleAssetUpload(currentGroup, files);
+                fileInput.value = '';
+              }
+            });
+          }
+
+          const gridContainer = section.querySelector('.assets-grid');
+          gridContainer.innerHTML = '';
+
+          if (!assets.length) {
+            let emptyState = section.querySelector('.assets-empty');
+            if (!emptyState) {
+              emptyState = document.createElement('div');
+              emptyState.className = 'assets-empty';
+              section.insertBefore(emptyState, gridContainer);
+            }
+            emptyState.textContent = 'No assets yet. Upload logos, images, or icons to share with your team.';
+            gridContainer.style.display = 'none';
+            return;
+          }
+
+          const existingEmpty = section.querySelector('.assets-empty');
+          if (existingEmpty) {
+            existingEmpty.remove();
+          }
+          gridContainer.style.display = 'grid';
+
+          assets.forEach((asset) => {
+            const item = document.createElement('div');
+            item.className = 'asset-item';
+            item.title = asset.name;
+
+            if (asset.url) {
+              const preview = document.createElement('img');
+              preview.className = 'asset-preview';
+              preview.src = asset.url;
+              preview.alt = asset.name;
+              preview.onerror = () => {
+                preview.style.display = 'none';
+                const placeholder = document.createElement('div');
+                placeholder.className = 'asset-placeholder';
+                placeholder.innerHTML = '<i class="fas fa-file-image"></i>';
+                item.appendChild(placeholder);
+              };
+              item.appendChild(preview);
+            } else {
+              const placeholder = document.createElement('div');
+              placeholder.className = 'asset-placeholder';
+              const icon = asset.type === 'logo' ? 'fa-image' : asset.type === 'icon' ? 'fa-icons' : 'fa-file-image';
+              placeholder.innerHTML = `<i class="fas ${icon}"></i>`;
+              item.appendChild(placeholder);
+            }
+
+            const info = document.createElement('div');
+            info.className = 'asset-info';
+            info.textContent = asset.name;
+            item.appendChild(info);
+
+            const actions = document.createElement('div');
+            actions.className = 'asset-actions';
+
+            const copyBtn = document.createElement('button');
+            copyBtn.className = 'asset-action-btn';
+            copyBtn.innerHTML = '<i class="fas fa-copy"></i>';
+            copyBtn.title = 'Copy URL';
+            copyBtn.addEventListener('click', (e) => {
+              e.stopPropagation();
+              if (asset.url) {
+                navigator.clipboard.writeText(asset.url).then(() => {
+                  copyBtn.innerHTML = '<i class="fas fa-check"></i>';
+                  setTimeout(() => {
+                    copyBtn.innerHTML = '<i class="fas fa-copy"></i>';
+                  }, 1000);
+                });
+              }
+            });
+
+            const deleteBtn = document.createElement('button');
+            deleteBtn.className = 'asset-action-btn';
+            deleteBtn.innerHTML = '<i class="fas fa-trash"></i>';
+            deleteBtn.title = 'Delete';
+            deleteBtn.addEventListener('click', (e) => {
+              e.stopPropagation();
+              if (confirm(`Delete "${asset.name}"?`)) {
+                deleteAsset(currentGroup, asset.id);
+              }
+            });
+
+            actions.appendChild(copyBtn);
+            actions.appendChild(deleteBtn);
+            item.appendChild(actions);
+
+            item.addEventListener('click', () => {
+              if (asset.url) {
+                window.open(asset.url, '_blank');
+              }
+            });
+
+            gridContainer.appendChild(item);
+          });
+        }
+
+        function handleAssetUpload(groupName, files) {
+          if (!groupAssets.has(groupName)) {
+            groupAssets.set(groupName, []);
+          }
+
+          const assets = groupAssets.get(groupName);
+          const currentUser = 'You'; // In a real app, this would come from auth
+
+          files.forEach((file) => {
+            if (!file.type.startsWith('image/')) {
+              alert(`${file.name} is not an image file.`);
+              return;
+            }
+
+            const reader = new FileReader();
+            reader.onload = (e) => {
+              const asset = {
+                id: Date.now() + Math.random(),
+                name: file.name,
+                type: file.name.toLowerCase().includes('logo') ? 'logo' : file.name.toLowerCase().includes('icon') ? 'icon' : 'image',
+                url: e.target.result,
+                uploadedBy: currentUser,
+                uploadedAt: Date.now()
+              };
+
+              assets.push(asset);
+              groupAssets.set(groupName, assets);
+
+              const card = document.querySelector(`[data-group-name="${groupName}"]`);
+              if (card) {
+                renderAssetsLibrary(card, groupName);
+                appendActivity(groupName, `Uploaded asset: ${file.name}`);
+                renderActivityLog(card, groupName);
+              }
+            };
+            reader.readAsDataURL(file);
+          });
+        }
+
+        function deleteAsset(groupName, assetId) {
+          const assets = groupAssets.get(groupName) || [];
+          const assetEntry = assets.find((asset) => asset.id === assetId);
+          const filtered = assets.filter(asset => asset.id !== assetId);
+          groupAssets.set(groupName, filtered);
+
+          const card = document.querySelector(`[data-group-name="${groupName}"]`);
+          if (card) {
+            renderAssetsLibrary(card, groupName);
+            if (assetEntry) {
+              appendActivity(groupName, `Removed asset: ${assetEntry.name}`);
+              renderActivityLog(card, groupName);
+            }
+          }
+        }
+
+        function renderSlides(card, groupName) {
+          const slides = groupSlides.get(groupName) || [];
+          let slidesSection = card.querySelector('.slides-section');
+
+          if (!slidesSection) {
+            slidesSection = document.createElement('div');
+            slidesSection.className = 'slides-section';
+
+            const header = document.createElement('div');
+            header.className = 'slides-header';
+            const title = document.createElement('h4');
+            title.textContent = 'Slides';
+            const count = document.createElement('span');
+            count.className = 'slides-count';
+
+            header.appendChild(title);
+            header.appendChild(count);
+
+            const list = document.createElement('div');
+            list.className = 'slides-list';
+
+            const grid = document.createElement('div');
+            grid.className = 'slides-grid';
+
+            slidesSection.appendChild(header);
+            slidesSection.appendChild(list);
+            slidesSection.appendChild(grid);
+
+            const commentsSection = card.querySelector('.comments-section');
+            const actions = card.querySelector('.group-actions');
+            if (commentsSection) {
+              card.insertBefore(slidesSection, commentsSection);
+            } else if (actions) {
+              card.insertBefore(slidesSection, actions);
+            } else {
+              card.appendChild(slidesSection);
+            }
+          }
+
+          const countBadge = slidesSection.querySelector('.slides-count');
+          countBadge.textContent = `${slides.length} ${slides.length === 1 ? 'slide' : 'slides'}`;
+
+          let progressContainer = slidesSection.querySelector('.slides-progress');
+          if (!progressContainer) {
+            progressContainer = document.createElement('div');
+            progressContainer.className = 'slides-progress';
+
+            const progressBar = document.createElement('div');
+            progressBar.className = 'progress-bar';
+            const progressFill = document.createElement('div');
+            progressFill.className = 'progress-fill';
+            progressFill.setAttribute('role', 'progressbar');
+            progressFill.setAttribute('aria-valuemin', '0');
+            progressFill.setAttribute('aria-valuemax', '100');
+            progressBar.appendChild(progressFill);
+
+            const progressMeta = document.createElement('div');
+            progressMeta.className = 'progress-meta';
+
+            progressContainer.appendChild(progressBar);
+            progressContainer.appendChild(progressMeta);
+
+            const header = slidesSection.querySelector('.slides-header');
+            header.insertAdjacentElement('afterend', progressContainer);
+          }
+
+          const listContainer = slidesSection.querySelector('.slides-list');
+          const gridContainer = slidesSection.querySelector('.slides-grid');
+          listContainer.innerHTML = '';
+          gridContainer.innerHTML = '';
+
+          if (!slides.length) {
+            let emptyState = slidesSection.querySelector('.slides-empty');
+            if (!emptyState) {
+              emptyState = document.createElement('div');
+              emptyState.className = 'slides-empty';
+              slidesSection.appendChild(emptyState);
+            }
+            emptyState.textContent = 'No slides yet. Use the New Slide button to start outlining your story.';
+            listContainer.style.display = 'none';
+            gridContainer.style.display = 'none';
+            progressContainer.style.display = 'none';
+            return;
+          }
+
+          const existingEmpty = slidesSection.querySelector('.slides-empty');
+          if (existingEmpty) {
+            existingEmpty.remove();
+          }
+          listContainer.style.display = 'flex';
+          gridContainer.style.display = 'grid';
+          progressContainer.style.display = 'flex';
+
+          const progressFill = progressContainer.querySelector('.progress-fill');
+          const progressMeta = progressContainer.querySelector('.progress-meta');
+
+          let completedCount = 0;
+          let inProgressCount = 0;
+          slides.forEach((slide) => {
+            const statusInfo = getSlideStatusInfo(slide.status);
+            slide.status = statusInfo.value;
+            if (slide.status === 'completed') {
+              completedCount += 1;
+            } else if (slide.status === 'in-progress') {
+              inProgressCount += 1;
+            }
+          });
+          const totalSlides = slides.length;
+          const notStartedCount = totalSlides - completedCount - inProgressCount;
+          const completionRate = totalSlides ? Math.round((completedCount / totalSlides) * 100) : 0;
+
+          progressFill.style.width = `${completionRate}%`;
+          progressFill.setAttribute('aria-valuenow', String(completionRate));
+          progressFill.setAttribute('aria-label', `Slides completed ${completionRate}%`);
+
+          progressMeta.innerHTML = `
+            <span class="progress-count">Completed: ${completedCount}</span>
+            <span class="progress-count">In Progress: ${inProgressCount}</span>
+            <span class="progress-count">Not Started: ${notStartedCount}</span>
+          `;
+
+          const members = groupMembers.get(groupName) || [];
+
+          slides.forEach((slide, index) => {
+            const item = document.createElement('div');
+            item.className = 'slide-item';
+
+            const indexBadge = document.createElement('span');
+            indexBadge.className = 'slide-index';
+            indexBadge.textContent = String(index + 1);
+
+            const details = document.createElement('div');
+            details.className = 'slide-details';
+
+            const title = document.createElement('div');
+            title.className = 'slide-title';
+            title.textContent = slide.title;
+
+            const assignmentRow = document.createElement('div');
+            assignmentRow.className = 'slide-assignment';
+
+            const assignmentLabel = document.createElement('label');
+            assignmentLabel.textContent = 'Assign to';
+
+            const assignmentSelect = document.createElement('select');
+            const unassignedOption = document.createElement('option');
+            unassignedOption.value = '';
+            unassignedOption.textContent = 'Unassigned';
+            assignmentSelect.appendChild(unassignedOption);
+
+            members.forEach((member) => {
+              const option = document.createElement('option');
+              option.value = member.username;
+              option.textContent = member.name || `@${member.username}`;
+              assignmentSelect.appendChild(option);
+            });
+
+            assignmentSelect.value = slide.assignee?.username || '';
+            assignmentSelect.disabled = !members.length;
+            if (!members.length) {
+              assignmentSelect.title = 'Invite teammates to assign slides';
+            }
+
+            assignmentSelect.addEventListener('change', () => {
+              assignSlideToMember(groupName, slide.id, assignmentSelect.value);
+            });
+
+            const assignmentStatus = document.createElement('span');
+            assignmentStatus.className = 'slide-assignee-pill';
+            if (slide.assignee) {
+              assignmentStatus.textContent = `${slide.assignee.name} (@${slide.assignee.username})`;
+            } else {
+              assignmentStatus.textContent = 'Unassigned';
+            }
+
+            assignmentRow.appendChild(assignmentLabel);
+            assignmentRow.appendChild(assignmentSelect);
+            assignmentRow.appendChild(assignmentStatus);
+
+            const statusRow = document.createElement('div');
+            statusRow.className = 'slide-status-row';
+
+            const statusLabel = document.createElement('label');
+            statusLabel.textContent = 'Status';
+
+            const statusSelect = document.createElement('select');
+            statusSelect.className = 'slide-status-select';
+            ['not-started', 'in-progress', 'completed'].forEach((statusValue) => {
+              const option = document.createElement('option');
+              option.value = statusValue;
+              option.textContent = getSlideStatusInfo(statusValue).label;
+              statusSelect.appendChild(option);
+            });
+            statusSelect.value = slide.status || 'not-started';
+            statusSelect.addEventListener('change', () => {
+              updateSlideStatus(groupName, slide.id, statusSelect.value);
+            });
+
+            const statusInfo = getSlideStatusInfo(slide.status);
+            const statusPill = document.createElement('span');
+            statusPill.className = statusInfo.pillClass;
+            statusPill.textContent = statusInfo.label;
+
+            statusRow.appendChild(statusLabel);
+            statusRow.appendChild(statusSelect);
+            statusRow.appendChild(statusPill);
+
+            details.appendChild(title);
+            details.appendChild(assignmentRow);
+            details.appendChild(statusRow);
+
+            item.appendChild(indexBadge);
+            item.appendChild(details);
+
+            listContainer.appendChild(item);
+
+            const thumb = document.createElement('div');
+            thumb.className = 'slide-thumb';
+
+            const thumbIndex = document.createElement('span');
+            thumbIndex.className = 'slide-thumb-index';
+            thumbIndex.textContent = `#${index + 1}`;
+
+            const canvas = document.createElement('div');
+            canvas.className = 'slide-thumb-canvas';
+
+            const thumbTitle = document.createElement('div');
+            thumbTitle.className = 'slide-thumb-title';
+            thumbTitle.textContent = slide.title;
+
+            thumb.appendChild(thumbIndex);
+            thumb.appendChild(canvas);
+            thumb.appendChild(thumbTitle);
+
+            if (slide.assignee) {
+              const thumbAssignee = document.createElement('span');
+              thumbAssignee.className = 'slide-assignee-pill';
+              thumbAssignee.textContent = `${slide.assignee.name} (@${slide.assignee.username})`;
+              thumb.appendChild(thumbAssignee);
+            }
+
+            const statusInfoThumb = getSlideStatusInfo(slide.status);
+            const thumbStatus = document.createElement('span');
+            thumbStatus.className = statusInfoThumb.pillClass;
+            thumbStatus.textContent = statusInfoThumb.label;
+            thumb.appendChild(thumbStatus);
+
+            gridContainer.appendChild(thumb);
+          });
+        }
+
+        function createSlide(groupName) {
+          const slides = groupSlides.get(groupName) || [];
+          const defaultTitle = `Slide ${slides.length + 1}`;
+          const input = window.prompt('Name your new slide', defaultTitle);
+          if (input === null) {
+            return;
+          }
+          const title = input.trim() || defaultTitle;
+          slides.push({
+            id: Date.now(),
+            title,
+            assignee: null,
+            status: 'not-started',
+            updatedAt: Date.now()
+          });
+          groupSlides.set(groupName, slides);
+
+          const card = document.querySelector(`[data-group-name="${groupName}"]`);
+          appendActivity(groupName, `Added slide: ${title}`);
+          if (card) {
+            renderSlides(card, groupName);
+            renderVersionHistory(card, groupName);
+            renderActivityLog(card, groupName);
+          }
+        }
+
+        function createVersion(groupName) {
+          const versionName = window.prompt('Version label', 'Version 1.1');
+          if (versionName === null) {
+            return;
+          }
+          const cleanedName = versionName.trim();
+          if (!cleanedName) {
+            return;
+          }
+
+          const updatedBy = window.prompt('Updated by', 'Team Member');
+          if (updatedBy === null) {
+            return;
+          }
+          const cleanedUpdatedBy = updatedBy.trim() || 'Team Member';
+
+          const versions = groupVersions.get(groupName) || [];
+          versions.unshift({
+            id: Date.now(),
+            name: cleanedName,
+            updatedBy: cleanedUpdatedBy,
+            updatedAt: Date.now()
+          });
+          groupVersions.set(groupName, versions);
+
+          const card = document.querySelector(`[data-group-name="${groupName}"]`);
+          appendActivity(groupName, `Created version ${cleanedName} by ${cleanedUpdatedBy}`);
+          if (card) {
+            renderVersionHistory(card, groupName);
+            renderActivityLog(card, groupName);
+          }
+        }
+
+        function extractMentions(text, groupName) {
+          const members = groupMembers.get(groupName) || [];
+          const mentions = [];
+          const seen = new Set();
+
+          text.replace(/@([a-z0-9._-]+)/gi, (_, username) => {
+            const member = members.find(
+              (m) => (m.username || '').toLowerCase() === username.toLowerCase()
+            );
+            if (member && !seen.has(member.username)) {
+              mentions.push({
+                username: member.username,
+                name: member.name,
+                email: member.email
+              });
+              seen.add(member.username);
+            }
+            return _;
+          });
+
+          return mentions;
+        }
+
+        function decorateCommentText(text, mentions) {
+          const fragment = document.createDocumentFragment();
+          const mentionRegex = /@([a-z0-9._-]+)/gi;
+          let lastIndex = 0;
+          let match;
+
+          while ((match = mentionRegex.exec(text)) !== null) {
+            const [fullMatch, username] = match;
+            const start = match.index;
+            if (start > lastIndex) {
+              fragment.appendChild(
+                document.createTextNode(text.slice(lastIndex, start))
+              );
+            }
+            const mention = mentions.find(
+              (m) => m.username.toLowerCase() === username.toLowerCase()
+            );
+            if (mention) {
+              const span = document.createElement('span');
+              span.className = 'mention-chip inline';
+              span.textContent = `@${mention.username}`;
+              span.title = mention.name;
+              fragment.appendChild(span);
+            } else {
+              fragment.appendChild(document.createTextNode(fullMatch));
+            }
+            lastIndex = mentionRegex.lastIndex;
+          }
+
+          if (lastIndex < text.length) {
+            fragment.appendChild(document.createTextNode(text.slice(lastIndex)));
+          }
+
+          return fragment;
+        }
+
+        function renderComments(card, groupName) {
+          const commentList = card.querySelector('.comment-list');
+          if (!commentList) return;
+          const comments = groupComments.get(groupName) || [];
+          commentList.innerHTML = '';
+
+          if (!comments.length) {
+            const emptyState = document.createElement('div');
+            emptyState.className = 'comment-empty';
+            emptyState.textContent = 'No comments yet. Start a discussion for a specific slide or section.';
+            commentList.appendChild(emptyState);
+            return;
+          }
+
+          comments.forEach((comment) => {
+            const item = document.createElement('article');
+            item.className = 'comment-item';
+
+            const meta = document.createElement('div');
+            meta.className = 'comment-meta';
+
+            const targetBadge = document.createElement('span');
+            targetBadge.className = 'target-badge';
+            targetBadge.textContent = comment.target || 'General';
+            meta.appendChild(targetBadge);
+
+            if (comment.mentions?.length) {
+              const mentionsContainer = document.createElement('div');
+              mentionsContainer.className = 'comment-mentions';
+              comment.mentions.forEach((mention) => {
+                const mentionChip = document.createElement('span');
+                mentionChip.className = 'mention-chip';
+                mentionChip.textContent = `@${mention.username}`;
+                mentionChip.title = mention.name;
+                mentionsContainer.appendChild(mentionChip);
+              });
+              meta.appendChild(mentionsContainer);
+            }
+
+            const textPara = document.createElement('p');
+            textPara.className = 'comment-text';
+            textPara.appendChild(decorateCommentText(comment.text, comment.mentions || []));
+
+            item.appendChild(meta);
+            item.appendChild(textPara);
+
+            commentList.appendChild(item);
+          });
+        }
+
+        function updateMentionOptions(card, groupName) {
+          const mentionSelect = card.querySelector('.comment-mention-select');
+          if (!mentionSelect) return;
+
+          mentionSelect.innerHTML = '';
+          const placeholderOption = document.createElement('option');
+          placeholderOption.value = '';
+          placeholderOption.textContent = '@ Mention teammate';
+          mentionSelect.appendChild(placeholderOption);
+
+          const members = groupMembers.get(groupName) || [];
+          members.forEach((member) => {
+            const option = document.createElement('option');
+            option.value = member.username;
+            option.textContent = `@${member.username}`;
+            mentionSelect.appendChild(option);
+          });
+
+          mentionSelect.selectedIndex = 0;
+        }
+
+        function setupCommentsSection(card, groupName) {
+          if (!groupComments.has(groupName)) {
+            groupComments.set(groupName, []);
+          }
+
+          let commentsSection = card.querySelector('.comments-section');
+          if (commentsSection) {
+            updateMentionOptions(card, groupName);
+            renderComments(card, groupName);
+            return;
+          }
+
+          const actions = card.querySelector('.group-actions');
+          commentsSection = document.createElement('div');
+          commentsSection.className = 'comments-section';
+
+          const header = document.createElement('div');
+          header.className = 'comments-header';
+          const headerTitle = document.createElement('h4');
+          headerTitle.textContent = 'Comments';
+          const headerSubtitle = document.createElement('p');
+          headerSubtitle.textContent = 'Point to slides or sections and mention teammates with @username.';
+          header.appendChild(headerTitle);
+          header.appendChild(headerSubtitle);
+
+          const commentList = document.createElement('div');
+          commentList.className = 'comment-list';
+
+          const commentForm = document.createElement('form');
+          commentForm.className = 'comment-form';
+
+          const targetField = document.createElement('div');
+          targetField.className = 'form-field';
+          const targetLabel = document.createElement('label');
+          targetLabel.textContent = 'Slide or Section';
+          const targetInput = document.createElement('input');
+          targetInput.type = 'text';
+          targetInput.placeholder = 'e.g., Slide 4 - Budget Overview';
+          targetInput.className = 'comment-target-input';
+          targetField.appendChild(targetLabel);
+          targetField.appendChild(targetInput);
+
+          const mentionField = document.createElement('div');
+          mentionField.className = 'form-field';
+          const mentionLabel = document.createElement('label');
+          mentionLabel.textContent = 'Mention teammate';
+          const mentionSelect = document.createElement('select');
+          mentionSelect.className = 'comment-mention-select';
+          mentionField.appendChild(mentionLabel);
+          mentionField.appendChild(mentionSelect);
+
+          const commentField = document.createElement('div');
+          commentField.className = 'form-field';
+          const commentLabel = document.createElement('label');
+          commentLabel.textContent = 'Comment';
+          const commentTextarea = document.createElement('textarea');
+          commentTextarea.placeholder = 'Share feedback or ask a question...';
+          commentTextarea.className = 'comment-textarea';
+          commentField.appendChild(commentLabel);
+          commentField.appendChild(commentTextarea);
+
+          const actionsRow = document.createElement('div');
+          actionsRow.className = 'comment-actions';
+          const submitButton = document.createElement('button');
+          submitButton.type = 'submit';
+          submitButton.className = 'btn-primary';
+          submitButton.textContent = 'Post Comment';
+          actionsRow.appendChild(submitButton);
+
+          commentForm.appendChild(targetField);
+          commentForm.appendChild(mentionField);
+          commentForm.appendChild(commentField);
+          commentForm.appendChild(actionsRow);
+
+          commentsSection.appendChild(header);
+          commentsSection.appendChild(commentList);
+          commentsSection.appendChild(commentForm);
+
+          if (actions) {
+            card.insertBefore(commentsSection, actions);
+          } else {
+            card.appendChild(commentsSection);
+          }
+
+          updateMentionOptions(card, groupName);
+          renderComments(card, groupName);
+
+          mentionSelect.addEventListener('change', () => {
+            const username = mentionSelect.value;
+            if (!username) return;
+            const token = `@${username}`;
+            const currentValue = commentTextarea.value.trim();
+            const hasToken = new RegExp(`@${username}(\\b|$)`, 'i').test(currentValue);
+            if (!hasToken) {
+              commentTextarea.value = currentValue ? `${currentValue} ${token}` : token;
+            }
+            commentTextarea.focus();
+            mentionSelect.selectedIndex = 0;
+          });
+
+          commentForm.addEventListener('submit', (event) => {
+            event.preventDefault();
+            const text = commentTextarea.value.trim();
+            if (!text) {
+              commentTextarea.focus();
+              return;
+            }
+            const target = targetInput.value.trim() || 'General';
+            const mentions = extractMentions(text, groupName);
+
+            const comments = groupComments.get(groupName) || [];
+            comments.push({
+              id: Date.now(),
+              target,
+              text,
+              mentions
+            });
+            groupComments.set(groupName, comments);
+
+            commentTextarea.value = '';
+            targetInput.value = '';
+            renderComments(card, groupName);
+          });
+        }
+
+        function renderActiveMembers(card, groupName) {
+          const activeMembers = groupActiveMembers.get(groupName) || [];
+          let activeSection = card.querySelector('.active-members');
+
+          if (!activeSection) {
+            activeSection = document.createElement('div');
+            activeSection.className = 'active-members';
+            const label = document.createElement('span');
+            label.className = 'active-label';
+            label.textContent = 'Active now';
+            const avatarsContainer = document.createElement('div');
+            avatarsContainer.className = 'active-avatars';
+            activeSection.appendChild(label);
+            activeSection.appendChild(avatarsContainer);
+            card.insertBefore(activeSection, card.querySelector('p'));
+          }
+
+          const avatarsContainer = activeSection.querySelector('.active-avatars');
+          avatarsContainer.innerHTML = '';
+
+          if (!activeMembers.length) {
+            activeSection.style.display = 'none';
+            return;
+          }
+
+          activeSection.style.display = 'flex';
+
+          const maxVisible = 5;
+          activeMembers.slice(0, maxVisible).forEach((member) => {
+            const avatar = document.createElement('span');
+            avatar.className = 'avatar';
+            const memberName = member.name || formatMemberName(member.email);
+            const username = member.username || generateUsername(member.email);
+            member.name = memberName;
+            member.username = username;
+            avatar.textContent = getInitials(memberName);
+            avatar.title = `${memberName} (@${username})`;
+            avatarsContainer.appendChild(avatar);
+          });
+
+          if (activeMembers.length > maxVisible) {
+            const extraCount = activeMembers.length - maxVisible;
+            const extraAvatar = document.createElement('span');
+            extraAvatar.className = 'avatar avatar-extra';
+            extraAvatar.textContent = `+${extraCount}`;
+            extraAvatar.title = `${extraCount} more active members`;
+            avatarsContainer.appendChild(extraAvatar);
+          }
+        }
+
+        function renderMembersList(card, groupName) {
+          const members = groupMembers.get(groupName) || [];
+          let membersList = card.querySelector('.members-list');
+          
+          if (members.length === 0) {
+            if (membersList) {
+              membersList.remove();
+            }
+            return;
+          }
+
+          if (!membersList) {
+            membersList = document.createElement('div');
+            membersList.className = 'members-list';
+            const actions = card.querySelector('.group-actions');
+            card.insertBefore(membersList, actions);
+          }
+
+          membersList.innerHTML = '<h4>Members</h4>';
+          members.forEach(member => {
+            if (!member.name) {
+              member.name = formatMemberName(member.email);
+            }
+            if (!member.username) {
+              member.username = generateUsername(member.email);
+            }
+            const memberItem = document.createElement('div');
+            memberItem.className = 'member-item';
+            
+            const memberInfo = document.createElement('div');
+            memberInfo.className = 'member-info';
+            
+            const emailSpan = document.createElement('span');
+            emailSpan.className = 'member-email';
+            emailSpan.textContent = member.email;
+            
+            memberInfo.appendChild(emailSpan);
+            
+            const roleBadge = document.createElement('span');
+            roleBadge.className = getRoleBadgeClass(member.role);
+            roleBadge.textContent = getRoleDisplayName(member.role);
+            
+            memberItem.appendChild(memberInfo);
+            memberItem.appendChild(roleBadge);
+            membersList.appendChild(memberItem);
+          });
+        }
+
+        function addGroupCard(name, description) {
+          const card = document.createElement('article');
+          card.className = 'group-card';
+          card.dataset.groupName = name;
+
+          // Initialize members array for this group
+          if (!groupMembers.has(name)) {
+            groupMembers.set(name, []);
+          }
+          if (!groupActiveMembers.has(name)) {
+            groupActiveMembers.set(name, []);
+          }
+          if (!groupSlides.has(name)) {
+            groupSlides.set(name, []);
+          }
+          if (!groupVersions.has(name)) {
+            groupVersions.set(name, [
+              {
+                id: Date.now(),
+                name: 'Version 1.0 — Initial Draft',
+                updatedBy: 'System',
+                updatedAt: Date.now()
+              }
+            ]);
+          }
+          if (!groupComments.has(name)) {
+            groupComments.set(name, []);
+          }
+          if (!groupTextStyles.has(name)) {
+            groupTextStyles.set(name, JSON.parse(JSON.stringify(getDefaultTextStyles())));
+          }
+          if (!groupBrandKits.has(name)) {
+            groupBrandKits.set(name, JSON.parse(JSON.stringify(getDefaultBrandKit())));
+          }
+          if (!groupAssets.has(name)) {
+            groupAssets.set(name, []);
+          }
+          if (!groupExportHistory.has(name)) {
+            groupExportHistory.set(name, null);
+          }
+          if (!groupFeedbackHistory.has(name)) {
+            groupFeedbackHistory.set(name, null);
+          }
+          if (!groupMetadata.has(name)) {
+            groupMetadata.set(name, { name, description, coverImage: null, pinned: false, archived: false });
+          } else {
+            const metaEntry = groupMetadata.get(name);
+            if (metaEntry) {
+              if (metaEntry.description == null) {
+                metaEntry.description = description;
+              }
+              if (typeof metaEntry.pinned !== 'boolean') {
+                metaEntry.pinned = false;
+              }
+              if (typeof metaEntry.archived !== 'boolean') {
+                metaEntry.archived = false;
+              }
+            }
+          }
+          if (!groupActivityLog.has(name)) {
+            groupActivityLog.set(name, []);
+          }
+          if ((groupActivityLog.get(name) || []).length === 0) {
+            appendActivity(name, 'Group created');
+          }
+          getShareLinks(name);
+
+          const metadata = groupMetadata.get(name) || { name, description, coverImage: null, pinned: false, archived: false };
+
+          const cover = document.createElement('div');
+          cover.className = 'group-cover';
+
+          const title = document.createElement('h3');
+          title.textContent = metadata.name || name;
+
+          const desc = document.createElement('p');
+          desc.className = 'group-description';
+          desc.textContent = metadata.description || description || 'Use this space to describe the group focus.';
+
+          const actions = document.createElement('div');
+          actions.className = 'group-actions';
+
+          const newSlideButton = document.createElement('button');
+          newSlideButton.type = 'button';
+          newSlideButton.className = 'btn-ghost';
+          newSlideButton.innerHTML = '<i class="fas fa-square-plus"></i>New Slide';
+          newSlideButton.addEventListener('click', () => {
+            createSlide(card.dataset.groupName);
+          });
+
+          const shareButton = document.createElement('button');
+          shareButton.type = 'button';
+          shareButton.className = 'btn-ghost';
+          shareButton.innerHTML = '<i class="fas fa-share-alt"></i>Share';
+          shareButton.addEventListener('click', () => {
+            toggleShareModal(true, card.dataset.groupName);
+          });
+
+          const feedbackButton = document.createElement('button');
+          feedbackButton.type = 'button';
+          feedbackButton.className = 'btn-ghost';
+          feedbackButton.innerHTML = '<i class="fas fa-comment-dots"></i>Request Feedback';
+          feedbackButton.addEventListener('click', () => {
+            toggleFeedbackModal(true, card.dataset.groupName);
+          });
+
+          const pinButton = document.createElement('button');
+          pinButton.type = 'button';
+          pinButton.className = 'btn-ghost pin-button';
+          pinButton.addEventListener('click', () => {
+            togglePinnedGroup(card.dataset.groupName);
+          });
+
+          const archiveButton = document.createElement('button');
+          archiveButton.type = 'button';
+          archiveButton.className = 'btn-ghost archive-button';
+          archiveButton.addEventListener('click', () => {
+            toggleArchiveGroup(card.dataset.groupName);
+          });
+
+          const settingsButton = document.createElement('button');
+          settingsButton.type = 'button';
+          settingsButton.className = 'btn-ghost';
+          settingsButton.innerHTML = '<i class="fas fa-cog"></i>Group Settings';
+          settingsButton.addEventListener('click', () => {
+            toggleSettingsModal(true, card.dataset.groupName);
+          });
+
+          const newVersionButton = document.createElement('button');
+          newVersionButton.type = 'button';
+          newVersionButton.className = 'btn-ghost';
+          newVersionButton.innerHTML = '<i class="fas fa-code-branch"></i>New Version';
+          newVersionButton.addEventListener('click', () => {
+            createVersion(card.dataset.groupName);
+          });
+
+          const inviteButton = document.createElement('button');
+          inviteButton.type = 'button';
+          inviteButton.className = 'btn-ghost';
+          inviteButton.innerHTML = '<i class="fas fa-user-plus"></i>Invite Members';
+          inviteButton.addEventListener('click', () => {
+            toggleInviteModal(true, card.dataset.groupName);
+          });
+
+          const deleteButton = document.createElement('button');
+          deleteButton.type = 'button';
+          deleteButton.className = 'btn-ghost danger-button';
+          deleteButton.innerHTML = '<i class="fas fa-trash-alt"></i>Delete';
+          deleteButton.addEventListener('click', () => {
+            deleteGroup(card.dataset.groupName);
+          });
+
+          actions.appendChild(newSlideButton);
+          actions.appendChild(shareButton);
+          actions.appendChild(feedbackButton);
+          actions.appendChild(pinButton);
+          actions.appendChild(archiveButton);
+          actions.appendChild(settingsButton);
+          actions.appendChild(newVersionButton);
+          actions.appendChild(inviteButton);
+          actions.appendChild(deleteButton);
+
+          card.appendChild(cover);
+          card.appendChild(title);
+          card.appendChild(desc);
+          card.appendChild(actions);
+          
+          renderActiveMembers(card, name);
+          renderSlides(card, name);
+          renderMembersList(card, name);
+          setupCommentsSection(card, name);
+          renderBrandKit(card, name);
+          renderExportOptions(card, name);
+          renderTextStylesPanel(card, name);
+          renderVersionHistory(card, name);
+          renderAssetsLibrary(card, name);
+          renderActivityLog(card, name);
+          updateGroupCardFromMetadata(card, metadata);
+          groupList.appendChild(card);
+          reorderGroupCards();
+        }
+
+        newGroupButton.addEventListener('click', () => {
+          groupForm.reset();
+          toggleModal(true);
+        });
+
+        cancelGroupButton.addEventListener('click', () => {
+          toggleModal(false);
+        });
+
+        modalBackdrop.addEventListener('click', handleBackdropClick);
+        inviteModalBackdrop.addEventListener('click', handleBackdropClick);
+        shareModalBackdrop.addEventListener('click', handleBackdropClick);
+        document.addEventListener('keydown', handleEscape);
+
+        groupForm.addEventListener('submit', (event) => {
+          event.preventDefault();
+          const name = groupNameInput.value.trim();
+          const description = groupDescriptionInput.value.trim();
+
+          if (!name || !description) {
+            return;
+          }
+
+          addGroupCard(name, description);
+          groupList.hidden = false;
+          emptyState.hidden = true;
+
+          toggleModal(false);
+        });
+
+        closeInviteButton.addEventListener('click', () => {
+          toggleInviteModal(false);
+        });
+
+        generateInviteLinkButton.addEventListener('click', () => {
+          const randomSegment = Math.random().toString(36).slice(2, 10);
+          inviteLinkInput.value = `https://app.slidemaker.com/invite/${randomSegment}`;
+          inviteLinkInput.select();
+        });
+
+        inviteForm.addEventListener('submit', (event) => {
+          event.preventDefault();
+          const emails = inviteEmailsInput.value
+            .split(/[\s,]+/)
+            .map((email) => email.trim())
+            .filter(Boolean);
+          const selectedRole = memberRoleSelect.value;
+
+          if (!emails.length && !inviteLinkInput.value) {
+            inviteFeedback.hidden = false;
+            inviteFeedback.textContent = 'Add at least one email address or generate an invite link.';
+            return;
+          }
+
+          // Add members with roles to the group
+          if (emails.length > 0 && activeInviteGroup) {
+            if (!groupMembers.has(activeInviteGroup)) {
+              groupMembers.set(activeInviteGroup, []);
+            }
+            if (!groupActiveMembers.has(activeInviteGroup)) {
+              groupActiveMembers.set(activeInviteGroup, []);
+            }
+            
+            const members = groupMembers.get(activeInviteGroup);
+            const activeMembers = groupActiveMembers.get(activeInviteGroup);
+            emails.forEach(email => {
+              const memberName = formatMemberName(email);
+              const username = generateUsername(email);
+
+              // Check if member already exists, update role if they do
+              const existingIndex = members.findIndex(m => m.email === email);
+              if (existingIndex >= 0) {
+                members[existingIndex].role = selectedRole;
+                members[existingIndex].name = members[existingIndex].name || memberName;
+                members[existingIndex].username = members[existingIndex].username || username;
+              } else {
+                members.push({ email, role: selectedRole, name: memberName, username });
+              }
+
+              const activeIndex = activeMembers.findIndex((m) => m.email === email);
+              if (activeIndex >= 0) {
+                activeMembers[activeIndex].name = memberName;
+                activeMembers[activeIndex].username = activeMembers[activeIndex].username || username;
+              } else {
+                activeMembers.push({ email, name: memberName, username });
+              }
+            });
+            groupMembers.set(activeInviteGroup, members);
+            groupActiveMembers.set(activeInviteGroup, activeMembers);
+
+            // Update the members list display
+            const groupCard = document.querySelector(`[data-group-name="${activeInviteGroup}"]`);
+            if (groupCard) {
+              renderActiveMembers(groupCard, activeInviteGroup);
+              renderSlides(groupCard, activeInviteGroup);
+              renderMembersList(groupCard, activeInviteGroup);
+              setupCommentsSection(groupCard, activeInviteGroup);
+              updateMentionOptions(groupCard, activeInviteGroup);
+              renderComments(groupCard, activeInviteGroup);
+            }
+          }
+
+          inviteFeedback.hidden = false;
+          const roleText = getRoleDisplayName(selectedRole);
+          inviteFeedback.textContent = `Invites prepared for ${activeInviteGroup || 'your group'} with ${roleText} role.`;
+
+          setTimeout(() => {
+            toggleInviteModal(false);
+          }, 1200);
+        });
+
+        closeShareButton.addEventListener('click', () => {
+          toggleShareModal(false);
+        });
+
+        refreshShareLinksButton.addEventListener('click', () => {
+          if (!activeShareGroup) {
+            return;
+          }
+          const original = refreshShareLinksButton.textContent;
+          const links = refreshShareLinks(activeShareGroup);
+          updateShareModalInputs(links);
+          refreshShareLinksButton.textContent = 'Links regenerated!';
+          setTimeout(() => {
+            refreshShareLinksButton.textContent = original;
+          }, 1200);
+        });
+
+        copyShareViewButton.addEventListener('click', () => {
+          copyShareLink(copyShareViewButton, shareViewLinkInput.value);
+        });
+
+        copyShareEditButton.addEventListener('click', () => {
+          copyShareLink(copyShareEditButton, shareEditLinkInput.value);
+        });
+
+        shareViewLinkInput.addEventListener('focus', () => {
+          shareViewLinkInput.select();
+        });
+
+        shareEditLinkInput.addEventListener('focus', () => {
+          shareEditLinkInput.select();
+        });
+
+        closeFeedbackButton.addEventListener('click', () => {
+          toggleFeedbackModal(false);
+        });
+
+        sendFeedbackButton.addEventListener('click', () => {
+          handleFeedbackRequest();
+        });
+
+        settingsCoverUploadArea.addEventListener('click', () => {
+          settingsCoverInput.click();
+        });
+
+        settingsCoverUploadArea.addEventListener('dragover', (event) => {
+          event.preventDefault();
+          settingsCoverUploadArea.classList.add('dragover');
+        });
+
+        settingsCoverUploadArea.addEventListener('dragleave', () => {
+          settingsCoverUploadArea.classList.remove('dragover');
+        });
+
+        settingsCoverUploadArea.addEventListener('drop', (event) => {
+          event.preventDefault();
+          settingsCoverUploadArea.classList.remove('dragover');
+          const file = event.dataTransfer.files?.[0];
+          if (file) {
+            handleSettingsCoverFile(file);
+          }
+        });
+
+        settingsCoverInput.addEventListener('change', (event) => {
+          const file = event.target.files?.[0];
+          if (file) {
+            handleSettingsCoverFile(file);
+            settingsCoverInput.value = '';
+          }
+        });
+
+        removeCoverButton.addEventListener('click', () => {
+          pendingCoverImage = null;
+          updateSettingsCoverPreview(null);
+          settingsStatusMessage.textContent = 'Cover image removed.';
+          settingsStatusMessage.style.color = '#00ffb5';
+        });
+
+        closeSettingsButton.addEventListener('click', () => {
+          toggleSettingsModal(false);
+        });
+
+        settingsForm.addEventListener('submit', (event) => {
+          event.preventDefault();
+          handleSettingsSubmit();
+        });
+      })();
+    </script>
+  </body>
+</html>
+

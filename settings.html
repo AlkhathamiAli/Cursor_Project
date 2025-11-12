@@ -331,7 +331,7 @@
       <div class="nav">
         <div class="logo" data-translate="common.slideMaker">SlideMaker</div>
         <nav class="menu" aria-label="Main">
-          <a href="./templates.html" data-translate="common.home">Home</a>
+          <a href="./Home.html" data-translate="common.home">Home</a>
           <a href="#" class="active" data-translate="common.settings">Settings</a>
         </nav>
         <div class="spacer"></div>
@@ -398,7 +398,7 @@
         </div>
       </div>
  
-      <a href="./templates.html" class="back-link" data-translate="settings.backToHome">← Back to Home</a>
+      <a href="./Home.html" class="back-link" data-translate="settings.backToHome">← Back to Home</a>
     </main>
 
     <script>
@@ -491,7 +491,7 @@
           // Save to localStorage
           localStorage.setItem('siteBackgroundColor', color);
           
-          // Also update templates.html if it's open
+          // Also update Home.html if it's open
           if (window.opener) {
             window.opener.postMessage({ type: 'updateBackground', color: color }, '*');
           }

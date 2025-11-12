@@ -4,76 +4,554 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>SlideMaker • Home</title>
+    <meta http-equiv="refresh" content="0; url=./Home.html">
+    <script>
+      window.location.replace('./Home.html');
+    </script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <script src="./translations.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="./assets/theme.css">
+    <link rel="stylesheet" href="./style.css">
     <style>
       * { box-sizing: border-box; }
-      html, body { height: 100%; margin: 0; }
-      body {
-        font-family: Poppins, sans-serif;
-        background: linear-gradient(135deg, #001a12 0%, #002519 50%, #003020 100%);
-        position: relative;
-        color: #E8F5E9;
-        overflow-x: hidden;
+      html {
+        scroll-behavior: smooth;
       }
-      body::before {
-        content: '';
-        position: fixed; inset: 0; z-index: 0;
-        background: rgba(255, 255, 255, 0.05);
-        pointer-events: none;
+      html, body {
+        margin: 0;
+        padding: 0;
+        min-height: 100%;
+        overflow-x: hidden;
       }
       a { color: inherit; text-decoration: none; }
       img { max-width: 100%; display: block; }
 
-      /* Header */
-      header {
-        position: sticky; top: 0; z-index: 10;
-        backdrop-filter: blur(25px);
-        background: rgba(0, 26, 18, 0.6);
-        border-bottom: 1px solid rgba(255,255,255,0.1);
+      /* Left Sidebar */
+      .sidebar {
+        box-shadow: 2px 0 12px rgba(0, 0, 0, 0.35);
+        border-right: 1px solid rgba(0, 255, 150, 0.1);
       }
-      .nav { max-width: 1200px; margin: 0 auto; padding: 12px 20px; display: flex; align-items: center; gap: 16px; position: relative; z-index: 1; }
-      .logo { font-weight: 700; letter-spacing: .2px; color: #E8F5E9; }
-      .menu { display: flex; gap: 12px; }
-      .menu a { color: #A5D6A7; font-weight: 600; padding: 8px 10px; border-radius: 8px; transition: color .2s; }
-      .menu a:hover { color: #E8F5E9; }
-      .spacer { flex: 1; }
+      
+      .logo-container {
+        margin-bottom: 25px;
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding-top: 10px;
+      }
+      
+      .sidebar-logo {
+        width: 120px;
+        max-width: 100%;
+        height: auto;
+        object-fit: contain;
+        transition: transform 0.3s ease, filter 0.3s ease;
+        filter: brightness(1.05);
+        margin: 0 auto;
+      }
+      
+      .sidebar-logo:hover {
+        transform: scale(1.05);
+        filter: brightness(1.2);
+      }
+      
+      .nav-menu {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        gap: 25px;
+        padding-top: 15px;
+        border-top: 1px solid rgba(255, 255, 255, 0.1);
+      }
+      
+      .sidebar .nav-menu a {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        color: #d1e7dc;
+        font-size: 1rem;
+        text-decoration: none;
+        padding: 10px;
+        border-radius: 10px;
+        transition: all 0.3s ease;
+      }
+      
+      .sidebar .nav-menu a:hover {
+        background: rgba(255, 255, 255, 0.1);
+        color: #00c853;
+        transform: translateX(5px);
+      }
+      
+      .sidebar .nav-menu a i {
+        font-size: 1.1rem;
+        width: 20px;
+        text-align: center;
+      }
+      
+      .sidebar .nav-menu a.active {
+        background: rgba(0, 200, 83, 0.15);
+        color: #00c853;
+      }
+      
+      /* Top Bar */
+      .topbar {
+        justify-content: flex-end;
+        color: #fff;
+        font-weight: 500;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+      }
+      
+      .topbar .welcome-text {
+        display: flex;
+        align-items: center;
+        gap: 18px;
+      }
+      
+      .topbar img.profile {
+        height: 35px;
+        width: 35px;
+        border-radius: 50%;
+        margin-left: 15px;
+        object-fit: cover;
+        border: 2px solid rgba(255, 255, 255, 0.3);
+      }
+      
+      .topbar .profile-icon {
+        height: 35px;
+        width: 35px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, #00c853 0%, #00a844 100%);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-size: 1.1rem;
+        margin-left: 15px;
+        border: 2px solid rgba(255, 255, 255, 0.3);
+      }
+      
+      .topbar .auth-buttons {
+        display: flex;
+        gap: 10px;
+      }
+      
+      .topbar .auth-btn {
+        padding: 8px 16px;
+        border-radius: 8px;
+        font-weight: 700;
+        cursor: pointer;
+        border: none;
+        transition: opacity .2s;
+        font-size: 14px;
+      }
+      
+      .topbar .auth-btn:hover {
+        opacity: 0.9;
+      }
+      
+      .topbar .auth-btn.green {
+        background: #10b981;
+        color: #06221e;
+      }
+      
+      .topbar .auth-btn.emerald {
+        background: #10b981;
+        color: #fff;
+      }
+      
+      /* Logout Button */
+      .logout-btn {
+        margin-left: 15px;
+      }
+      
+      @media (max-width: 768px) {
+      }
 
       /* Layout */
-      .container { max-width: 1200px; margin: 0 auto; padding: 40px 20px; position: relative; z-index: 1; }
-      .start-section { text-align: center; width: 100%; margin-bottom: 60px; }
+      section, .container, .template-examples {
+        background: transparent;
+      }
+      .container { 
+        max-width: 1200px; 
+        margin: 0 auto;
+        padding: 48px 32px 120px 32px; 
+        position: relative; 
+        z-index: 1;
+        opacity: 0;
+        animation: fadeInUp 0.8s ease-out forwards;
+      }
+      .start-section { 
+        text-align: center; 
+        width: 100%; 
+        margin-bottom: 80px;
+        opacity: 0;
+        animation: fadeInUp 0.8s ease-out 0.2s forwards;
+      }
+      
+      /* Introduction Animation Keyframes */
+      @keyframes fadeInUp {
+        from {
+          opacity: 0;
+          transform: translateY(30px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+      
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+        }
+        to {
+          opacity: 1;
+        }
+      }
+      
+      @keyframes slideInLeft {
+        from {
+          opacity: 0;
+          transform: translateX(-30px);
+        }
+        to {
+          opacity: 1;
+          transform: translateX(0);
+        }
+      }
+      
+      /* Staggered animations for sections */
+      .template-examples {
+        opacity: 0;
+        animation: fadeInUp 0.8s ease-out 0.4s forwards;
+      }
+      
+      .beautiful-templates {
+        opacity: 0;
+        animation: fadeInUp 0.8s ease-out 0.6s forwards;
+      }
+      
+      .recent-section {
+        opacity: 0;
+        animation: fadeInUp 0.8s ease-out 0.8s forwards;
+      }
+      
+      /* Sidebar animation */
+      .sidebar {
+        animation: slideInLeft 0.6s ease-out;
+      }
+      
+      /* Topbar animation */
+      .topbar {
+        animation: fadeIn 0.6s ease-out;
+      }
+      
+      @media (max-width: 768px) {
+        .container {
+          margin-left: 180px;
+        }
+      }
+      
+      /* Template Examples Section */
+      .template-examples {
+        margin-top: 120px;
+        padding: 60px 0;
+        text-align: center;
+        color: #ffffff;
+      }
+      .template-examples h2 {
+        font-size: 28px;
+        margin-bottom: 10px;
+        color: #E8F5E9;
+      }
+      .template-examples > p {
+        font-size: 16px;
+        margin-bottom: 40px;
+        color: #A5D6A7;
+      }
+      .template-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 30px;
+        justify-items: center;
+        max-width: 1000px;
+        margin: 0 auto;
+      }
+      .template-card {
+        background: rgba(255, 255, 255, 0.9);
+        border: 1px solid rgba(220, 220, 220, 0.8);
+        border-radius: 16px;
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.05);
+        padding: 25px;
+        text-align: left;
+        transition: all 0.3s ease;
+        width: 100%;
+        max-width: 320px;
+        cursor: pointer;
+        opacity: 0;
+        transform: translateY(20px);
+        animation: fadeInUp 0.8s ease-out forwards;
+        animation-delay: var(--delay, 0s);
+      }
+      .template-card:hover {
+        transform: translateY(-5px);
+        border-color: #00c853;
+        box-shadow: 0 12px 30px rgba(0, 200, 83, 0.2);
+      }
+      .template-card i,
+      .template-card img {
+        font-size: 40px;
+        color: #007aff;
+        margin-bottom: 10px;
+        display: block;
+      }
+      .template-card img {
+        width: 40px;
+        height: 40px;
+        object-fit: contain;
+      }
+      .template-card h3 {
+        font-size: 1.1rem;
+        font-weight: 600;
+        color: #1a1a1a;
+        margin-bottom: 8px;
+      }
+      .template-card p {
+        font-size: 0.95rem;
+        color: #555;
+        line-height: 1.4;
+        margin: 0;
+      }
+      .use-template {
+        display: none;
+      }
+      .template-grid .template-card:nth-child(1) { --delay: 0s; }
+      .template-grid .template-card:nth-child(2) { --delay: 0.15s; }
+      .template-grid .template-card:nth-child(3) { --delay: 0.3s; }
+      .template-grid .template-card:nth-child(4) { --delay: 0.45s; }
+      @media (max-width: 600px) {
+        .template-grid {
+          grid-template-columns: 1fr;
+        }
+      }
+      
+      /* Beautiful Templates Section */
+      .beautiful-templates {
+        text-align: center;
+        padding: 80px 0;
+        margin-top: 60px;
+      }
+      
+      .beautiful-templates h2 {
+        font-size: 2rem;
+        font-weight: 700;
+        color: #E8F5E9;
+        margin-bottom: 10px;
+      }
+      
+      .beautiful-templates p {
+        color: #b5d9c5;
+        font-size: 1.1rem;
+        margin-bottom: 40px;
+      }
+      
+      .template-gallery {
+        display: flex;
+        justify-content: center;
+        gap: 40px;
+        flex-wrap: wrap;
+        max-width: 1200px;
+        margin: 0 auto;
+      }
+      
+      .template-item {
+        background: rgba(255, 255, 255, 0.05);
+        border-radius: 16px;
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+        overflow: hidden;
+        transition: all 0.3s ease;
+        width: 320px;
+        cursor: pointer;
+      }
+      
+      .template-item:hover {
+        box-shadow: 0 12px 35px rgba(0, 0, 0, 0.25);
+        transform: translateY(-5px);
+      }
+      
+      .template-item img {
+        width: 100%;
+        height: 200px;
+        display: block;
+        object-fit: cover;
+        background: linear-gradient(135deg, rgba(30, 58, 95, 0.8) 0%, rgba(11, 61, 46, 0.8) 100%);
+        opacity: 0;
+        transition: transform 0.3s ease, opacity 0.4s ease;
+      }
+
+      .template-item img.loaded {
+        opacity: 1;
+      }
+      
+      .template-item:hover img {
+        transform: scale(1.05);
+      }
+      
+      .template-item h3 {
+        margin: 15px 0;
+        padding: 0 20px 20px;
+        color: #fff;
+        font-size: 1.1rem;
+        font-weight: 600;
+      }
+      
+      .browse-btn {
+        margin-top: 50px;
+        padding: 12px 30px;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        opacity: 0;
+        transform: translateY(20px);
+        animation: fadeInUp 0.8s ease-out forwards;
+        animation-delay: 0.6s;
+      }
+      
+      .browse-btn i {
+        font-size: 1.1rem;
+      }
+      
+      @media (max-width: 768px) {
+        .template-gallery {
+          gap: 20px;
+        }
+        .template-item {
+        width: 100%;
+          max-width: 320px;
+      }
+      }
+      
       h2 { font-size: 24px; margin: 0 0 8px; font-weight: 700; color: #E8F5E9; }
       .subtitle { color: #A5D6A7; font-size: 14px; margin-bottom: 32px; }
 
       /* Single centered card */
       .card-wrapper { display: flex; justify-content: center; align-items: center; }
       .card {
-        background: rgba(17, 51, 34, 0.6);
-        border: 1px solid rgba(255,255,255,0.1);
+        background: rgba(0, 55, 40, 0.65);
+        border: 1px solid rgba(0,255,150,0.08);
         border-radius: 16px;
         box-shadow: 0 8px 25px rgba(0,0,0,0.3);
-        backdrop-filter: blur(20px);
+        backdrop-filter: blur(12px);
         overflow: hidden;
         transition: background .3s ease, transform .3s ease, box-shadow .3s ease;
         color: #E8F5E9;
         width: min(90vw, 320px);
         cursor: pointer;
+        opacity: 0;
+        transform: translateY(20px);
+        animation: fadeInUp 0.8s ease-out forwards;
+        animation-delay: 0.3s;
       }
       .card:hover {
         background: rgba(26, 64, 45, 0.8);
         transform: scale(1.05);
         box-shadow: 0 12px 35px rgba(0,0,0,0.4);
       }
-      .thumb { aspect-ratio: 16/9; background: #ffffff; display: grid; place-items: center; }
-      .thumb.blank { background: #fff; }
-      /* Minimal flat light-green plus icon */
+      .blank-presentation {
+        position: relative;
+        overflow: hidden;
+      }
+      
+      .blank-presentation:hover {
+        background: rgba(255, 255, 255, 0.15) !important;
+        transform: scale(1.05);
+        box-shadow: 0 12px 35px rgba(0,0,0,0.4);
+      }
+      
+      .blank-presentation:hover .tutorial-overlay {
+        opacity: 1;
+        transform: translateY(0);
+      }
+      
+      .tutorial-overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0, 0, 0, 0.85);
+        backdrop-filter: blur(5px);
+        color: #fff;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        padding: 20px;
+        opacity: 0;
+        transform: translateY(15px);
+        transition: all 0.4s ease;
+        z-index: 10;
+        border-radius: 16px;
+      }
+      
+      .tutorial-overlay h4 {
+        margin: 0 0 20px 0;
+        font-size: 1.2rem;
+        color: #00c853;
+        font-weight: 600;
+      }
+      
+      .tutorial-overlay .tutorial-step {
+        margin: 8px 0;
+        font-size: 0.95rem;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        animation: fadeInUp 0.6s ease forwards;
+        opacity: 0;
+      }
+      
+      .tutorial-overlay .tutorial-step:nth-child(2) {
+        animation-delay: 0.1s;
+      }
+      
+      .tutorial-overlay .tutorial-step:nth-child(3) {
+        animation-delay: 0.2s;
+      }
+      
+      .tutorial-overlay .tutorial-step:nth-child(4) {
+        animation-delay: 0.3s;
+      }
+      
+      .tutorial-overlay .tutorial-step i {
+        color: #00c853;
+        font-size: 1.1rem;
+      }
+      
+      @keyframes fadeInUp {
+        from { 
+          opacity: 0; 
+          transform: translateY(10px); 
+        }
+        to { 
+          opacity: 1; 
+          transform: translateY(0); 
+        }
+      }
+      .thumb { aspect-ratio: 16/9; background: transparent; display: grid; place-items: center; }
+      .thumb.blank { background: linear-gradient(135deg, #d4e8dd 0%, #c5e1d0 100%); }
+      /* Plus icon with dark blue color */
       .icon-plus { position: relative; width: 56px; height: 56px; }
       .icon-plus::before,
       .icon-plus::after {
         content: '';
         position: absolute;
-        background: #9CCC65;
+        background: #1E3A5F;
         border-radius: 2px;
       }
       .icon-plus::before {
@@ -107,61 +585,483 @@
       .chip.danger { background: rgba(185, 28, 28, 0.6); border-color: rgba(239, 68, 68, 0.4); }
       .muted { color: #A5D6A7; font-size: 12px; }
       .empty-state { text-align: center; color: #A5D6A7; padding: 40px 20px; }
+
+      /* Auth Buttons */
+      .auth-buttons { display: flex; gap: 10px; margin-right: 30px; }
+      .auth-btn { padding: 8px 16px; border-radius: 12px; font-weight: 700; cursor: pointer; border: none; transition: transform .2s ease; }
+      .auth-btn:hover { transform: scale(1.02); }
+      .auth-btn.green,
+      .auth-btn.emerald,
+      .auth-btn.gray { background: transparent; color: inherit; }
+      .user-info { color: white; margin-right: 12px; }
+
+      /* Auth Modal */
+      .modal { display: none; position: fixed; inset: 0; z-index: 1000; backdrop-filter: blur(25px); background: rgba(0,0,0,0.5); }
+      .modal.active { display: grid; place-items: center; }
+      .modal-content { background: rgba(17, 51, 34, 0.6); border: 1px solid rgba(255,255,255,0.1); border-radius: 16px; padding: 32px; width: min(90vw, 400px); box-shadow: 0 8px 25px rgba(0,0,0,0.3); backdrop-filter: blur(20px); color: #E8F5E9; }
+      .modal-header { margin-bottom: 24px; }
+      .modal-title { font-size: 24px; font-weight: 700; margin: 0 0 8px; }
+      .modal-close { position: absolute; top: 16px; right: 16px; background: transparent; border: none; color: #A5D6A7; font-size: 24px; cursor: pointer; }
+      .form-group { margin-bottom: 16px; }
+      .form-label { display: block; margin-bottom: 6px; color: #A5D6A7; font-weight: 600; }
+      .form-input { width: 100%; padding: 10px 12px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.1); background: rgba(0,0,0,0.2); color: #E8F5E9; font-size: 14px; }
+      .form-input:focus { outline: none; border-color: #10b981; }
+      .form-submit { width: 100%; padding: 12px; border-radius: 12px; border: none; font-weight: 700; cursor: pointer; font-size: 16px; }
+      .error-message { color: #f87171; font-size: 12px; margin-top: 8px; }
+      .success-message { color: #10b981; font-size: 12px; margin-top: 8px; }
+
+      /* Dark metallic gradient background */
+      body.dark-theme {
+        background: linear-gradient(135deg, #0b0b0b 0%, #0d0d0d 40%, #000000 100%) !important;
+        background-attachment: fixed;
+        background-repeat: no-repeat;
+        background-size: cover;
+        color: #eaeaea;
+        position: relative;
+      }
+
+      body.dark-theme::before {
+        content: "";
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: radial-gradient(circle at 30% 20%, rgba(255, 255, 255, 0.05), transparent 60%);
+        pointer-events: none;
+        z-index: 0;
+      }
+
+      body.dark-theme > * {
+        position: relative;
+        z-index: 1;
+      }
+
+      header.dark-theme {
+        background: linear-gradient(135deg, #0b0b0b 0%, #0d0d0d 40%, #000000 100%) !important;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      }
+
+      /* Light mode background with frosted glass effect */
+      body.light-mode {
+        background:
+          linear-gradient(90deg,
+            rgba(22, 106, 156, 0.92) 0%,
+            rgba(22, 106, 156, 0.92) 49%,
+            rgba(35, 146, 103, 0.88) 51%,
+            rgba(35, 146, 103, 0.9) 100%),
+          radial-gradient(circle at 24% 18%, rgba(255,255,255,0.35), transparent 60%),
+          radial-gradient(circle at 78% 72%, rgba(255,255,255,0.25), transparent 55%),
+          linear-gradient(120deg, rgba(255, 255, 255, 0.2) 0%, rgba(255,255,255,0) 45%);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        color: #1a1a1a;
+        transition: all 0.3s ease-in-out;
+        position: relative;
+      }
+
+      body.light-mode > * {
+        position: relative;
+        z-index: 1;
+      }
+
+      header.light-mode {
+        background: rgba(255, 255, 255, 0.4) !important;
+        backdrop-filter: blur(15px);
+        -webkit-backdrop-filter: blur(15px);
+        border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+      }
+
+      /* Card or container glass effect */
+      body.light-mode .card,
+      body.light-mode .modal-content {
+        background: rgba(255, 255, 255, 0.35);
+        border: 1px solid rgba(255, 255, 255, 0.5);
+        box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
+        backdrop-filter: blur(15px);
+        -webkit-backdrop-filter: blur(15px);
+      }
+      /* Template cards maintain their light glass style in all themes */
+      body.light-mode .template-card,
+      body.dark-theme .template-card {
+        background: rgba(255, 255, 255, 0.9);
+        border: 1px solid rgba(220, 220, 220, 0.8);
+      }
+
+      body.light-mode .card {
+        color: #1a1a1a;
+      }
+
+      body.light-mode .card:hover {
+        background: rgba(255, 255, 255, 0.5);
+        box-shadow: 0 12px 35px rgba(0, 0, 0, 0.15);
+      }
+
+      /* Navigation colors */
+      .nav a, .nav span, .logo {
+        color: inherit;
+        transition: color 0.3s ease;
+      }
+
+      body.light-mode .nav a,
+      body.light-mode .nav span,
+      body.light-mode .logo {
+        color: #222;
+      }
+
+      body.dark-theme .nav a,
+      body.dark-theme .nav span,
+      body.dark-theme .logo {
+        color: #eaeaea;
+      }
+
+      /* Headings */
+      body.light-mode h1, 
+      body.light-mode h2, 
+      body.light-mode h3 {
+        color: #111;
+      }
+
+      body.dark-theme h1, 
+      body.dark-theme h2, 
+      body.dark-theme h3 {
+        color: #f5f5f5;
+      }
+
+      /* Text colors in light mode */
+      body.light-mode .subtitle {
+        color: #555 !important;
+      }
+
+      body.light-mode .card-title {
+        color: #1a1a1a !important;
+      }
+
+      body.light-mode .card-desc {
+        color: #555 !important;
+      }
+
+      body.light-mode .muted {
+        color: #666 !important;
+      }
+
+      body.light-mode .back-link {
+        color: #1a1a1a !important;
+      }
+
+      body.light-mode .empty-state {
+        color: #666 !important;
+      }
+
+      body.light-mode .template-examples > p {
+        color: #555 !important;
+      }
+      body.light-mode .template-examples h2 {
+        color: #1a1a1a !important;
+      }
+      
+      body.light-mode .beautiful-templates h2 {
+        color: #1a1a1a !important;
+      }
+      
+      body.light-mode .beautiful-templates p {
+        color: #555 !important;
+      }
+      
+      body.light-mode .template-item {
+        background: rgba(255, 255, 255, 0.8);
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+      }
+      
+      body.light-mode .template-item h3 {
+        color: #1a1a1a;
+      }
+
+      body.light-mode .chip {
+        color: #1a1a1a !important;
+        background: rgba(255, 255, 255, 0.5);
+        border-color: rgba(0, 0, 0, 0.15);
+      }
     </style>
   </head>
-  <body>
-    <header>
-      <div class="nav">
-        <div class="logo">SlideMaker</div>
-        <nav class="menu" aria-label="Main">
-          <a href="#">Home</a>
-          <a href="#">My Slides</a>
-          <a href="#">Settings</a>
-        </nav>
-        <div class="spacer"></div>
+  <body class="page-container shell-layout">
+    <!-- Left Sidebar -->
+    <nav class="sidebar">
+      <div class="logo-container">
+        <img src="./CURSOR-Project/public/aramco-digital.png" alt="Aramco Digital Logo" class="sidebar-logo">
       </div>
-    </header>
+      <div class="nav-menu">
+        <a href="./templates.html" class="active">
+          <i class="fas fa-home"></i>
+          <span data-translate="common.home">Home</span>
+        </a>
+        <a href="./templates.html#templates">
+          <i class="fas fa-layer-group"></i>
+          <span data-translate="common.templates">Templates</span>
+        </a>
+        <a href="./templates.html#recent">
+          <i class="fas fa-folder-open"></i>
+          <span data-translate="common.myPresentations">My Presentations</span>
+        </a>
+        <a href="./settings.html">
+          <i class="fas fa-cog"></i>
+          <span data-translate="common.settings">Settings</span>
+        </a>
+        <a href="#" onclick="alert(window.getTranslation ? window.getTranslation('common.helpComingSoon') : 'Help section coming soon!'); return false;">
+          <i class="fas fa-question-circle"></i>
+          <span data-translate="common.help">Help</span>
+        </a>
+      </div>
+        </nav>
+
+    <!-- Top Bar -->
+    <div class="topbar">
+          <div class="auth-buttons" id="authButtons">
+            <button class="btn btn-secondary auth-btn green" id="btnSignUp" data-action="open_signup" data-translate="common.signUp">Sign Up</button>
+            <button class="btn btn-primary auth-btn emerald" id="btnLogIn" data-action="open_login" data-translate="common.logIn">Log In</button>
+          </div>
+      <div class="welcome-text" id="userInfo" style="display: none;">
+        <span id="userName">Welcome, Guest</span>
+        <button class="btn btn-primary logout-btn" id="btnLogOut" data-translate="common.logout">Log Out</button>
+        <div class="profile-icon">
+          <i class="fas fa-user"></i>
+        </div>
+        </div>
+      </div>
 
     <main class="container">
       <section id="start" class="start-section">
-        <h2>Create a New Presentation</h2>
-        <p class="subtitle">Start a new deck instantly.</p>
+        <h2 data-translate="home.newPresentationTitle">Create a New Presentation</h2>
+        <p class="subtitle" data-translate="home.newPresentationSubtitle">Start a new deck instantly.</p>
         <div class="card-wrapper">
-          <a class="card" data-action="open_blank_page" href="#">
+          <a class="card blank-presentation" data-action="open_blank_page" href="#">
             <div class="thumb blank">
               <div class="icon-plus"></div>
             </div>
             <div class="card-body">
-              <div class="card-title">Blank Presentation</div>
-              <div class="card-desc">Start from a clean slide</div>
+              <div class="card-title" data-translate="home.blankTitle">Blank Presentation</div>
+              <div class="card-desc" data-translate="home.blankSubtitle">Start from a clean slide</div>
+            </div>
+            <div class="tutorial-overlay">
+              <h4 data-translate="home.quickStartTitle">Quick Start Guide</h4>
+              <div class="tutorial-step">
+                <i class="fas fa-plus-circle"></i>
+                <span data-translate="home.quickStartAdd">Click + to add new slides</span>
+              </div>
+              <div class="tutorial-step">
+                <i class="fas fa-edit"></i>
+                <span data-translate="home.quickStartEdit">Use toolbar to edit text and styles</span>
+              </div>
+              <div class="tutorial-step">
+                <i class="fas fa-save"></i>
+                <span data-translate="home.quickStartSave">Save your work to access it later</span>
+              </div>
             </div>
           </a>
         </div>
       </section>
 
+      <section id="templates" class="template-examples">
+        <h2 data-translate="home.templateExamplesTitle">Template Examples</h2>
+        <p data-translate="home.templateExamplesSubtitle">Choose a ready design to start quickly:</p>
+        <div class="template-grid">
+          <div class="template-card" onclick="useTemplate('business')">
+            <i class="fas fa-briefcase"></i>
+            <h3 data-translate="home.templateBusinessTitle">Business Template</h3>
+            <p data-translate="home.templateBusinessDesc">Professional slides for corporate presentations and meetings</p>
+          </div>
+          <div class="template-card" onclick="useTemplate('education')">
+            <i class="fas fa-graduation-cap"></i>
+            <h3 data-translate="home.templateEducationTitle">Education Template</h3>
+            <p data-translate="home.templateEducationDesc">Engaging designs perfect for educational content and lectures</p>
+          </div>
+          <div class="template-card" onclick="useTemplate('marketing')">
+            <i class="fas fa-chart-line"></i>
+            <h3 data-translate="home.templateMarketingTitle">Marketing Template</h3>
+            <p data-translate="home.templateMarketingDesc">Eye-catching layouts for marketing campaigns and pitches</p>
+          </div>
+          <div class="template-card" onclick="useTemplate('project')">
+            <i class="fas fa-project-diagram"></i>
+            <h3 data-translate="home.templateProjectTitle">Project Template</h3>
+            <p data-translate="home.templateProjectDesc">Structured layouts for project planning and progress tracking</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="beautiful-templates">
+        <h2 data-translate="home.beautifulTitle">Beautiful Templates</h2>
+        <p data-translate="home.beautifulSubtitle">Start with professionally designed templates and make them your own.</p>
+        <div class="template-gallery">
+          <div class="template-item" onclick="useTemplate('business-pro')">
+            <img
+              class="lazy-template-img"
+              src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw=="
+              data-src="https://via.placeholder.com/320x200/1E3A5F/ffffff?text=Business+Pro"
+              alt="Business Pro Template"
+              width="320"
+              height="200"
+              loading="lazy">
+            <h3 data-translate="home.beautifulBusinessTitle">Business Pro</h3>
+          </div>
+          <div class="template-item" onclick="useTemplate('creative-bold')">
+            <img
+              class="lazy-template-img"
+              src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw=="
+              data-src="https://via.placeholder.com/320x200/0b3d2e/ffffff?text=Creative+Bold"
+              alt="Creative Bold Template"
+              width="320"
+              height="200"
+              loading="lazy">
+            <h3 data-translate="home.beautifulCreativeTitle">Creative Bold</h3>
+          </div>
+          <div class="template-item" onclick="useTemplate('corporate-clean')">
+            <img
+              class="lazy-template-img"
+              src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw=="
+              data-src="https://via.placeholder.com/320x200/00796b/ffffff?text=Corporate+Clean"
+              alt="Corporate Clean Template"
+              width="320"
+              height="200"
+              loading="lazy">
+            <h3 data-translate="home.beautifulCorporateTitle">Corporate Clean</h3>
+          </div>
+        </div>
+        <button class="btn btn-primary browse-btn" onclick="alert(window.getTranslation ? window.getTranslation('common.browseComingSoon') : 'Browse all templates feature coming soon!')">
+          <span data-translate="home.browseAll">Browse All Templates</span>
+          <i class="fas fa-arrow-right"></i>
+        </button>
+      </section>
+
       <section id="recent" class="recent-section">
-        <h2>Recent Presentations</h2>
-        <p class="subtitle">Access your latest decks quickly.</p>
+        <h2 data-translate="home.recentTitle">Recent Presentations</h2>
+        <p class="subtitle" data-translate="home.recentSubtitle">Access your latest decks quickly.</p>
         <div class="recent-grid" id="recentGrid">
-          <div class="empty-state">No saved presentations yet. Create and save your first one!</div>
+          <div class="empty-state" data-translate="home.recentEmpty">No saved presentations yet. Create and save your first one!</div>
         </div>
       </section>
     </main>
 
+    <!-- Auth Modals -->
+    <div class="modal" id="signupModal">
+      <div class="modal-content" style="position: relative;">
+        <button class="modal-close" onclick="closeModal('signupModal')">&times;</button>
+        <div class="modal-header">
+          <h3 class="modal-title" data-translate="auth.createAccountTitle">Create Account</h3>
+        </div>
+        <form id="signup_form" onsubmit="signupUser(event)">
+          <div class="form-group">
+            <label class="form-label" for="signup_username" data-translate="common.username">Username</label>
+            <input class="form-input" type="text" id="signup_username" required placeholder="Enter your username" data-translate-placeholder="auth.usernamePlaceholder">
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="signup_email" data-translate="common.email">Email</label>
+            <input class="form-input" type="email" id="signup_email" required placeholder="Enter your email" data-translate-placeholder="auth.emailPlaceholder">
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="signup_password" data-translate="common.password">Password</label>
+            <input class="form-input" type="password" id="signup_password" required placeholder="Enter your password" data-translate-placeholder="auth.passwordPlaceholder">
+          </div>
+          <div id="signup_error" class="error-message" style="display: none;"></div>
+          <div id="signup_success" class="success-message" style="display: none;"></div>
+          <button type="submit" class="btn btn-primary form-submit green" data-translate="common.signUp">Sign Up</button>
+        </form>
+      </div>
+    </div>
+
+    <div class="modal" id="loginModal">
+      <div class="modal-content" style="position: relative;">
+        <button class="modal-close" onclick="closeModal('loginModal')">&times;</button>
+        <div class="modal-header">
+          <h3 class="modal-title" data-translate="auth.signInTitle">Log In</h3>
+        </div>
+        <form id="login_form" onsubmit="loginUser(event)">
+          <div class="form-group">
+            <label class="form-label" for="login_email" data-translate="common.email">Email</label>
+            <input class="form-input" type="email" id="login_email" required placeholder="Enter your email" data-translate-placeholder="auth.emailPlaceholder">
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="login_password" data-translate="common.password">Password</label>
+            <input class="form-input" type="password" id="login_password" required placeholder="Enter your password" data-translate-placeholder="auth.passwordPlaceholder">
+          </div>
+          <div id="login_error" class="error-message" style="display: none;"></div>
+          <button type="submit" class="btn btn-primary form-submit emerald" data-translate="common.logIn">Log In</button>
+        </form>
+      </div>
+    </div>
+
     <script>
+      // Route Protection - Check authentication on page load
+      (function() {
+        const currentUser = JSON.parse(localStorage.getItem('currentUser') || 'null');
+        const isGuest = localStorage.getItem('guest') === 'true';
+        
+        // If not authenticated and not a guest, redirect to welcome page
+        if (!currentUser && !isGuest) {
+          window.location.href = './index.html';
+          return;
+        }
+      })();
+      
+      let currentLanguage = window.getCurrentLanguage ? window.getCurrentLanguage() : (localStorage.getItem('siteLanguage') || 'en');
+      const translate = (key) => window.getTranslation ? window.getTranslation(key, currentLanguage) : key;
+      const formatTranslation = (key, ...args) => {
+        let text = translate(key);
+        args.forEach(value => {
+          text = text.replace('%s', value);
+        });
+        return text;
+      };
+
+      if (typeof window.initTranslations === 'function') {
+        window.onLanguageChange = (lang) => {
+          currentLanguage = lang;
+          updateUserGreeting();
+          loadRecentPresentations();
+        };
+        window.initTranslations();
+      } else if (typeof window.applyTranslations === 'function') {
+        window.applyTranslations(currentLanguage);
+      }
+      
       // Per Home.json: open_blank_page navigates to blank editor
       document.querySelector('[data-action="open_blank_page"]').addEventListener('click', (e) => {
         e.preventDefault();
         window.location.href = './blank.html';
       });
 
-      // Load and display saved presentations from localStorage
+      // Use Template function
+      function useTemplate(templateName) {
+        // Store template selection in sessionStorage
+        sessionStorage.setItem('selectedTemplate', templateName);
+        // Navigate to blank editor with template parameter
+        window.location.href = `./blank.html?template=${templateName}`;
+      }
+
+      // Load and display saved presentations from localStorage (user-specific)
       function loadRecentPresentations() {
-        const saved = JSON.parse(localStorage.getItem("recentPresentations")) || [];
+        const currentUser = JSON.parse(localStorage.getItem('currentUser') || 'null');
+        const isGuest = localStorage.getItem('guest') === 'true';
+        let saved = [];
+        
+        if (currentUser) {
+          // Load user-specific presentations
+          saved = JSON.parse(localStorage.getItem(`presentations_${currentUser.username}`) || '[]');
+        } else if (isGuest) {
+          // If guest, show message that they need to sign in
+          const grid = document.getElementById('recentGrid');
+          grid.innerHTML = `<div class="empty-state">${translate('home.recentSignIn')}</div>`;
+          return;
+        } else {
+          // If not logged in, show empty state
+          const grid = document.getElementById('recentGrid');
+          grid.innerHTML = `<div class="empty-state">${translate('home.recentLogin')}</div>`;
+          return;
+        }
+
         const grid = document.getElementById('recentGrid');
         
         if (saved.length === 0) {
-          grid.innerHTML = '<div class="empty-state">No saved presentations yet. Create and save your first one!</div>';
+          grid.innerHTML = `<div class="empty-state">${translate('home.recentEmpty')}</div>`;
           return;
         }
 
@@ -172,17 +1072,19 @@
         sorted.forEach((pres, index) => {
           const card = document.createElement('div');
           card.className = 'card recent-card';
+          const title = pres.title || translate('common.untitled');
+          const dateLabel = pres.date ? formatTranslation('common.lastEdited', pres.date) : formatTranslation('common.lastEdited', translate('common.unknown'));
           card.innerHTML = `
-            <div class="thumb" data-title="${pres.title || 'Untitled'}">
-              <div style="width:100%;height:100%;background:linear-gradient(135deg, rgba(17,51,34,0.8), rgba(26,64,45,0.8));display:grid;place-items:center;color:#fff;font-weight:600;font-size:14px;">${pres.title || 'Untitled'}</div>
+            <div class="thumb" data-title="${title}">
+              <div style="width:100%;height:100%;background:linear-gradient(135deg, rgba(17,51,34,0.8), rgba(26,64,45,0.8));display:grid;place-items:center;color:#fff;font-weight:600;font-size:14px;">${title}</div>
             </div>
             <div class="card-body">
-              <div class="card-title">${pres.title || 'Untitled'}</div>
-              <div class="muted">Last edited ${pres.date || 'Unknown'}</div>
+              <div class="card-title">${title}</div>
+              <div class="muted">${dateLabel}</div>
             </div>
             <div class="hover-actions">
-              <button class="chip" data-open="${index}">Open</button>
-              <button class="chip danger" data-delete="${index}">Delete</button>
+              <button class="chip" data-open="${index}">${translate('common.open')}</button>
+              <button class="chip danger" data-delete="${index}">${translate('common.delete')}</button>
             </div>
           `;
           grid.appendChild(card);
@@ -194,7 +1096,6 @@
             e.stopPropagation();
             const idx = parseInt(btn.getAttribute('data-open'));
             const pres = sorted[idx];
-            // Store the presentation data to load in editor
             sessionStorage.setItem('loadPresentation', JSON.stringify(pres));
             window.location.href = './blank.html';
           });
@@ -204,17 +1105,306 @@
           btn.addEventListener('click', (e) => {
             e.stopPropagation();
             const idx = parseInt(btn.getAttribute('data-delete'));
-            if (confirm(`Delete "${sorted[idx].title || 'Untitled'}"?`)) {
-              saved.splice(saved.indexOf(sorted[idx]), 1);
-              localStorage.setItem("recentPresentations", JSON.stringify(saved));
-              loadRecentPresentations(); // Reload
+            const pres = sorted[idx];
+            const title = pres.title || translate('common.untitled');
+            const confirmMsg = formatTranslation('common.confirmDelete', title);
+            if (confirm(confirmMsg)) {
+              const currentUser = JSON.parse(localStorage.getItem('currentUser') || 'null');
+              if (currentUser) {
+                saved.splice(saved.indexOf(sorted[idx]), 1);
+                localStorage.setItem(`presentations_${currentUser.username}`, JSON.stringify(saved));
+                loadRecentPresentations(); // Reload
+              }
             }
           });
         });
       }
 
-      // Load on page load
+      // ===== Authentication System =====
+      
+      // Check if user is logged in on page load
+      function updateUserGreeting() {
+        const userNameEl = document.getElementById('userName');
+        if (!userNameEl) return;
+        const currentUser = JSON.parse(localStorage.getItem('currentUser') || 'null');
+        const isGuest = localStorage.getItem('guest') === 'true';
+        const welcomeLabel = translate('common.welcome');
+        if (currentUser) {
+          userNameEl.textContent = `${welcomeLabel}, ${currentUser.username || currentUser.name}`;
+        } else if (isGuest) {
+          userNameEl.textContent = `${welcomeLabel}, ${translate('common.guest')}`;
+        } else {
+          userNameEl.textContent = `${welcomeLabel}, ${translate('common.guest')}`;
+        }
+      }
+
+      function checkAuthStatus() {
+        const currentUser = JSON.parse(localStorage.getItem('currentUser') || 'null');
+        const isGuest = localStorage.getItem('guest') === 'true';
+        const logoutBtn = document.getElementById('btnLogOut');
+        const authButtons = document.getElementById('authButtons');
+        const userInfo = document.getElementById('userInfo');
+        
+        if (currentUser) {
+          if (authButtons) authButtons.style.display = 'none';
+          if (userInfo) userInfo.style.display = 'flex';
+          updateUserGreeting();
+          // Show logout button for logged-in users
+          if (logoutBtn) logoutBtn.style.display = 'inline-block';
+        } else if (isGuest) {
+          if (authButtons) authButtons.style.display = 'none';
+          if (userInfo) userInfo.style.display = 'flex';
+          updateUserGreeting();
+          // Show logout button for guests too (they can return to access page)
+          if (logoutBtn) logoutBtn.style.display = 'inline-block';
+        } else {
+          if (authButtons) authButtons.style.display = 'flex';
+          if (userInfo) userInfo.style.display = 'none';
+        }
+      }
+      
+      // Logout handler function
+      function handleLogout() {
+        localStorage.removeItem('currentUser');
+        localStorage.removeItem('guest');
+        // Redirect to access/welcome page
+        window.location.href = './index.html';
+      }
+
+      // Modal functions
+      function openModal(modalId) {
+        document.getElementById(modalId).classList.add('active');
+      }
+
+      function closeModal(modalId) {
+        document.getElementById(modalId).classList.remove('active');
+        // Clear error messages
+        document.getElementById(modalId.replace('Modal', '_error')).style.display = 'none';
+        if (document.getElementById(modalId.replace('Modal', '_success'))) {
+          document.getElementById(modalId.replace('Modal', '_success')).style.display = 'none';
+        }
+      }
+
+      // Open modals
+      document.getElementById('btnSignUp').addEventListener('click', () => openModal('signupModal'));
+      document.getElementById('btnLogIn').addEventListener('click', () => openModal('loginModal'));
+
+      // Close modals on outside click
+      document.getElementById('signupModal').addEventListener('click', (e) => {
+        if (e.target.id === 'signupModal') closeModal('signupModal');
+      });
+      document.getElementById('loginModal').addEventListener('click', (e) => {
+        if (e.target.id === 'loginModal') closeModal('loginModal');
+      });
+
+      // Sign Up function per auth_system.json
+      function signupUser(event) {
+        event.preventDefault();
+        const username = document.getElementById('signup_username').value.trim();
+        const email = document.getElementById('signup_email').value.trim();
+        const password = document.getElementById('signup_password').value;
+
+        const users = JSON.parse(localStorage.getItem('users') || '[]');
+        
+        // Check if email already exists
+        if (users.find(u => u.email === email)) {
+          const errorEl = document.getElementById('signup_error');
+          if (errorEl) {
+            errorEl.textContent = translate('auth.emailExists');
+            errorEl.style.display = 'block';
+            errorEl.classList.add('show');
+          }
+          return;
+        }
+
+        // Check if username already exists
+        if (users.find(u => u.username === username)) {
+          const errorEl = document.getElementById('signup_error');
+          if (errorEl) {
+            errorEl.textContent = translate('auth.usernameExists');
+            errorEl.style.display = 'block';
+            errorEl.classList.add('show');
+          }
+          return;
+        }
+
+        // Save new user
+        users.push({ username, email, password });
+        localStorage.setItem('users', JSON.stringify(users));
+
+        // Auto-login after signup
+        localStorage.setItem('currentUser', JSON.stringify({ username, email }));
+        const successEl = document.getElementById('signup_success');
+        if (successEl) {
+          successEl.textContent = translate('auth.accountCreated');
+          successEl.style.display = 'block';
+          successEl.classList.add('show');
+        }
+        
+        setTimeout(() => {
+          closeModal('signupModal');
+          checkAuthStatus();
+          loadRecentPresentations(); // Reload presentations for new user
+          location.reload();
+        }, 1000);
+      }
+
+      // Login function per auth_system.json
+      function loginUser(event) {
+        event.preventDefault();
+        const email = document.getElementById('login_email').value.trim();
+        const password = document.getElementById('login_password').value;
+
+        const users = JSON.parse(localStorage.getItem('users') || '[]');
+        const user = users.find(u => u.email === email && u.password === password);
+
+        if (!user) {
+          const errorEl = document.getElementById('login_error');
+          if (errorEl) {
+            errorEl.textContent = translate('auth.invalidCredentials');
+            errorEl.style.display = 'block';
+          }
+          return;
+        }
+
+        // Store current user
+        localStorage.setItem('currentUser', JSON.stringify({ username: user.username, email: user.email }));
+        closeModal('loginModal');
+        checkAuthStatus();
+        loadRecentPresentations(); // Reload presentations for logged-in user
+        location.reload();
+      }
+
+      // Logout function per auth_system.json - use the shared handleLogout function
+      const logoutBtn = document.getElementById('btnLogOut');
+      if (logoutBtn) {
+        logoutBtn.addEventListener('click', handleLogout);
+      }
+
+      // Initialize auth status and load presentations on page load
+      checkAuthStatus();
       loadRecentPresentations();
+      initPageAnimations();
+      scheduleGalleryLazyLoad();
+      
+      // Introduction Animation - Animate cards and elements with staggered delays
+      function animateOnLoad() {
+        // Animate blank presentation card
+        const blankCard = document.querySelector('.blank-presentation');
+        if (blankCard) {
+          blankCard.style.opacity = '0';
+          blankCard.style.transform = 'scale(0.95)';
+          setTimeout(() => {
+            blankCard.style.transition = 'all 0.6s ease-out';
+            blankCard.style.opacity = '1';
+            blankCard.style.transform = 'scale(1)';
+          }, 400);
+        }
+        
+        // Animate browse button
+        const browseBtn = document.querySelector('.browse-btn');
+        if (browseBtn) {
+          browseBtn.style.opacity = '0';
+          browseBtn.style.transform = 'translateY(10px)';
+          setTimeout(() => {
+            browseBtn.style.transition = 'all 0.6s ease-out';
+            browseBtn.style.opacity = '1';
+            browseBtn.style.transform = 'translateY(0)';
+          }, 1400);
+        }
+      }
+      
+      let animationsInitialized = false;
+      function initPageAnimations() {
+        if (animationsInitialized) return;
+        animationsInitialized = true;
+        requestAnimationFrame(() => animateOnLoad());
+      }
+
+      let templateGalleryInitialized = false;
+      function setupLazyTemplateGallery() {
+        if (templateGalleryInitialized) return;
+        const images = Array.from(document.querySelectorAll('.template-gallery img[data-src]'));
+        if (!images.length) return;
+        templateGalleryInitialized = true;
+
+        const loadImage = (img) => {
+          if (!img.dataset.src) return;
+          const finalize = () => img.classList.add('loaded');
+          img.addEventListener('load', finalize, { once: true });
+          img.src = img.dataset.src;
+          img.removeAttribute('data-src');
+          if (img.complete) {
+            finalize();
+          }
+        };
+
+        if ('IntersectionObserver' in window) {
+          const observer = new IntersectionObserver((entries, obs) => {
+            entries.forEach(entry => {
+              if (entry.isIntersecting) {
+                loadImage(entry.target);
+                obs.unobserve(entry.target);
+              }
+            });
+          }, { rootMargin: '160px 0px' });
+          images.forEach(img => observer.observe(img));
+        } else {
+          images.forEach(loadImage);
+        }
+      }
+
+      function scheduleGalleryLazyLoad() {
+        if ('requestIdleCallback' in window) {
+          requestIdleCallback(() => setupLazyTemplateGallery(), { timeout: 600 });
+        } else {
+          setTimeout(setupLazyTemplateGallery, 200);
+        }
+      }
+
+      // Load and apply saved background color from settings
+      const savedBg = localStorage.getItem('siteBackgroundColor') || '#0b3d2e';
+      if (savedBg !== '#0b3d2e') {
+        if (savedBg === '#000000') {
+          document.body.classList.add('dark-theme');
+          document.body.style.background = '';
+          document.body.style.color = '';
+          document.querySelector('header').classList.add('dark-theme');
+        } else if (savedBg === '#ffffff') {
+          document.body.classList.add('light-mode');
+          document.body.style.background = '';
+          document.body.style.color = '';
+          document.querySelector('header').classList.add('light-mode');
+        } else {
+          document.body.style.background = savedBg;
+        }
+      }
+
+      // Listen for background color updates from settings page
+      window.addEventListener('message', (e) => {
+        if (e.data.type === 'updateBackground') {
+          const color = e.data.color;
+          document.body.classList.remove('dark-theme', 'light-mode');
+          document.querySelector('header').classList.remove('dark-theme', 'light-mode');
+          
+          if (color === '#000000') {
+            document.body.classList.add('dark-theme');
+            document.body.style.background = '';
+            document.body.style.color = '';
+            document.querySelector('header').classList.add('dark-theme');
+          } else if (color === '#ffffff') {
+            document.body.classList.add('light-mode');
+            document.body.style.background = '';
+            document.body.style.color = '';
+            document.querySelector('header').classList.add('light-mode');
+          } else {
+            document.body.style.background = color;
+            if (color !== '#0b3d2e') {
+              document.body.style.color = '#e8f5e9';
+            }
+          }
+        }
+      });
     </script>
   </body>
   </html>

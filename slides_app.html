@@ -5,55 +5,260 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Slides Web</title>
   <meta name="color-scheme" content="light dark">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="./assets/theme.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js" integrity="sha512-BNa5lGdQDzFv1NNpJBWlAbIYW/W2PASi6DPd7OJbRRqtD9h5pz50jdK5Zk90un0nLBKBPXn1HULICwhf66A86A==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js" integrity="sha512-/PHX0JrB9c4ZzG3eHn2mSYYWWVseGbIJcYsCkP3BL+J36xTV3Bd6p+nNL39CNgW0n9K8ZlR5BHY6royEUnXX7Q==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js" integrity="sha512-4R7n2sFTNK1VNHYsYAGdivgLPgAvFp8ZUBKbjsggq09uXBJgp7wa9u0edPFpKnz03Wx/ju0RduCMsZ/H6GfPmw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pptxgenjs/3.12.0/pptxgen.bundle.min.js" integrity="sha512-F8+aoCA8DmF5asJQHKqGmMwakyfeG5edDx9yv7zhtfQczr6gs3qK1D7w+l0kcRAg1WoljzWEGngZFV3nC8slVQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
   <style>
-    :root {
-      --bg: #f3f4f6; --panel: #ffffff; --panel-2: #ffffff; --text: #111827;
-      --muted: #6b7280; --primary: #1a73e8; --primary-2: #1666cb; --accent: #22d3ee;
-      --danger: #ef4444; --border: #e5e7eb; --shadow: 0 10px 24px rgba(0,0,0,.08);
-    }
     * { box-sizing: border-box; }
-    html, body { height: 100%; }
-    body { margin: 0; background: var(--bg); color: var(--text);
-      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji"; }
+    html, body { height: 100%; margin: 0; }
+    body { font-family: 'Poppins', sans-serif; color: var(--text-primary); background: transparent; }
     .app { display: grid; grid-template-rows: 64px 1fr; height: 100vh; }
     .topbar { display: grid; grid-template-columns: 240px 1fr auto; align-items: center; gap: 12px; padding: 10px 16px;
-      border-bottom: 1px solid var(--border); background: var(--panel); position: sticky; top: 0; z-index: 5; }
+      border-bottom: 1px solid rgba(255,255,255,0.08); background: rgba(0, 40, 25, 0.85); backdrop-filter: blur(12px); position: sticky; top: 0; z-index: 5; border-radius: 0 0 18px 18px; }
     .brand { display: flex; align-items: center; gap: 10px; font-weight: 800; }
     .brand-badge { width: 28px; height: 28px; border-radius: 6px; background: #fbbc04; position: relative; box-shadow: inset 0 0 0 2px rgba(0,0,0,.04); }
     .brand-badge::after { content:""; position:absolute; inset:6px; background:#fff; border-radius:2px; }
     .doc { display:flex; align-items:center; gap:10px; }
-    .doc input { border:none; outline:none; font-weight:700; font-size:14px; background:transparent; color:var(--text); padding:6px 8px; border-radius:6px; }
-    .doc input:hover { background:#f3f4f6; }
-    .actions { display: flex; align-items: center; gap: 8px; }
-    button { background: var(--primary); color: #fff; border: 1px solid #0000; padding: 8px 12px; border-radius: 20px; cursor: pointer; font-weight: 600; }
-    button:hover { background: var(--primary-2); }
-    .btn-secondary { background: #f3f4f6; border: 1px solid var(--border); color: var(--text); }
-    .btn-secondary:hover { background: #e5e7eb; }
-    .btn-danger { background: var(--danger); }
+    .doc input { border:none; outline:none; font-weight:700; font-size:14px; background:rgba(255,255,255,0.08); color:var(--text-primary); padding:6px 8px; border-radius:6px; transition: transform 0.2s ease, background 0.3s ease, box-shadow 0.3s ease; }
+    .doc input:hover { background:rgba(255,255,255,0.15); transform: translateY(-1px); box-shadow: 0 8px 20px rgba(0,0,0,0.25); }
+    .actions { display: flex; align-items: center; gap: 10px; }
+    button:not(.toolbar-pill) { background: linear-gradient(90deg, #00796b, #00c853); color: #fff; border: 1px solid transparent; padding: 8px 14px; border-radius: 16px; cursor: pointer; font-weight: 600; transition: transform 0.25s ease, box-shadow 0.35s ease, background 0.35s ease; }
+    button:not(.toolbar-pill):hover { background: linear-gradient(90deg, var(--brand-green), var(--brand-green-bright)); transform: scale(1.02); box-shadow: 0 10px 24px rgba(0, 200, 120, 0.35); }
+    button.btn-secondary { background: rgba(255,255,255,0.12); border: 1px solid rgba(255,255,255,0.24); color: var(--text-primary); }
+    button.btn-secondary:hover { background: rgba(0, 168, 107, 0.32); border-color: rgba(0, 222, 168, 0.45); }
+    button.btn-danger { background: #ef4444; }
     .layout { display: grid; grid-template-columns: 280px 1fr; height: calc(100vh - 64px); }
-    .sidebar { border-right: 1px solid var(--border); padding: 12px; overflow: auto; background: #fafafa; }
+    .sidebar { border-right: 1px solid rgba(255,255,255,0.08); padding: 12px; overflow: auto; background: rgba(0, 40, 25, 0.55); backdrop-filter: blur(10px); }
     .slides-list { display: flex; flex-direction: column; gap: 8px; margin-top: 8px; }
-    .slide-item { display: grid; grid-template-columns: 96px 1fr auto; align-items: center; gap: 8px; padding: 8px; border: 1px solid var(--border);
-      border-radius: 10px; background: var(--panel); cursor: pointer; box-shadow: var(--shadow); }
-    .slide-item.active { outline: 2px solid var(--primary); }
-    .thumb { width: 96px; height: 60px; border-radius: 6px; background: #fff; border: 1px solid var(--border); position: relative; overflow: hidden; }
+    .slide-item { display: grid; grid-template-columns: 96px 1fr auto; align-items: center; gap: 8px; padding: 8px; border: 1px solid rgba(0,255,150,0.12);
+      border-radius: 12px; background: rgba(0, 55, 40, 0.65); cursor: pointer; box-shadow: 0 12px 24px rgba(0,0,0,0.2); transition: transform 0.25s ease, box-shadow 0.35s ease, border-color 0.35s ease; }
+    .slide-item:hover { transform: scale(1.015); box-shadow: 0 16px 32px rgba(0,0,0,0.28); border-color: rgba(0,255,150,0.3); }
+    .slide-item.active { outline: 2px solid var(--brand-green); }
+    .thumb { width: 96px; height: 60px; border-radius: 8px; background: rgba(255,255,255,0.92); border: none; position: relative; overflow: hidden; }
     .thumb .mini { transform: scale(.18); transform-origin: top left; width: 530px; height: 300px; }
-    .slide-title { color: var(--text); font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-    .slide-meta { color: var(--muted); font-size: 12px; }
-    .editor-wrap { padding: 16px; display: grid; grid-template-rows: auto 1fr; gap: 12px; background:#f8fafc; }
-    .toolbar { display: flex; flex-wrap: wrap; gap: 8px; background: var(--panel); padding:8px; border:1px solid var(--border); border-radius:12px; position: sticky; top: 8px; z-index:2; }
-    .canvas { display: grid; place-items: center; overflow: auto; }
-    .slide-canvas { width: min(960px, 90vw); aspect-ratio: 16 / 9; background: #fff; color: #111827; border-radius: 8px; border: 1px solid #e5e7eb;
-      box-shadow: var(--shadow); display: grid; grid-template-rows: auto 1fr; padding: 28px; overflow: hidden; }
-    .slide-canvas input.title { border: none; border-bottom: 1px dashed #d1d5db; outline: none; font-size: clamp(20px, 4vw, 40px);
-      font-weight: 800; margin-bottom: 12px; width: 100%; }
+    .slide-title { color: var(--text-primary); font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .slide-meta { color: var(--text-muted); font-size: 12px; }
+    .editor-wrap { padding: 16px; display: grid; grid-template-rows: auto 1fr; gap: 12px; background: rgba(0, 40, 25, 0.4); backdrop-filter: blur(12px); border-radius: 18px; box-shadow: 0 20px 40px rgba(0,0,0,0.25); margin: 16px; border: 1px solid rgba(0, 255, 150, 0.12); opacity: 0; transform: translateY(24px); animation: wrapperFade 0.8s ease forwards; }
+    .toolbar { display: flex; flex-wrap: wrap; gap: 8px; background: rgba(5, 60, 35, 0.95); padding:10px; border:1px solid rgba(0,255,150,0.12); border-radius:12px; box-shadow: 0 8px 25px rgba(0,0,0,0.25); }
+    .toolbar button { border: 1px solid transparent; background: rgba(255,255,255,0.12); color: inherit; }
+    .toolbar button:hover,
+    .toolbar button:focus-visible { background: rgba(0, 168, 107, 0.32); transform: translateY(-2px) scale(1.03); box-shadow: 0 8px 20px rgba(0,0,0,0.25); }
+    .toolbar button[data-cmd="bold"] { font-weight: 800; }
+    .toolbar button[data-cmd="italic"] { font-style: italic; }
+    .toolbar button[data-cmd="formatBlock"][data-value="h2"] { font-weight: 700; font-size: 15px; }
+    .canvas { display: grid; place-items: center; overflow: auto; background: rgba(255,255,255,0.08); border-radius: 22px; padding: 24px; box-shadow: 0 18px 38px rgba(0,0,0,0.28); border: 1px solid rgba(255,255,255,0.18); opacity: 0; transform: translateY(24px); animation: canvasReveal 0.9s ease forwards; animation-delay: 0.15s; }
+    .slide-canvas { width: min(960px, 90vw); aspect-ratio: 16 / 9; background: #fff; color: #111827; border-radius: 18px; border: 1px solid rgba(0,0,0,0.08);
+      box-shadow: inset 0 0 0 1px rgba(0,0,0,.06); display: grid; grid-template-rows: auto 1fr; padding: 32px; overflow: hidden; }
+    .slide-canvas input.title { border: none; border-bottom: 1px dashed rgba(0,0,0,0.12); outline: none; font-size: clamp(20px, 4vw, 40px);
+      font-weight: 800; margin-bottom: 16px; width: 100%; }
     .slide-canvas .content { outline: none; font-size: clamp(14px, 2.2vw, 22px); line-height: 1.5; overflow: auto; }
-    .footer-hint { color: var(--muted); font-size: 12px; text-align: center; padding: 4px 0; }
-    @media (max-width: 900px) { .layout { grid-template-columns: 1fr; } .sidebar { order: 2; height: 220px; } .editor-wrap { order: 1; } }
+    .slide-canvas .content:focus-visible { box-shadow: 0 0 0 3px rgba(0,200,120,0.18); border-radius: 12px; }
+    .footer-hint { color: var(--text-muted); font-size: 12px; text-align: center; padding: 4px 0; }
     .btn-mini { padding: 4px 8px; border-radius: 6px; }
+    .btn-mini:hover { transform: translateY(-1px); }
+    @media (max-width: 900px) { .layout { grid-template-columns: 1fr; } .sidebar { order: 2; height: 220px; } .editor-wrap { order: 1; } }
+    @keyframes wrapperFade { 0% { opacity: 0; transform: translateY(24px); } 100% { opacity: 1; transform: translateY(0); } }
+    @keyframes canvasReveal { 0% { opacity: 0; transform: translateY(24px); } 100% { opacity: 1; transform: translateY(0); } }
+    .save-notification {
+      position: fixed;
+      top: 90px;
+      right: 24px;
+      background: rgba(0, 168, 107, 0.95);
+      color: #f4fff9;
+      padding: 14px 20px;
+      border-radius: 14px;
+      box-shadow: 0 18px 42px rgba(0, 0, 0, 0.35);
+      opacity: 0;
+      transform: translateY(-12px);
+      transition: opacity 0.3s ease, transform 0.3s ease;
+      z-index: 5200;
+      pointer-events: none;
+      font-weight: 600;
+    }
+    .save-notification.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .export-modal {
+      position: fixed;
+      inset: 0;
+      display: none;
+      z-index: 9999;
+      pointer-events: none;
+    }
+    .export-modal::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: rgba(0, 24, 18, 0.55);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      pointer-events: none;
+    }
+    .export-modal.show {
+      display: block;
+      pointer-events: auto;
+    }
+    .export-dialog {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: rgba(3, 32, 23, 0.95);
+      border: 1px solid rgba(0, 222, 168, 0.2);
+      border-radius: 18px;
+      box-shadow: 0 24px 60px rgba(0, 0, 0, 0.45);
+      width: min(440px, 92vw);
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+      color: #e8f5e9;
+      z-index: 10000;
+    }
+    .export-body { display: flex; flex-direction: column; gap: 16px; }
+    .export-field { display: flex; flex-direction: column; gap: 6px; }
+    .export-field label { font-size: 0.9rem; font-weight: 600; color: rgba(200, 240, 225, 0.86); }
+    .export-field input {
+      background: rgba(3, 45, 30, 0.82);
+      border: 1px solid rgba(0, 222, 168, 0.25);
+      border-radius: 12px;
+      padding: 12px;
+      color: #e8f5e9;
+      font-size: 1rem;
+      transition: border 0.2s ease, box-shadow 0.2s ease;
+    }
+    .export-field input:focus {
+      outline: none;
+      border-color: rgba(0, 222, 168, 0.55);
+      box-shadow: 0 0 0 2px rgba(0, 222, 168, 0.25);
+    }
+    .export-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+    .export-header h2 { margin: 0; font-size: 1.25rem; }
+    .export-close {
+      border: none;
+      background: rgba(255, 255, 255, 0.08);
+      color: inherit;
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      cursor: pointer;
+      transition: transform 0.2s ease, background 0.3s ease;
+    }
+    .export-close:hover { background: rgba(0, 200, 120, 0.35); transform: scale(1.05); }
+    .export-options {
+      background: linear-gradient(145deg, #062f25, #0b3d2f);
+      color: #fff;
+      border-radius: 20px;
+      padding: 30px 40px;
+      width: 380px;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      z-index: 999;
+      text-align: center;
+      font-family: 'Inter', sans-serif;
+      overflow: hidden;
+    }
+    .export-options h3 {
+      font-size: 1.3rem;
+      font-weight: 600;
+      margin-bottom: 15px;
+    }
+    .format-options {
+      text-align: left;
+      margin: 15px 0;
+      line-height: 1.9;
+    }
+    .format-options label {
+      font-size: 0.95rem;
+      cursor: pointer;
+      display: block;
+      color: #d1d5db;
+      transition: color 0.3s ease;
+    }
+    .format-options label:hover {
+      color: #10b981;
+    }
+    .export-options input[type="text"] {
+      width: 100%;
+      padding: 8px 10px;
+      border-radius: 10px;
+      border: none;
+      margin-bottom: 10px;
+      background: #1a3a2c;
+      color: #e5e7eb;
+      font-size: 0.95rem;
+      outline: none;
+    }
+    .export-options button {
+      background: linear-gradient(90deg, #059669, #10b981);
+      color: #fff;
+      font-weight: 600;
+      border: none;
+      border-radius: 12px;
+      padding: 10px 24px;
+      cursor: pointer;
+      font-size: 1rem;
+      width: 100%;
+      margin-top: 15px;
+      transition: all 0.3s ease;
+    }
+    .export-options button:hover {
+      background: linear-gradient(90deg, #10b981, #34d399);
+      transform: scale(1.02);
+    }
+    .export-options button:active {
+      transform: scale(0.98);
+    }
+    .export-options .export-close {
+      position: absolute;
+      top: 16px;
+      right: 16px;
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      border: none;
+      background: rgba(255, 255, 255, 0.12);
+      color: #e5e7eb;
+      font-size: 18px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background 0.3s ease, transform 0.2s ease;
+    }
+    .export-options .export-close:hover {
+      background: rgba(16, 185, 129, 0.35);
+      transform: scale(1.05);
+    }
+    .export-options .export-close:active {
+      transform: scale(0.95);
+    }
+    .canvas.exporting {
+      pointer-events: none;
+    }
+    .canvas.exporting input,
+    .canvas.exporting .content {
+      outline: none;
+      border-color: transparent;
+    }
   </style>
 </head>
-<body>
+<body class="page-container">
   <div class="app">
     <div class="topbar">
       <div class="brand">
@@ -64,10 +269,26 @@
         <input id="fileName" value="Untitled presentation" aria-label="Document name">
       </div>
       <div class="actions">
-        <button id="btn-new">New slide</button>
-        <button class="btn-secondary" id="btn-duplicate">Duplicate</button>
-        <button class="btn-danger" id="btn-delete">Delete</button>
-        <button class="btn-secondary" id="btn-clear" title="Clear all slides">Reset</button>
+        <button type="button" class="toolbar-pill" data-variant="blue" data-tooltip="Add New Slide" id="btn-new" aria-label="New Slide">
+          <i class="fas fa-plus"></i>
+          <span class="label">New</span>
+        </button>
+        <button type="button" class="toolbar-pill" data-variant="blue" data-tooltip="Duplicate Slide" id="btn-duplicate" aria-label="Duplicate Slide">
+          <i class="fas fa-copy"></i>
+          <span class="label">Duplicate</span>
+        </button>
+        <button type="button" class="toolbar-pill" data-variant="red" data-tooltip="Delete Slide" id="btn-delete" aria-label="Delete Slide">
+          <i class="fas fa-trash"></i>
+          <span class="label">Delete</span>
+        </button>
+        <button type="button" class="toolbar-pill" data-variant="neutral" data-tooltip="Reset Presentation" id="btn-clear" aria-label="Reset Presentation">
+          <i class="fas fa-rotate-right"></i>
+          <span class="label">Reset</span>
+        </button>
+        <button type="button" class="toolbar-pill" data-variant="green" data-tooltip="Export Presentation" id="btn-export" aria-label="Export Presentation">
+          <i class="fas fa-file-export"></i>
+          <span class="label">Export</span>
+        </button>
       </div>
     </div>
     <div class="layout">
@@ -96,6 +317,27 @@
       </main>
     </div>
   </div>
+  <div class="save-notification" id="saveNotification">Presentation saved!</div>
+  <div class="export-modal" id="exportModal" aria-hidden="true">
+    <div class="export-dialog" role="dialog" aria-modal="true" aria-labelledby="exportDialogTitle">
+      <div class="export-options">
+        <button type="button" class="export-close" id="exportClose" aria-label="Close export dialog">&times;</button>
+        <h3 id="exportDialogTitle">Export Presentation</h3>
+        <input type="text" id="exportName" placeholder="File name" value="aramco-slide" />
+        <div class="format-options">
+          <label><input type="radio" name="format" value="pdf" checked> PDF Document</label><br>
+          <label><input type="radio" name="format" value="pptx"> PowerPoint (PPTX)</label><br>
+          <label><input type="radio" name="format" value="png"> PNG Image</label><br>
+          <label><input type="radio" name="format" value="jpg"> JPG Image</label><br>
+          <label><input type="radio" name="format" value="html"> Interactive HTML</label><br>
+          <label><input type="radio" name="format" value="json"> Editor JSON</label>
+        </div>
+        <button type="button" id="exportSaveButton">
+          <span class="label">Save</span>
+        </button>
+      </div>
+    </div>
+  </div>
 
   <script>
     const storageKey = 'slides.web.v2';
@@ -109,147 +351,201 @@
     const contentEl = el('content');
     const countEl = el('count');
     const fileNameEl = el('fileName');
+    const saveNotification = document.getElementById('saveNotification');
+    const exportModal = document.getElementById('exportModal');
+    const exportCloseBtn = document.getElementById('exportClose');
+    const exportNameInput = document.getElementById('exportName');
+    const exportSaveButton = document.getElementById('exportSaveButton');
+    let toastTimeout;
+    let exportModalPreviousFocus = null;
 
-    function uid() { return 's_' + Math.random().toString(36).slice(2, 10); }
-    function now() { return Date.now(); }
-
-    function createSlide(partial) {
-      return {
-        id: uid(),
-        title: (partial && partial.title) || 'Untitled',
-        html: (partial && partial.html) || '',
-        createdAt: now(),
-        updatedAt: now(),
-      };
-    }
-
-    function save() { localStorage.setItem(storageKey, JSON.stringify({ slides, selectedId, fileName })); }
-    function load() {
-      try {
-        const raw = localStorage.getItem(storageKey);
-        if (!raw) throw new Error('empty');
-        const data = JSON.parse(raw);
-        slides = Array.isArray(data.slides) ? data.slides : [];
-        selectedId = data.selectedId || (slides[0] && slides[0].id) || null;
-        fileName = data.fileName || fileName;
-      } catch (e) {
-        slides = [createSlide({ title: 'Welcome', html: '<p>Start building your deck.</p>' })];
-        selectedId = slides[0].id;
+    function showToast(message, duration = 2400) {
+      clearTimeout(toastTimeout);
+      saveNotification.textContent = message;
+      saveNotification.classList.add('show');
+      if (duration !== null) {
+        toastTimeout = setTimeout(() => {
+          saveNotification.classList.remove('show');
+        }, duration);
       }
     }
 
-    function selectedIndex() { return slides.findIndex(s => s.id === selectedId); }
-    function currentSlide() { return slides.find(s => s.id === selectedId) || null; }
-
-    function addSlide() {
-      const idx = selectedIndex();
-      const s = createSlide({ title: 'New slide' });
-      if (idx >= 0) slides.splice(idx + 1, 0, s); else slides.push(s);
-      selectedId = s.id; render(); save(); titleEl.focus(); titleEl.select();
-    }
-    function duplicateSlide() {
-      const cur = currentSlide(); if (!cur) return;
-      const s = createSlide({ title: cur.title + ' (copy)', html: cur.html });
-      slides.splice(selectedIndex() + 1, 0, s); selectedId = s.id; render(); save();
-    }
-    function deleteSlide() {
-      const idx = selectedIndex(); if (idx < 0) return;
-      slides.splice(idx, 1);
-      if (!slides.length) { const s = createSlide({ title: 'New slide' }); slides.push(s); selectedId = s.id; }
-      else { selectedId = slides[Math.max(0, idx - 1)].id; }
-      render(); save();
-    }
-    function selectSlide(id) { selectedId = id; render(); save(); }
-
-    function updateCurrentFromEditor() {
-      const cur = currentSlide(); if (!cur) return;
-      cur.title = titleEl.value.trim() || 'Untitled';
-      cur.html = contentEl.innerHTML; cur.updatedAt = now();
-      const t = document.querySelector(`.slide-item[data-id="${cur.id}"] .slide-title`);
-      if (t) t.textContent = cur.title; save();
+    function hideToast() {
+      clearTimeout(toastTimeout);
+      saveNotification.classList.remove('show');
     }
 
-    function escapeHtml(str) {
-      return (str || '')
-        .replaceAll('&', '&amp;').replaceAll('<', '&lt;').replaceAll('>', '&gt;')
-        .replaceAll('"', '&quot;').replaceAll("'", '&#039;');
+    function sanitizeFileName(value) {
+      return (value || 'presentation')
+        .replace(/[^a-z0-9\-_]+/gi, '-')
+        .replace(/-{2,}/g, '-')
+        .replace(/^-|-$/g, '')
+        .toLowerCase() || 'presentation';
     }
 
-    function thumbHTML(slide) {
-      const title = (slide.title || '').replaceAll('<','&lt;').replaceAll('>','&gt;');
-      return `
-        <div class="mini slide-canvas" style="width:530px;height:300px;border-radius:8px;padding:20px;">
-          <div style="font-weight:800;font-size:28px;border-bottom:1px dashed #d1d5db;margin-bottom:8px;">${title}</div>
-          <div>${slide.html || ''}</div>
-        </div>`;
+    function getExportBaseName() {
+      const activeSlide = currentSlide();
+      const fallbackTitle = activeSlide && activeSlide.title ? activeSlide.title : 'slides';
+      return sanitizeFileName(fileName || fallbackTitle);
     }
 
-    function renderList() {
-      slidesEl.innerHTML = '';
-      slides.forEach((s, i) => {
-        const item = document.createElement('div');
-        item.className = 'slide-item' + (s.id === selectedId ? ' active' : '');
-        item.dataset.id = s.id;
-        item.innerHTML = `
-          <div class="thumb"><div>${thumbHTML(s)}</div></div>
-          <div>
-            <div class="slide-title">${escapeHtml(s.title)}</div>
-            <div class="slide-meta">Slide ${i + 1}</div>
-          </div>
-          <div style=\"display:flex;gap:6px;\">
-            <button class=\"btn-secondary btn-mini\" data-action=\"dup\">⎘</button>
-            <button class=\"btn-danger btn-mini\" data-action=\"del\">×</button>
-          </div>`;
-        item.addEventListener('click', (e) => {
-          const btn = e.target.closest('button');
-          if (btn && btn.dataset.action === 'dup') { duplicateSlide(); e.stopPropagation(); return; }
-          if (btn && btn.dataset.action === 'del') { deleteSlide(); e.stopPropagation(); return; }
-          selectSlide(s.id);
-        });
-        slidesEl.appendChild(item);
+    function handleExportKeydown(event) {
+      if (event.key === 'Escape') {
+        event.preventDefault();
+        closeExportModal();
+      }
+      if (event.key === 'Tab') {
+        const focusable = Array.from(exportModal.querySelectorAll('button, input'));
+        if (focusable.length === 0) return;
+        const first = focusable[0];
+        const last = focusable[focusable.length - 1];
+        if (event.shiftKey && document.activeElement === first) {
+          event.preventDefault();
+          last.focus();
+        } else if (!event.shiftKey && document.activeElement === last) {
+          event.preventDefault();
+          first.focus();
+        }
+      }
+    }
+
+    function openExportModal() {
+      const defaultName = getExportBaseName();
+      exportModalPreviousFocus = document.activeElement;
+      if (exportNameInput) {
+        exportNameInput.value = defaultName;
+        exportNameInput.focus();
+        exportNameInput.select();
+      }
+      const defaultFormat = exportModal.querySelector('input[name="format"][value="pdf"]');
+      if (defaultFormat) {
+        defaultFormat.checked = true;
+      }
+      exportModalPreviousFocus = document.activeElement;
+      exportModal.classList.add('show');
+      exportModal.setAttribute('aria-hidden', 'false');
+      document.addEventListener('keydown', handleExportKeydown);
+    }
+
+    function closeExportModal() {
+      exportModal.classList.remove('show');
+      exportModal.setAttribute('aria-hidden', 'true');
+      document.removeEventListener('keydown', handleExportKeydown);
+      if (exportModalPreviousFocus && typeof exportModalPreviousFocus.focus === 'function') {
+        exportModalPreviousFocus.focus();
+      }
+    }
+
+    exportModal.addEventListener('click', (event) => {
+      if (event.target === exportModal) {
+        closeExportModal();
+      }
+    });
+    exportCloseBtn.addEventListener('click', closeExportModal);
+    if (exportNameInput) {
+      exportNameInput.addEventListener('keydown', (event) => {
+        if (event.key === 'Enter') {
+        event.preventDefault();
+          const selectedFormat = document.querySelector('input[name="format"]:checked');
+          if (!selectedFormat) {
+            alert('Please select a format.');
+            return;
+          }
+          exportSlides(selectedFormat.value, exportNameInput.value);
+      closeExportModal();
+        }
       });
-      countEl.textContent = slides.length + ' slides';
     }
-
-    function renderEditor() {
-      const cur = currentSlide(); if (!cur) return;
-      titleEl.value = cur.title; contentEl.innerHTML = cur.html; fileNameEl.value = fileName;
-    }
-    function render() { renderList(); renderEditor(); }
-
-    // Toolbar commands
-    document.querySelectorAll('[data-cmd]').forEach(btn => {
-      btn.addEventListener('click', () => {
-        const cmd = btn.getAttribute('data-cmd');
-        const val = btn.getAttribute('data-value');
-        contentEl.focus(); document.execCommand(cmd, false, val); updateCurrentFromEditor();
+    if (exportSaveButton) {
+      exportSaveButton.addEventListener('click', () => {
+        const selectedFormat = document.querySelector('input[name="format"]:checked');
+        if (!selectedFormat) {
+          alert('Please select a format.');
+          return;
+        }
+        exportSlides(selectedFormat.value, exportNameInput ? exportNameInput.value : getExportBaseName());
+        closeExportModal();
       });
-    });
+    }
 
-    // Buttons
-    document.getElementById('btn-new').addEventListener('click', addSlide);
-    document.getElementById('btn-duplicate').addEventListener('click', duplicateSlide);
-    document.getElementById('btn-delete').addEventListener('click', deleteSlide);
-    document.getElementById('btn-clear').addEventListener('click', () => {
-      if (!confirm('Reset all slides?')) return;
-      slides = [createSlide({ title: 'Welcome', html: '<p>Blank deck.</p>' })]; selectedId = slides[0].id; render(); save();
-    });
 
-    // Editor listeners
-    titleEl.addEventListener('input', updateCurrentFromEditor);
-    contentEl.addEventListener('input', updateCurrentFromEditor);
-    fileNameEl.addEventListener('input', () => { fileName = fileNameEl.value || 'Untitled presentation'; save(); });
+  </script>
+  <script>
+  async function exportSlides(format, fileName) {
+    const slideArea =
+      document.querySelector('.slide, .slide-canvas, .main-slide, .editor-canvas') ||
+      document.body;
 
-    // Keyboard navigation
-    window.addEventListener('keydown', (e) => {
-      if (e.key === 'ArrowDown') { const i = Math.min(slides.length - 1, selectedIndex() + 1); selectedId = slides[i].id; render(); e.preventDefault(); }
-      else if (e.key === 'ArrowUp') { const i = Math.max(0, selectedIndex() - 1); selectedId = slides[i].id; render(); e.preventDefault(); }
-      else if (e.key === 'Enter' && (e.metaKey || e.ctrlKey)) { addSlide(); e.preventDefault(); }
-      else if (e.key === 'Backspace' && (e.metaKey || e.ctrlKey)) { deleteSlide(); e.preventDefault(); }
-    });
+    if (!slideArea) return alert('No slide area found!');
 
-    load();
-    render();
+    try {
+      const canvas = await html2canvas(slideArea, { scale: 2 });
+      const imgData = canvas.toDataURL('image/png');
+
+      switch (format) {
+        case 'pdf': {
+          const { jsPDF } = window.jspdf;
+          const pdf = new jsPDF('l', 'pt', 'a4');
+          const width = pdf.internal.pageSize.getWidth();
+          const height = pdf.internal.pageSize.getHeight();
+          pdf.addImage(imgData, 'PNG', 0, 0, width, height);
+          pdf.save(`${fileName}.pdf`);
+          break;
+        }
+
+        case 'pptx': {
+          const pptx = new PptxGenJS();
+          const slide = pptx.addSlide();
+          slide.addImage({ data: imgData, x: 0, y: 0, w: 10, h: 5.625 });
+          await pptx.writeFile({ fileName: `${fileName}.pptx` });
+          break;
+        }
+
+        case 'png': {
+          const link = document.createElement('a');
+          link.href = imgData;
+          link.download = `${fileName}.png`;
+          link.click();
+          break;
+        }
+
+        case 'jpg': {
+          const jpgData = canvas.toDataURL('image/jpeg', 0.95);
+          const link = document.createElement('a');
+          link.href = jpgData;
+          link.download = `${fileName}.jpg`;
+          link.click();
+          break;
+        }
+
+        case 'html': {
+          const blob = new Blob([slideArea.outerHTML], { type: 'text/html' });
+          const link = document.createElement('a');
+          link.href = URL.createObjectURL(blob);
+          link.download = `${fileName}.html`;
+          link.click();
+          break;
+        }
+
+        case 'json': {
+          const content = slideArea.innerHTML.trim();
+          const data = { slide: content, exportedAt: new Date().toISOString() };
+          const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+          const link = document.createElement('a');
+          link.href = URL.createObjectURL(blob);
+          link.download = `${fileName}.json`;
+          link.click();
+          break;
+        }
+
+        default:
+          alert('Please select a valid format.');
+      }
+    } catch (err) {
+      alert(`Export failed: ${err.message}`);
+      console.error(err);
+    }
+  }
   </script>
 </body>
 </html>
