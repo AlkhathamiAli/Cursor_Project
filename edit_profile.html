@@ -1,0 +1,326 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>SlideMaker • Edit Profile</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+      * { box-sizing: border-box; }
+      html, body { height: 100%; margin: 0; }
+      body {
+        font-family: Poppins, sans-serif;
+        background: #0b3d2e;
+        color: #E8F5E9;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 48px 20px;
+      }
+
+      .edit-wrapper {
+        width: min(680px, 100%);
+        background: linear-gradient(145deg, rgba(13, 53, 38, 0.9), rgba(9, 34, 24, 0.84));
+        border: 1px solid rgba(46, 213, 115, 0.2);
+        border-radius: 28px;
+        padding: 48px 40px;
+        box-shadow: 0 24px 50px rgba(0, 0, 0, 0.35);
+        backdrop-filter: blur(24px);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 32px;
+        text-align: center;
+      }
+
+      h1 {
+        margin: 0;
+        font-size: 32px;
+        font-weight: 700;
+        letter-spacing: 0.4px;
+      }
+
+      .content-section {
+        width: 100%;
+      }
+
+      .content-section + .content-section {
+        margin-top: 32px;
+        padding-top: 32px;
+        border-top: 1px solid rgba(255, 255, 255, 0.12);
+      }
+
+      .profile-picture-wrapper {
+        position: relative;
+        width: 170px;
+        height: 170px;
+        margin-top: 40px;
+      }
+
+      .profile-picture {
+        width: 100%;
+        height: 100%;
+        border-radius: 50%;
+        border: 6px solid rgba(255, 255, 255, 0.2);
+        overflow: hidden;
+        box-shadow: 0 18px 40px rgba(0, 0, 0, 0.35);
+        background: radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.15), rgba(11, 61, 46, 0.8));
+      }
+
+      .profile-picture img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+      }
+
+      .camera-button {
+        position: absolute;
+        right: 12px;
+        bottom: 12px;
+        width: 48px;
+        height: 48px;
+        border-radius: 50%;
+        border: none;
+        background: linear-gradient(135deg, #2ed573, #1abc9c);
+        color: #0d3b2c;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 20px;
+        cursor: pointer;
+        box-shadow: 0 12px 24px rgba(46, 213, 115, 0.35);
+      }
+
+      .camera-button span {
+        display: inline-block;
+        transform: translateY(1px);
+      }
+
+      .profile-info {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+        width: 100%;
+      }
+
+      .profile-field {
+        background: rgba(255, 255, 255, 0.08);
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        border-radius: 20px;
+        padding: 20px 22px;
+        text-align: left;
+        display: flex;
+        flex-direction: column;
+        gap: 14px;
+      }
+
+      .field-head {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+      }
+
+      .profile-label {
+        font-size: 15px;
+        font-weight: 600;
+        letter-spacing: 0.2px;
+      }
+
+      .inline-edit {
+        padding: 8px 18px;
+        border-radius: 999px;
+        border: none;
+        background: rgba(255, 255, 255, 0.14);
+        color: #E8F5E9;
+        font-size: 13px;
+        font-weight: 600;
+        cursor: pointer;
+        letter-spacing: 0.2px;
+        transition: background 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+      }
+
+      .inline-edit:hover {
+        background: rgba(255, 255, 255, 0.22);
+        transform: translateY(-1px);
+        box-shadow: 0 6px 16px rgba(0, 0, 0, 0.25);
+      }
+
+      .inline-edit:active {
+        transform: translateY(0);
+      }
+
+      .input-control,
+      .select-control,
+      .textarea-control {
+        width: 100%;
+        border-radius: 14px;
+        border: 1px solid rgba(255, 255, 255, 0.18);
+        background: rgba(255, 255, 255, 0.06);
+        padding: 14px 16px;
+        color: #E8F5E9;
+        font-size: 16px;
+        font-family: inherit;
+        outline: none;
+        transition: border-color 0.2s ease, box-shadow 0.2s ease;
+      }
+
+      .input-control:focus,
+      .select-control:focus,
+      .textarea-control:focus {
+        border-color: rgba(46, 213, 115, 0.6);
+        box-shadow: 0 0 0 3px rgba(46, 213, 115, 0.2);
+      }
+
+      .select-control {
+        appearance: none;
+        background-image: linear-gradient(135deg, rgba(255, 255, 255, 0.12), rgba(255, 255, 255, 0));
+        cursor: pointer;
+      }
+
+      .textarea-control {
+        min-height: 120px;
+        resize: vertical;
+      }
+
+      .actions {
+        display: flex;
+        gap: 16px;
+        width: 100%;
+        justify-content: center;
+        flex-wrap: wrap;
+      }
+
+      .action-link {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 12px 32px;
+        border-radius: 999px;
+        font-weight: 600;
+        letter-spacing: 0.3px;
+        text-decoration: none;
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+      }
+
+      .action-link.primary {
+        background: linear-gradient(135deg, #2ed573, #1abc9c);
+        color: #0d3b2c;
+        box-shadow: 0 16px 30px rgba(46, 213, 115, 0.3);
+      }
+
+      .action-link.secondary {
+        background: linear-gradient(135deg, rgba(255, 255, 255, 0.18), rgba(217, 217, 217, 0.08));
+        color: #E8F5E9;
+        border: 1px solid rgba(255, 255, 255, 0.18);
+      }
+
+      .action-link.secondary:hover {
+        box-shadow: 0 10px 22px rgba(0, 0, 0, 0.25);
+      }
+
+      .action-link:hover {
+        transform: translateY(-2px);
+      }
+
+      .action-link:active {
+        transform: translateY(0);
+      }
+
+      .back-link {
+        color: #A5D6A7;
+        text-decoration: none;
+        font-weight: 600;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        align-self: flex-start;
+      }
+
+      .back-link:hover {
+        color: #E8F5E9;
+      }
+
+      @media (max-width: 600px) {
+        .edit-wrapper {
+          padding: 40px 24px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main class="edit-wrapper" aria-labelledby="editProfileHeading">
+      <a class="back-link" href="./settings.html">← Back to Settings</a>
+      <h1 id="editProfileHeading">Edit Profile</h1>
+
+      <section class="profile-picture-section content-section" aria-labelledby="profilePictureHeading">
+        <div class="profile-picture-wrapper">
+          <div class="profile-picture" aria-hidden="true">
+            <img src="https://i.pravatar.cc/260?img=12" alt="Profile avatar preview">
+          </div>
+          <button type="button" class="camera-button" aria-label="Upload new profile picture (coming soon)" disabled>
+            <span>📷</span>
+          </button>
+        </div>
+      </section>
+
+      <section class="profile-info content-section" aria-labelledby="profileDetailsHeading">
+        <div class="profile-field">
+          <div class="field-head">
+            <span class="profile-label">First Name</span>
+            <button type="button" class="inline-edit" disabled>Edit</button>
+          </div>
+          <input type="text" class="input-control" value="Avery" placeholder="Enter first name" disabled aria-disabled="true">
+        </div>
+
+        <div class="profile-field">
+          <div class="field-head">
+            <span class="profile-label">Last Name</span>
+            <button type="button" class="inline-edit" disabled>Edit</button>
+          </div>
+          <input type="text" class="input-control" value="Johnson" placeholder="Enter last name" disabled aria-disabled="true">
+        </div>
+
+        <div class="profile-field">
+          <div class="field-head">
+            <span class="profile-label">Email Address</span>
+            <button type="button" class="inline-edit" disabled>Edit</button>
+          </div>
+          <input type="email" class="input-control" value="avery.johnson@example.com" placeholder="name@example.com" disabled aria-disabled="true">
+        </div>
+
+        <div class="profile-field">
+          <div class="field-head">
+            <span class="profile-label">Country</span>
+            <button type="button" class="inline-edit" disabled>Edit</button>
+          </div>
+          <select class="select-control" disabled aria-disabled="true">
+            <option selected>United States</option>
+            <option>Canada</option>
+            <option>United Kingdom</option>
+            <option>Germany</option>
+            <option>Saudi Arabia</option>
+            <option>Australia</option>
+          </select>
+        </div>
+
+        <div class="profile-field">
+          <div class="field-head">
+            <span class="profile-label">About Me</span>
+            <button type="button" class="inline-edit" disabled>Edit</button>
+          </div>
+          <textarea class="textarea-control" placeholder="Share a short bio" disabled aria-disabled="true">Passionate about crafting engaging slide decks and visual storytelling that resonates with every audience.</textarea>
+        </div>
+      </section>
+
+      <div class="actions content-section">
+        <a href="./settings.html" class="action-link secondary">Cancel</a>
+        <a href="./settings.html" class="action-link primary">Save Changes</a>
+      </div>
+    </main>
+  </body>
+</html>
+

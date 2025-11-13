@@ -32,20 +32,41 @@
       .spacer { flex: 1; }
 
       /* Settings page */
-      .container { max-width: 800px; margin: 0 auto; padding: 40px 20px; }
+      .container { max-width: 900px; margin: 0 auto; padding: 48px 24px; }
       h1 { font-size: 32px; margin: 0 0 40px; color: #E8F5E9; }
+      body.light-mode h1 { color: #0d3b2c; }
       
       .settings-card {
-        background: rgba(17, 51, 34, 0.6);
-        border: 1px solid rgba(255,255,255,0.1);
-        border-radius: 16px;
+        background: linear-gradient(145deg, rgba(13, 53, 38, 0.9), rgba(9, 34, 24, 0.84));
+        border: 1px solid rgba(46, 213, 115, 0.22);
+        border-radius: 24px;
         padding: 32px;
-        backdrop-filter: blur(20px);
-        box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+        backdrop-filter: blur(24px);
+        box-shadow: 0 14px 34px rgba(0, 0, 0, 0.28);
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+        display: flex;
+        flex-direction: column;
+        gap: 24px;
+      }
+
+      .settings-card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 20px 48px rgba(0, 0, 0, 0.32);
+      }
+
+      .settings-card > h2 {
+        margin: 0;
+        font-size: 22px;
+        font-weight: 600;
+        color: inherit;
       }
 
       .form-group {
         margin-bottom: 24px;
+      }
+
+      .settings-card > .form-group:last-child {
+        margin-bottom: 0;
       }
 
       .form-label {
@@ -160,6 +181,217 @@
         color: #10b981 !important;
       }
 
+      /* Theme preview overrides */
+      #backgroundSelector {
+        border-radius: 20px;
+        border: none;
+        background: transparent;
+        padding: 0;
+        display: grid;
+        gap: 20px;
+      }
+
+      @media (min-width: 701px) {
+        #backgroundSelector {
+          grid-template-columns: repeat(3, minmax(0, 1fr));
+        }
+      }
+
+      @media (max-width: 700px) {
+        #backgroundSelector {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      #backgroundSelector .color-option {
+        flex-direction: column;
+        align-items: stretch;
+        border-left: none;
+        border-bottom: none;
+        border-radius: 18px;
+        padding: 18px 20px 20px;
+        background: rgba(255, 255, 255, 0.08);
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        transform: none;
+      }
+
+      #backgroundSelector .color-option::before,
+      #backgroundSelector .color-option.focused::before {
+        display: none;
+      }
+
+      #backgroundSelector .color-option:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 12px 28px rgba(0, 0, 0, 0.32);
+        border-color: rgba(46, 213, 115, 0.35);
+      }
+
+      #backgroundSelector .color-option[data-selected="true"] {
+        border-color: rgba(46, 213, 115, 0.6);
+        box-shadow: 0 18px 36px rgba(0, 0, 0, 0.4);
+        background: linear-gradient(145deg, rgba(46, 213, 115, 0.28), rgba(21, 71, 52, 0.4));
+      }
+
+      #backgroundSelector .color-option .theme-preview {
+        position: relative;
+        border-radius: 12px;
+        overflow: hidden;
+        border: 1px solid rgba(255, 255, 255, 0.18);
+        background: rgba(0, 0, 0, 0.2);
+        height: 96px;
+      }
+
+      #backgroundSelector .color-option .theme-preview img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+        filter: saturate(1.05);
+      }
+
+      #backgroundSelector .color-option .theme-meta {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+      }
+
+      #backgroundSelector .color-option .color-label {
+        font-size: 16px;
+        font-weight: 600;
+        color: #E8F5E9;
+      }
+
+      #backgroundSelector .color-option .check-icon {
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        border: 2px solid rgba(255, 255, 255, 0.35);
+        background: rgba(11, 61, 46, 0.45);
+        font-size: 18px;
+        transition: background 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+      }
+
+      #backgroundSelector .color-option[data-selected="true"] .check-icon {
+        background: linear-gradient(135deg, #2ed573, #1abc9c);
+        border-color: transparent;
+        color: #0d3b2c;
+      }
+
+      body.light-mode #backgroundSelector .color-option {
+        background: rgba(255, 255, 255, 0.9);
+        border: 1px solid rgba(0, 0, 0, 0.1);
+      }
+
+      body.light-mode #backgroundSelector .color-option[data-selected="true"] {
+        background: linear-gradient(145deg, rgba(233, 248, 240, 0.9), rgba(213, 245, 230, 0.9));
+        border-color: rgba(26, 156, 109, 0.35);
+      }
+
+      body.light-mode #backgroundSelector .color-option .color-label {
+        color: #0d3b2c;
+      }
+
+      body.light-mode #backgroundSelector .color-option .check-icon {
+        background: rgba(255, 255, 255, 0.8);
+        border-color: rgba(13, 59, 44, 0.2);
+        color: #0d3b2c;
+      }
+
+      body.light-mode #backgroundSelector .color-option[data-selected="true"] .check-icon {
+        background: linear-gradient(135deg, #2ed573, #1abc9c);
+        border-color: transparent;
+        color: #ffffff;
+      }
+
+      /* App customization */
+      .app-customization-section {
+        display: flex;
+        flex-direction: column;
+        gap: 24px;
+      }
+
+      .customization-group {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 24px;
+        padding: 18px 0;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      }
+
+      .customization-group:last-child {
+        border-bottom: none;
+      }
+
+      .customization-details {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+        max-width: 70%;
+      }
+
+      .customization-details h3 {
+        margin: 0;
+        font-size: 18px;
+        font-weight: 600;
+      }
+
+      .customization-details p {
+        margin: 0;
+        font-size: 14px;
+        line-height: 1.6;
+        opacity: 0.85;
+      }
+
+      .density-select {
+        position: relative;
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        padding: 10px 16px;
+        border-radius: 12px;
+        border: 1px solid rgba(255, 255, 255, 0.25);
+        background: rgba(255, 255, 255, 0.08);
+        color: #ffffff;
+        font-weight: 600;
+        cursor: pointer;
+        transition: background 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+      }
+
+      .density-select span {
+        pointer-events: none;
+      }
+
+      .density-select::after {
+        content: "⌄";
+        font-size: 14px;
+        opacity: 0.75;
+      }
+
+      .density-select select {
+        position: absolute;
+        inset: 0;
+        opacity: 0;
+        cursor: pointer;
+      }
+
+      .density-select:hover {
+        background: rgba(255, 255, 255, 0.15);
+        box-shadow: 0 6px 14px rgba(0, 0, 0, 0.2);
+        border-color: rgba(255, 255, 255, 0.35);
+      }
+
+      body.light-mode .density-select {
+        color: #1a1a1a;
+        border: 1px solid rgba(0, 0, 0, 0.15);
+        background: rgba(0, 0, 0, 0.04);
+      }
+
+      body.light-mode .density-select:hover {
+        background: rgba(0, 0, 0, 0.08);
+      }
+
       .back-link {
         display: inline-block;
         margin-top: 24px;
@@ -227,14 +459,13 @@
       }
 
       /* Card or container glass effect */
-      .settings-card {
-        background: rgba(255, 255, 255, 0.35);
-        border: 1px solid rgba(255, 255, 255, 0.5);
-        border-radius: 14px;
-        box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
-        backdrop-filter: blur(15px);
-        -webkit-backdrop-filter: blur(15px);
-        margin-bottom: 24px;
+      body.light-mode .settings-card {
+        background: linear-gradient(145deg, rgba(233, 248, 240, 0.95), rgba(203, 240, 223, 0.9));
+        border: 1px solid rgba(26, 156, 109, 0.2);
+        border-radius: 24px;
+        box-shadow: 0 18px 32px rgba(0, 0, 0, 0.12);
+        backdrop-filter: blur(24px);
+        -webkit-backdrop-filter: blur(24px);
       }
 
       .about-list {
@@ -253,6 +484,733 @@
 
       .about-list a:hover {
         text-decoration: underline;
+      }
+
+      /* Profile card */
+      .profile-card {
+        display: flex;
+        align-items: center;
+        gap: 24px;
+        flex-wrap: wrap;
+      }
+
+      .profile-card .profile-avatar {
+        width: 72px;
+        height: 72px;
+        border-radius: 50%;
+        overflow: hidden;
+        flex-shrink: 0;
+        border: 3px solid rgba(255, 255, 255, 0.3);
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
+      }
+
+      .profile-card .profile-avatar img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+      }
+
+      .profile-card .profile-info {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+      }
+
+      .profile-card .profile-name {
+        font-size: 20px;
+        font-weight: 600;
+        color: #FFFFFF;
+        margin: 0;
+      }
+
+      .profile-card .profile-email {
+        font-size: 15px;
+        opacity: 0.85;
+        color: inherit;
+      }
+
+      body.light-mode .profile-card .profile-name {
+        color: #0d3b2c;
+      }
+      .settings-layout {
+        display: grid;
+        gap: 32px;
+      }
+
+      .settings-layout > * {
+        width: 100%;
+      }
+
+      .settings-row-two {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 20px;
+        width: 100%;
+      }
+
+      .settings-row-two > .settings-card {
+        height: 100%;
+      }
+
+      .settings-row-two .app-customization-section {
+        max-width: 100%;
+      }
+
+      @media (min-width: 900px) {
+        .settings-layout {
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+
+        .settings-layout > .profile-card {
+          grid-column: span 2;
+        }
+
+        .settings-layout > .form-settings-card {
+          grid-column: span 2;
+        }
+
+        .settings-layout > .settings-row-two {
+          grid-column: span 2;
+        }
+
+        .settings-layout > #aboutCard {
+          grid-column: span 2;
+        }
+      }
+
+      .profile-card .profile-actions {
+        display: flex;
+        align-items: center;
+      }
+
+      .profile-edit-btn {
+        padding: 10px 18px;
+        border-radius: 999px;
+        border: none;
+        background: linear-gradient(135deg, #2ed573, #1abc9c);
+        color: #ffffff;
+        font-weight: 600;
+        letter-spacing: 0.3px;
+        cursor: pointer;
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+      }
+
+      .profile-edit-btn:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 8px 16px rgba(46, 213, 115, 0.25);
+      }
+
+      .profile-edit-btn:focus {
+        outline: 2px solid rgba(46, 213, 115, 0.6);
+        outline-offset: 2px;
+      }
+
+      .profile-edit-btn:active {
+        transform: translateY(0);
+      }
+
+      /* Account & Security */
+      .security-section {
+        display: flex;
+        flex-direction: column;
+        gap: 24px;
+      }
+
+      .security-row {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 24px;
+        padding: 18px 0;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      }
+
+      .security-row:last-child {
+        border-bottom: none;
+      }
+
+      .security-text {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+        max-width: 70%;
+      }
+
+      .security-text h3 {
+        margin: 0;
+        font-size: 18px;
+        font-weight: 600;
+      }
+
+      .security-text p {
+        margin: 0;
+        font-size: 14px;
+        line-height: 1.6;
+        opacity: 0.85;
+      }
+
+      .security-button {
+        padding: 10px 20px;
+        border-radius: 12px;
+        border: 1px solid rgba(255, 255, 255, 0.25);
+        background: rgba(255, 255, 255, 0.08);
+        color: #ffffff;
+        font-weight: 600;
+        cursor: pointer;
+        transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+      }
+
+      .security-button:hover {
+        transform: translateY(-1px);
+        background: rgba(255, 255, 255, 0.15);
+        box-shadow: 0 6px 14px rgba(0, 0, 0, 0.2);
+      }
+
+      .security-button:focus {
+        outline: 2px solid rgba(46, 213, 115, 0.6);
+        outline-offset: 2px;
+      }
+
+      body.light-mode .security-button {
+        color: #1a1a1a;
+        border: 1px solid rgba(0, 0, 0, 0.15);
+        background: rgba(0, 0, 0, 0.04);
+      }
+
+      body.light-mode .security-button:hover {
+        background: rgba(0, 0, 0, 0.08);
+      }
+
+      .security-toggle {
+        position: relative;
+        width: 56px;
+        height: 30px;
+      }
+
+      .security-toggle input {
+        opacity: 0;
+        width: 0;
+        height: 0;
+      }
+
+      .toggle-slider {
+        position: absolute;
+        cursor: not-allowed;
+        inset: 0;
+        background: rgba(255, 255, 255, 0.15);
+        border-radius: 999px;
+        transition: background 0.2s ease;
+      }
+
+      .toggle-slider::before {
+        content: "";
+        position: absolute;
+        height: 24px;
+        width: 24px;
+        left: 3px;
+        top: 3px;
+        background: rgba(255, 255, 255, 0.85);
+        border-radius: 50%;
+        transition: transform 0.2s ease;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+      }
+
+      .security-toggle input:checked + .toggle-slider {
+        background: linear-gradient(135deg, #2ed573, #1abc9c);
+      }
+
+      .security-toggle input:checked + .toggle-slider::before {
+        transform: translateX(26px);
+      }
+
+      body.light-mode .toggle-slider {
+        background: rgba(0, 0, 0, 0.1);
+      }
+
+      body.light-mode .toggle-slider::before {
+        background: #ffffff;
+      }
+
+      /* Preferences */
+      .preferences-section {
+        display: flex;
+        flex-direction: column;
+        gap: 24px;
+      }
+
+      .preference-row {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 24px;
+        padding: 18px 0;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      }
+
+      .preference-row:last-child {
+        border-bottom: none;
+      }
+
+      .preference-details {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+        max-width: 70%;
+      }
+
+      .preference-details h3 {
+        margin: 0;
+        font-size: 18px;
+        font-weight: 600;
+      }
+
+      .preference-details p {
+        margin: 0;
+        font-size: 14px;
+        line-height: 1.6;
+        opacity: 0.85;
+      }
+
+      .font-size-options {
+        display: inline-flex;
+        align-items: center;
+        background: rgba(255, 255, 255, 0.06);
+        border: 1px solid rgba(255, 255, 255, 0.15);
+        border-radius: 999px;
+        padding: 4px;
+        gap: 6px;
+      }
+
+      .font-size-button {
+        padding: 8px 16px;
+        border-radius: 999px;
+        border: none;
+        background: transparent;
+        color: inherit;
+        font-weight: 600;
+        cursor: pointer;
+        transition: background 0.2s ease, color 0.2s ease, transform 0.2s ease;
+      }
+
+      .font-size-button.is-active {
+        background: linear-gradient(135deg, rgba(46, 213, 115, 0.35), rgba(26, 188, 156, 0.35));
+        color: #ffffff;
+        transform: translateY(-1px);
+      }
+
+      .font-size-button:hover {
+        background: rgba(255, 255, 255, 0.12);
+      }
+
+      body.light-mode .font-size-options {
+        background: rgba(0, 0, 0, 0.05);
+        border: 1px solid rgba(0, 0, 0, 0.12);
+      }
+
+      body.light-mode .font-size-button {
+        color: #1a1a1a;
+      }
+
+      body.light-mode .font-size-button.is-active {
+        color: #1a1a1a;
+        background: rgba(26, 188, 156, 0.24);
+      }
+
+      /* Notifications */
+      .notifications-section {
+        display: flex;
+        flex-direction: column;
+        gap: 24px;
+      }
+
+      .notification-row {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 24px;
+        padding: 18px 0;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      }
+
+      .notification-row:last-child {
+        border-bottom: none;
+      }
+
+      .notification-details {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+        max-width: 70%;
+      }
+
+      .notification-details h3 {
+        margin: 0;
+        font-size: 18px;
+        font-weight: 600;
+      }
+
+      .notification-details p {
+        margin: 0;
+        font-size: 14px;
+        line-height: 1.6;
+        opacity: 0.85;
+      }
+
+      /* Collaboration */
+      .collaboration-section {
+        display: flex;
+        flex-direction: column;
+        gap: 24px;
+      }
+
+      .collaboration-row {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 24px;
+        padding: 18px 0;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      }
+
+      .collaboration-row:last-child {
+        border-bottom: none;
+      }
+
+      .collaboration-details {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+        max-width: 70%;
+      }
+
+      .collaboration-details h3 {
+        margin: 0;
+        font-size: 18px;
+        font-weight: 600;
+      }
+
+      .collaboration-details p {
+        margin: 0;
+        font-size: 14px;
+        line-height: 1.6;
+        opacity: 0.85;
+      }
+
+      .collaboration-select {
+        position: relative;
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        padding: 10px 16px;
+        border-radius: 12px;
+        border: 1px solid rgba(255, 255, 255, 0.25);
+        background: rgba(255, 255, 255, 0.08);
+        color: #ffffff;
+        font-weight: 600;
+        cursor: pointer;
+        transition: background 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+      }
+
+      .collaboration-select span {
+        pointer-events: none;
+      }
+
+      .collaboration-select::after {
+        content: "⌄";
+        font-size: 14px;
+        opacity: 0.75;
+      }
+
+      .collaboration-select:hover {
+        background: rgba(255, 255, 255, 0.15);
+        box-shadow: 0 6px 14px rgba(0, 0, 0, 0.2);
+      }
+
+      body.light-mode .collaboration-select {
+        color: #1a1a1a;
+        border-color: rgba(0, 0, 0, 0.15);
+        background: rgba(0, 0, 0, 0.04);
+      }
+
+      body.light-mode .collaboration-select:hover {
+        background: rgba(0, 0, 0, 0.08);
+      }
+
+      .collaboration-select select {
+        position: absolute;
+        inset: 0;
+        opacity: 0;
+        cursor: pointer;
+      }
+
+      /* Connected Accounts */
+      .connections-section {
+        display: flex;
+        flex-direction: column;
+        gap: 18px;
+      }
+
+      .connection-item {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 24px;
+        padding: 18px 0;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      }
+
+      .connection-item:last-child {
+        border-bottom: none;
+      }
+
+      .connection-details {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+      }
+
+      .connection-details h3 {
+        margin: 0;
+        font-size: 18px;
+        font-weight: 600;
+      }
+
+      .connection-details p {
+        margin: 0;
+        font-size: 14px;
+        line-height: 1.6;
+        opacity: 0.85;
+      }
+
+      .connection-button {
+        padding: 10px 20px;
+        border-radius: 12px;
+        border: 1px solid rgba(255, 255, 255, 0.25);
+        background: rgba(255, 255, 255, 0.08);
+        color: #ffffff;
+        font-weight: 600;
+        cursor: pointer;
+        transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+      }
+
+      .connection-button:hover {
+        transform: translateY(-1px);
+        background: rgba(255, 255, 255, 0.15);
+        box-shadow: 0 6px 14px rgba(0, 0, 0, 0.2);
+      }
+
+      body.light-mode .connection-button {
+        color: #1a1a1a;
+        border: 1px solid rgba(0, 0, 0, 0.15);
+        background: rgba(0, 0, 0, 0.04);
+      }
+
+      body.light-mode .connection-button:hover {
+        background: rgba(0, 0, 0, 0.08);
+      }
+
+      /* Responsive layout tweaks */
+      @media (max-width: 900px) {
+        .settings-layout {
+          grid-template-columns: 1fr;
+        }
+
+        .profile-card {
+          align-items: flex-start;
+        }
+        
+        .settings-row-two {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      @media (max-width: 768px) {
+        .profile-card {
+          flex-direction: column;
+          text-align: center;
+        }
+
+        .profile-card .profile-info,
+        .profile-card .profile-actions {
+          width: 100%;
+          align-items: center;
+        }
+
+        .profile-card .profile-actions {
+          justify-content: center;
+        }
+
+        .security-row,
+        .preference-row,
+        .notification-row,
+        .collaboration-row,
+        .connection-item,
+        .customization-group {
+          flex-direction: column;
+          align-items: flex-start;
+          width: 100%;
+        }
+
+        .security-text,
+        .preference-details,
+        .notification-details,
+        .collaboration-details,
+        .connection-details {
+          max-width: 100%;
+        }
+
+        .security-button,
+        .delete-button,
+        .collaboration-select,
+        .connection-button,
+        .font-size-options,
+        .density-select {
+          width: 100%;
+          justify-content: center;
+        }
+
+        .font-size-options {
+          justify-content: space-between;
+        }
+
+        .font-size-button {
+          flex: 1;
+        }
+
+        .security-toggle {
+          align-self: flex-start;
+        }
+      }
+
+      .delete-button {
+        padding: 10px 22px;
+        border-radius: 12px;
+        border: 1px solid rgba(220, 53, 69, 0.5);
+        background: rgba(220, 53, 69, 0.12);
+        color: #ff6b6b;
+        font-weight: 600;
+        cursor: pointer;
+        transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+      }
+
+      .delete-button:hover {
+        transform: translateY(-1px);
+        background: rgba(220, 53, 69, 0.18);
+        box-shadow: 0 6px 14px rgba(220, 53, 69, 0.25);
+      }
+
+      .delete-button:focus {
+        outline: 2px solid rgba(220, 53, 69, 0.5);
+        outline-offset: 2px;
+      }
+
+      body.light-mode .delete-button {
+        color: #c0392b;
+        background: rgba(192, 57, 43, 0.08);
+        border: 1px solid rgba(192, 57, 43, 0.4);
+      }
+
+      body.light-mode .delete-button:hover {
+        background: rgba(192, 57, 43, 0.14);
+      }
+
+      /* Modals */
+      .modal-overlay {
+        position: fixed;
+        inset: 0;
+        background: rgba(5, 15, 10, 0.72);
+        backdrop-filter: blur(16px);
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.3s ease;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 24px;
+      }
+
+      .modal-overlay.is-visible {
+        opacity: 1;
+        pointer-events: auto;
+      }
+
+      .modal-card {
+        width: min(420px, 90vw);
+        border-radius: 20px;
+        padding: 28px 32px;
+        background: linear-gradient(145deg, rgba(18, 53, 38, 0.95), rgba(8, 25, 18, 0.92));
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        box-shadow: 0 20px 45px rgba(0, 0, 0, 0.35);
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+        position: relative;
+      }
+
+      body.light-mode .modal-card {
+        background: rgba(255, 255, 255, 0.92);
+        border: 1px solid rgba(0, 0, 0, 0.08);
+        box-shadow: 0 20px 45px rgba(0, 0, 0, 0.15);
+      }
+
+      .modal-card h3 {
+        margin: 0;
+        font-size: 22px;
+        font-weight: 600;
+      }
+
+      .modal-card p {
+        margin: 0;
+        font-size: 14px;
+        line-height: 1.7;
+        opacity: 0.88;
+      }
+
+      .modal-actions {
+        display: flex;
+        justify-content: flex-end;
+        gap: 12px;
+      }
+
+      .modal-close,
+      .modal-confirm {
+        padding: 10px 18px;
+        border-radius: 10px;
+        border: none;
+        font-weight: 600;
+        cursor: pointer;
+        transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+      }
+
+      .modal-close {
+        background: rgba(255, 255, 255, 0.08);
+        color: #ffffff;
+      }
+
+      .modal-close:hover {
+        background: rgba(255, 255, 255, 0.15);
+        transform: translateY(-1px);
+      }
+
+      .modal-confirm {
+        background: linear-gradient(135deg, #ff5f6d, #ffc371);
+        color: #ffffff;
+      }
+
+      .modal-confirm:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 8px 18px rgba(255, 95, 109, 0.35);
+      }
+
+      body.light-mode .modal-close {
+        background: rgba(0, 0, 0, 0.05);
+        color: #1a1a1a;
+      }
+
+      body.light-mode .modal-close:hover {
+        background: rgba(0, 0, 0, 0.08);
       }
 
       /* Navigation colors */
@@ -341,21 +1299,266 @@
     <main class="container">
       <h1 data-translate="settings.title">Settings</h1>
       
-      <div class="settings-card">
+      <div class="settings-layout">
+        <section class="settings-card profile-card" aria-labelledby="profileHeading">
+        <div class="profile-avatar" aria-hidden="true">
+          <img src="https://i.pravatar.cc/120?img=12" alt="Sample profile avatar">
+        </div>
+        <div class="profile-info">
+          <h2 id="profileHeading" class="profile-name">Avery Johnson</h2>
+          <span class="profile-email">avery.johnson@example.com</span>
+        </div>
+        <div class="profile-actions">
+          <a href="./edit_profile.html" class="profile-edit-btn">Edit Profile</a>
+        </div>
+        </section>
+
+      <section class="settings-card security-section" aria-labelledby="securityHeading">
+        <h2 id="securityHeading">Account &amp; Security</h2>
+
+        <div class="security-row">
+          <div class="security-text">
+            <h3>Change Password</h3>
+            <p>Update your password regularly to keep your account protected. Add logic to open the modal when ready.</p>
+          </div>
+          <button type="button" class="security-button" aria-haspopup="dialog" aria-controls="changePasswordModal">Change Password</button>
+        </div>
+
+        <div class="security-row">
+          <div class="security-text">
+            <h3>Two-Factor Authentication</h3>
+            <p>Add an extra layer of security to your account. Toggle will activate once logic is connected.</p>
+          </div>
+          <label class="security-toggle">
+            <input type="checkbox" disabled aria-disabled="true">
+            <span class="toggle-slider"></span>
+          </label>
+        </div>
+
+        <div class="security-row">
+          <div class="security-text">
+            <h3>Delete Account</h3>
+            <p>Permanently remove your account and associated data. Connect a confirmation flow before enabling.</p>
+          </div>
+          <button type="button" class="delete-button" aria-haspopup="dialog" aria-controls="deleteAccountModal">Delete Account</button>
+        </div>
+      </section>
+
+      <section class="settings-card preferences-section" aria-labelledby="preferencesHeading">
+        <h2 id="preferencesHeading">Preferences</h2>
+
+        <div class="preference-row">
+          <div class="preference-details">
+            <h3>Auto-Save Presentations</h3>
+            <p>Automatically back up your presentation progress while you work. Toggle logic coming soon.</p>
+          </div>
+          <label class="security-toggle">
+            <input type="checkbox" disabled aria-disabled="true">
+            <span class="toggle-slider"></span>
+          </label>
+        </div>
+
+        <div class="preference-row">
+          <div class="preference-details">
+            <h3>Font Size</h3>
+            <p>Adjust the interface typography that suits your presentation workflow best.</p>
+          </div>
+          <div class="font-size-options" role="group" aria-label="Font size selection">
+            <button type="button" class="font-size-button is-active" aria-pressed="true">Normal</button>
+            <button type="button" class="font-size-button" aria-pressed="false">Large</button>
+          </div>
+        </div>
+
+        <div class="preference-row">
+          <div class="preference-details">
+            <h3>Enable Animations</h3>
+            <p>Control interface motion for transitions and micro-interactions. Toggle functionality is pending.</p>
+          </div>
+          <label class="security-toggle">
+            <input type="checkbox" disabled aria-disabled="true">
+            <span class="toggle-slider"></span>
+          </label>
+        </div>
+      </section>
+
+      <section class="settings-card notifications-section" aria-labelledby="notificationsHeading">
+        <h2 id="notificationsHeading">Notifications</h2>
+
+        <div class="notification-row">
+          <div class="notification-details">
+            <h3>Project Activity</h3>
+            <p>Stay updated when changes happen across your shared presentations. Logic will be linked soon.</p>
+          </div>
+          <label class="security-toggle">
+            <input type="checkbox" disabled aria-disabled="true">
+            <span class="toggle-slider"></span>
+          </label>
+        </div>
+
+        <div class="notification-row">
+          <div class="notification-details">
+            <h3>Comments &amp; Mentions</h3>
+            <p>Get notified when teammates leave feedback or mention you. Hook into your notifications service when ready.</p>
+          </div>
+          <label class="security-toggle">
+            <input type="checkbox" disabled aria-disabled="true">
+            <span class="toggle-slider"></span>
+          </label>
+        </div>
+
+        <div class="notification-row">
+          <div class="notification-details">
+            <h3>Group Invites</h3>
+            <p>Receive alerts for collaboration invites and shared workspace access. Toggle activation pending.</p>
+          </div>
+          <label class="security-toggle">
+            <input type="checkbox" disabled aria-disabled="true">
+            <span class="toggle-slider"></span>
+          </label>
+        </div>
+
+        <div class="notification-row">
+          <div class="notification-details">
+            <h3>Email Updates</h3>
+            <p>Enable digest summaries and important app announcements. Connect to your email settings later.</p>
+          </div>
+          <label class="security-toggle">
+            <input type="checkbox" disabled aria-disabled="true">
+            <span class="toggle-slider"></span>
+          </label>
+        </div>
+      </section>
+
+      <section class="settings-card collaboration-section" aria-labelledby="collaborationHeading">
+        <h2 id="collaborationHeading">Collaboration Settings</h2>
+
+        <div class="collaboration-row">
+          <div class="collaboration-details">
+            <h3>Default Sharing</h3>
+            <p>Choose how new presentations are shared by default. Hook this select to your sharing preferences when ready.</p>
+          </div>
+          <div class="collaboration-select">
+            <span>Private</span>
+            <select aria-label="Default sharing preference" disabled>
+              <option selected>Private</option>
+              <option>Team Only</option>
+              <option>Public</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="collaboration-row">
+          <div class="collaboration-details">
+            <h3>Show Active Collaborators</h3>
+            <p>Display avatars for teammates currently editing the same presentation. Toggle activation coming soon.</p>
+          </div>
+          <label class="security-toggle">
+            <input type="checkbox" disabled aria-disabled="true">
+            <span class="toggle-slider"></span>
+          </label>
+        </div>
+      </section>
+
+      <div class="settings-row-two">
+        <section class="settings-card connections-section" aria-labelledby="connectionsHeading">
+          <h2 id="connectionsHeading">Connected Accounts</h2>
+
+          <div class="connection-item">
+            <div class="connection-details">
+              <h3>Connect Google Drive</h3>
+              <p>Link your Google Drive to import slides and sync assets. Integration coming soon.</p>
+            </div>
+            <button type="button" class="connection-button">Connect</button>
+          </div>
+
+          <div class="connection-item">
+            <div class="connection-details">
+              <h3>Connect GitHub</h3>
+              <p>Sync project assets or store presentations in repositories. Hook this button to OAuth flow later.</p>
+            </div>
+            <button type="button" class="connection-button">Connect</button>
+          </div>
+
+          <div class="connection-item">
+            <div class="connection-details">
+              <h3>Connect Dropbox</h3>
+              <p>Enable Dropbox backups and quick access to shared folders. Placeholder for upcoming integration.</p>
+            </div>
+            <button type="button" class="connection-button">Connect</button>
+          </div>
+        </section>
+
+        <section class="settings-card app-customization-section" aria-labelledby="customizationHeading">
+          <h2 id="customizationHeading">App Customization</h2>
+
+          <div class="customization-group">
+            <div class="customization-details">
+              <h3>Rounded Corners</h3>
+              <p>Choose whether interface surfaces use softened, rounded corners across the app.</p>
+            </div>
+            <label class="security-toggle">
+              <input type="checkbox" checked disabled aria-disabled="true">
+              <span class="toggle-slider"></span>
+            </label>
+          </div>
+
+          <div class="customization-group">
+            <div class="customization-details">
+              <h3>Glass Effect</h3>
+              <p>Preview a frosted glass aesthetic for cards and surfaces. Toggle coming soon.</p>
+            </div>
+            <label class="security-toggle">
+              <input type="checkbox" disabled aria-disabled="true">
+              <span class="toggle-slider"></span>
+            </label>
+          </div>
+
+          <div class="customization-group">
+            <div class="customization-details">
+              <h3>UI Density</h3>
+              <p>Adjust spacing for controls and content layouts to match your working style.</p>
+            </div>
+            <div class="density-select">
+              <span>Comfortable</span>
+              <select aria-label="UI density selection" disabled>
+                <option selected>Comfortable</option>
+                <option>Compact</option>
+              </select>
+            </div>
+          </div>
+        </section>
+      </div>
+
+        <div class="settings-card form-settings-card">
         <div class="form-group">
           <label class="form-label" for="backgroundSelector" data-translate="settings.backgroundColor">Background Color</label>
           <div class="color-options" id="backgroundSelector">
-            <div class="color-option" data-color="#0b3d2e" data-selected="true">
-              <span class="check-icon">✓</span>
-              <span class="color-label" data-translate="settings.darkGreen">Dark Green</span>
-            </div>
             <div class="color-option" data-color="#ffffff">
-              <span class="check-icon"></span>
+                <div class="theme-preview">
+                <img src="./CURSOR-Project/thems-mods/light.jpeg" alt="light">
+                </div>
+                <div class="theme-meta">
               <span class="color-label" data-translate="settings.light">Light</span>
+                  <span class="check-icon"></span>
+                </div>
             </div>
             <div class="color-option" data-color="#000000">
-              <span class="check-icon"></span>
+                <div class="theme-preview">
+                <img src="./CURSOR-Project/thems-mods/dark.jpeg" alt="dark">
+                </div>
+                <div class="theme-meta">
               <span class="color-label" data-translate="settings.dark">Dark</span>
+                  <span class="check-icon"></span>
+                </div>
+              </div>
+              <div class="color-option" data-color="#0b3d2e" data-selected="true">
+                <div class="theme-preview">
+                <img src="./CURSOR-Project/thems-mods/defult.jpeg" alt="defult">
+                </div>
+                <div class="theme-meta">
+                  <span class="color-label">System Default</span>
+                  <span class="check-icon">✓</span>
+                </div>
             </div>
           </div>
         </div>
@@ -395,6 +1598,30 @@
               <a href="#" id="privacyPolicyLink" data-translate="settings.privacyPolicy">Privacy Policy</a>
             </li>
           </ul>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="modal-overlay" id="changePasswordModal" role="dialog" aria-modal="true" aria-labelledby="changePasswordHeading" aria-hidden="true">
+        <div class="modal-card">
+          <h3 id="changePasswordHeading">Change Password</h3>
+          <p>This is a placeholder for the upcoming password reset flow. Hook up your logic and form here.</p>
+          <div class="modal-actions">
+            <button type="button" class="modal-close">Cancel</button>
+            <button type="button" class="modal-confirm">Save New Password</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="modal-overlay" id="deleteAccountModal" role="dialog" aria-modal="true" aria-labelledby="deleteAccountHeading" aria-hidden="true">
+        <div class="modal-card">
+          <h3 id="deleteAccountHeading">Delete Account</h3>
+          <p>This popup confirms your decision before removing your account. Connect functionality to handle the process.</p>
+          <div class="modal-actions">
+            <button type="button" class="modal-close">Cancel</button>
+            <button type="button" class="modal-confirm">Yes, Delete</button>
+          </div>
         </div>
       </div>
  
