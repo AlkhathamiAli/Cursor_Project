@@ -1,0 +1,175 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>SlideMaker • Groups</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="./assets/theme.css">
+    <style>
+      * { box-sizing: border-box; }
+      html, body {
+        margin: 0;
+        padding: 0;
+        min-height: 100%;
+      }
+
+      body {
+        font-family: 'Poppins', sans-serif;
+        color: #e8f5ed;
+        background: radial-gradient(circle at 18% 25%, rgba(0, 255, 186, 0.18), transparent 45%),
+                    radial-gradient(circle at 82% 80%, rgba(0, 140, 255, 0.18), transparent 55%),
+                    linear-gradient(140deg, #062824 0%, #081b2b 38%, #0c4028 100%);
+      }
+
+      .page-shell {
+        display: flex;
+        min-height: 100vh;
+      }
+
+      nav.sidebar {
+        width: 240px;
+        background: rgba(4, 35, 30, 0.92);
+        border-right: 1px solid rgba(0, 255, 150, 0.12);
+        box-shadow: 2px 0 16px rgba(0, 0, 0, 0.35);
+        padding: 28px 20px;
+        display: flex;
+        flex-direction: column;
+        gap: 28px;
+        position: fixed;
+        inset: 0 auto 0 0;
+        z-index: 40;
+      }
+
+      .content {
+        flex: 1 1 auto;
+        margin-left: 240px;
+        padding: 36px 48px 80px;
+        display: flex;
+        flex-direction: column;
+        gap: 40px;
+      }
+
+      .logo-container {
+        display: flex;
+        justify-content: center;
+      }
+
+      .logo-container img {
+        width: clamp(140px, 12vw, 200px);
+        height: auto;
+      }
+
+      .nav-menu {
+        display: flex;
+        flex-direction: column;
+        gap: 18px;
+      }
+
+      .nav-menu a {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 10px 12px;
+        border-radius: 10px;
+        color: #cfeee5;
+        text-decoration: none;
+        transition: background 0.25s ease, transform 0.25s ease;
+      }
+
+      .nav-menu a:hover,
+      .nav-menu a.active {
+        background: rgba(0, 200, 83, 0.2);
+        color: #00ff9f;
+        transform: translateX(6px);
+      }
+
+      .workspace {
+        flex: 1 1 auto;
+        border-radius: 24px;
+        border: 1px solid rgba(0, 255, 150, 0.08);
+        background: rgba(5, 30, 27, 0.42);
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+        min-height: 400px;
+        padding: 40px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+      }
+
+      .workspace-placeholder {
+        max-width: 540px;
+      }
+
+      .workspace-placeholder h1 {
+        margin: 0 0 12px;
+        font-size: clamp(28px, 4vw, 40px);
+        font-weight: 700;
+      }
+
+      .workspace-placeholder p {
+        margin: 0;
+        color: rgba(200, 242, 228, 0.9);
+        font-size: 1rem;
+      }
+
+      @media (max-width: 992px) {
+        nav.sidebar {
+          position: relative;
+          width: 100%;
+          flex-direction: row;
+          align-items: center;
+          justify-content: space-between;
+        }
+
+        .content {
+          margin-left: 0;
+          padding: 24px;
+        }
+
+        .nav-menu {
+          flex-direction: row;
+          flex-wrap: wrap;
+          gap: 12px;
+        }
+
+        .nav-menu a {
+          padding: 8px 10px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="page-shell">
+      <nav class="sidebar">
+        <div class="logo-container">
+          <img src="./CURSOR-Project/public/aramco-digital.O&amp;D.PNG" alt="Aramco Digital Logo">
+        </div>
+        <div class="nav-menu">
+          <a href="./Home.html">
+            <i class="fas fa-home"></i>
+            Home
+          </a>
+          <a href="./groups.html" class="active">
+            <i class="fas fa-users"></i>
+            Groups
+          </a>
+        </div>
+      </nav>
+      <main class="content">
+        <section class="workspace">
+          <div class="workspace-placeholder">
+            <h1>Groups Workspace</h1>
+            <p>This page is ready for your collaboration features. Add your own layouts, components, and scripts here.</p>
+          </div>
+        </section>
+      </main>
+    </div>
+  </body>
+</html>
+

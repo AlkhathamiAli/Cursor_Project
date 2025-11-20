@@ -460,7 +460,7 @@
         const isGuest = localStorage.getItem('guest') === 'true';
         
         if (currentUser || isGuest) {
-          window.location.href = './templates.html';
+          window.location.href = './Home.html';
         }
       }
       
@@ -534,7 +534,7 @@
         localStorage.removeItem('guest'); // Remove guest status if exists
         
         // Redirect to home
-        window.location.href = './templates.html';
+        window.location.href = './Home.html';
       }
       
       
@@ -543,7 +543,7 @@
       function continueAsVisitor() {
         localStorage.setItem('guest', 'true');
         localStorage.removeItem('currentUser'); // Clear any existing user
-        window.location.href = './templates.html';
+        window.location.href = './Home.html';
       }
     </script>
   </body>

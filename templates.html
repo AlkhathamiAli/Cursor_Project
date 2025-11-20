@@ -4,12 +4,17 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>SlideMaker • Home</title>
+    <meta http-equiv="refresh" content="0; url=./Home.html">
+    <script>
+      window.location.replace('./Home.html');
+    </script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
     <script src="./translations.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="./assets/theme.css">
+    <link rel="stylesheet" href="./style.css">
     <style>
       * { box-sizing: border-box; }
       html {
@@ -26,21 +31,8 @@
 
       /* Left Sidebar */
       .sidebar {
-        position: fixed;
-        left: 0;
-        top: 0;
-        height: 100vh;
-        width: 220px;
-        background: linear-gradient(180deg, rgba(0, 55, 33, 0.8) 0%, rgba(0, 35, 48, 0.85) 100%);
-        padding: 20px 20px 30px 20px;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        z-index: 100;
         box-shadow: 2px 0 12px rgba(0, 0, 0, 0.35);
         border-right: 1px solid rgba(0, 255, 150, 0.1);
-        backdrop-filter: blur(10px);
-        -webkit-backdrop-filter: blur(10px);
       }
       
       .logo-container {
@@ -108,22 +100,10 @@
       
       /* Top Bar */
       .topbar {
-        position: fixed;
-        top: 0;
-        left: 220px;
-        right: 0;
-        height: 70px;
-        background: rgba(0, 0, 0, 0.4);
-        backdrop-filter: blur(10px);
-        -webkit-backdrop-filter: blur(10px);
-        display: flex;
-        align-items: center;
         justify-content: flex-end;
-        padding: 0 40px;
         color: #fff;
         font-weight: 500;
         box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
-        z-index: 99;
       }
       
       .topbar .welcome-text {
@@ -190,13 +170,6 @@
       }
       
       @media (max-width: 768px) {
-        .sidebar {
-          width: 180px;
-        }
-        .topbar {
-          left: 180px;
-          padding: 0 20px;
-        }
       }
 
       /* Layout */
@@ -205,9 +178,8 @@
       }
       .container { 
         max-width: 1200px; 
-        margin: 0 auto; 
-        margin-left: 220px;
-        padding: 90px 20px 120px 20px; 
+        margin: 0 auto;
+        padding: 48px 32px 120px 32px; 
         position: relative; 
         z-index: 1;
         opacity: 0;
@@ -672,7 +644,15 @@
 
       /* Light mode background with frosted glass effect */
       body.light-mode {
-        background: linear-gradient(135deg, rgba(255,255,255,0.85), rgba(240,240,240,0.8)) !important;
+        background:
+          linear-gradient(90deg,
+            rgba(22, 106, 156, 0.92) 0%,
+            rgba(22, 106, 156, 0.92) 49%,
+            rgba(35, 146, 103, 0.88) 51%,
+            rgba(35, 146, 103, 0.9) 100%),
+          radial-gradient(circle at 24% 18%, rgba(255,255,255,0.35), transparent 60%),
+          radial-gradient(circle at 78% 72%, rgba(255,255,255,0.25), transparent 55%),
+          linear-gradient(120deg, rgba(255, 255, 255, 0.2) 0%, rgba(255,255,255,0) 45%);
         backdrop-filter: blur(10px);
         -webkit-backdrop-filter: blur(10px);
         color: #1a1a1a;
@@ -804,7 +784,7 @@
       }
     </style>
   </head>
-  <body class="page-container">
+  <body class="page-container shell-layout">
     <!-- Left Sidebar -->
     <nav class="sidebar">
       <div class="logo-container">
@@ -815,13 +795,13 @@
           <i class="fas fa-home"></i>
           <span data-translate="common.home">Home</span>
         </a>
+        <a href="./templates.html#recent">
+          <i class="fas fa-folder-open"></i>
+          <span data-translate="common.myPresentations">Recent Presentations</span>
+        </a>
         <a href="./templates.html#templates">
           <i class="fas fa-layer-group"></i>
           <span data-translate="common.templates">Templates</span>
-        </a>
-        <a href="./templates.html#recent">
-          <i class="fas fa-folder-open"></i>
-          <span data-translate="common.myPresentations">My Presentations</span>
         </a>
         <a href="./settings.html">
           <i class="fas fa-cog"></i>
@@ -906,50 +886,6 @@
             <p data-translate="home.templateProjectDesc">Structured layouts for project planning and progress tracking</p>
           </div>
         </div>
-      </section>
-
-      <section class="beautiful-templates">
-        <h2 data-translate="home.beautifulTitle">Beautiful Templates</h2>
-        <p data-translate="home.beautifulSubtitle">Start with professionally designed templates and make them your own.</p>
-        <div class="template-gallery">
-          <div class="template-item" onclick="useTemplate('business-pro')">
-            <img
-              class="lazy-template-img"
-              src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw=="
-              data-src="https://via.placeholder.com/320x200/1E3A5F/ffffff?text=Business+Pro"
-              alt="Business Pro Template"
-              width="320"
-              height="200"
-              loading="lazy">
-            <h3 data-translate="home.beautifulBusinessTitle">Business Pro</h3>
-          </div>
-          <div class="template-item" onclick="useTemplate('creative-bold')">
-            <img
-              class="lazy-template-img"
-              src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw=="
-              data-src="https://via.placeholder.com/320x200/0b3d2e/ffffff?text=Creative+Bold"
-              alt="Creative Bold Template"
-              width="320"
-              height="200"
-              loading="lazy">
-            <h3 data-translate="home.beautifulCreativeTitle">Creative Bold</h3>
-          </div>
-          <div class="template-item" onclick="useTemplate('corporate-clean')">
-            <img
-              class="lazy-template-img"
-              src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw=="
-              data-src="https://via.placeholder.com/320x200/00796b/ffffff?text=Corporate+Clean"
-              alt="Corporate Clean Template"
-              width="320"
-              height="200"
-              loading="lazy">
-            <h3 data-translate="home.beautifulCorporateTitle">Corporate Clean</h3>
-          </div>
-        </div>
-        <button class="btn btn-primary browse-btn" onclick="alert(window.getTranslation ? window.getTranslation('common.browseComingSoon') : 'Browse all templates feature coming soon!')">
-          <span data-translate="home.browseAll">Browse All Templates</span>
-          <i class="fas fa-arrow-right"></i>
-        </button>
       </section>
 
       <section id="recent" class="recent-section">

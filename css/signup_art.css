@@ -1,0 +1,249 @@
+.modal-pane.auth-art-pane {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0;
+  overflow: visible;
+  background-image: url('../assets/art/signin2.png');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  position: relative;
+  border-radius: 0 22px 22px 0;
+  min-height: 100%;
+  /* Clip path to ensure art stays inside rounded corners */
+  clip-path: inset(0 round 0 22px 22px 0);
+  -webkit-clip-path: inset(0 round 0 22px 22px 0);
+  /* Animation for smooth appearance */
+  animation: fadeIn 0.6s ease-out forwards, neonPulse 5s linear infinite 0.6s;
+}
+
+/* Login modal specific art */
+.modal-pane.login-art-pane {
+  background-image: url('../assets/art/login2.png');
+  background-size: 90%;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+/* Login chart animation styling */
+.login-chart {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 2;
+  pointer-events: none;
+}
+
+.chart-container {
+  transform-origin: center;
+}
+
+.bar {
+  transition: opacity 0.3s ease;
+  opacity: 0.95;
+}
+
+.grid-lines {
+  opacity: 0.4;
+}
+
+/* Responsive chart positioning */
+@media (max-width: 900px) {
+  .chart-container {
+    transform: translate(50%, 25%) scale(0.7);
+  }
+}
+
+/* Soft gradient overlay to blend with border radius */
+.modal-pane.auth-art-pane::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    135deg,
+    rgba(10, 36, 27, 0.15) 0%,
+    rgba(10, 36, 27, 0.05) 50%,
+    rgba(10, 36, 27, 0.1) 100%
+  );
+  pointer-events: none;
+  z-index: 1;
+  border-radius: 0 22px 22px 0;
+}
+
+/* Art animations container */
+.art-animations {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 2;
+  pointer-events: none;
+}
+
+/* Lottie animations container */
+.lottie-container {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 3;
+  overflow: visible;
+}
+
+.lottie-cloud,
+.lottie-palm {
+  position: absolute;
+  pointer-events: none;
+  z-index: 3;
+  overflow: visible;
+}
+
+.lottie-cloud {
+  filter: drop-shadow(0 0 3px rgba(21, 255, 195, 0.5));
+}
+
+.lottie-palm {
+  filter: drop-shadow(0 0 2px rgba(21, 255, 195, 0.4));
+}
+
+/* Seagulls styling and animation */
+/* Glow is handled by SVG filter */
+
+.seagull {
+  transform-origin: center;
+}
+
+.seagull-1 {
+  animation: seagullMove1 40s ease-in-out infinite;
+}
+
+.seagull-2 {
+  animation: seagullMove2 42s ease-in-out infinite;
+  animation-delay: -8s;
+}
+
+.seagull-3 {
+  animation: seagullMove3 38s ease-in-out infinite;
+  animation-delay: -15s;
+}
+
+.seagull path {
+  animation: flapWings 4s ease-in-out infinite;
+  transform-origin: center;
+}
+
+.seagull-2 path {
+  animation-duration: 4.2s;
+  animation-delay: -1s;
+}
+
+.seagull-3 path {
+  animation-duration: 3.8s;
+  animation-delay: -2s;
+}
+
+@keyframes flapWings {
+  0%, 100% {
+    transform: rotate(0deg);
+  }
+  50% {
+    transform: rotate(2.5deg);
+  }
+}
+
+@keyframes seagullMove1 {
+  0% {
+    transform: translate(150, 120) translateX(-30px) translateY(0px);
+  }
+  25% {
+    transform: translate(150, 120) translateX(-15px) translateY(-5px);
+  }
+  50% {
+    transform: translate(150, 120) translateX(0px) translateY(0px);
+  }
+  75% {
+    transform: translate(150, 120) translateX(15px) translateY(-5px);
+  }
+  100% {
+    transform: translate(150, 120) translateX(30px) translateY(0px);
+  }
+}
+
+@keyframes seagullMove2 {
+  0% {
+    transform: translate(250, 100) translateX(-40px) translateY(0px);
+  }
+  25% {
+    transform: translate(250, 100) translateX(-20px) translateY(-4px);
+  }
+  50% {
+    transform: translate(250, 100) translateX(0px) translateY(0px);
+  }
+  75% {
+    transform: translate(250, 100) translateX(20px) translateY(-4px);
+  }
+  100% {
+    transform: translate(250, 100) translateX(40px) translateY(0px);
+  }
+}
+
+@keyframes seagullMove3 {
+  0% {
+    transform: translate(200, 80) translateX(-25px) translateY(0px);
+  }
+  25% {
+    transform: translate(200, 80) translateX(-12px) translateY(-3px);
+  }
+  50% {
+    transform: translate(200, 80) translateX(0px) translateY(0px);
+  }
+  75% {
+    transform: translate(200, 80) translateX(12px) translateY(-3px);
+  }
+  100% {
+    transform: translate(200, 80) translateX(25px) translateY(0px);
+  }
+}
+
+/* Grass styling - animations handled by SVG animateTransform */
+#grass-left,
+#grass-right {
+  opacity: 0.8;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: scale(1.02); }
+  to   { opacity: 1; transform: scale(1); }
+}
+
+@keyframes neonPulse {
+  0%, 100% {
+    opacity: 0.6;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+/* Responsive adjustments */
+@media (max-width: 900px) {
+  .modal-pane.auth-art-pane {
+    border-radius: 0 0 22px 22px;
+    min-height: 300px;
+    background-position: center;
+    clip-path: inset(0 round 0 0 22px 22px);
+    -webkit-clip-path: inset(0 round 0 0 22px 22px);
+  }
+  
+  .modal-pane.auth-art-pane::before {
+    border-radius: 0 0 22px 22px;
+  }
+
+  .art-animations {
+    /* Scale down animations on mobile */
+    transform: scale(0.8);
+  }
+}

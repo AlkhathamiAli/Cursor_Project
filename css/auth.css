@@ -1,0 +1,648 @@
+/* Authentication modal styles */
+.modal {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  background: rgba(0, 0, 0, 0.65);
+  padding: 24px;
+  opacity: 0;
+  transition: opacity 300ms ease-in-out, backdrop-filter 300ms ease-in-out, -webkit-backdrop-filter 300ms ease-in-out;
+}
+
+.modal.active {
+  display: grid;
+  place-items: center;
+  opacity: 1;
+}
+
+.modal.closing {
+  opacity: 0;
+  backdrop-filter: blur(0px);
+  -webkit-backdrop-filter: blur(0px);
+}
+
+.modal-content {
+  width: min(90vw, 460px);
+  background: rgba(10, 36, 27, 0.95);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 22px;
+  padding: 44px 40px 36px;
+  box-shadow: 0 18px 60px rgba(0, 0, 0, 0.55);
+  backdrop-filter: blur(26px);
+  -webkit-backdrop-filter: blur(26px);
+  color: #e9f7ec;
+  position: relative;
+  transform-origin: center;
+  animation: modalReveal 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+  transition: opacity 300ms ease-in-out, transform 300ms ease-in-out;
+}
+
+.modal-content.closing {
+  animation: modalClose 300ms ease-in-out forwards;
+}
+
+.modal-content.split {
+  border-radius: 22px;
+  box-shadow: 0 18px 60px rgba(0, 0, 0, 0.55);
+  backdrop-filter: blur(26px);
+  -webkit-backdrop-filter: blur(26px);
+}
+
+.modal-header {
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.modal-title {
+  font-size: 1.9rem;
+  font-weight: 700;
+  margin-bottom: 6px;
+  color: #fff;
+}
+
+.modal-subtitle {
+  color: #a9d9c1;
+  font-size: 0.95rem;
+}
+
+.modal-close {
+  position: absolute;
+  top: 18px;
+  right: 18px;
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  border: none;
+  background: rgba(255, 255, 255, 0.04);
+  color: #c0e9d2;
+  font-size: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background 0.25s ease, color 0.25s ease, transform 0.25s ease;
+}
+
+.modal-close:hover {
+  background: rgba(0, 200, 126, 0.15);
+  color: #fff;
+  transform: scale(1.05);
+}
+
+.modal-form {
+  display: flex;
+  flex-direction: column;
+}
+
+.modal-form.signup-flow {
+  gap: 18px;
+}
+
+.profile-circle {
+  width: 72px;
+  height: 72px;
+  border-radius: 18px;
+  background: linear-gradient(135deg, rgba(16, 185, 129, 0.3), rgba(0, 150, 136, 0.2));
+  border: 1px solid rgba(0, 200, 140, 0.3);
+  display: grid;
+  place-items: center;
+  color: #c6fff5;
+  font-size: 1.6rem;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
+  margin: 0 auto;
+  margin-bottom: 24px;
+  margin-top: 8px;
+}
+
+.flow-indicator {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.flow-indicator__label {
+  font-size: 0.95rem;
+  color: rgba(255, 255, 255, 0.85);
+  font-weight: 600;
+}
+
+.flow-indicator__bar {
+  width: 100%;
+  height: 6px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.1);
+  overflow: hidden;
+}
+
+.flow-indicator__progress {
+  display: block;
+  height: 100%;
+  width: 50%;
+  background: linear-gradient(90deg, #00c27f, #00e1ff);
+  border-radius: inherit;
+  transition: width 0.3s ease;
+}
+
+.signup-step {
+  display: none;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.signup-step.active {
+  display: flex;
+}
+
+.signup-step-actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.form-submit.secondary {
+  background: rgba(0, 255, 197, 0.12);
+  border: 1px solid rgba(0, 255, 197, 0.2);
+  color: #c6fff5;
+}
+
+.form-submit.secondary:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 20px rgba(0, 255, 197, 0.25);
+}
+
+.btn-ghost {
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: rgba(255, 255, 255, 0.85);
+  padding: 12px 18px;
+  border-radius: 12px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: all 0.3s ease;
+}
+
+.btn-ghost:hover {
+  border-color: rgba(0, 255, 200, 0.4);
+  color: #ffffff;
+}
+
+.form-group {
+  margin-bottom: 18px;
+}
+
+.form-label {
+  display: block;
+  margin-bottom: 8px;
+  color: #a9d9c1;
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.form-input {
+  width: 100%;
+  padding: 12px 16px;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  background: rgba(0, 0, 0, 0.28);
+  color: #e9f7ec;
+  font-size: 1rem;
+  font-family: "Poppins", sans-serif;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease, background 0.3s ease;
+}
+
+.form-input:focus {
+  outline: none;
+  border-color: #00c853;
+  background: rgba(0, 0, 0, 0.4);
+  box-shadow: 0 0 0 3px rgba(0, 200, 83, 0.15);
+}
+
+.password-field {
+  position: relative;
+}
+
+.password-field .form-input {
+  padding-right: 48px;
+}
+
+.toggle-password {
+  position: absolute;
+  top: 50%;
+  right: 14px;
+  transform: translateY(-50%);
+  border: none;
+  background: transparent;
+  color: #94c9b0;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  transition: color 0.2s ease, background 0.2s ease;
+}
+
+.toggle-password:hover {
+  color: #ffffff;
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.toggle-password .fa-eye-slash {
+  display: none;
+}
+
+.toggle-password.is-visible .fa-eye {
+  display: none;
+}
+
+.toggle-password.is-visible .fa-eye-slash {
+  display: inline;
+}
+
+.form-submit {
+  width: 100%;
+  padding: 14px;
+  margin-top: 6px;
+  border-radius: 12px;
+  border: none;
+  font-weight: 700;
+  cursor: pointer;
+  font-size: 1rem;
+  font-family: "Poppins", sans-serif;
+  background: linear-gradient(90deg, #00796b 0%, #00c853 100%);
+  color: white;
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.form-submit:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 30px rgba(0, 200, 83, 0.35);
+}
+
+.error-message,
+.success-message {
+  font-size: 0.85rem;
+  margin-top: 6px;
+  display: none;
+}
+
+.error-message {
+  color: #ff8c8c;
+}
+
+.success-message {
+  color: #45ffbc;
+}
+
+.error-message.show,
+.success-message.show {
+  display: block;
+}
+
+body.modal-open {
+  overflow: hidden;
+}
+
+@keyframes modalReveal {
+  0% {
+    opacity: 0;
+    transform: scale(0.9) translateY(20px);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+@keyframes modalClose {
+  0% {
+    opacity: 1;
+    transform: scale(0.95);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(0.80);
+  }
+}
+
+.modal-content.split {
+  width: min(150vw, 1200px);
+  min-height: 600px;
+  display: grid;
+  grid-template-columns: 33% 67%;
+  gap: 0;
+  padding: 0;
+  overflow: hidden;
+  border-radius: 22px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6),
+              inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.modal-pane {
+  padding: 44px 40px 36px;
+  width: 100%;
+}
+
+.modal-pane.form-pane {
+  background: rgba(10, 36, 27, 0.95);
+  border-radius: 22px 0 0 22px;
+  box-shadow: inset -1px 0 0 rgba(255, 255, 255, 0.05);
+  position: relative;
+}
+
+/* Subtle divider between form and art panes */
+.modal-pane.form-pane::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: 1px;
+  background: linear-gradient(
+    to bottom,
+    transparent,
+    rgba(255, 255, 255, 0.08) 20%,
+    rgba(255, 255, 255, 0.08) 80%,
+    transparent
+  );
+  pointer-events: none;
+}
+
+.modal-pane.art-pane {
+  position: relative;
+  background: radial-gradient(circle at 20% 20%, rgba(0, 255, 195, 0.18), transparent 55%),
+    linear-gradient(165deg, rgba(7, 32, 46, 0.9), rgba(4, 62, 46, 0.95));
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-height: 100%;
+  color: #e6fff6;
+}
+
+.modal-pane.placeholder-pane {
+  align-items: center;
+  text-align: center;
+  justify-content: center;
+}
+
+/* Art pane styles are handled in signup_art.css */
+
+.modal-art-hero {
+  position: relative;
+  border-radius: 28px;
+  overflow: hidden;
+  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.35);
+  background: linear-gradient(145deg, rgba(0, 255, 200, 0.2), rgba(0, 136, 255, 0.22));
+  min-height: 220px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.modal-art-hero img {
+  width: 90%;
+  height: auto;
+  object-fit: contain;
+  filter: drop-shadow(0 15px 35px rgba(0, 0, 0, 0.4));
+}
+
+.skyline-hero {
+  background: linear-gradient(145deg, rgba(8, 49, 40, 0.6), rgba(6, 26, 33, 0.8));
+}
+
+.skyline-hero svg {
+  width: 100%;
+  height: 100%;
+}
+
+.framed-hero {
+  width: 100%;
+  height: 100%;
+  padding: 0;
+  background: none;
+  border-radius: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.framed-hero img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 0;
+  box-shadow: none;
+}
+
+.neon-hero {
+  background: rgba(0, 255, 213, 0.08);
+  border: 1px solid rgba(0, 255, 213, 0.2);
+  border-radius: 28px;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.modal-art-copy {
+  margin-top: 32px;
+}
+
+.modal-art-copy h4 {
+  font-size: 1.4rem;
+  margin-bottom: 10px;
+}
+
+.modal-art-copy p {
+  color: rgba(230, 255, 246, 0.8);
+  font-size: 0.95rem;
+  line-height: 1.5;
+}
+
+.modal-badges {
+  display: flex;
+  gap: 12px;
+  margin-top: 26px;
+}
+
+.modal-badge {
+  flex: 1;
+  padding: 12px 14px;
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.08);
+  text-align: center;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.modal-badge span {
+  display: block;
+  font-size: 1.4rem;
+  font-weight: 700;
+  margin-bottom: 6px;
+  color: #ffffff;
+}
+
+@media (max-width: 480px) {
+  .modal-content {
+    padding: 36px 28px 30px;
+  }
+
+  .modal-title {
+    font-size: 1.6rem;
+  }
+}
+
+@media (max-width: 900px) {
+  .modal-content.split {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto auto;
+  }
+
+  .modal-pane.form-pane {
+    padding: 32px 28px;
+    border-radius: 22px 22px 0 0;
+  }
+
+  .modal-pane.auth-art-pane {
+    padding: 0;
+    border-radius: 0 0 22px 22px;
+  }
+
+  .modal-badges {
+    flex-direction: column;
+  }
+}
+
+/* Recent Users Section */
+.recent-users-section {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding: 8px 0;
+}
+
+.recent-users-title {
+  font-size: 20px;
+  font-weight: 600;
+  color: #e9f7ec;
+  text-align: center;
+  margin: 0 0 8px 0;
+}
+
+.recent-users-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  max-height: 400px;
+  overflow-y: auto;
+  padding: 4px 0;
+}
+
+.recent-user-card {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 14px 18px;
+  background: rgba(4, 63, 50, 0.4);
+  border: 1px solid rgba(0, 255, 150, 0.15);
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+
+.recent-user-card:hover {
+  background: rgba(4, 63, 50, 0.6);
+  border-color: rgba(0, 255, 150, 0.3);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 255, 150, 0.15);
+}
+
+.recent-user-avatar {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, rgba(0, 255, 197, 0.3), rgba(0, 150, 136, 0.2));
+  border: 1px solid rgba(0, 255, 150, 0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.recent-user-avatar span {
+  font-size: 20px;
+  font-weight: 600;
+  color: #00ff9f;
+  text-transform: uppercase;
+}
+
+.recent-user-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+}
+
+.recent-user-name {
+  font-size: 16px;
+  font-weight: 500;
+  color: #e9f7ec;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.recent-user-email {
+  font-size: 14px;
+  color: rgba(233, 247, 236, 0.7);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.use-different-account {
+  width: 100%;
+  padding: 12px;
+  margin-top: 8px;
+  background: transparent;
+  border: 1px solid rgba(0, 255, 150, 0.2);
+  border-radius: 10px;
+  color: rgba(233, 247, 236, 0.9);
+  font-size: 15px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+
+.use-different-account:hover {
+  background: rgba(0, 255, 150, 0.1);
+  border-color: rgba(0, 255, 150, 0.4);
+  color: #00ff9f;
+}
+
+.recent-users-list::-webkit-scrollbar {
+  width: 6px;
+}
+
+.recent-users-list::-webkit-scrollbar-track {
+  background: rgba(4, 63, 50, 0.2);
+  border-radius: 3px;
+}
+
+.recent-users-list::-webkit-scrollbar-thumb {
+  background: rgba(0, 255, 150, 0.3);
+  border-radius: 3px;
+}
+
+.recent-users-list::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 255, 150, 0.5);
+}
+
+

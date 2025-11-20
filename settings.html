@@ -8,15 +8,20 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
     <script src="./translations.js"></script>
-    <link rel="stylesheet" href="./assets/theme.css">
     <style>
       * { box-sizing: border-box; }
       html, body { height: 100%; margin: 0; }
+      body {
+        font-family: Poppins, sans-serif;
+        background: #0b3d2e;
+        color: #E8F5E9;
+        transition: background-color 0.3s ease;
+      }
 
       /* Header per settings.json */
       header {
         position: sticky; top: 0; z-index: 10;
-        background: transparent;
+        background: #0b3d2e;
         border-bottom: 1px solid rgba(255,255,255,0.1);
       }
       .nav { max-width: 1200px; margin: 0 auto; padding: 12px 20px; display: flex; align-items: center; gap: 16px; }
@@ -27,20 +32,144 @@
       .spacer { flex: 1; }
 
       /* Settings page */
-      .container { max-width: 800px; margin: 0 auto; padding: 40px 20px; }
-      h1 { font-size: 32px; margin: 0 0 40px; color: #E8F5E9; }
+      .container { max-width: 1400px; margin: 0 auto; padding: 48px 24px; }
+      h1 { font-size: 32px; margin: 0 0 40px; color: #E8F5E9; text-align: left; }
+      body.light-mode h1 { color: #0d3b2c; }
+
+      /* Profile card wrapper - centered at top */
+      .profile-wrapper {
+        display: flex;
+        justify-content: center;
+        margin-bottom: 40px;
+      }
+
+      .profile-wrapper .profile-card {
+        max-width: 600px;
+        width: 100%;
+      }
+
+      /* Two-column layout: sidebar + content */
+      .settings-main-layout {
+        display: flex;
+        gap: 32px;
+        align-items: flex-start;
+      }
+
+      /* Left Sidebar */
+      .settings-sidebar {
+        width: 240px;
+        flex-shrink: 0;
+        background: linear-gradient(145deg, rgba(13, 53, 38, 0.9), rgba(9, 34, 24, 0.84));
+        border: 1px solid rgba(46, 213, 115, 0.2);
+        border-radius: 24px;
+        padding: 24px 0;
+        box-shadow: 0 14px 34px rgba(0, 0, 0, 0.28);
+        backdrop-filter: blur(24px);
+        position: sticky;
+        top: 100px;
+        max-height: calc(100vh - 120px);
+        overflow-y: auto;
+      }
+
+      .settings-tabs {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+      }
+
+      .sidebar-tab {
+        padding: 14px 24px;
+        color: #E8F5E9;
+        text-decoration: none;
+        font-weight: 600;
+        font-size: 15px;
+        letter-spacing: 0.2px;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        border: none;
+        background: transparent;
+        border-radius: 12px;
+        text-align: left;
+        display: block;
+        margin: 0 8px;
+      }
+
+      .sidebar-tab:hover {
+        background: rgba(255, 255, 255, 0.08);
+        color: #E8F5E9;
+      }
+
+      .sidebar-tab.active {
+        background: linear-gradient(135deg, rgba(46, 213, 115, 0.25), rgba(26, 188, 156, 0.25));
+        color: #2ed573;
+        box-shadow: 0 4px 16px rgba(46, 213, 115, 0.3);
+        border: 1px solid rgba(46, 213, 115, 0.4);
+      }
+
+      body.light-mode .settings-sidebar {
+        background: linear-gradient(145deg, rgba(233, 248, 240, 0.95), rgba(203, 240, 223, 0.9));
+        border: 1px solid rgba(26, 156, 109, 0.2);
+      }
+
+      body.light-mode .sidebar-tab {
+        color: #0d3b2c;
+      }
+
+      body.light-mode .sidebar-tab:hover {
+        background: rgba(0, 0, 0, 0.05);
+      }
+
+      body.light-mode .sidebar-tab.active {
+        background: linear-gradient(135deg, rgba(46, 213, 115, 0.3), rgba(26, 188, 156, 0.3));
+        color: #1a7c5a;
+        border: 1px solid rgba(46, 213, 115, 0.5);
+      }
+
+      /* Content Area */
+      .settings-content {
+        flex: 1;
+        min-width: 0;
+      }
+
+      .tab-content {
+        display: none;
+      }
+
+      .tab-content.active {
+        display: block;
+      }
       
       .settings-card {
-        background: rgba(17, 51, 34, 0.6);
-        border: 1px solid rgba(255,255,255,0.1);
-        border-radius: 16px;
+        background: linear-gradient(145deg, rgba(13, 53, 38, 0.9), rgba(9, 34, 24, 0.84));
+        border: 1px solid rgba(46, 213, 115, 0.22);
+        border-radius: 24px;
         padding: 32px;
-        backdrop-filter: blur(20px);
-        box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+        backdrop-filter: blur(24px);
+        box-shadow: 0 14px 34px rgba(0, 0, 0, 0.28);
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+        display: flex;
+        flex-direction: column;
+        gap: 24px;
+      }
+
+      .settings-card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 20px 48px rgba(0, 0, 0, 0.32);
+      }
+
+      .settings-card > h2 {
+        margin: 0;
+        font-size: 22px;
+        font-weight: 600;
+        color: inherit;
       }
 
       .form-group {
         margin-bottom: 24px;
+      }
+
+      .settings-card > .form-group:last-child {
+        margin-bottom: 0;
       }
 
       .form-label {
@@ -155,6 +284,217 @@
         color: #10b981 !important;
       }
 
+      /* Theme preview overrides */
+      #backgroundSelector {
+        border-radius: 20px;
+        border: none;
+        background: transparent;
+        padding: 0;
+        display: grid;
+        gap: 20px;
+      }
+
+      @media (min-width: 701px) {
+        #backgroundSelector {
+          grid-template-columns: repeat(3, minmax(0, 1fr));
+        }
+      }
+
+      @media (max-width: 700px) {
+        #backgroundSelector {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      #backgroundSelector .color-option {
+        flex-direction: column;
+        align-items: stretch;
+        border-left: none;
+        border-bottom: none;
+        border-radius: 18px;
+        padding: 18px 20px 20px;
+        background: rgba(255, 255, 255, 0.08);
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        transform: none;
+      }
+
+      #backgroundSelector .color-option::before,
+      #backgroundSelector .color-option.focused::before {
+        display: none;
+      }
+
+      #backgroundSelector .color-option:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 12px 28px rgba(0, 0, 0, 0.32);
+        border-color: rgba(46, 213, 115, 0.35);
+      }
+
+      #backgroundSelector .color-option[data-selected="true"] {
+        border-color: rgba(46, 213, 115, 0.6);
+        box-shadow: 0 18px 36px rgba(0, 0, 0, 0.4);
+        background: linear-gradient(145deg, rgba(46, 213, 115, 0.28), rgba(21, 71, 52, 0.4));
+      }
+
+      #backgroundSelector .color-option .theme-preview {
+        position: relative;
+        border-radius: 12px;
+        overflow: hidden;
+        border: 1px solid rgba(255, 255, 255, 0.18);
+        background: rgba(0, 0, 0, 0.2);
+        height: 96px;
+      }
+
+      #backgroundSelector .color-option .theme-preview img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+        filter: saturate(1.05);
+      }
+
+      #backgroundSelector .color-option .theme-meta {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+      }
+
+      #backgroundSelector .color-option .color-label {
+        font-size: 16px;
+        font-weight: 600;
+        color: #E8F5E9;
+      }
+
+      #backgroundSelector .color-option .check-icon {
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        border: 2px solid rgba(255, 255, 255, 0.35);
+        background: rgba(11, 61, 46, 0.45);
+        font-size: 18px;
+        transition: background 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+      }
+
+      #backgroundSelector .color-option[data-selected="true"] .check-icon {
+        background: linear-gradient(135deg, #2ed573, #1abc9c);
+        border-color: transparent;
+        color: #0d3b2c;
+      }
+
+      body.light-mode #backgroundSelector .color-option {
+        background: rgba(255, 255, 255, 0.9);
+        border: 1px solid rgba(0, 0, 0, 0.1);
+      }
+
+      body.light-mode #backgroundSelector .color-option[data-selected="true"] {
+        background: linear-gradient(145deg, rgba(233, 248, 240, 0.9), rgba(213, 245, 230, 0.9));
+        border-color: rgba(26, 156, 109, 0.35);
+      }
+
+      body.light-mode #backgroundSelector .color-option .color-label {
+        color: #0d3b2c;
+      }
+
+      body.light-mode #backgroundSelector .color-option .check-icon {
+        background: rgba(255, 255, 255, 0.8);
+        border-color: rgba(13, 59, 44, 0.2);
+        color: #0d3b2c;
+      }
+
+      body.light-mode #backgroundSelector .color-option[data-selected="true"] .check-icon {
+        background: linear-gradient(135deg, #2ed573, #1abc9c);
+        border-color: transparent;
+        color: #ffffff;
+      }
+
+      /* App customization */
+      .app-customization-section {
+        display: flex;
+        flex-direction: column;
+        gap: 24px;
+      }
+
+      .customization-group {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 24px;
+        padding: 18px 0;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      }
+
+      .customization-group:last-child {
+        border-bottom: none;
+      }
+
+      .customization-details {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+        max-width: 70%;
+      }
+
+      .customization-details h3 {
+        margin: 0;
+        font-size: 18px;
+        font-weight: 600;
+      }
+
+      .customization-details p {
+        margin: 0;
+        font-size: 14px;
+        line-height: 1.6;
+        opacity: 0.85;
+      }
+
+      .density-select {
+        position: relative;
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        padding: 10px 16px;
+        border-radius: 12px;
+        border: 1px solid rgba(255, 255, 255, 0.25);
+        background: rgba(255, 255, 255, 0.08);
+        color: #ffffff;
+        font-weight: 600;
+        cursor: pointer;
+        transition: background 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+      }
+
+      .density-select span {
+        pointer-events: none;
+      }
+
+      .density-select::after {
+        content: "⌄";
+        font-size: 14px;
+        opacity: 0.75;
+      }
+
+      .density-select select {
+        position: absolute;
+        inset: 0;
+        opacity: 0;
+        cursor: pointer;
+      }
+
+      .density-select:hover {
+        background: rgba(255, 255, 255, 0.15);
+        box-shadow: 0 6px 14px rgba(0, 0, 0, 0.2);
+        border-color: rgba(255, 255, 255, 0.35);
+      }
+
+      body.light-mode .density-select {
+        color: #1a1a1a;
+        border: 1px solid rgba(0, 0, 0, 0.15);
+        background: rgba(0, 0, 0, 0.04);
+      }
+
+      body.light-mode .density-select:hover {
+        background: rgba(0, 0, 0, 0.08);
+      }
+
       .back-link {
         display: inline-block;
         margin-top: 24px;
@@ -222,14 +562,13 @@
       }
 
       /* Card or container glass effect */
-      .settings-card {
-        background: rgba(255, 255, 255, 0.35);
-        border: 1px solid rgba(255, 255, 255, 0.5);
-        border-radius: 14px;
-        box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
-        backdrop-filter: blur(15px);
-        -webkit-backdrop-filter: blur(15px);
-        margin-bottom: 24px;
+      body.light-mode .settings-card {
+        background: linear-gradient(145deg, rgba(233, 248, 240, 0.95), rgba(203, 240, 223, 0.9));
+        border: 1px solid rgba(26, 156, 109, 0.2);
+        border-radius: 24px;
+        box-shadow: 0 18px 32px rgba(0, 0, 0, 0.12);
+        backdrop-filter: blur(24px);
+        -webkit-backdrop-filter: blur(24px);
       }
 
       .about-list {
@@ -248,6 +587,1485 @@
 
       .about-list a:hover {
         text-decoration: underline;
+      }
+
+      /* Profile card */
+      .profile-card {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 20px;
+        text-align: center;
+      }
+
+      /* Profile card inside tab content - align left */
+      .tab-content .profile-card {
+        align-items: flex-start;
+        text-align: left;
+      }
+
+      .tab-content .profile-card .profile-info {
+        align-items: flex-start;
+      }
+
+      .tab-content .profile-card .profile-actions {
+        align-self: flex-start;
+      }
+
+      .profile-card .profile-avatar {
+        width: 120px;
+        height: 120px;
+        border-radius: 50%;
+        overflow: hidden;
+        flex-shrink: 0;
+        border: 4px solid rgba(255, 255, 255, 0.3);
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
+      }
+
+      .profile-card .profile-avatar img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+      }
+
+      .profile-card .profile-info {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        align-items: center;
+      }
+
+      .profile-card .profile-name {
+        font-size: 20px;
+        font-weight: 600;
+        color: #FFFFFF;
+        margin: 0;
+      }
+
+      .profile-card .profile-email {
+        font-size: 15px;
+        opacity: 0.85;
+        color: inherit;
+      }
+
+      body.light-mode .profile-card .profile-name {
+        color: #0d3b2c;
+      }
+      .settings-layout {
+        display: grid;
+        gap: 32px;
+      }
+
+      .settings-layout > * {
+        width: 100%;
+      }
+
+      .settings-row-two {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 20px;
+        width: 100%;
+      }
+
+      .settings-row-two > .settings-card {
+        height: 100%;
+      }
+
+      .settings-row-two .app-customization-section {
+        max-width: 100%;
+      }
+
+      @media (min-width: 900px) {
+        .settings-layout {
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+
+        .settings-layout > .profile-card {
+          grid-column: span 2;
+        }
+
+        .settings-layout > .form-settings-card {
+          grid-column: span 2;
+        }
+
+        .settings-layout > .settings-row-two {
+          grid-column: span 2;
+        }
+
+        .settings-layout > #aboutCard {
+          grid-column: span 2;
+        }
+      }
+
+      .profile-card .profile-actions {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+      }
+
+      .profile-edit-btn {
+        padding: 10px 18px;
+        border-radius: 999px;
+        border: none;
+        background: linear-gradient(135deg, #2ed573, #1abc9c);
+        color: #ffffff;
+        font-weight: 600;
+        letter-spacing: 0.3px;
+        cursor: pointer;
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+      }
+
+      .profile-edit-btn:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 8px 16px rgba(46, 213, 115, 0.25);
+      }
+
+      .profile-edit-btn:focus {
+        outline: 2px solid rgba(46, 213, 115, 0.6);
+        outline-offset: 2px;
+      }
+
+      .profile-edit-btn:active {
+        transform: translateY(0);
+      }
+
+      /* Profile Editable Fields */
+      .profile-field {
+        background: rgba(255, 255, 255, 0.08);
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        border-radius: 20px;
+        padding: 20px 22px;
+        text-align: left;
+        display: flex;
+        flex-direction: column;
+        gap: 14px;
+        margin-bottom: 20px;
+      }
+
+      .profile-field:last-child {
+        margin-bottom: 0;
+      }
+
+      .field-head {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+      }
+
+      .field-label {
+        font-size: 15px;
+        font-weight: 600;
+        letter-spacing: 0.2px;
+        color: #E8F5E9;
+      }
+
+      .field-actions {
+        display: flex;
+        gap: 8px;
+      }
+
+      .field-edit-btn,
+      .field-save-btn,
+      .field-cancel-btn {
+        padding: 8px 18px;
+        border-radius: 999px;
+        border: none;
+        background: rgba(255, 255, 255, 0.14);
+        color: #E8F5E9;
+        font-size: 13px;
+        font-weight: 600;
+        cursor: pointer;
+        letter-spacing: 0.2px;
+        transition: background 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+      }
+
+      .field-edit-btn:hover {
+        background: rgba(255, 255, 255, 0.22);
+        transform: translateY(-1px);
+        box-shadow: 0 6px 16px rgba(0, 0, 0, 0.25);
+      }
+
+      .field-save-btn {
+        background: linear-gradient(135deg, rgba(46, 213, 115, 0.3), rgba(26, 188, 156, 0.3));
+        color: #2ed573;
+      }
+
+      .field-save-btn:hover {
+        background: linear-gradient(135deg, rgba(46, 213, 115, 0.4), rgba(26, 188, 156, 0.4));
+        transform: translateY(-1px);
+        box-shadow: 0 6px 16px rgba(46, 213, 115, 0.3);
+      }
+
+      .field-cancel-btn {
+        background: rgba(255, 255, 255, 0.1);
+      }
+
+      .field-cancel-btn:hover {
+        background: rgba(255, 255, 255, 0.18);
+        transform: translateY(-1px);
+      }
+
+      .field-value {
+        font-size: 16px;
+        color: #E8F5E9;
+        padding: 14px 16px;
+        border-radius: 14px;
+        background: rgba(255, 255, 255, 0.06);
+        min-height: 48px;
+        display: flex;
+        align-items: center;
+      }
+
+      .field-value.hidden {
+        display: none;
+      }
+
+      .field-input {
+        width: 100%;
+        border-radius: 14px;
+        border: 1px solid rgba(255, 255, 255, 0.18);
+        background: rgba(255, 255, 255, 0.1);
+        padding: 14px 16px;
+        color: #E8F5E9;
+        font-size: 16px;
+        font-family: inherit;
+        outline: none;
+        transition: border-color 0.2s ease, box-shadow 0.2s ease;
+      }
+
+      .field-input:focus {
+        border-color: rgba(46, 213, 115, 0.6);
+        box-shadow: 0 0 0 3px rgba(46, 213, 115, 0.2);
+      }
+
+      .field-select {
+        width: 100%;
+        border-radius: 14px;
+        border: 1px solid rgba(255, 255, 255, 0.18);
+        background: rgba(255, 255, 255, 0.1);
+        padding: 14px 16px;
+        color: #E8F5E9;
+        font-size: 16px;
+        font-family: inherit;
+        outline: none;
+        cursor: pointer;
+        appearance: none;
+        transition: border-color 0.2s ease, box-shadow 0.2s ease;
+      }
+
+      .field-select:focus {
+        border-color: rgba(46, 213, 115, 0.6);
+        box-shadow: 0 0 0 3px rgba(46, 213, 115, 0.2);
+      }
+
+      .field-textarea {
+        width: 100%;
+        border-radius: 14px;
+        border: 1px solid rgba(255, 255, 255, 0.18);
+        background: rgba(255, 255, 255, 0.1);
+        padding: 14px 16px;
+        color: #E8F5E9;
+        font-size: 16px;
+        font-family: inherit;
+        outline: none;
+        min-height: 120px;
+        resize: vertical;
+        transition: border-color 0.2s ease, box-shadow 0.2s ease;
+      }
+
+      .field-textarea:focus {
+        border-color: rgba(46, 213, 115, 0.6);
+        box-shadow: 0 0 0 3px rgba(46, 213, 115, 0.2);
+      }
+
+      .field-input.hidden,
+      .field-select.hidden,
+      .field-textarea.hidden {
+        display: none;
+      }
+
+      body.light-mode .field-label {
+        color: #0d3b2c;
+      }
+
+      body.light-mode .field-value {
+        color: #0d3b2c;
+        background: rgba(0, 0, 0, 0.04);
+      }
+
+      body.light-mode .field-input,
+      body.light-mode .field-select,
+      body.light-mode .field-textarea {
+        color: #0d3b2c;
+        background: rgba(0, 0, 0, 0.05);
+        border-color: rgba(0, 0, 0, 0.15);
+      }
+
+      /* Profile Picture Section */
+      .profile-picture-section {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 20px;
+        padding: 32px 0;
+        margin-bottom: 32px;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+      }
+
+      .profile-avatar-container {
+        position: relative;
+        width: 140px;
+        height: 140px;
+      }
+
+      .profile-avatar-display {
+        width: 100%;
+        height: 100%;
+        border-radius: 50%;
+        border: 4px solid rgba(255, 255, 255, 0.3);
+        overflow: hidden;
+        box-shadow: 0 12px 28px rgba(0, 0, 0, 0.3);
+        background: radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.15), rgba(11, 61, 46, 0.8));
+        cursor: pointer;
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+      }
+
+      .profile-avatar-display:hover {
+        transform: scale(1.05);
+        box-shadow: 0 16px 36px rgba(0, 0, 0, 0.4);
+      }
+
+      .profile-avatar-display img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+      }
+
+      .change-photo-btn {
+        padding: 10px 24px;
+        border-radius: 999px;
+        border: none;
+        background: linear-gradient(135deg, rgba(46, 213, 115, 0.2), rgba(26, 188, 156, 0.2));
+        color: #2ed573;
+        font-weight: 600;
+        font-size: 14px;
+        cursor: pointer;
+        transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+        border: 1px solid rgba(46, 213, 115, 0.3);
+      }
+
+      .change-photo-btn:hover {
+        transform: translateY(-1px);
+        background: linear-gradient(135deg, rgba(46, 213, 115, 0.3), rgba(26, 188, 156, 0.3));
+        box-shadow: 0 6px 16px rgba(46, 213, 115, 0.25);
+      }
+
+      /* Avatar Modal */
+      .avatar-modal-overlay {
+        position: fixed;
+        inset: 0;
+        background: rgba(5, 15, 10, 0.72);
+        backdrop-filter: blur(16px);
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.3s ease;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 24px;
+        z-index: 10000;
+      }
+
+      .avatar-modal-overlay.is-visible {
+        opacity: 1;
+        pointer-events: auto;
+      }
+
+      .avatar-modal-card {
+        width: min(520px, 90vw);
+        max-height: 90vh;
+        overflow-y: auto;
+        border-radius: 24px;
+        padding: 32px;
+        background: linear-gradient(145deg, rgba(18, 53, 38, 0.95), rgba(8, 25, 18, 0.92));
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        box-shadow: 0 20px 45px rgba(0, 0, 0, 0.35);
+        display: flex;
+        flex-direction: column;
+        gap: 24px;
+        position: relative;
+      }
+
+      .avatar-modal-card h3 {
+        margin: 0;
+        font-size: 22px;
+        font-weight: 600;
+        color: #E8F5E9;
+      }
+
+      .avatar-upload-section {
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+      }
+
+      .avatar-upload-label {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 12px 24px;
+        border-radius: 12px;
+        border: 2px dashed rgba(46, 213, 115, 0.4);
+        background: rgba(46, 213, 115, 0.1);
+        color: #2ed573;
+        font-weight: 600;
+        font-size: 14px;
+        cursor: pointer;
+        transition: background 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
+      }
+
+      .avatar-upload-label:hover {
+        background: rgba(46, 213, 115, 0.15);
+        border-color: rgba(46, 213, 115, 0.6);
+        transform: translateY(-1px);
+      }
+
+      .avatar-upload-label input[type="file"] {
+        display: none;
+      }
+
+      .avatar-preview {
+        width: 120px;
+        height: 120px;
+        border-radius: 50%;
+        border: 3px solid rgba(46, 213, 115, 0.4);
+        overflow: hidden;
+        margin: 0 auto;
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+        background: radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.15), rgba(11, 61, 46, 0.8));
+      }
+
+      .avatar-preview img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+      }
+
+      .avatar-presets-section {
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+      }
+
+      .avatar-presets-title {
+        font-size: 16px;
+        font-weight: 600;
+        color: #E8F5E9;
+        margin: 0;
+      }
+
+      .avatar-presets-grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 12px;
+      }
+
+      .avatar-preset-item {
+        aspect-ratio: 1;
+        border-radius: 12px;
+        overflow: hidden;
+        border: 2px solid rgba(255, 255, 255, 0.15);
+        background: rgba(255, 255, 255, 0.08);
+        cursor: pointer;
+        transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+        position: relative;
+      }
+
+      .avatar-preset-item:hover {
+        transform: translateY(-2px);
+        border-color: rgba(46, 213, 115, 0.5);
+        box-shadow: 0 8px 20px rgba(46, 213, 115, 0.2);
+      }
+
+      .avatar-preset-item.selected {
+        border-color: #2ed573;
+        box-shadow: 0 0 0 3px rgba(46, 213, 115, 0.3);
+      }
+
+      .avatar-preset-item img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+      }
+
+      .avatar-preset-item::after {
+        content: '✓';
+        position: absolute;
+        top: 4px;
+        right: 4px;
+        width: 24px;
+        height: 24px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, #2ed573, #1abc9c);
+        color: #0d3b2c;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 14px;
+        font-weight: 700;
+        opacity: 0;
+        transition: opacity 0.2s ease;
+      }
+
+      .avatar-preset-item.selected::after {
+        opacity: 1;
+      }
+
+      .avatar-modal-actions {
+        display: flex;
+        gap: 12px;
+        justify-content: flex-end;
+        margin-top: 8px;
+      }
+
+      .avatar-modal-save,
+      .avatar-modal-cancel {
+        padding: 10px 24px;
+        border-radius: 12px;
+        border: none;
+        font-weight: 600;
+        cursor: pointer;
+        transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+      }
+
+      .avatar-modal-save {
+        background: linear-gradient(135deg, #2ed573, #1abc9c);
+        color: #0d3b2c;
+      }
+
+      .avatar-modal-save:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 8px 18px rgba(46, 213, 115, 0.35);
+      }
+
+      .avatar-modal-cancel {
+        background: rgba(255, 255, 255, 0.08);
+        color: #E8F5E9;
+      }
+
+      .avatar-modal-cancel:hover {
+        background: rgba(255, 255, 255, 0.15);
+        transform: translateY(-1px);
+      }
+
+      body.light-mode .avatar-modal-card {
+        background: rgba(255, 255, 255, 0.92);
+        border: 1px solid rgba(0, 0, 0, 0.08);
+      }
+
+      body.light-mode .avatar-modal-card h3,
+      body.light-mode .avatar-presets-title {
+        color: #0d3b2c;
+      }
+
+      body.light-mode .avatar-upload-label {
+        border-color: rgba(26, 188, 156, 0.4);
+        background: rgba(26, 188, 156, 0.1);
+        color: #1a7c5a;
+      }
+
+      body.light-mode .avatar-modal-cancel {
+        background: rgba(0, 0, 0, 0.05);
+        color: #0d3b2c;
+      }
+
+      @media (max-width: 600px) {
+        .avatar-presets-grid {
+          grid-template-columns: repeat(3, 1fr);
+        }
+      }
+
+      /* Account & Security */
+      .security-section {
+        display: flex;
+        flex-direction: column;
+        gap: 24px;
+      }
+
+      .security-row {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 24px;
+        padding: 18px 0;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      }
+
+      .security-row:last-child {
+        border-bottom: none;
+      }
+
+      .security-text {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+        max-width: 70%;
+      }
+
+      .security-text h3 {
+        margin: 0;
+        font-size: 18px;
+        font-weight: 600;
+      }
+
+      .security-text p {
+        margin: 0;
+        font-size: 14px;
+        line-height: 1.6;
+        opacity: 0.85;
+      }
+
+      .security-button {
+        padding: 10px 20px;
+        border-radius: 12px;
+        border: 1px solid rgba(255, 255, 255, 0.25);
+        background: rgba(255, 255, 255, 0.08);
+        color: #ffffff;
+        font-weight: 600;
+        cursor: pointer;
+        transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+      }
+
+      .security-button:hover {
+        transform: translateY(-1px);
+        background: rgba(255, 255, 255, 0.15);
+        box-shadow: 0 6px 14px rgba(0, 0, 0, 0.2);
+      }
+
+      .security-button:focus {
+        outline: 2px solid rgba(46, 213, 115, 0.6);
+        outline-offset: 2px;
+      }
+
+      body.light-mode .security-button {
+        color: #1a1a1a;
+        border: 1px solid rgba(0, 0, 0, 0.15);
+        background: rgba(0, 0, 0, 0.04);
+      }
+
+      body.light-mode .security-button:hover {
+        background: rgba(0, 0, 0, 0.08);
+      }
+
+      .security-toggle {
+        position: relative;
+        width: 56px;
+        height: 30px;
+      }
+
+      .security-toggle input {
+        opacity: 0;
+        width: 0;
+        height: 0;
+      }
+
+      .toggle-slider {
+        position: absolute;
+        cursor: not-allowed;
+        inset: 0;
+        background: rgba(255, 255, 255, 0.15);
+        border-radius: 999px;
+        transition: background 0.2s ease;
+      }
+
+      .toggle-slider::before {
+        content: "";
+        position: absolute;
+        height: 24px;
+        width: 24px;
+        left: 3px;
+        top: 3px;
+        background: rgba(255, 255, 255, 0.85);
+        border-radius: 50%;
+        transition: transform 0.2s ease;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+      }
+
+      .security-toggle input:checked + .toggle-slider {
+        background: linear-gradient(135deg, #2ed573, #1abc9c);
+      }
+
+      .security-toggle input:checked + .toggle-slider::before {
+        transform: translateX(26px);
+      }
+
+      body.light-mode .toggle-slider {
+        background: rgba(0, 0, 0, 0.1);
+      }
+
+      body.light-mode .toggle-slider::before {
+        background: #ffffff;
+      }
+
+      /* Preferences */
+      .preferences-section {
+        display: flex;
+        flex-direction: column;
+        gap: 24px;
+      }
+
+      .preference-row {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 24px;
+        padding: 18px 0;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      }
+
+      .preference-row:last-child {
+        border-bottom: none;
+      }
+
+      .preference-details {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+        max-width: 70%;
+      }
+
+      .preference-details h3 {
+        margin: 0;
+        font-size: 18px;
+        font-weight: 600;
+      }
+
+      .preference-details p {
+        margin: 0;
+        font-size: 14px;
+        line-height: 1.6;
+        opacity: 0.85;
+      }
+
+      .font-size-options {
+        display: inline-flex;
+        align-items: center;
+        background: rgba(255, 255, 255, 0.06);
+        border: 1px solid rgba(255, 255, 255, 0.15);
+        border-radius: 999px;
+        padding: 4px;
+        gap: 6px;
+      }
+
+      .font-size-button {
+        padding: 8px 16px;
+        border-radius: 999px;
+        border: none;
+        background: transparent;
+        color: inherit;
+        font-weight: 600;
+        cursor: pointer;
+        transition: background 0.2s ease, color 0.2s ease, transform 0.2s ease;
+      }
+
+      .font-size-button.is-active {
+        background: linear-gradient(135deg, rgba(46, 213, 115, 0.35), rgba(26, 188, 156, 0.35));
+        color: #ffffff;
+        transform: translateY(-1px);
+      }
+
+      .font-size-button:hover {
+        background: rgba(255, 255, 255, 0.12);
+      }
+
+      body.light-mode .font-size-options {
+        background: rgba(0, 0, 0, 0.05);
+        border: 1px solid rgba(0, 0, 0, 0.12);
+      }
+
+      body.light-mode .font-size-button {
+        color: #1a1a1a;
+      }
+
+      body.light-mode .font-size-button.is-active {
+        color: #1a1a1a;
+        background: rgba(26, 188, 156, 0.24);
+      }
+
+      /* Font Size Classes */
+      body.normal-font {
+        font-size: 16px;
+      }
+
+      body.large-font {
+        font-size: 18px;
+      }
+
+      body.large-font h1 {
+        font-size: 36px;
+      }
+
+      body.large-font h2 {
+        font-size: 24px;
+      }
+
+      body.large-font h3 {
+        font-size: 20px;
+      }
+
+      body.large-font .sidebar-tab {
+        font-size: 16px;
+      }
+
+      body.large-font .field-label,
+      body.large-font .form-label {
+        font-size: 16px;
+      }
+
+      body.large-font .field-value,
+      body.large-font .field-input,
+      body.large-font .field-select,
+      body.large-font .field-textarea {
+        font-size: 17px;
+      }
+
+      /* Animations Control */
+      body:not(.animations-on) *,
+      body:not(.animations-on) *::before,
+      body:not(.animations-on) *::after {
+        animation-duration: 0s !important;
+        animation-delay: 0s !important;
+        transition-duration: 0s !important;
+        transition-delay: 0s !important;
+      }
+
+      body.animations-on * {
+        transition-duration: 0.2s;
+        transition-timing-function: ease;
+      }
+
+      /* Rounded Corners UI */
+      body.rounded-ui * {
+        border-radius: 10px !important;
+      }
+
+      body.rounded-ui .settings-card,
+      body.rounded-ui .profile-field,
+      body.rounded-ui .sidebar-tab,
+      body.rounded-ui button,
+      body.rounded-ui input,
+      body.rounded-ui select,
+      body.rounded-ui textarea {
+        border-radius: 10px !important;
+      }
+
+      /* Glass Effect UI */
+      body.glass-ui .settings-card,
+      body.glass-ui .settings-sidebar,
+      body.glass-ui .profile-card {
+        backdrop-filter: blur(20px) saturate(1.2);
+        background: rgba(255, 255, 255, 0.08);
+      }
+
+      body.glass-ui .modal-card {
+        backdrop-filter: blur(24px) saturate(1.3);
+        background: rgba(18, 53, 38, 0.85);
+      }
+
+      /* UI Density Classes */
+      body.ui-density-compact * {
+        padding: calc(var(--density-multiplier, 1) * 0.75);
+        gap: calc(var(--density-multiplier, 1) * 0.75);
+      }
+
+      body.ui-density-compact .settings-card {
+        padding: 20px;
+        gap: 16px;
+      }
+
+      body.ui-density-compact .sidebar-tab {
+        padding: 10px 20px;
+      }
+
+      body.ui-density-compact .profile-field {
+        padding: 16px 18px;
+        gap: 12px;
+      }
+
+
+      body.ui-density-spacious .settings-card {
+        padding: 48px;
+        gap: 32px;
+      }
+
+      body.ui-density-spacious .sidebar-tab {
+        padding: 18px 28px;
+      }
+
+      body.ui-density-spacious .profile-field {
+        padding: 28px 30px;
+        gap: 20px;
+      }
+
+      body.ui-density-spacious .customization-group,
+      body.ui-density-spacious .preference-row,
+      body.ui-density-spacious .notification-row,
+      body.ui-density-spacious .collaboration-row {
+        padding: 24px 0;
+        gap: 32px;
+      }
+
+      /* Notifications */
+      .notifications-section {
+        display: flex;
+        flex-direction: column;
+        gap: 24px;
+      }
+
+      .notification-row {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 24px;
+        padding: 18px 0;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      }
+
+      .notification-row:last-child {
+        border-bottom: none;
+      }
+
+      .notification-details {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+        max-width: 70%;
+      }
+
+      .notification-details h3 {
+        margin: 0;
+        font-size: 18px;
+        font-weight: 600;
+      }
+
+      .notification-details p {
+        margin: 0;
+        font-size: 14px;
+        line-height: 1.6;
+        opacity: 0.85;
+      }
+
+      /* Collaboration */
+      .collaboration-section {
+        display: flex;
+        flex-direction: column;
+        gap: 24px;
+      }
+
+      .collaboration-row {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 24px;
+        padding: 18px 0;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      }
+
+      .collaboration-row:last-child {
+        border-bottom: none;
+      }
+
+      .collaboration-details {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+        max-width: 70%;
+      }
+
+      .collaboration-details h3 {
+        margin: 0;
+        font-size: 18px;
+        font-weight: 600;
+      }
+
+      .collaboration-details p {
+        margin: 0;
+        font-size: 14px;
+        line-height: 1.6;
+        opacity: 0.85;
+      }
+
+      .collaboration-select {
+        position: relative;
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        padding: 10px 16px;
+        border-radius: 12px;
+        border: 1px solid rgba(255, 255, 255, 0.25);
+        background: rgba(255, 255, 255, 0.08);
+        color: #ffffff;
+        font-weight: 600;
+        cursor: pointer;
+        transition: background 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+      }
+
+      .collaboration-select span {
+        pointer-events: none;
+      }
+
+      .collaboration-select::after {
+        content: "⌄";
+        font-size: 14px;
+        opacity: 0.75;
+      }
+
+      .collaboration-select:hover {
+        background: rgba(255, 255, 255, 0.15);
+        box-shadow: 0 6px 14px rgba(0, 0, 0, 0.2);
+      }
+
+      body.light-mode .collaboration-select {
+        color: #1a1a1a;
+        border-color: rgba(0, 0, 0, 0.15);
+        background: rgba(0, 0, 0, 0.04);
+      }
+
+      body.light-mode .collaboration-select:hover {
+        background: rgba(0, 0, 0, 0.08);
+      }
+
+      .collaboration-select select {
+        position: absolute;
+        inset: 0;
+        opacity: 0;
+        cursor: pointer;
+      }
+
+      /* Connected Accounts */
+      .connections-section {
+        display: flex;
+        flex-direction: column;
+        gap: 18px;
+      }
+
+      .connection-item {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 24px;
+        padding: 18px 0;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      }
+
+      .connection-item:last-child {
+        border-bottom: none;
+      }
+
+      .connection-details {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+      }
+
+      .connection-details h3 {
+        margin: 0;
+        font-size: 18px;
+        font-weight: 600;
+      }
+
+      .connection-details p {
+        margin: 0;
+        font-size: 14px;
+        line-height: 1.6;
+        opacity: 0.85;
+      }
+
+      .connection-button {
+        padding: 10px 20px;
+        border-radius: 12px;
+        border: 1px solid rgba(255, 255, 255, 0.25);
+        background: rgba(255, 255, 255, 0.08);
+        color: #ffffff;
+        font-weight: 600;
+        cursor: pointer;
+        transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+      }
+
+      .connection-button:hover {
+        transform: translateY(-1px);
+        background: rgba(255, 255, 255, 0.15);
+        box-shadow: 0 6px 14px rgba(0, 0, 0, 0.2);
+      }
+
+      .connection-button.connected {
+        background: rgba(46, 213, 115, 0.15);
+        border-color: rgba(46, 213, 115, 0.4);
+        color: #2ed573;
+        cursor: default;
+        opacity: 0.8;
+      }
+
+      .connection-button.connected:hover {
+        transform: none;
+        background: rgba(46, 213, 115, 0.15);
+        box-shadow: none;
+      }
+
+      body.light-mode .connection-button {
+        color: #1a1a1a;
+        border: 1px solid rgba(0, 0, 0, 0.15);
+        background: rgba(0, 0, 0, 0.04);
+      }
+
+      body.light-mode .connection-button:hover {
+        background: rgba(0, 0, 0, 0.08);
+      }
+
+      /* Responsive layout tweaks */
+      @media (max-width: 900px) {
+        .settings-main-layout {
+          flex-direction: column;
+        }
+
+        .settings-sidebar {
+          width: 100%;
+          position: relative;
+          top: 0;
+          max-height: none;
+        }
+
+        .settings-tabs {
+          flex-direction: row;
+          overflow-x: auto;
+          padding: 0 16px;
+        }
+
+        .sidebar-tab {
+          border-radius: 999px;
+          white-space: nowrap;
+          margin: 0;
+        }
+
+        .profile-card {
+          align-items: flex-start;
+        }
+        
+        .settings-row-two {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      @media (max-width: 768px) {
+        .profile-card {
+          flex-direction: column;
+          text-align: center;
+        }
+
+        .profile-card .profile-info,
+        .profile-card .profile-actions {
+          width: 100%;
+          align-items: center;
+        }
+
+        .profile-card .profile-actions {
+          justify-content: center;
+        }
+
+        .security-row,
+        .preference-row,
+        .notification-row,
+        .collaboration-row,
+        .connection-item,
+        .customization-group {
+          flex-direction: column;
+          align-items: flex-start;
+          width: 100%;
+        }
+
+        .security-text,
+        .preference-details,
+        .notification-details,
+        .collaboration-details,
+        .connection-details {
+          max-width: 100%;
+        }
+
+        .security-button,
+        .delete-button,
+        .collaboration-select,
+        .connection-button,
+        .font-size-options,
+        .density-select {
+          width: 100%;
+          justify-content: center;
+        }
+
+        .font-size-options {
+          justify-content: space-between;
+        }
+
+        .font-size-button {
+          flex: 1;
+        }
+
+        .security-toggle {
+          align-self: flex-start;
+        }
+      }
+
+      .delete-button {
+        padding: 10px 22px;
+        border-radius: 12px;
+        border: 1px solid rgba(220, 53, 69, 0.5);
+        background: rgba(220, 53, 69, 0.12);
+        color: #ff6b6b;
+        font-weight: 600;
+        cursor: pointer;
+        transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+      }
+
+      .delete-button:hover {
+        transform: translateY(-1px);
+        background: rgba(220, 53, 69, 0.18);
+        box-shadow: 0 6px 14px rgba(220, 53, 69, 0.25);
+      }
+
+      .delete-button:focus {
+        outline: 2px solid rgba(220, 53, 69, 0.5);
+        outline-offset: 2px;
+      }
+
+      body.light-mode .delete-button {
+        color: #c0392b;
+        background: rgba(192, 57, 43, 0.08);
+        border: 1px solid rgba(192, 57, 43, 0.4);
+      }
+
+      body.light-mode .delete-button:hover {
+        background: rgba(192, 57, 43, 0.14);
+      }
+
+      /* Modals */
+      .modal-overlay {
+        position: fixed;
+        inset: 0;
+        background: rgba(5, 15, 10, 0.72);
+        backdrop-filter: blur(16px);
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.3s ease;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 24px;
+      }
+
+      .modal-overlay.is-visible {
+        opacity: 1;
+        pointer-events: auto;
+      }
+
+      .modal-card {
+        width: min(420px, 90vw);
+        border-radius: 20px;
+        padding: 28px 32px;
+        background: linear-gradient(145deg, rgba(18, 53, 38, 0.95), rgba(8, 25, 18, 0.92));
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        box-shadow: 0 20px 45px rgba(0, 0, 0, 0.35);
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+        position: relative;
+      }
+
+      body.light-mode .modal-card {
+        background: rgba(255, 255, 255, 0.92);
+        border: 1px solid rgba(0, 0, 0, 0.08);
+        box-shadow: 0 20px 45px rgba(0, 0, 0, 0.15);
+      }
+
+      .modal-card h3 {
+        margin: 0;
+        font-size: 22px;
+        font-weight: 600;
+      }
+
+      .modal-card p {
+        margin: 0;
+        font-size: 14px;
+        line-height: 1.7;
+        opacity: 0.88;
+      }
+
+      .modal-actions {
+        display: flex;
+        justify-content: flex-end;
+        gap: 12px;
+      }
+
+      .modal-close,
+      .modal-confirm {
+        padding: 10px 18px;
+        border-radius: 10px;
+        border: none;
+        font-weight: 600;
+        cursor: pointer;
+        transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+      }
+
+      .modal-close {
+        background: rgba(255, 255, 255, 0.08);
+        color: #ffffff;
+      }
+
+      .modal-close:hover {
+        background: rgba(255, 255, 255, 0.15);
+        transform: translateY(-1px);
+      }
+
+      .modal-confirm {
+        background: linear-gradient(135deg, #ff5f6d, #ffc371);
+        color: #ffffff;
+      }
+
+      .modal-confirm:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 8px 18px rgba(255, 95, 109, 0.35);
+      }
+
+      body.light-mode .modal-close {
+        background: rgba(0, 0, 0, 0.05);
+        color: #1a1a1a;
+      }
+
+      body.light-mode .modal-close:hover {
+        background: rgba(0, 0, 0, 0.08);
+      }
+
+      /* Modal Form Fields */
+      .modal-form {
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+      }
+
+      .modal-form-group {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+      }
+
+      .modal-form-label {
+        font-size: 14px;
+        font-weight: 600;
+        color: #E8F5E9;
+      }
+
+      .modal-form-input {
+        width: 100%;
+        border-radius: 12px;
+        border: 1px solid rgba(255, 255, 255, 0.18);
+        background: rgba(255, 255, 255, 0.1);
+        padding: 12px 16px;
+        color: #E8F5E9;
+        font-size: 15px;
+        font-family: inherit;
+        outline: none;
+        transition: border-color 0.2s ease, box-shadow 0.2s ease;
+      }
+
+      .modal-form-input:focus {
+        border-color: rgba(46, 213, 115, 0.6);
+        box-shadow: 0 0 0 3px rgba(46, 213, 115, 0.2);
+      }
+
+      .modal-form-error {
+        font-size: 12px;
+        color: #ff6b6b;
+        margin-top: -4px;
+        display: none;
+      }
+
+      .modal-form-error.show {
+        display: block;
+      }
+
+      body.light-mode .modal-form-label {
+        color: #0d3b2c;
+      }
+
+      body.light-mode .modal-form-input {
+        color: #0d3b2c;
+        background: rgba(0, 0, 0, 0.05);
+        border-color: rgba(0, 0, 0, 0.15);
+      }
+
+      /* Toast/Snackbar */
+      .toast {
+        position: fixed;
+        bottom: 24px;
+        right: 24px;
+        background: linear-gradient(145deg, rgba(18, 53, 38, 0.95), rgba(8, 25, 18, 0.92));
+        border: 1px solid rgba(46, 213, 115, 0.3);
+        border-radius: 12px;
+        padding: 16px 20px;
+        color: #E8F5E9;
+        font-size: 14px;
+        font-weight: 500;
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+        backdrop-filter: blur(16px);
+        z-index: 10000;
+        opacity: 0;
+        transform: translateY(20px);
+        transition: opacity 0.3s ease, transform 0.3s ease;
+        pointer-events: none;
+        max-width: 320px;
+      }
+
+      .toast.show {
+        opacity: 1;
+        transform: translateY(0);
+        pointer-events: auto;
+      }
+
+      .toast.success {
+        border-color: rgba(46, 213, 115, 0.5);
+        background: linear-gradient(145deg, rgba(18, 53, 38, 0.98), rgba(8, 25, 18, 0.95));
+      }
+
+      .toast.error {
+        border-color: rgba(255, 107, 107, 0.5);
+        background: linear-gradient(145deg, rgba(53, 18, 18, 0.98), rgba(25, 8, 8, 0.95));
+      }
+
+      body.light-mode .toast {
+        background: rgba(255, 255, 255, 0.95);
+        border: 1px solid rgba(26, 156, 109, 0.3);
+        color: #0d3b2c;
+      }
+
+      body.light-mode .toast.success {
+        border-color: rgba(46, 213, 115, 0.5);
+      }
+
+      body.light-mode .toast.error {
+        border-color: rgba(255, 107, 107, 0.5);
+      }
+
+      /* Enable 2FA Toggle */
+      .security-toggle input:not(:disabled) {
+        cursor: pointer;
+      }
+
+      .security-toggle input:not(:disabled) + .toggle-slider {
+        cursor: pointer;
       }
 
       /* Navigation colors */
@@ -321,12 +2139,12 @@
       }
     </style>
   </head>
-  <body class="page-container">
+  <body>
     <header>
       <div class="nav">
         <div class="logo" data-translate="common.slideMaker">SlideMaker</div>
         <nav class="menu" aria-label="Main">
-          <a href="./templates.html" data-translate="common.home">Home</a>
+          <a href="./Home.html" data-translate="common.home">Home</a>
           <a href="#" class="active" data-translate="common.settings">Settings</a>
         </nav>
         <div class="spacer"></div>
@@ -336,21 +2154,379 @@
     <main class="container">
       <h1 data-translate="settings.title">Settings</h1>
       
-      <div class="settings-card">
+      <!-- Two-Column Layout: Sidebar + Content -->
+      <div class="settings-main-layout">
+        <!-- Left Sidebar Navigation -->
+        <aside class="settings-sidebar" aria-label="Settings navigation">
+          <nav class="settings-tabs">
+            <button class="sidebar-tab active" data-tab="profile" aria-selected="true">Profile</button>
+            <button class="sidebar-tab" data-tab="account-security" aria-selected="false">Account & Security</button>
+            <button class="sidebar-tab" data-tab="preferences" aria-selected="false">Preferences</button>
+            <button class="sidebar-tab" data-tab="notifications" aria-selected="false">Notifications</button>
+            <button class="sidebar-tab" data-tab="collaboration" aria-selected="false">Collaboration</button>
+            <button class="sidebar-tab" data-tab="connected-accounts" aria-selected="false">Connected Accounts</button>
+            <button class="sidebar-tab" data-tab="app-customization" aria-selected="false">App Customization</button>
+            <button class="sidebar-tab" data-tab="language-theme" aria-selected="false">Language & Theme</button>
+            <button class="sidebar-tab" data-tab="about" aria-selected="false">About App</button>
+          </nav>
+        </aside>
+
+        <!-- Right Content Area -->
+        <div class="settings-content">
+          <!-- Profile Tab -->
+          <div class="tab-content active" id="profile">
+            <section class="settings-card" aria-labelledby="profileHeading">
+              <h2 id="profileHeading">Profile</h2>
+              
+              <!-- Profile Picture Section -->
+              <div class="profile-picture-section">
+                <div class="profile-avatar-container">
+                  <div class="profile-avatar-display" id="profileAvatarDisplay">
+                    <img id="profileAvatarImg" src="https://i.pravatar.cc/260?img=12" alt="Profile avatar">
+        </div>
+        </div>
+                <button type="button" class="change-photo-btn" id="changePhotoBtn">Change Photo</button>
+              </div>
+              
+              <div class="profile-field" data-field="firstName">
+                <div class="field-head">
+                  <span class="field-label">First Name</span>
+                  <div class="field-actions">
+                    <button type="button" class="field-edit-btn">Edit</button>
+                    <button type="button" class="field-save-btn hidden">Save</button>
+                    <button type="button" class="field-cancel-btn hidden">Cancel</button>
+        </div>
+        </div>
+                <div class="field-value" data-field-value="firstName">Avery</div>
+                <input type="text" class="field-input hidden" data-field-input="firstName" placeholder="Enter first name" value="Avery">
+              </div>
+
+              <div class="profile-field" data-field="lastName">
+                <div class="field-head">
+                  <span class="field-label">Last Name</span>
+                  <div class="field-actions">
+                    <button type="button" class="field-edit-btn">Edit</button>
+                    <button type="button" class="field-save-btn hidden">Save</button>
+                    <button type="button" class="field-cancel-btn hidden">Cancel</button>
+                  </div>
+                </div>
+                <div class="field-value" data-field-value="lastName">Johnson</div>
+                <input type="text" class="field-input hidden" data-field-input="lastName" placeholder="Enter last name" value="Johnson">
+              </div>
+
+              <div class="profile-field" data-field="email">
+                <div class="field-head">
+                  <span class="field-label">Email Address</span>
+                  <div class="field-actions">
+                    <button type="button" class="field-edit-btn">Edit</button>
+                    <button type="button" class="field-save-btn hidden">Save</button>
+                    <button type="button" class="field-cancel-btn hidden">Cancel</button>
+                  </div>
+                </div>
+                <div class="field-value" data-field-value="email">avery.johnson@example.com</div>
+                <input type="email" class="field-input hidden" data-field-input="email" placeholder="name@example.com" value="avery.johnson@example.com">
+              </div>
+
+              <div class="profile-field" data-field="country">
+                <div class="field-head">
+                  <span class="field-label">Country</span>
+                  <div class="field-actions">
+                    <button type="button" class="field-edit-btn">Edit</button>
+                    <button type="button" class="field-save-btn hidden">Save</button>
+                    <button type="button" class="field-cancel-btn hidden">Cancel</button>
+                  </div>
+                </div>
+                <div class="field-value" data-field-value="country">United States</div>
+                <select class="field-select hidden" data-field-input="country">
+                  <option value="United States" selected>United States</option>
+                  <option value="Canada">Canada</option>
+                  <option value="United Kingdom">United Kingdom</option>
+                  <option value="Germany">Germany</option>
+                  <option value="Saudi Arabia">Saudi Arabia</option>
+                  <option value="Australia">Australia</option>
+                </select>
+              </div>
+
+              <div class="profile-field" data-field="aboutMe">
+                <div class="field-head">
+                  <span class="field-label">About Me</span>
+                  <div class="field-actions">
+                    <button type="button" class="field-edit-btn">Edit</button>
+                    <button type="button" class="field-save-btn hidden">Save</button>
+                    <button type="button" class="field-cancel-btn hidden">Cancel</button>
+                  </div>
+                </div>
+                <div class="field-value" data-field-value="aboutMe">Passionate about crafting engaging slide decks and visual storytelling that resonates with every audience.</div>
+                <textarea class="field-textarea hidden" data-field-input="aboutMe" placeholder="Share a short bio">Passionate about crafting engaging slide decks and visual storytelling that resonates with every audience.</textarea>
+        </div>
+        </section>
+          </div>
+
+          <!-- Account & Security Tab -->
+          <div class="tab-content" id="account-security">
+      <section class="settings-card security-section" aria-labelledby="securityHeading">
+        <h2 id="securityHeading">Account &amp; Security</h2>
+
+        <div class="security-row">
+          <div class="security-text">
+            <h3>Change Password</h3>
+            <p>Update your password regularly to keep your account protected. Add logic to open the modal when ready.</p>
+          </div>
+          <button type="button" class="security-button" aria-haspopup="dialog" aria-controls="changePasswordModal">Change Password</button>
+        </div>
+
+        <div class="security-row">
+          <div class="security-text">
+            <h3>Two-Factor Authentication</h3>
+            <p>Add an extra layer of security to your account. Toggle will activate once logic is connected.</p>
+          </div>
+          <label class="security-toggle">
+            <input type="checkbox" id="twoFactorToggle" aria-label="Two-Factor Authentication">
+            <span class="toggle-slider"></span>
+          </label>
+        </div>
+
+        <div class="security-row">
+          <div class="security-text">
+            <h3>Delete Account</h3>
+            <p>Permanently remove your account and associated data. Connect a confirmation flow before enabling.</p>
+          </div>
+          <button type="button" class="delete-button" aria-haspopup="dialog" aria-controls="deleteAccountModal">Delete Account</button>
+        </div>
+      </section>
+          </div>
+
+          <!-- Preferences Tab -->
+          <div class="tab-content" id="preferences">
+      <section class="settings-card preferences-section" aria-labelledby="preferencesHeading">
+        <h2 id="preferencesHeading">Preferences</h2>
+
+        <div class="preference-row">
+          <div class="preference-details">
+            <h3>Auto-Save Presentations</h3>
+            <p>Automatically back up your presentation progress while you work.</p>
+          </div>
+          <label class="security-toggle">
+            <input type="checkbox" id="autoSaveToggle" aria-label="Auto-Save Presentations">
+            <span class="toggle-slider"></span>
+          </label>
+        </div>
+
+        <div class="preference-row">
+          <div class="preference-details">
+            <h3>Font Size</h3>
+            <p>Adjust the interface typography that suits your presentation workflow best.</p>
+          </div>
+          <div class="font-size-options" role="group" aria-label="Font size selection">
+            <button type="button" class="font-size-button is-active" data-font-size="normal" aria-pressed="true">Normal</button>
+            <button type="button" class="font-size-button" data-font-size="large" aria-pressed="false">Large</button>
+          </div>
+        </div>
+
+        <div class="preference-row">
+          <div class="preference-details">
+            <h3>Enable Animations</h3>
+            <p>Control interface motion for transitions and micro-interactions.</p>
+          </div>
+          <label class="security-toggle">
+            <input type="checkbox" id="animationsToggle" aria-label="Enable Animations">
+            <span class="toggle-slider"></span>
+          </label>
+        </div>
+      </section>
+          </div>
+
+          <!-- Notifications Tab -->
+          <div class="tab-content" id="notifications">
+      <section class="settings-card notifications-section" aria-labelledby="notificationsHeading">
+        <h2 id="notificationsHeading">Notifications</h2>
+
+        <div class="notification-row">
+          <div class="notification-details">
+            <h3>Project Activity</h3>
+            <p>Stay updated when changes happen across your shared presentations.</p>
+          </div>
+          <label class="security-toggle">
+            <input type="checkbox" id="notifProjectActivity" aria-label="Project Activity notifications">
+            <span class="toggle-slider"></span>
+          </label>
+        </div>
+
+        <div class="notification-row">
+          <div class="notification-details">
+            <h3>Comments &amp; Mentions</h3>
+            <p>Get notified when teammates leave feedback or mention you.</p>
+          </div>
+          <label class="security-toggle">
+            <input type="checkbox" id="notifCommentsMentions" aria-label="Comments & Mentions notifications">
+            <span class="toggle-slider"></span>
+          </label>
+        </div>
+
+        <div class="notification-row">
+          <div class="notification-details">
+            <h3>Group Invites</h3>
+            <p>Receive alerts for collaboration invites and shared workspace access.</p>
+          </div>
+          <label class="security-toggle">
+            <input type="checkbox" id="notifGroupInvites" aria-label="Group Invites notifications">
+            <span class="toggle-slider"></span>
+          </label>
+        </div>
+
+        <div class="notification-row">
+          <div class="notification-details">
+            <h3>Email Updates</h3>
+            <p>Enable digest summaries and important app announcements.</p>
+          </div>
+          <label class="security-toggle">
+            <input type="checkbox" id="notifEmailUpdates" aria-label="Email Updates notifications">
+            <span class="toggle-slider"></span>
+          </label>
+        </div>
+      </section>
+          </div>
+
+          <!-- Collaboration Tab -->
+          <div class="tab-content" id="collaboration">
+      <section class="settings-card collaboration-section" aria-labelledby="collaborationHeading">
+        <h2 id="collaborationHeading">Collaboration Settings</h2>
+
+        <div class="collaboration-row">
+          <div class="collaboration-details">
+            <h3>Default Sharing</h3>
+            <p>Choose how new presentations are shared by default.</p>
+          </div>
+          <div class="collaboration-select">
+            <span id="defaultSharingDisplay">Private</span>
+            <select id="defaultSharingSelect" aria-label="Default sharing preference">
+              <option value="Private" selected>Private</option>
+              <option value="Team Only">Team Only</option>
+              <option value="Public">Public</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="collaboration-row">
+          <div class="collaboration-details">
+            <h3>Show Active Collaborators</h3>
+            <p>Display avatars for teammates currently editing the same presentation.</p>
+          </div>
+          <label class="security-toggle">
+            <input type="checkbox" id="collabShowActive" aria-label="Show Active Collaborators">
+            <span class="toggle-slider"></span>
+          </label>
+        </div>
+      </section>
+          </div>
+
+          <!-- Connected Accounts Tab -->
+          <div class="tab-content" id="connected-accounts">
+        <section class="settings-card connections-section" aria-labelledby="connectionsHeading">
+          <h2 id="connectionsHeading">Connected Accounts</h2>
+
+          <div class="connection-item">
+            <div class="connection-details">
+              <h3>Connect Google Drive</h3>
+              <p>Link your Google Drive to import slides and sync assets.</p>
+            </div>
+            <button type="button" class="connection-button" id="connectGoogleDrive">Connect</button>
+          </div>
+
+          <div class="connection-item">
+            <div class="connection-details">
+              <h3>Connect GitHub</h3>
+              <p>Sync project assets or store presentations in repositories.</p>
+            </div>
+            <button type="button" class="connection-button" id="connectGitHub">Connect</button>
+          </div>
+
+          <div class="connection-item">
+            <div class="connection-details">
+              <h3>Connect Dropbox</h3>
+              <p>Enable Dropbox backups and quick access to shared folders.</p>
+            </div>
+            <button type="button" class="connection-button" id="connectDropbox">Connect</button>
+          </div>
+        </section>
+          </div>
+
+          <!-- App Customization Tab -->
+          <div class="tab-content" id="app-customization">
+        <section class="settings-card app-customization-section" aria-labelledby="customizationHeading">
+          <h2 id="customizationHeading">App Customization</h2>
+
+          <div class="customization-group">
+            <div class="customization-details">
+              <h3>Rounded Corners</h3>
+              <p>Choose whether interface surfaces use softened, rounded corners across the app.</p>
+            </div>
+            <label class="security-toggle">
+              <input type="checkbox" id="roundedCornersToggle" aria-label="Rounded Corners">
+              <span class="toggle-slider"></span>
+            </label>
+          </div>
+
+          <div class="customization-group">
+            <div class="customization-details">
+              <h3>Glass Effect</h3>
+              <p>Preview a frosted glass aesthetic for cards and surfaces.</p>
+            </div>
+            <label class="security-toggle">
+              <input type="checkbox" id="glassEffectToggle" aria-label="Glass Effect">
+              <span class="toggle-slider"></span>
+            </label>
+          </div>
+
+          <div class="customization-group">
+            <div class="customization-details">
+              <h3>UI Density</h3>
+              <p>Adjust spacing for controls and content layouts to match your working style.</p>
+            </div>
+            <div class="density-select">
+              <span id="uiDensityDisplay">Comfortable</span>
+              <select id="uiDensitySelect" aria-label="UI density selection">
+                <option value="compact">Compact</option>
+                <option value="comfortable" selected>Comfortable</option>
+                <option value="spacious">Spacious</option>
+              </select>
+            </div>
+          </div>
+        </section>
+      </div>
+
+          <!-- Language & Theme Tab -->
+          <div class="tab-content" id="language-theme">
+        <div class="settings-card form-settings-card">
         <div class="form-group">
           <label class="form-label" for="backgroundSelector" data-translate="settings.backgroundColor">Background Color</label>
           <div class="color-options" id="backgroundSelector">
-            <div class="color-option" data-color="#0b3d2e" data-selected="true">
-              <span class="check-icon">✓</span>
-              <span class="color-label" data-translate="settings.darkGreen">Dark Green</span>
-            </div>
             <div class="color-option" data-color="#ffffff">
-              <span class="check-icon"></span>
+                <div class="theme-preview">
+                <img src="./CURSOR-Project/thems-mods/light.jpeg" alt="light">
+                </div>
+                <div class="theme-meta">
               <span class="color-label" data-translate="settings.light">Light</span>
+                  <span class="check-icon"></span>
+                </div>
             </div>
             <div class="color-option" data-color="#000000">
-              <span class="check-icon"></span>
+                <div class="theme-preview">
+                <img src="./CURSOR-Project/thems-mods/dark.jpeg" alt="dark">
+                </div>
+                <div class="theme-meta">
               <span class="color-label" data-translate="settings.dark">Dark</span>
+                  <span class="check-icon"></span>
+                </div>
+              </div>
+              <div class="color-option" data-color="#0b3d2e" data-selected="true">
+                <div class="theme-preview">
+                <img src="./CURSOR-Project/thems-mods/defult.jpeg" alt="defult">
+                </div>
+                <div class="theme-meta">
+                  <span class="color-label">System Default</span>
+                  <span class="check-icon">✓</span>
+                </div>
             </div>
           </div>
         </div>
@@ -366,10 +2542,13 @@
               <span class="check-icon"></span>
               <span class="color-label" data-translate="settings.arabic">Arabic</span>
             </div>
+            </div>
           </div>
         </div>
       </div>
 
+          <!-- About App Tab -->
+          <div class="tab-content" id="about">
       <div class="settings-card" id="aboutCard">
         <div class="form-group">
           <label class="form-label" data-translate="settings.aboutTitle">About App</label>
@@ -390,10 +2569,118 @@
               <a href="#" id="privacyPolicyLink" data-translate="settings.privacyPolicy">Privacy Policy</a>
             </li>
           </ul>
+          </div>
+        </div>
+          </div>
         </div>
       </div>
+
+      <div class="modal-overlay" id="changePasswordModal" role="dialog" aria-modal="true" aria-labelledby="changePasswordHeading" aria-hidden="true">
+        <div class="modal-card">
+          <h3 id="changePasswordHeading">Change Password</h3>
+          <form class="modal-form" id="changePasswordForm">
+            <div class="modal-form-group">
+              <label class="modal-form-label" for="oldPassword">Old Password</label>
+              <input type="password" class="modal-form-input" id="oldPassword" name="oldPassword" required>
+              <div class="modal-form-error" id="oldPasswordError"></div>
+            </div>
+            <div class="modal-form-group">
+              <label class="modal-form-label" for="newPassword">New Password</label>
+              <input type="password" class="modal-form-input" id="newPassword" name="newPassword" required>
+              <div class="modal-form-error" id="newPasswordError"></div>
+            </div>
+            <div class="modal-form-group">
+              <label class="modal-form-label" for="confirmPassword">Confirm New Password</label>
+              <input type="password" class="modal-form-input" id="confirmPassword" name="confirmPassword" required>
+              <div class="modal-form-error" id="confirmPasswordError"></div>
+            </div>
+          <div class="modal-actions">
+              <button type="button" class="modal-close" id="changePasswordCancel">Cancel</button>
+              <button type="submit" class="modal-confirm">Save New Password</button>
+          </div>
+          </form>
+        </div>
+      </div>
+
+      <div class="modal-overlay" id="deleteAccountModal" role="dialog" aria-modal="true" aria-labelledby="deleteAccountHeading" aria-hidden="true">
+        <div class="modal-card">
+          <h3 id="deleteAccountHeading">Delete Account</h3>
+          <p>Are you sure? This cannot be undone.</p>
+          <div class="modal-actions">
+            <button type="button" class="modal-close" id="deleteAccountCancel">Cancel</button>
+            <button type="button" class="modal-confirm" id="deleteAccountConfirm">Yes, Delete</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Avatar Modal -->
+      <div class="avatar-modal-overlay" id="avatarModal" role="dialog" aria-modal="true" aria-labelledby="avatarModalHeading" aria-hidden="true">
+        <div class="avatar-modal-card">
+          <h3 id="avatarModalHeading">Change Profile Photo</h3>
+          
+          <div class="avatar-upload-section">
+            <label for="avatarFileInput" class="avatar-upload-label">
+              📤 Upload Image (JPG, PNG, WEBP)
+            </label>
+            <input type="file" id="avatarFileInput" accept="image/jpeg,image/jpg,image/png,image/webp" style="display: none;">
+            <div class="avatar-preview" id="avatarPreview">
+              <img id="avatarPreviewImg" src="https://api.dicebear.com/7.x/lorelei/svg?seed=Default&backgroundColor=e0e7ff" alt="Avatar preview">
+            </div>
+          </div>
+
+          <div class="avatar-presets-section">
+            <h4 class="avatar-presets-title">Or choose a preset avatar:</h4>
+            <div class="avatar-presets-grid" id="avatarPresetsGrid">
+              <div class="avatar-preset-item" data-preset="1">
+                <img src="https://api.dicebear.com/7.x/lorelei/svg?seed=Alex&backgroundColor=e0e7ff" alt="Avatar preset 1">
+              </div>
+              <div class="avatar-preset-item" data-preset="2">
+                <img src="https://api.dicebear.com/7.x/lorelei/svg?seed=Sam&backgroundColor=c7d2fe" alt="Avatar preset 2">
+              </div>
+              <div class="avatar-preset-item" data-preset="3">
+                <img src="https://api.dicebear.com/7.x/lorelei/svg?seed=Jordan&backgroundColor=ffd5dc" alt="Avatar preset 3">
+              </div>
+              <div class="avatar-preset-item" data-preset="4">
+                <img src="https://api.dicebear.com/7.x/lorelei/svg?seed=Taylor&backgroundColor=ffdfbf" alt="Avatar preset 4">
+              </div>
+              <div class="avatar-preset-item" data-preset="5">
+                <img src="https://api.dicebear.com/7.x/lorelei/svg?seed=Casey&backgroundColor=d1f4e0" alt="Avatar preset 5">
+              </div>
+              <div class="avatar-preset-item" data-preset="6">
+                <img src="https://api.dicebear.com/7.x/lorelei/svg?seed=Riley&backgroundColor=fce7f3" alt="Avatar preset 6">
+              </div>
+              <div class="avatar-preset-item" data-preset="7">
+                <img src="https://api.dicebear.com/7.x/lorelei/svg?seed=Avery&backgroundColor=e0e7ff" alt="Avatar preset 7">
+              </div>
+              <div class="avatar-preset-item" data-preset="8">
+                <img src="https://api.dicebear.com/7.x/lorelei/svg?seed=Morgan&backgroundColor=ffe4e6" alt="Avatar preset 8">
+              </div>
+              <div class="avatar-preset-item" data-preset="9">
+                <img src="https://api.dicebear.com/7.x/lorelei/svg?seed=Quinn&backgroundColor=fff4e6" alt="Avatar preset 9">
+              </div>
+              <div class="avatar-preset-item" data-preset="10">
+                <img src="https://api.dicebear.com/7.x/lorelei/svg?seed=Dakota&backgroundColor=e0f2fe" alt="Avatar preset 10">
+              </div>
+              <div class="avatar-preset-item" data-preset="11">
+                <img src="https://api.dicebear.com/7.x/lorelei/svg?seed=Sage&backgroundColor=f3e8ff" alt="Avatar preset 11">
+              </div>
+              <div class="avatar-preset-item" data-preset="12">
+                <img src="https://api.dicebear.com/7.x/lorelei/svg?seed=Parker&backgroundColor=fef3c7" alt="Avatar preset 12">
+              </div>
+            </div>
+          </div>
+
+          <div class="avatar-modal-actions">
+            <button type="button" class="avatar-modal-cancel" id="avatarModalCancel">Cancel</button>
+            <button type="button" class="avatar-modal-save" id="avatarModalSave">Save</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Toast Container -->
+      <div class="toast" id="toast"></div>
  
-      <a href="./templates.html" class="back-link" data-translate="settings.backToHome">← Back to Home</a>
+      <a href="./Home.html" class="back-link" data-translate="settings.backToHome">← Back to Home</a>
     </main>
 
     <script>
@@ -408,21 +2695,1267 @@
           return;
         }
       })();
-      
-      let currentLanguage = window.getCurrentLanguage ? window.getCurrentLanguage() : (localStorage.getItem('siteLanguage') || document.documentElement.lang || 'en');
-      const translate = (key) => window.getTranslation ? window.getTranslation(key, currentLanguage) : key;
 
-      if (typeof window.initTranslations === 'function') {
-        window.onLanguageChange = (lang) => {
-          currentLanguage = lang;
-          if (typeof window.applyTranslations === 'function') {
-            window.applyTranslations(lang);
+      // Tab Switching Logic
+      (function() {
+        const tabs = document.querySelectorAll('.sidebar-tab');
+        const tabContents = document.querySelectorAll('.tab-content');
+
+        function switchTab(tabId) {
+          // Hide all tab contents
+          tabContents.forEach(content => {
+            content.classList.remove('active');
+          });
+
+          // Remove active class from all tabs
+          tabs.forEach(tab => {
+            tab.classList.remove('active');
+            tab.setAttribute('aria-selected', 'false');
+          });
+
+          // Show selected tab content
+          const selectedContent = document.getElementById(tabId);
+          if (selectedContent) {
+            selectedContent.classList.add('active');
           }
-        };
-        window.initTranslations();
-      } else if (typeof window.applyTranslations === 'function') {
-        window.applyTranslations(currentLanguage);
-      }
+
+          // Activate selected tab
+          const selectedTab = document.querySelector(`[data-tab="${tabId}"]`);
+          if (selectedTab) {
+            selectedTab.classList.add('active');
+            selectedTab.setAttribute('aria-selected', 'true');
+          }
+        }
+
+        // Add click handlers to all tabs
+        tabs.forEach(tab => {
+          tab.addEventListener('click', (e) => {
+            e.preventDefault();
+            const tabId = tab.getAttribute('data-tab');
+            if (tabId) {
+              switchTab(tabId);
+            }
+          });
+        });
+
+        // Initialize: show first tab (Profile) by default
+        const defaultTab = document.querySelector('.sidebar-tab.active');
+        if (defaultTab) {
+          const defaultTabId = defaultTab.getAttribute('data-tab');
+          if (defaultTabId) {
+            switchTab(defaultTabId);
+          }
+        }
+      })();
+
+      // Profile Field Editing Logic
+      (function() {
+        const STORAGE_KEY = 'userProfileData';
+        
+        // Load profile data from localStorage or use defaults
+        function loadProfileData() {
+          const saved = localStorage.getItem(STORAGE_KEY);
+          if (saved) {
+            try {
+              return JSON.parse(saved);
+            } catch (e) {
+              console.error('Error parsing profile data:', e);
+            }
+          }
+          // Default values
+          return {
+            firstName: 'Avery',
+            lastName: 'Johnson',
+            email: 'avery.johnson@example.com',
+            country: 'United States',
+            aboutMe: 'Passionate about crafting engaging slide decks and visual storytelling that resonates with every audience.'
+          };
+        }
+
+        // Save profile data to localStorage
+        function saveProfileData(data) {
+          localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+        }
+
+        // Initialize profile fields with saved data
+        function initializeProfileFields() {
+          const profileData = loadProfileData();
+          
+          // Update all field values
+          Object.keys(profileData).forEach(fieldName => {
+            const valueElement = document.querySelector(`[data-field-value="${fieldName}"]`);
+            const inputElement = document.querySelector(`[data-field-input="${fieldName}"]`);
+            
+            if (valueElement) {
+              valueElement.textContent = profileData[fieldName];
+            }
+            
+            if (inputElement) {
+              if (inputElement.tagName === 'SELECT') {
+                inputElement.value = profileData[fieldName];
+                // Update selected option
+                Array.from(inputElement.options).forEach(option => {
+                  option.selected = option.value === profileData[fieldName];
+                });
+              } else {
+                inputElement.value = profileData[fieldName];
+              }
+            }
+          });
+        }
+
+        // Enter edit mode for a field
+        function enterEditMode(fieldElement) {
+          const fieldName = fieldElement.getAttribute('data-field');
+          const valueElement = fieldElement.querySelector(`[data-field-value="${fieldName}"]`);
+          const inputElement = fieldElement.querySelector(`[data-field-input="${fieldName}"]`);
+          const editBtn = fieldElement.querySelector('.field-edit-btn');
+          const saveBtn = fieldElement.querySelector('.field-save-btn');
+          const cancelBtn = fieldElement.querySelector('.field-cancel-btn');
+
+          // Store original value for cancel
+          const originalValue = inputElement.tagName === 'SELECT' 
+            ? inputElement.value 
+            : inputElement.value;
+
+          // Hide value, show input
+          valueElement.classList.add('hidden');
+          inputElement.classList.remove('hidden');
+          
+          // Hide edit button, show save/cancel
+          editBtn.classList.add('hidden');
+          saveBtn.classList.remove('hidden');
+          cancelBtn.classList.remove('hidden');
+
+          // Focus on input
+          inputElement.focus();
+          if (inputElement.tagName === 'INPUT' || inputElement.tagName === 'TEXTAREA') {
+            inputElement.select();
+          }
+
+          // Save handler
+          const saveHandler = () => {
+            const newValue = inputElement.tagName === 'SELECT' 
+              ? inputElement.value 
+              : inputElement.value.trim();
+
+            // Update value display
+            valueElement.textContent = newValue;
+            
+            // Update localStorage
+            const profileData = loadProfileData();
+            profileData[fieldName] = newValue;
+            saveProfileData(profileData);
+
+            // Exit edit mode
+            exitEditMode(fieldElement);
+          };
+
+          // Cancel handler
+          const cancelHandler = () => {
+            // Restore original value
+            if (inputElement.tagName === 'SELECT') {
+              inputElement.value = originalValue;
+              Array.from(inputElement.options).forEach(option => {
+                option.selected = option.value === originalValue;
+              });
+            } else {
+              inputElement.value = originalValue;
+            }
+            
+            // Exit edit mode
+            exitEditMode(fieldElement);
+          };
+
+          // Remove old listeners and add new ones
+          saveBtn.replaceWith(saveBtn.cloneNode(true));
+          cancelBtn.replaceWith(cancelBtn.cloneNode(true));
+          
+          const newSaveBtn = fieldElement.querySelector('.field-save-btn');
+          const newCancelBtn = fieldElement.querySelector('.field-cancel-btn');
+          
+          newSaveBtn.addEventListener('click', saveHandler);
+          newCancelBtn.addEventListener('click', cancelHandler);
+
+          // Handle Enter key to save, Escape to cancel
+          const keyHandler = (e) => {
+            if (e.key === 'Enter' && (e.ctrlKey || e.metaKey || inputElement.tagName !== 'TEXTAREA')) {
+              if (inputElement.tagName !== 'TEXTAREA' || e.ctrlKey || e.metaKey) {
+                e.preventDefault();
+                saveHandler();
+              }
+            } else if (e.key === 'Escape') {
+              e.preventDefault();
+              cancelHandler();
+            }
+          };
+
+          inputElement.addEventListener('keydown', keyHandler);
+        }
+
+        // Exit edit mode for a field
+        function exitEditMode(fieldElement) {
+          const fieldName = fieldElement.getAttribute('data-field');
+          const valueElement = fieldElement.querySelector(`[data-field-value="${fieldName}"]`);
+          const inputElement = fieldElement.querySelector(`[data-field-input="${fieldName}"]`);
+          const editBtn = fieldElement.querySelector('.field-edit-btn');
+          const saveBtn = fieldElement.querySelector('.field-save-btn');
+          const cancelBtn = fieldElement.querySelector('.field-cancel-btn');
+
+          // Show value, hide input
+          valueElement.classList.remove('hidden');
+          inputElement.classList.add('hidden');
+          
+          // Show edit button, hide save/cancel
+          editBtn.classList.remove('hidden');
+          saveBtn.classList.add('hidden');
+          cancelBtn.classList.add('hidden');
+        }
+
+        // Initialize on page load
+        initializeProfileFields();
+
+        // Add click handlers to all edit buttons
+        document.querySelectorAll('.field-edit-btn').forEach(editBtn => {
+          editBtn.addEventListener('click', () => {
+            const fieldElement = editBtn.closest('.profile-field');
+            enterEditMode(fieldElement);
+          });
+        });
+      })();
+
+      // Profile Avatar Functionality
+      (function() {
+        const AVATAR_STORAGE_KEY = 'profile_avatar';
+        const DEFAULT_AVATAR = 'https://api.dicebear.com/7.x/lorelei/svg?seed=Default&backgroundColor=e0e7ff';
+
+        // Reuse toast function
+        function showToast(message, type = 'success') {
+          const toast = document.getElementById('toast');
+          if (toast) {
+            toast.textContent = message;
+            toast.className = `toast ${type} show`;
+            
+            setTimeout(() => {
+              toast.classList.remove('show');
+              setTimeout(() => {
+                toast.className = 'toast';
+              }, 300);
+            }, 3000);
+          }
+        }
+
+        // State variables
+        let uploadedImageData = null;
+        let selectedPresetUrl = null;
+
+        // Modal helper functions
+        function openAvatarModal() {
+          const modal = document.getElementById('avatarModal');
+          if (modal) {
+            modal.classList.add('is-visible');
+            modal.setAttribute('aria-hidden', 'false');
+            document.body.style.overflow = 'hidden';
+            // Reset state
+            uploadedImageData = null;
+            selectedPresetUrl = null;
+            // Load current avatar into preview
+            loadAvatarToPreview();
+          }
+        }
+
+        function closeAvatarModal() {
+          const modal = document.getElementById('avatarModal');
+          if (modal) {
+            modal.classList.remove('is-visible');
+            modal.setAttribute('aria-hidden', 'true');
+            document.body.style.overflow = '';
+            // Reset state
+            uploadedImageData = null;
+            selectedPresetUrl = null;
+            // Reset preview to current saved avatar
+            loadAvatarToPreview();
+            // Clear file input
+            const fileInput = document.getElementById('avatarFileInput');
+            if (fileInput) fileInput.value = '';
+            // Clear preset selection
+            document.querySelectorAll('.avatar-preset-item').forEach(item => {
+              item.classList.remove('selected');
+            });
+          }
+        }
+
+        // Load avatar from localStorage
+        function loadAvatar() {
+          const saved = localStorage.getItem(AVATAR_STORAGE_KEY);
+          return saved || DEFAULT_AVATAR;
+        }
+
+        // Save avatar to localStorage
+        function saveAvatar(avatarData) {
+          localStorage.setItem(AVATAR_STORAGE_KEY, avatarData);
+        }
+
+        // Update avatar display everywhere
+        function updateAvatarDisplay(avatarSrc) {
+          const profileAvatarImg = document.getElementById('profileAvatarImg');
+          if (profileAvatarImg) {
+            profileAvatarImg.src = avatarSrc;
+          }
+          // Update preview in modal
+          const previewImg = document.getElementById('avatarPreviewImg');
+          if (previewImg) {
+            previewImg.src = avatarSrc;
+          }
+        }
+
+        // Load avatar to preview in modal
+        function loadAvatarToPreview() {
+          const currentAvatar = loadAvatar();
+          updateAvatarDisplay(currentAvatar);
+        }
+
+        // Initialize avatar on page load
+        function initializeAvatar() {
+          const avatar = loadAvatar();
+          updateAvatarDisplay(avatar);
+        }
+
+        // Convert file to base64
+        function fileToBase64(file) {
+          return new Promise((resolve, reject) => {
+            const reader = new FileReader();
+            reader.onload = () => resolve(reader.result);
+            reader.onerror = reject;
+            reader.readAsDataURL(file);
+          });
+        }
+
+        // Initialize on page load
+        initializeAvatar();
+
+        // Open modal button
+        const changePhotoBtn = document.getElementById('changePhotoBtn');
+        if (changePhotoBtn) {
+          changePhotoBtn.addEventListener('click', openAvatarModal);
+        }
+
+        // Open modal when clicking avatar
+        const profileAvatarDisplay = document.getElementById('profileAvatarDisplay');
+        if (profileAvatarDisplay) {
+          profileAvatarDisplay.addEventListener('click', openAvatarModal);
+        }
+
+        // Close modal on cancel
+        const avatarModalCancel = document.getElementById('avatarModalCancel');
+        if (avatarModalCancel) {
+          avatarModalCancel.addEventListener('click', closeAvatarModal);
+        }
+
+        // Close modal on overlay click
+        const avatarModal = document.getElementById('avatarModal');
+        if (avatarModal) {
+          avatarModal.addEventListener('click', (e) => {
+            if (e.target === avatarModal) {
+              closeAvatarModal();
+            }
+          });
+        }
+
+        // File upload handler
+        const avatarFileInput = document.getElementById('avatarFileInput');
+
+        if (avatarFileInput) {
+          avatarFileInput.addEventListener('change', async (e) => {
+            const file = e.target.files[0];
+            if (!file) return;
+
+            // Validate file type
+            const validTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp'];
+            if (!validTypes.includes(file.type)) {
+              showToast('Please upload a JPG, PNG, or WEBP image.', 'error');
+              return;
+            }
+
+            // Validate file size (max 5MB)
+            if (file.size > 5 * 1024 * 1024) {
+              showToast('Image size must be less than 5MB.', 'error');
+              return;
+            }
+
+            try {
+              // Convert to base64
+              const base64 = await fileToBase64(file);
+              uploadedImageData = base64;
+              
+              // Update preview
+              const previewImg = document.getElementById('avatarPreviewImg');
+              if (previewImg) {
+                previewImg.src = base64;
+              }
+
+              // Clear preset selection
+              document.querySelectorAll('.avatar-preset-item').forEach(item => {
+                item.classList.remove('selected');
+              });
+            } catch (error) {
+              console.error('Error reading file:', error);
+              showToast('Error reading image file.', 'error');
+            }
+          });
+        }
+
+        // Preset avatar selection
+        const presetItems = document.querySelectorAll('.avatar-preset-item');
+
+        presetItems.forEach(item => {
+          item.addEventListener('click', () => {
+            // Remove selection from all
+            presetItems.forEach(i => i.classList.remove('selected'));
+            // Add selection to clicked item
+            item.classList.add('selected');
+            
+            // Get preset image URL
+            const presetImg = item.querySelector('img');
+            if (presetImg) {
+              selectedPresetUrl = presetImg.src;
+              // Update preview
+              const previewImg = document.getElementById('avatarPreviewImg');
+              if (previewImg) {
+                previewImg.src = selectedPresetUrl;
+              }
+              // Clear uploaded file
+              uploadedImageData = null;
+              if (avatarFileInput) avatarFileInput.value = '';
+            }
+          });
+        });
+
+        // Save button handler
+        const avatarModalSave = document.getElementById('avatarModalSave');
+        if (avatarModalSave) {
+          avatarModalSave.addEventListener('click', () => {
+            let avatarToSave = null;
+
+            // Priority: uploaded image > selected preset > current avatar
+            if (uploadedImageData) {
+              avatarToSave = uploadedImageData;
+            } else if (selectedPresetUrl) {
+              avatarToSave = selectedPresetUrl;
+            } else {
+              // No change made
+              closeAvatarModal();
+              return;
+            }
+
+            // Save to localStorage
+            saveAvatar(avatarToSave);
+            
+            // Update display
+            updateAvatarDisplay(avatarToSave);
+
+            // Show toast
+            showToast('Profile photo updated successfully.', 'success');
+
+            // Close modal
+            closeAvatarModal();
+
+            // Log to console
+            console.log('Profile Avatar Updated:', {
+              type: uploadedImageData ? 'uploaded' : 'preset',
+              timestamp: new Date().toISOString()
+            });
+          });
+        }
+      })();
+
+      // Account & Security Functionality
+      (function() {
+        // Toast notification helper
+        function showToast(message, type = 'success') {
+          const toast = document.getElementById('toast');
+          toast.textContent = message;
+          toast.className = `toast ${type} show`;
+          
+          setTimeout(() => {
+            toast.classList.remove('show');
+            setTimeout(() => {
+              toast.className = 'toast';
+            }, 300);
+          }, 3000);
+        }
+
+        // Modal helper functions
+        function openModal(modalId) {
+          const modal = document.getElementById(modalId);
+          if (modal) {
+            modal.classList.add('is-visible');
+            modal.setAttribute('aria-hidden', 'false');
+            document.body.style.overflow = 'hidden';
+          }
+        }
+
+        function closeModal(modalId) {
+          const modal = document.getElementById(modalId);
+          if (modal) {
+            modal.classList.remove('is-visible');
+            modal.setAttribute('aria-hidden', 'true');
+            document.body.style.overflow = '';
+          }
+        }
+
+        // 1. Change Password Modal
+        const changePasswordBtn = document.querySelector('.security-button[aria-controls="changePasswordModal"]');
+        const changePasswordModal = document.getElementById('changePasswordModal');
+        const changePasswordForm = document.getElementById('changePasswordForm');
+        const changePasswordCancel = document.getElementById('changePasswordCancel');
+
+        if (changePasswordBtn) {
+          changePasswordBtn.addEventListener('click', () => {
+            openModal('changePasswordModal');
+          });
+        }
+
+        if (changePasswordCancel) {
+          changePasswordCancel.addEventListener('click', () => {
+            closeModal('changePasswordModal');
+            changePasswordForm.reset();
+            // Clear errors
+            document.querySelectorAll('.modal-form-error').forEach(error => {
+              error.classList.remove('show');
+              error.textContent = '';
+            });
+          });
+        }
+
+        // Close modal on overlay click
+        if (changePasswordModal) {
+          changePasswordModal.addEventListener('click', (e) => {
+            if (e.target === changePasswordModal) {
+              closeModal('changePasswordModal');
+              changePasswordForm.reset();
+              document.querySelectorAll('.modal-form-error').forEach(error => {
+                error.classList.remove('show');
+                error.textContent = '';
+              });
+            }
+          });
+        }
+
+        // Form validation and submission
+        if (changePasswordForm) {
+          changePasswordForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            
+            const oldPassword = document.getElementById('oldPassword').value.trim();
+            const newPassword = document.getElementById('newPassword').value.trim();
+            const confirmPassword = document.getElementById('confirmPassword').value.trim();
+            
+            // Clear previous errors
+            document.querySelectorAll('.modal-form-error').forEach(error => {
+              error.classList.remove('show');
+              error.textContent = '';
+            });
+
+            let isValid = true;
+
+            // Validate all fields are filled
+            if (!oldPassword) {
+              const errorEl = document.getElementById('oldPasswordError');
+              errorEl.textContent = 'Old password is required';
+              errorEl.classList.add('show');
+              isValid = false;
+            }
+
+            if (!newPassword) {
+              const errorEl = document.getElementById('newPasswordError');
+              errorEl.textContent = 'New password is required';
+              errorEl.classList.add('show');
+              isValid = false;
+            }
+
+            if (!confirmPassword) {
+              const errorEl = document.getElementById('confirmPasswordError');
+              errorEl.textContent = 'Please confirm your new password';
+              errorEl.classList.add('show');
+              isValid = false;
+            }
+
+            // Validate passwords match
+            if (newPassword && confirmPassword && newPassword !== confirmPassword) {
+              const errorEl = document.getElementById('confirmPasswordError');
+              errorEl.textContent = 'New passwords do not match';
+              errorEl.classList.add('show');
+              isValid = false;
+            }
+
+            if (isValid) {
+              // Log to console (for now, no backend)
+              console.log('Password Change Request:', {
+                oldPassword: oldPassword,
+                newPassword: newPassword,
+                timestamp: new Date().toISOString()
+              });
+
+              // Close modal and show success
+              closeModal('changePasswordModal');
+              changePasswordForm.reset();
+              showToast('Password changed successfully', 'success');
+            }
+          });
+        }
+
+        // 2. Two-Factor Authentication Toggle
+        const twoFactorToggle = document.getElementById('twoFactorToggle');
+        const TWO_FA_STORAGE_KEY = 'twoFactorEnabled';
+
+        // Load saved 2FA state
+        function loadTwoFactorState() {
+          const saved = localStorage.getItem(TWO_FA_STORAGE_KEY);
+          if (saved === 'true') {
+            twoFactorToggle.checked = true;
+          }
+        }
+
+        // Initialize on page load
+        if (twoFactorToggle) {
+          loadTwoFactorState();
+
+          twoFactorToggle.addEventListener('change', (e) => {
+            const isEnabled = e.target.checked;
+            
+            // Save to localStorage
+            localStorage.setItem(TWO_FA_STORAGE_KEY, isEnabled.toString());
+            
+            // Show toast notification
+            if (isEnabled) {
+              showToast('2FA enabled', 'success');
+            } else {
+              showToast('2FA disabled', 'success');
+            }
+
+            // Log to console
+            console.log('Two-Factor Authentication:', {
+              enabled: isEnabled,
+              timestamp: new Date().toISOString()
+            });
+          });
+        }
+
+        // 3. Delete Account
+        const deleteAccountBtn = document.querySelector('.delete-button[aria-controls="deleteAccountModal"]');
+        const deleteAccountModal = document.getElementById('deleteAccountModal');
+        const deleteAccountCancel = document.getElementById('deleteAccountCancel');
+        const deleteAccountConfirm = document.getElementById('deleteAccountConfirm');
+
+        if (deleteAccountBtn) {
+          deleteAccountBtn.addEventListener('click', () => {
+            openModal('deleteAccountModal');
+          });
+        }
+
+        if (deleteAccountCancel) {
+          deleteAccountCancel.addEventListener('click', () => {
+            closeModal('deleteAccountModal');
+          });
+        }
+
+        // Close modal on overlay click
+        if (deleteAccountModal) {
+          deleteAccountModal.addEventListener('click', (e) => {
+            if (e.target === deleteAccountModal) {
+              closeModal('deleteAccountModal');
+            }
+          });
+        }
+
+        if (deleteAccountConfirm) {
+          deleteAccountConfirm.addEventListener('click', () => {
+            // Clear all localStorage
+            localStorage.clear();
+            
+            // Log to console
+            console.log('Account Deleted:', {
+              timestamp: new Date().toISOString(),
+              localStorageCleared: true
+            });
+
+            // Close modal
+            closeModal('deleteAccountModal');
+
+            // Show final message
+            showToast('Account deleted', 'success');
+
+            // Optional: Redirect after a delay
+            setTimeout(() => {
+              // Uncomment when ready to redirect
+              // window.location.href = './index.html';
+              console.log('Account deletion complete. Redirect would happen here.');
+            }, 2000);
+          });
+        }
+      })();
+
+      // Preferences Functionality
+      (function() {
+        // Reuse toast function from Account & Security
+        function showToast(message, type = 'success') {
+          const toast = document.getElementById('toast');
+          if (toast) {
+            toast.textContent = message;
+            toast.className = `toast ${type} show`;
+            
+            setTimeout(() => {
+              toast.classList.remove('show');
+              setTimeout(() => {
+                toast.className = 'toast';
+              }, 300);
+            }, 3000);
+          }
+        }
+
+        // Load preferences from localStorage
+        function loadPreferences() {
+          const saved = localStorage.getItem('userPreferences');
+          if (saved) {
+            try {
+              return JSON.parse(saved);
+            } catch (e) {
+              console.error('Error parsing preferences:', e);
+            }
+          }
+          return {
+            autoSave: false,
+            fontSize: 'normal',
+            animations: false
+          };
+        }
+
+        // Save preferences to localStorage
+        function savePreferences(prefs) {
+          localStorage.setItem('userPreferences', JSON.stringify(prefs));
+        }
+
+        const preferences = loadPreferences();
+
+        // 1. Auto-Save Presentations Toggle
+        const autoSaveToggle = document.getElementById('autoSaveToggle');
+        if (autoSaveToggle) {
+          // Load saved state
+          autoSaveToggle.checked = preferences.autoSave;
+
+          autoSaveToggle.addEventListener('change', (e) => {
+            const isEnabled = e.target.checked;
+            preferences.autoSave = isEnabled;
+            savePreferences(preferences);
+
+            if (isEnabled) {
+              showToast('Auto-Save enabled', 'success');
+            } else {
+              showToast('Auto-Save disabled', 'success');
+            }
+
+            console.log('Auto-Save:', {
+              enabled: isEnabled,
+              timestamp: new Date().toISOString()
+            });
+          });
+        }
+
+        // 2. Font Size Selector
+        const fontSizeButtons = document.querySelectorAll('.font-size-button[data-font-size]');
+        
+        function applyFontSize(size) {
+          // Remove existing font size classes
+          document.body.classList.remove('normal-font', 'large-font');
+          
+          // Add new font size class
+          if (size === 'normal' || size === 'large') {
+            document.body.classList.add(`${size}-font`);
+          }
+
+          // Update button states
+          fontSizeButtons.forEach(btn => {
+            const btnSize = btn.getAttribute('data-font-size');
+            if (btnSize === size) {
+              btn.classList.add('is-active');
+              btn.setAttribute('aria-pressed', 'true');
+            } else {
+              btn.classList.remove('is-active');
+              btn.setAttribute('aria-pressed', 'false');
+            }
+          });
+
+          // Save to localStorage
+          preferences.fontSize = size;
+          savePreferences(preferences);
+        }
+
+        // Initialize font size on load
+        applyFontSize(preferences.fontSize || 'normal');
+
+        // Add click handlers to font size buttons
+        fontSizeButtons.forEach(btn => {
+          btn.addEventListener('click', () => {
+            const size = btn.getAttribute('data-font-size');
+            applyFontSize(size);
+          });
+        });
+
+        // 3. Enable Animations Toggle
+        const animationsToggle = document.getElementById('animationsToggle');
+        if (animationsToggle) {
+          // Load saved state
+          animationsToggle.checked = preferences.animations;
+          
+          // Apply initial state
+          if (preferences.animations) {
+            document.body.classList.add('animations-on');
+          } else {
+            document.body.classList.remove('animations-on');
+          }
+
+          animationsToggle.addEventListener('change', (e) => {
+            const isEnabled = e.target.checked;
+            preferences.animations = isEnabled;
+            savePreferences(preferences);
+
+            if (isEnabled) {
+              document.body.classList.add('animations-on');
+              showToast('Animations enabled', 'success');
+            } else {
+              document.body.classList.remove('animations-on');
+              showToast('Animations disabled', 'success');
+            }
+
+            console.log('Animations:', {
+              enabled: isEnabled,
+              timestamp: new Date().toISOString()
+            });
+          });
+        }
+      })();
+
+      // Notifications Functionality
+      (function() {
+        // Reuse toast function
+        function showToast(message, type = 'success') {
+          const toast = document.getElementById('toast');
+          if (toast) {
+            toast.textContent = message;
+            toast.className = `toast ${type} show`;
+            
+            setTimeout(() => {
+              toast.classList.remove('show');
+              setTimeout(() => {
+                toast.className = 'toast';
+              }, 300);
+            }, 3000);
+          }
+        }
+
+        // Load notification state from localStorage
+        function loadNotificationState(key) {
+          const saved = localStorage.getItem(key);
+          return saved === 'true';
+        }
+
+        // Save notification state to localStorage
+        function saveNotificationState(key, value) {
+          localStorage.setItem(key, value.toString());
+        }
+
+        // Setup notification toggle
+        function setupNotificationToggle(toggleId, storageKey, messages) {
+          const toggle = document.getElementById(toggleId);
+          if (!toggle) return;
+
+          // Load saved state (default to false if not set)
+          const savedState = loadNotificationState(storageKey);
+          toggle.checked = savedState;
+
+          // Add change event listener
+          toggle.addEventListener('change', (e) => {
+            const isEnabled = e.target.checked;
+            saveNotificationState(storageKey, isEnabled);
+
+            // Show appropriate toast message
+            if (isEnabled) {
+              showToast(messages.on, 'success');
+            } else {
+              showToast(messages.off, 'success');
+            }
+
+            // Log to console
+            console.log(`${toggleId}:`, {
+              enabled: isEnabled,
+              timestamp: new Date().toISOString()
+            });
+          });
+        }
+
+        // 1. Project Activity
+        setupNotificationToggle('notifProjectActivity', 'notif_project_activity', {
+          on: 'Project activity notifications enabled',
+          off: 'Project activity notifications disabled'
+        });
+
+        // 2. Comments & Mentions
+        setupNotificationToggle('notifCommentsMentions', 'notif_comments_mentions', {
+          on: 'You\'ll be notified when someone mentions you',
+          off: 'Comments & mentions notifications disabled'
+        });
+
+        // 3. Group Invites
+        setupNotificationToggle('notifGroupInvites', 'notif_group_invites', {
+          on: 'Group invite notifications enabled',
+          off: 'Group invite notifications disabled'
+        });
+
+        // 4. Email Updates
+        setupNotificationToggle('notifEmailUpdates', 'notif_email_updates', {
+          on: 'Email updates enabled',
+          off: 'Email updates disabled'
+        });
+      })();
+
+      // Collaboration Functionality
+      (function() {
+        // Reuse toast function
+        function showToast(message, type = 'success') {
+          const toast = document.getElementById('toast');
+          if (toast) {
+            toast.textContent = message;
+            toast.className = `toast ${type} show`;
+            
+            setTimeout(() => {
+              toast.classList.remove('show');
+              setTimeout(() => {
+                toast.className = 'toast';
+              }, 300);
+            }, 3000);
+          }
+        }
+
+        // 1. Default Sharing Dropdown
+        const defaultSharingSelect = document.getElementById('defaultSharingSelect');
+        const defaultSharingDisplay = document.getElementById('defaultSharingDisplay');
+        const COLLAB_SHARING_KEY = 'collab_default_sharing';
+        const DEFAULT_SHARING = 'Private';
+
+        // Load saved sharing preference
+        function loadDefaultSharing() {
+          const saved = localStorage.getItem(COLLAB_SHARING_KEY);
+          return saved || DEFAULT_SHARING;
+        }
+
+        // Save sharing preference
+        function saveDefaultSharing(value) {
+          localStorage.setItem(COLLAB_SHARING_KEY, value);
+        }
+
+        // Initialize default sharing on load
+        if (defaultSharingSelect && defaultSharingDisplay) {
+          const savedSharing = loadDefaultSharing();
+          defaultSharingSelect.value = savedSharing;
+          defaultSharingDisplay.textContent = savedSharing;
+
+          // Update display when select changes
+          defaultSharingSelect.addEventListener('change', (e) => {
+            const selectedValue = e.target.value;
+            defaultSharingDisplay.textContent = selectedValue;
+            saveDefaultSharing(selectedValue);
+
+            // Show toast notification
+            showToast(`Default sharing set to: ${selectedValue}`, 'success');
+
+            // Log to console
+            console.log('Default Sharing:', {
+              value: selectedValue,
+              timestamp: new Date().toISOString()
+            });
+          });
+        }
+
+        // 2. Show Active Collaborators Toggle
+        const collabShowActive = document.getElementById('collabShowActive');
+        const COLLAB_SHOW_ACTIVE_KEY = 'collab_show_active';
+
+        // Load saved state
+        function loadShowActiveState() {
+          const saved = localStorage.getItem(COLLAB_SHOW_ACTIVE_KEY);
+          return saved === 'true';
+        }
+
+        // Save state
+        function saveShowActiveState(value) {
+          localStorage.setItem(COLLAB_SHOW_ACTIVE_KEY, value.toString());
+        }
+
+        // Initialize toggle on load
+        if (collabShowActive) {
+          const savedState = loadShowActiveState();
+          collabShowActive.checked = savedState;
+
+          // Add change event listener
+          collabShowActive.addEventListener('change', (e) => {
+            const isEnabled = e.target.checked;
+            saveShowActiveState(isEnabled);
+
+            // Show toast notification
+            if (isEnabled) {
+              showToast('Active collaborator indicators enabled', 'success');
+            } else {
+              showToast('Active collaborator indicators hidden', 'success');
+            }
+
+            // Log to console
+            console.log('Show Active Collaborators:', {
+              enabled: isEnabled,
+              timestamp: new Date().toISOString()
+            });
+          });
+        }
+      })();
+
+      // Connected Accounts Functionality
+      (function() {
+        // Reuse toast function
+        function showToast(message, type = 'success') {
+          const toast = document.getElementById('toast');
+          if (toast) {
+            toast.textContent = message;
+            toast.className = `toast ${type} show`;
+            
+            setTimeout(() => {
+              toast.classList.remove('show');
+              setTimeout(() => {
+                toast.className = 'toast';
+              }, 300);
+            }, 3000);
+          }
+        }
+
+        // Load connection state from localStorage
+        function loadConnectionState(key) {
+          const saved = localStorage.getItem(key);
+          return saved === 'true';
+        }
+
+        // Save connection state to localStorage
+        function saveConnectionState(key, value) {
+          localStorage.setItem(key, value.toString());
+        }
+
+        // Update button state
+        function updateButtonState(button, isConnected) {
+          if (isConnected) {
+            button.textContent = 'Connected ✓';
+            button.classList.add('connected');
+          } else {
+            button.textContent = 'Connect';
+            button.classList.remove('connected');
+          }
+        }
+
+        // Setup connection button
+        function setupConnectionButton(buttonId, storageKey, toastMessage) {
+          const button = document.getElementById(buttonId);
+          if (!button) return;
+
+          // Load saved state and update button
+          const initialState = loadConnectionState(storageKey);
+          updateButtonState(button, initialState);
+
+          // Add click event listener
+          button.addEventListener('click', () => {
+            // Get current state
+            const currentState = loadConnectionState(storageKey);
+            // Toggle state
+            const newState = !currentState;
+            saveConnectionState(storageKey, newState);
+            updateButtonState(button, newState);
+
+            // Show toast only when connecting (not disconnecting)
+            if (newState) {
+              showToast(toastMessage, 'success');
+            }
+
+            // Log to console
+            console.log(`${buttonId}:`, {
+              connected: newState,
+              timestamp: new Date().toISOString()
+            });
+          });
+        }
+
+        // 1. Google Drive
+        setupConnectionButton('connectGoogleDrive', 'connected_google_drive', 'Google Drive successfully connected.');
+
+        // 2. GitHub
+        setupConnectionButton('connectGitHub', 'connected_github', 'GitHub account connected.');
+
+        // 3. Dropbox
+        setupConnectionButton('connectDropbox', 'connected_dropbox', 'Dropbox connected.');
+      })();
+
+      // App Customization Functionality
+      (function() {
+        // Reuse toast function
+        function showToast(message, type = 'success') {
+          const toast = document.getElementById('toast');
+          if (toast) {
+            toast.textContent = message;
+            toast.className = `toast ${type} show`;
+            
+            setTimeout(() => {
+              toast.classList.remove('show');
+              setTimeout(() => {
+                toast.className = 'toast';
+              }, 300);
+            }, 3000);
+          }
+        }
+
+        // 1. Rounded Corners Toggle
+        const roundedCornersToggle = document.getElementById('roundedCornersToggle');
+        const ROUNDED_CORNERS_KEY = 'ui_rounded_corners';
+
+        function loadRoundedCornersState() {
+          const saved = localStorage.getItem(ROUNDED_CORNERS_KEY);
+          return saved === 'true';
+        }
+
+        function saveRoundedCornersState(value) {
+          localStorage.setItem(ROUNDED_CORNERS_KEY, value.toString());
+        }
+
+        function applyRoundedCorners(isEnabled) {
+          if (isEnabled) {
+            document.body.classList.add('rounded-ui');
+          } else {
+            document.body.classList.remove('rounded-ui');
+          }
+        }
+
+        if (roundedCornersToggle) {
+          const initialState = loadRoundedCornersState();
+          roundedCornersToggle.checked = initialState;
+          applyRoundedCorners(initialState);
+
+          roundedCornersToggle.addEventListener('change', (e) => {
+            const isEnabled = e.target.checked;
+            saveRoundedCornersState(isEnabled);
+            applyRoundedCorners(isEnabled);
+
+            if (isEnabled) {
+              showToast('Rounded corners enabled.', 'success');
+            } else {
+              showToast('Rounded corners disabled.', 'success');
+            }
+
+            console.log('Rounded Corners:', {
+              enabled: isEnabled,
+              timestamp: new Date().toISOString()
+            });
+          });
+        }
+
+        // 2. Glass Effect Toggle
+        const glassEffectToggle = document.getElementById('glassEffectToggle');
+        const GLASS_EFFECT_KEY = 'ui_glass_effect';
+
+        function loadGlassEffectState() {
+          const saved = localStorage.getItem(GLASS_EFFECT_KEY);
+          return saved === 'true';
+        }
+
+        function saveGlassEffectState(value) {
+          localStorage.setItem(GLASS_EFFECT_KEY, value.toString());
+        }
+
+        function applyGlassEffect(isEnabled) {
+          if (isEnabled) {
+            document.body.classList.add('glass-ui');
+          } else {
+            document.body.classList.remove('glass-ui');
+          }
+        }
+
+        if (glassEffectToggle) {
+          const initialState = loadGlassEffectState();
+          glassEffectToggle.checked = initialState;
+          applyGlassEffect(initialState);
+
+          glassEffectToggle.addEventListener('change', (e) => {
+            const isEnabled = e.target.checked;
+            saveGlassEffectState(isEnabled);
+            applyGlassEffect(isEnabled);
+
+            if (isEnabled) {
+              showToast('Glass effect enabled.', 'success');
+            } else {
+              showToast('Glass effect disabled.', 'success');
+            }
+
+            console.log('Glass Effect:', {
+              enabled: isEnabled,
+              timestamp: new Date().toISOString()
+            });
+          });
+        }
+
+        // 3. UI Density Dropdown
+        const uiDensitySelect = document.getElementById('uiDensitySelect');
+        const uiDensityDisplay = document.getElementById('uiDensityDisplay');
+        const UI_DENSITY_KEY = 'ui_density';
+        const DEFAULT_DENSITY = 'comfortable';
+
+        function loadUIDensity() {
+          const saved = localStorage.getItem(UI_DENSITY_KEY);
+          return saved || DEFAULT_DENSITY;
+        }
+
+        function saveUIDensity(value) {
+          localStorage.setItem(UI_DENSITY_KEY, value);
+        }
+
+        function applyUIDensity(density) {
+          // Remove all density classes
+          document.body.classList.remove('ui-density-compact', 'ui-density-comfortable', 'ui-density-spacious');
+          
+          // Add selected density class
+          if (density === 'compact' || density === 'comfortable' || density === 'spacious') {
+            document.body.classList.add(`ui-density-${density}`);
+          }
+
+          // Update display text (capitalize first letter)
+          const displayText = density.charAt(0).toUpperCase() + density.slice(1);
+          if (uiDensityDisplay) {
+            uiDensityDisplay.textContent = displayText;
+          }
+        }
+
+        if (uiDensitySelect && uiDensityDisplay) {
+          const savedDensity = loadUIDensity();
+          uiDensitySelect.value = savedDensity;
+          applyUIDensity(savedDensity);
+
+          uiDensitySelect.addEventListener('change', (e) => {
+            const selectedDensity = e.target.value;
+            saveUIDensity(selectedDensity);
+            applyUIDensity(selectedDensity);
+
+            const displayText = selectedDensity.charAt(0).toUpperCase() + selectedDensity.slice(1);
+            showToast(`UI layout set to ${displayText}.`, 'success');
+
+            console.log('UI Density:', {
+              density: selectedDensity,
+              timestamp: new Date().toISOString()
+            });
+          });
+        }
+      })();
       
       // Load saved background color from localStorage
       const savedBg = localStorage.getItem('siteBackgroundColor') || '#0b3d2e';
@@ -501,7 +4034,7 @@
           // Save to localStorage
           localStorage.setItem('siteBackgroundColor', color);
           
-          // Also update templates.html if it's open
+          // Also update Home.html if it's open
           if (window.opener) {
             window.opener.postMessage({ type: 'updateBackground', color: color }, '*');
           }
@@ -570,21 +4103,7 @@
         if (e.data.type === 'updateLanguage') {
           const lang = e.data.language;
           localStorage.setItem('siteLanguage', lang);
-          currentLanguage = lang;
-          if (typeof window.applyTranslations === 'function') {
-            window.applyTranslations(lang);
-          }
-          document.querySelectorAll('#languageSelector .color-option').forEach(option => {
-            option.removeAttribute('data-selected');
-            option.classList.remove('focused');
-            const checkIcon = option.querySelector('.check-icon');
-            if (option.getAttribute('data-lang') === lang) {
-              option.setAttribute('data-selected', 'true');
-              checkIcon.textContent = '✓';
-            } else {
-              checkIcon.textContent = '';
-            }
-          });
+          applyTranslations(lang);
         }
       });
 
@@ -608,15 +4127,23 @@
       if (privacyLinkEl) {
         privacyLinkEl.addEventListener('click', (event) => {
           event.preventDefault();
-          alert(translate('common.privacyComingSoon'));
+          const lang = localStorage.getItem('siteLanguage') || document.documentElement.lang || 'en';
+          const dict = (window.translations && window.translations[lang]) || window.translations.en;
+          const message = (dict && dict['common.privacyComingSoon']) || 'Privacy policy coming soon.';
+          alert(message);
         });
       }
 
-      const savedLang = localStorage.getItem('siteLanguage') || currentLanguage;
-      currentLanguage = savedLang;
       if (typeof window.applyTranslations === 'function') {
-        window.applyTranslations(savedLang);
+        window.applyTranslations(localStorage.getItem('siteLanguage') || document.documentElement.lang || 'en');
       }
+
+      // Make translations available globally
+      window.translations = translations;
+      
+      // Load saved language
+      const savedLang = localStorage.getItem('siteLanguage') || 'en';
+      applyTranslations(savedLang);
 
       // Language selector functionality
       const langOptions = document.querySelectorAll('#languageSelector .color-option');
@@ -651,12 +4178,9 @@
           
           // Save to localStorage
           localStorage.setItem('siteLanguage', lang);
-          currentLanguage = lang;
           
           // Apply translations
-          if (typeof window.applyTranslations === 'function') {
-            window.applyTranslations(lang);
-          }
+          applyTranslations(lang);
           
           // Notify other windows
           if (window.opener) {

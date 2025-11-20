@@ -4,7 +4,7 @@
       'common.slideMaker': 'SlideMaker',
       'common.home': 'Home',
       'common.templates': 'Templates',
-      'common.myPresentations': 'My Presentations',
+      'common.myPresentations': 'Recent Presentations',
       'common.settings': 'Settings',
       'common.help': 'Help',
       'common.signUp': 'Sign Up',

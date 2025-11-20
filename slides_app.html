@@ -89,17 +89,27 @@
       position: fixed;
       inset: 0;
       display: none;
-      background: rgba(0, 20, 15, 0.68);
-      backdrop-filter: blur(8px);
-      -webkit-backdrop-filter: blur(8px);
-      align-items: center;
-      justify-content: center;
-      z-index: 5100;
+      z-index: 9999;
+      pointer-events: none;
+    }
+    .export-modal::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: rgba(0, 24, 18, 0.55);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      pointer-events: none;
     }
     .export-modal.show {
-      display: flex;
+      display: block;
+      pointer-events: auto;
     }
     .export-dialog {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
       background: rgba(3, 32, 23, 0.95);
       border: 1px solid rgba(0, 222, 168, 0.2);
       border-radius: 18px;
@@ -110,6 +120,7 @@
       flex-direction: column;
       gap: 18px;
       color: #e8f5e9;
+      z-index: 10000;
     }
     .export-body { display: flex; flex-direction: column; gap: 16px; }
     .export-field { display: flex; flex-direction: column; gap: 6px; }
@@ -148,67 +159,95 @@
       transition: transform 0.2s ease, background 0.3s ease;
     }
     .export-close:hover { background: rgba(0, 200, 120, 0.35); transform: scale(1.05); }
-    .export-options { display: grid; gap: 12px; }
-    .export-option {
-      position: relative;
-      display: flex;
-      align-items: flex-start;
-      gap: 14px;
-      border: 1px solid rgba(0, 255, 170, 0.2);
-      background: rgba(4, 60, 40, 0.55);
-      border-radius: 14px;
-      padding: 14px 16px;
-      cursor: pointer;
-      text-align: left;
-      transition: transform 0.2s ease, box-shadow 0.3s ease, border 0.3s ease, background 0.3s ease;
-      color: inherit;
-      font: inherit;
+    .export-options {
+      background: linear-gradient(145deg, #062f25, #0b3d2f);
+      color: #fff;
+      border-radius: 20px;
+      padding: 30px 40px;
+      width: 380px;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      z-index: 999;
+      text-align: center;
+      font-family: 'Inter', sans-serif;
+      overflow: hidden;
     }
-    .export-option-input {
-      appearance: none;
-      width: 18px;
-      height: 18px;
-      border-radius: 50%;
-      border: 2px solid rgba(0, 222, 168, 0.55);
-      margin-top: 4px;
-      position: relative;
-      cursor: pointer;
-      flex-shrink: 0;
-    }
-    .export-option-input::after {
-      content: '';
-      position: absolute;
-      inset: 3px;
-      border-radius: 50%;
-      background: rgba(0, 222, 168, 0.85);
-      transform: scale(0);
-      transition: transform 0.2s ease;
-    }
-    .export-option-input:checked::after {
-      transform: scale(1);
-    }
-    .export-option:hover,
-    .export-option:focus-within {
-      transform: translateY(-2px);
-      border-color: rgba(0, 222, 168, 0.55);
-      background: rgba(5, 85, 54, 0.8);
-      box-shadow: 0 14px 38px rgba(0, 222, 168, 0.25);
-    }
-    .export-option.active {
-      border-color: rgba(0, 222, 168, 0.65);
-      background: rgba(5, 90, 56, 0.92);
-      box-shadow: 0 16px 38px rgba(0, 222, 168, 0.35);
-    }
-    .export-option-details { display: flex; flex-direction: column; gap: 4px; }
-    .export-option-kicker {
+    .export-options h3 {
+      font-size: 1.3rem;
       font-weight: 600;
-      font-size: 0.9rem;
-      color: rgba(0, 222, 168, 0.85);
-      min-width: 44px;
+      margin-bottom: 15px;
     }
-    .export-option-label { font-weight: 600; font-size: 1rem; }
-    .export-option-note { color: rgba(200, 240, 225, 0.7); font-size: 0.85rem; display: block; }
-    .export-footer { display: flex; justify-content: flex-end; gap: 12px; }
+    .format-options {
+      text-align: left;
+      margin: 15px 0;
+      line-height: 1.9;
+    }
+    .format-options label {
+      font-size: 0.95rem;
+      cursor: pointer;
+      display: block;
+      color: #d1d5db;
+      transition: color 0.3s ease;
+    }
+    .format-options label:hover {
+      color: #10b981;
+    }
+    .export-options input[type="text"] {
+      width: 100%;
+      padding: 8px 10px;
+      border-radius: 10px;
+      border: none;
+      margin-bottom: 10px;
+      background: #1a3a2c;
+      color: #e5e7eb;
+      font-size: 0.95rem;
+      outline: none;
+    }
+    .export-options button {
+      background: linear-gradient(90deg, #059669, #10b981);
+      color: #fff;
+      font-weight: 600;
+      border: none;
+      border-radius: 12px;
+      padding: 10px 24px;
+      cursor: pointer;
+      font-size: 1rem;
+      width: 100%;
+      margin-top: 15px;
+      transition: all 0.3s ease;
+    }
+    .export-options button:hover {
+      background: linear-gradient(90deg, #10b981, #34d399);
+      transform: scale(1.02);
+    }
+    .export-options button:active {
+      transform: scale(0.98);
+    }
+    .export-options .export-close {
+      position: absolute;
+      top: 16px;
+      right: 16px;
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      border: none;
+      background: rgba(255, 255, 255, 0.12);
+      color: #e5e7eb;
+      font-size: 18px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background 0.3s ease, transform 0.2s ease;
+    }
+    .export-options .export-close:hover {
+      background: rgba(16, 185, 129, 0.35);
+      transform: scale(1.05);
+    }
+    .export-options .export-close:active {
+      transform: scale(0.95);
+    }
     .canvas.exporting {
       pointer-events: none;
     }
@@ -281,24 +320,19 @@
   <div class="save-notification" id="saveNotification">Presentation saved!</div>
   <div class="export-modal" id="exportModal" aria-hidden="true">
     <div class="export-dialog" role="dialog" aria-modal="true" aria-labelledby="exportDialogTitle">
-      <div class="export-header">
-        <h2 id="exportDialogTitle">Export Presentation</h2>
-        <button type="button" class="export-close" id="exportClose" aria-label="Close export dialog">
-          <i class="fas fa-times"></i>
-        </button>
-      </div>
-      <div class="export-body">
-        <div class="export-field">
-          <label for="exportFileName">File name</label>
-          <input type="text" id="exportFileName" maxlength="80" autocomplete="off" placeholder="presentation-name">
+      <div class="export-options">
+        <button type="button" class="export-close" id="exportClose" aria-label="Close export dialog">&times;</button>
+        <h3 id="exportDialogTitle">Export Presentation</h3>
+        <input type="text" id="exportName" placeholder="File name" value="aramco-slide" />
+        <div class="format-options">
+          <label><input type="radio" name="format" value="pdf" checked> PDF Document</label><br>
+          <label><input type="radio" name="format" value="pptx"> PowerPoint (PPTX)</label><br>
+          <label><input type="radio" name="format" value="png"> PNG Image</label><br>
+          <label><input type="radio" name="format" value="jpg"> JPG Image</label><br>
+          <label><input type="radio" name="format" value="html"> Interactive HTML</label><br>
+          <label><input type="radio" name="format" value="json"> Editor JSON</label>
         </div>
-        <div class="export-options" id="exportOptions"></div>
-      </div>
-      <div class="export-footer">
-        <button type="button" class="toolbar-pill" data-variant="neutral" id="exportCancel">
-          <span class="label">Cancel</span>
-        </button>
-        <button type="button" class="toolbar-pill" data-variant="green" id="exportConfirm" disabled>
+        <button type="button" id="exportSaveButton">
           <span class="label">Save</span>
         </button>
       </div>
@@ -319,26 +353,11 @@
     const fileNameEl = el('fileName');
     const saveNotification = document.getElementById('saveNotification');
     const exportModal = document.getElementById('exportModal');
-    const exportOptionsContainer = document.getElementById('exportOptions');
     const exportCloseBtn = document.getElementById('exportClose');
-    const exportCancelBtn = document.getElementById('exportCancel');
-    const exportFileNameInput = document.getElementById('exportFileName');
-    const exportConfirmBtn = document.getElementById('exportConfirm');
+    const exportNameInput = document.getElementById('exportName');
+    const exportSaveButton = document.getElementById('exportSaveButton');
     let toastTimeout;
-    let selectedExportFormat = null;
     let exportModalPreviousFocus = null;
-    const EXPORT_FORMATS = [
-      { id: 'pdf', label: 'PDF Document', note: 'Printable version of your slides.' },
-      { id: 'pptx', label: 'PowerPoint (PPTX)', note: 'Open and edit in Microsoft PowerPoint.' },
-      { id: 'png', label: 'PNG Images (ZIP)', note: 'Export each slide as a transparent image.' },
-      { id: 'jpg', label: 'JPG Images (ZIP)', note: 'Export each slide as a photo-friendly image.' },
-      { id: 'html', label: 'Interactive HTML', note: 'Share as a standalone web page.' },
-      { id: 'json', label: 'Editor JSON', note: 'Backup for reloading into SlideMaker.' }
-    ];
-    const EXPORT_LABEL_MAP = EXPORT_FORMATS.reduce((map, fmt) => {
-      map[fmt.id] = fmt.label;
-      return map;
-    }, {});
 
     function showToast(message, duration = 2400) {
       clearTimeout(toastTimeout);
@@ -370,66 +389,13 @@
       return sanitizeFileName(fileName || fallbackTitle);
     }
 
-    function downloadBlob(blob, fileName) {
-      console.log('Triggering download…', fileName);
-      const url = URL.createObjectURL(blob);
-      const anchor = document.createElement('a');
-      anchor.href = url;
-      anchor.download = fileName;
-      document.body.appendChild(anchor);
-      anchor.click();
-      anchor.remove();
-      URL.revokeObjectURL(url);
-      console.log('Download successful.', fileName);
-    }
-
-    function renderExportOptions() {
-      exportOptionsContainer.innerHTML = '';
-      selectedExportFormat = null;
-      exportConfirmBtn.disabled = true;
-      EXPORT_FORMATS.forEach(format => {
-        const option = document.createElement('label');
-        option.className = 'export-option';
-
-        const input = document.createElement('input');
-        input.type = 'radio';
-        input.name = 'exportFormat';
-        input.value = format.id;
-        input.className = 'export-option-input';
-
-        const kicker = document.createElement('span');
-        kicker.className = 'export-option-kicker';
-        kicker.textContent = format.id.toUpperCase();
-
-        const details = document.createElement('div');
-        details.className = 'export-option-details';
-        const labelSpan = document.createElement('span');
-        labelSpan.className = 'export-option-label';
-        labelSpan.textContent = format.label;
-        const noteSpan = document.createElement('span');
-        noteSpan.className = 'export-option-note';
-        noteSpan.textContent = format.note;
-        details.append(labelSpan, noteSpan);
-
-        input.addEventListener('change', () => {
-          document.querySelectorAll('.export-option.active').forEach(active => active.classList.remove('active'));
-          option.classList.add('active');
-          selectedExportFormat = input.value;
-          exportConfirmBtn.disabled = false;
-        });
-
-        option.append(input, kicker, details);
-        exportOptionsContainer.appendChild(option);
-      });
-    }
-
     function handleExportKeydown(event) {
       if (event.key === 'Escape') {
         event.preventDefault();
         closeExportModal();
       }
       if (event.key === 'Tab') {
-        const focusable = Array.from(exportModal.querySelectorAll('button, input[type="radio"]'));
+        const focusable = Array.from(exportModal.querySelectorAll('button, input'));
         if (focusable.length === 0) return;
         const first = focusable[0];
         const last = focusable[focusable.length - 1];
@@ -444,11 +410,17 @@
     }
 
     function openExportModal() {
-      renderExportOptions();
       const defaultName = getExportBaseName();
-      exportFileNameInput.value = defaultName;
-      exportFileNameInput.focus();
-      exportFileNameInput.select();
+      exportModalPreviousFocus = document.activeElement;
+      if (exportNameInput) {
+        exportNameInput.value = defaultName;
+        exportNameInput.focus();
+        exportNameInput.select();
+      }
+      const defaultFormat = exportModal.querySelector('input[name="format"][value="pdf"]');
+      if (defaultFormat) {
+        defaultFormat.checked = true;
+      }
       exportModalPreviousFocus = document.activeElement;
       exportModal.classList.add('show');
       exportModal.setAttribute('aria-hidden', 'false');
@@ -459,9 +431,6 @@
       exportModal.classList.remove('show');
       exportModal.setAttribute('aria-hidden', 'true');
       document.removeEventListener('keydown', handleExportKeydown);
-      document.querySelectorAll('.export-option.active').forEach(active => active.classList.remove('active'));
-      exportConfirmBtn.disabled = true;
-      selectedExportFormat = null;
       if (exportModalPreviousFocus && typeof exportModalPreviousFocus.focus === 'function') {
         exportModalPreviousFocus.focus();
       }
@@ -473,383 +442,110 @@
       }
     });
     exportCloseBtn.addEventListener('click', closeExportModal);
-    exportCancelBtn.addEventListener('click', closeExportModal);
-    exportConfirmBtn.addEventListener('click', handleExportConfirm);
-    exportFileNameInput.addEventListener('keydown', (event) => {
-      if (event.key === 'Enter' && !exportConfirmBtn.disabled) {
+    if (exportNameInput) {
+      exportNameInput.addEventListener('keydown', (event) => {
+        if (event.key === 'Enter') {
         event.preventDefault();
-        handleExportConfirm();
-      }
-    });
-
-    async function handleExportConfirm() {
-      if (!selectedExportFormat) return;
-      const rawName = exportFileNameInput.value.trim();
-      const safeName = sanitizeFileName(rawName) || getExportBaseName();
+          const selectedFormat = document.querySelector('input[name="format"]:checked');
+          if (!selectedFormat) {
+            alert('Please select a format.');
+            return;
+          }
+          exportSlides(selectedFormat.value, exportNameInput.value);
       closeExportModal();
-      await exportPresentation(selectedExportFormat, safeName);
-    }
-
-    async function waitForRenderCycles(cycles = 2) {
-      while (cycles-- > 0) {
-        await new Promise(resolve => requestAnimationFrame(() => resolve()));
-      }
-    }
-
-    async function captureSlideSnapshot(type = 'png') {
-      await waitForRenderCycles(2);
-      const canvasWrapper = document.querySelector('.canvas');
-      if (!canvasWrapper) {
-        throw new Error('Presentation canvas not found.');
-      }
-      document.activeElement && document.activeElement.blur();
-      canvasWrapper.classList.add('exporting');
-      await waitForRenderCycles(1);
-      const slideCanvas = canvasWrapper.querySelector('.slide-canvas');
-      const backgroundColor = type === 'png' ? null : '#ffffff';
-      const rendered = await html2canvas(slideCanvas, {
-        backgroundColor,
-        scale: 2,
-        logging: false,
-        useCORS: true
-      });
-      canvasWrapper.classList.remove('exporting');
-      const mime = type === 'jpg' ? 'image/jpeg' : 'image/png';
-      return {
-        dataUrl: rendered.toDataURL(mime, 0.92),
-        width: rendered.width,
-        height: rendered.height
-      };
-    }
-
-    function generateStandaloneHTMLDocument(baseName) {
-      const slidesJSON = JSON.stringify(slides).replace(/<\/script>/gi, '<\\/script>');
-      const lines = [
-        "<!doctype html>",
-        "<html lang=\"en\">",
-        "<head>",
-        "  <meta charset=\"utf-8\">",
-        "  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">",
-        `  <title>${baseName} – Slide Export</title>`,
-        "  <style>",
-        "    body { font-family: 'Poppins', Arial, sans-serif; margin: 0; padding: 40px; background: #01231a; color: #e8f5e9; }",
-        "    .deck { display: grid; gap: 32px; max-width: 960px; margin: 0 auto; }",
-        "    .slide { background: rgba(255, 255, 255, 0.06); border: 1px solid rgba(255, 255, 255, 0.12); border-radius: 18px; padding: 32px; box-shadow: 0 20px 50px rgba(0,0,0,0.35); }",
-        "    .slide h2 { margin: 0 0 16px; font-size: 1.8rem; color: #9ef6c7; }",
-        "    .slide-content { line-height: 1.6; }",
-        "  </style>",
-        "</head>",
-        "<body>",
-        "  <main class=\"deck\" id=\"deck\"></main>",
-        "  <script>",
-        `    const slides = ${slidesJSON};`,
-        "    const deck = document.getElementById('deck');",
-        "    slides.forEach((slide, index) => {",
-        "      const section = document.createElement('section');",
-        "      section.className = 'slide';",
-        "      const title = document.createElement('h2');",
-        "      title.textContent = slide.title && slide.title.trim() ? slide.title.trim() : 'Slide ' + (index + 1);",
-        "      section.appendChild(title);",
-        "      const content = document.createElement('div');",
-        "      content.className = 'slide-content';",
-        "      content.innerHTML = slide.html || '';",
-        "      section.appendChild(content);",
-        "      deck.appendChild(section);",
-        "    });",
-        "  <\\/script>",
-        "</body>",
-        "</html>"
-      ];
-      return lines.join('\\n');
-    }
-
-    async function exportAsPDF(baseName) {
-      if (!window.html2canvas || !window.jspdf) {
-        throw new Error('PDF export libraries are not available.');
-      }
-      console.log('Generating file blob… (PDF)');
-      const { jsPDF } = window.jspdf;
-      const pdf = new jsPDF({ orientation: 'landscape', unit: 'pt', format: 'a4' });
-      const originalId = selectedId;
-      for (let i = 0; i < slides.length; i += 1) {
-        selectedId = slides[i].id;
-        render();
-        const snapshot = await captureSlideSnapshot('png');
-        if (i > 0) {
-          pdf.addPage();
-        }
-        const pageWidth = pdf.internal.pageSize.getWidth() - 60;
-        const ratio = snapshot.height === 0 ? 1 : snapshot.width / snapshot.height;
-        const imageHeight = pageWidth / ratio;
-        const maxHeight = pdf.internal.pageSize.getHeight() - 60;
-        const heightToUse = Math.min(imageHeight, maxHeight);
-        const widthToUse = heightToUse * ratio;
-        pdf.addImage(snapshot.dataUrl, 'PNG', 30, 30, widthToUse, heightToUse);
-      }
-      selectedId = originalId;
-      render();
-      const fileNameOut = `${baseName}.pdf`;
-      const pdfBlob = pdf.output('blob');
-      downloadBlob(pdfBlob, fileNameOut);
-      return fileNameOut;
-    }
-
-    async function exportAsPPTX(baseName) {
-      if (!window.PptxGenJS) {
-        throw new Error('PPTX export library is not available.');
-      }
-      console.log('Generating file blob… (PPTX)');
-      const pptx = new window.PptxGenJS();
-      slides.forEach((slide, index) => {
-        const pptSlide = pptx.addSlide();
-        const titleText = slide.title && slide.title.trim() ? slide.title.trim() : `Slide ${index + 1}`;
-        pptSlide.addText(titleText, {
-          x: 0.6,
-          y: 0.5,
-          fontSize: 26,
-          bold: true,
-          color: '2dd4bf'
-        });
-        const temp = document.createElement('div');
-        temp.innerHTML = slide.html || '';
-        const bodyText = (temp.textContent || temp.innerText || '').trim();
-        if (bodyText) {
-          pptSlide.addText(bodyText, {
-            x: 0.6,
-            y: 1.25,
-            w: 8.4,
-            h: 4.5,
-            fontSize: 18,
-            color: '173f35',
-            lineSpacing: 28
-          });
         }
       });
-      const fileNameOut = `${baseName}.pptx`;
-      const pptxBlob = await pptx.write('blob');
-      downloadBlob(pptxBlob, fileNameOut);
-      return fileNameOut;
     }
-
-    async function exportSlidesAsImages(baseName, type) {
-      if (!window.html2canvas || !window.JSZip) {
-        throw new Error('Image export libraries are not available.');
-      }
-      console.log(`Generating file blob… (${type.toUpperCase()} ZIP)`);
-      const zip = new JSZip();
-      const originalId = selectedId;
-      for (let i = 0; i < slides.length; i += 1) {
-        selectedId = slides[i].id;
-        render();
-        const snapshot = await captureSlideSnapshot(type);
-        const fileName = `slide-${String(i + 1).padStart(2, '0')}.${type}`;
-        zip.file(fileName, snapshot.dataUrl.split(',')[1], { base64: true });
-      }
-      selectedId = originalId;
-      render();
-      const blob = await zip.generateAsync({ type: 'blob' });
-      const zipName = `${baseName}-${type.toUpperCase()}-slides.zip`;
-      downloadBlob(blob, zipName);
-      return zipName;
-    }
-
-    function exportAsHTML(baseName) {
-      console.log('Generating file blob… (HTML)');
-      const htmlDocument = generateStandaloneHTMLDocument(baseName);
-      const blob = new Blob([htmlDocument], { type: 'text/html;charset=utf-8' });
-      const fileNameOut = `${baseName}.html`;
-      downloadBlob(blob, fileNameOut);
-      return fileNameOut;
-    }
-
-    function exportAsJSON(baseName) {
-      console.log('Generating file blob… (JSON)');
-      const payload = {
-        generatedAt: new Date().toISOString(),
-        fileName,
-        slides
-      };
-      const blob = new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json' });
-      const fileNameOut = `${baseName}.json`;
-      downloadBlob(blob, fileNameOut);
-      return fileNameOut;
-    }
-
-    async function exportPresentation(format, customBaseName) {
-      const label = EXPORT_LABEL_MAP[format] || format.toUpperCase();
-      showToast(`Preparing ${label}…`, null);
-      try {
-        updateCurrentFromEditor();
-        const baseName = sanitizeFileName(customBaseName || getExportBaseName());
-        let exportedFileName = '';
-        if (format === 'pdf') {
-          exportedFileName = await exportAsPDF(baseName);
-        } else if (format === 'pptx') {
-          exportedFileName = await exportAsPPTX(baseName);
-        } else if (format === 'png') {
-          exportedFileName = await exportSlidesAsImages(baseName, 'png');
-        } else if (format === 'jpg') {
-          exportedFileName = await exportSlidesAsImages(baseName, 'jpg');
-        } else if (format === 'html') {
-          exportedFileName = exportAsHTML(baseName);
-        } else if (format === 'json') {
-          exportedFileName = exportAsJSON(baseName);
-        } else {
-          throw new Error('Unsupported format selected.');
+    if (exportSaveButton) {
+      exportSaveButton.addEventListener('click', () => {
+        const selectedFormat = document.querySelector('input[name="format"]:checked');
+        if (!selectedFormat) {
+          alert('Please select a format.');
+          return;
         }
-        hideToast();
-        showToast('✅ File saved successfully to your Downloads folder.', 3000);
-      } catch (error) {
-        console.error('Export failed:', error);
-        hideToast();
-        alert(`Export failed: ${error.message || error}`);
-      }
-    }
-
-    function uid() { return 's_' + Math.random().toString(36).slice(2, 10); }
-    function now() { return Date.now(); }
-
-    function createSlide(partial) {
-      return {
-        id: uid(),
-        title: (partial && partial.title) || 'Untitled',
-        html: (partial && partial.html) || '',
-        createdAt: now(),
-        updatedAt: now(),
-      };
-    }
-
-    function save() { localStorage.setItem(storageKey, JSON.stringify({ slides, selectedId, fileName })); }
-    function load() {
-      try {
-        const raw = localStorage.getItem(storageKey);
-        if (!raw) throw new Error('empty');
-        const data = JSON.parse(raw);
-        slides = Array.isArray(data.slides) ? data.slides : [];
-        selectedId = data.selectedId || (slides[0] && slides[0].id) || null;
-        fileName = data.fileName || fileName;
-      } catch (e) {
-        slides = [createSlide({ title: 'Welcome', html: '<p>Start building your deck.</p>' })];
-        selectedId = slides[0].id;
-      }
-    }
-
-    function selectedIndex() { return slides.findIndex(s => s.id === selectedId); }
-    function currentSlide() { return slides.find(s => s.id === selectedId) || null; }
-
-    function addSlide() {
-      const idx = selectedIndex();
-      const s = createSlide({ title: 'New slide' });
-      if (idx >= 0) slides.splice(idx + 1, 0, s); else slides.push(s);
-      selectedId = s.id; render(); save(); titleEl.focus(); titleEl.select();
-    }
-    function duplicateSlide() {
-      const cur = currentSlide(); if (!cur) return;
-      const s = createSlide({ title: cur.title + ' (copy)', html: cur.html });
-      slides.splice(selectedIndex() + 1, 0, s); selectedId = s.id; render(); save();
-    }
-    function deleteSlide() {
-      const idx = selectedIndex(); if (idx < 0) return;
-      slides.splice(idx, 1);
-      if (!slides.length) { const s = createSlide({ title: 'New slide' }); slides.push(s); selectedId = s.id; }
-      else { selectedId = slides[Math.max(0, idx - 1)].id; }
-      render(); save();
-    }
-    function selectSlide(id) { selectedId = id; render(); save(); }
-
-    function updateCurrentFromEditor() {
-      const cur = currentSlide(); if (!cur) return;
-      cur.title = titleEl.value.trim() || 'Untitled';
-      cur.html = contentEl.innerHTML; cur.updatedAt = now();
-      const t = document.querySelector(`.slide-item[data-id="${cur.id}"] .slide-title`);
-      if (t) t.textContent = cur.title; save();
-    }
-
-    function escapeHtml(str) {
-      return (str || '')
-        .replaceAll('&', '&amp;').replaceAll('<', '&lt;').replaceAll('>', '&gt;')
-        .replaceAll('"', '&quot;').replaceAll("'", '&#039;');
-    }
-
-    function thumbHTML(slide) {
-      const title = (slide.title || '').replaceAll('<','&lt;').replaceAll('>','&gt;');
-      return `
-        <div class="mini slide-canvas" style="width:530px;height:300px;border-radius:8px;padding:20px;">
-          <div style="font-weight:800;font-size:28px;border-bottom:1px dashed #d1d5db;margin-bottom:8px;">${title}</div>
-          <div>${slide.html || ''}</div>
-        </div>`;
-    }
-
-    function renderList() {
-      slidesEl.innerHTML = '';
-      slides.forEach((s, i) => {
-        const item = document.createElement('div');
-        item.className = 'slide-item' + (s.id === selectedId ? ' active' : '');
-        item.dataset.id = s.id;
-        item.innerHTML = `
-          <div class="thumb"><div>${thumbHTML(s)}</div></div>
-          <div>
-            <div class="slide-title">${escapeHtml(s.title)}</div>
-            <div class="slide-meta">Slide ${i + 1}</div>
-          </div>
-          <div style=\"display:flex;gap:6px;\">
-            <button class=\"btn-secondary btn-mini\" data-action=\"dup\">⎘</button>
-            <button class=\"btn-danger btn-mini\" data-action=\"del\">×</button>
-          </div>`;
-        item.addEventListener('click', (e) => {
-          const btn = e.target.closest('button');
-          if (btn && btn.dataset.action === 'dup') { duplicateSlide(); e.stopPropagation(); return; }
-          if (btn && btn.dataset.action === 'del') { deleteSlide(); e.stopPropagation(); return; }
-          selectSlide(s.id);
-        });
-        slidesEl.appendChild(item);
+        exportSlides(selectedFormat.value, exportNameInput ? exportNameInput.value : getExportBaseName());
+        closeExportModal();
       });
-      countEl.textContent = slides.length + ' slides';
     }
 
-    function renderEditor() {
-      const cur = currentSlide(); if (!cur) return;
-      titleEl.value = cur.title; contentEl.innerHTML = cur.html; fileNameEl.value = fileName;
+
+  </script>
+  <script>
+  async function exportSlides(format, fileName) {
+    const slideArea =
+      document.querySelector('.slide, .slide-canvas, .main-slide, .editor-canvas') ||
+      document.body;
+
+    if (!slideArea) return alert('No slide area found!');
+
+    try {
+      const canvas = await html2canvas(slideArea, { scale: 2 });
+      const imgData = canvas.toDataURL('image/png');
+
+      switch (format) {
+        case 'pdf': {
+          const { jsPDF } = window.jspdf;
+          const pdf = new jsPDF('l', 'pt', 'a4');
+          const width = pdf.internal.pageSize.getWidth();
+          const height = pdf.internal.pageSize.getHeight();
+          pdf.addImage(imgData, 'PNG', 0, 0, width, height);
+          pdf.save(`${fileName}.pdf`);
+          break;
+        }
+
+        case 'pptx': {
+          const pptx = new PptxGenJS();
+          const slide = pptx.addSlide();
+          slide.addImage({ data: imgData, x: 0, y: 0, w: 10, h: 5.625 });
+          await pptx.writeFile({ fileName: `${fileName}.pptx` });
+          break;
+        }
+
+        case 'png': {
+          const link = document.createElement('a');
+          link.href = imgData;
+          link.download = `${fileName}.png`;
+          link.click();
+          break;
+        }
+
+        case 'jpg': {
+          const jpgData = canvas.toDataURL('image/jpeg', 0.95);
+          const link = document.createElement('a');
+          link.href = jpgData;
+          link.download = `${fileName}.jpg`;
+          link.click();
+          break;
+        }
+
+        case 'html': {
+          const blob = new Blob([slideArea.outerHTML], { type: 'text/html' });
+          const link = document.createElement('a');
+          link.href = URL.createObjectURL(blob);
+          link.download = `${fileName}.html`;
+          link.click();
+          break;
+        }
+
+        case 'json': {
+          const content = slideArea.innerHTML.trim();
+          const data = { slide: content, exportedAt: new Date().toISOString() };
+          const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+          const link = document.createElement('a');
+          link.href = URL.createObjectURL(blob);
+          link.download = `${fileName}.json`;
+          link.click();
+          break;
+        }
+
+        default:
+          alert('Please select a valid format.');
+      }
+    } catch (err) {
+      alert(`Export failed: ${err.message}`);
+      console.error(err);
     }
-    function render() { renderList(); renderEditor(); }
-
-    // Toolbar commands
-    document.querySelectorAll('[data-cmd]').forEach(btn => {
-      btn.addEventListener('click', () => {
-        const cmd = btn.getAttribute('data-cmd');
-        const val = btn.getAttribute('data-value');
-        contentEl.focus(); document.execCommand(cmd, false, val); updateCurrentFromEditor();
-      });
-    });
-
-    // Buttons
-    document.getElementById('btn-new').addEventListener('click', addSlide);
-    document.getElementById('btn-duplicate').addEventListener('click', duplicateSlide);
-    document.getElementById('btn-delete').addEventListener('click', deleteSlide);
-    document.getElementById('btn-clear').addEventListener('click', () => {
-      if (!confirm('Reset all slides?')) return;
-      slides = [createSlide({ title: 'Welcome', html: '<p>Blank deck.</p>' })]; selectedId = slides[0].id; render(); save();
-    });
-    document.getElementById('btn-export').addEventListener('click', () => {
-      updateCurrentFromEditor();
-      openExportModal();
-    });
-
-    // Editor listeners
-    titleEl.addEventListener('input', updateCurrentFromEditor);
-    contentEl.addEventListener('input', updateCurrentFromEditor);
-    fileNameEl.addEventListener('input', () => { fileName = fileNameEl.value || 'Untitled presentation'; save(); });
-
-    // Keyboard navigation
-    window.addEventListener('keydown', (e) => {
-      if (e.key === 'ArrowDown') { const i = Math.min(slides.length - 1, selectedIndex() + 1); selectedId = slides[i].id; render(); e.preventDefault(); }
-      else if (e.key === 'ArrowUp') { const i = Math.max(0, selectedIndex() - 1); selectedId = slides[i].id; render(); e.preventDefault(); }
-      else if (e.key === 'Enter' && (e.metaKey || e.ctrlKey)) { addSlide(); e.preventDefault(); }
-      else if (e.key === 'Backspace' && (e.metaKey || e.ctrlKey)) { deleteSlide(); e.preventDefault(); }
-    });
-
-    load();
-    render();
+  }
   </script>
 </body>
 </html>

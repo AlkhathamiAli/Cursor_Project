@@ -1,0 +1,187 @@
+body {
+  background:
+    linear-gradient(100deg,
+      rgba(4, 34, 53, 0.97) 0%,
+      rgba(6, 62, 85, 0.94) 52%,
+      rgba(9, 108, 78, 0.95) 71%,
+      rgba(17, 158, 70, 0.96) 100%);
+  background-attachment: fixed;
+  background-repeat: no-repeat;
+  background-size: cover;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  color: #111827;
+  transition: background 0.6s ease;
+}
+
+body.light-mode {
+  background:
+    radial-gradient(circle at 22% 22%, rgba(255, 255, 255, 0.45), transparent 60%),
+    radial-gradient(circle at 78% 74%, rgba(255, 255, 255, 0.3), transparent 55%),
+    linear-gradient(120deg,
+      rgba(245, 247, 250, 0.98) 0%,
+      rgba(235, 244, 249, 0.96) 38%,
+      rgba(229, 242, 239, 0.95) 62%,
+      rgba(236, 248, 241, 0.97) 100%);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  color: #1a1a1a;
+  transition: all 0.3s ease-in-out;
+  position: relative;
+}
+
+body.light-mode,
+body.light-mode h1,
+body.light-mode h2,
+body.light-mode h3,
+body.light-mode h4,
+body.light-mode h5,
+body.light-mode h6,
+body.light-mode p,
+body.light-mode span,
+body.light-mode label,
+body.light-mode li,
+body.light-mode .muted,
+body.light-mode .subtitle,
+body.light-mode .card-title,
+body.light-mode .card-desc,
+body.light-mode .nav-menu a,
+body.light-mode .welcome-text,
+body.light-mode .template-examples h2,
+body.light-mode .template-examples p,
+body.light-mode .beautiful-templates h2,
+body.light-mode .beautiful-templates p,
+body.light-mode .recent-section h2,
+body.light-mode .recent-section p {
+  color: #111827 !important;
+}
+
+body.dark-theme,
+body:not(.light-mode) {
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+:root {
+  --sidebar-width: 220px;
+  --topbar-height: 70px;
+}
+
+.sidebar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: var(--sidebar-width);
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 20px 20px 30px;
+  overflow-y: auto;
+  background: linear-gradient(180deg, #022d27 0%, #004a42 100%);
+  color: #e5e7eb;
+  box-shadow: inset -1px 0 0 rgba(255, 255, 255, 0.08);
+  transition: all 0.3s ease;
+  z-index: 900;
+}
+
+.sidebar a {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: #d1d5db;
+  padding: 12px 20px;
+  border-radius: 12px;
+  text-decoration: none;
+  transition: all 0.3s ease;
+}
+
+.sidebar a:hover {
+  background-color: rgba(16, 185, 129, 0.15);
+  color: #1ae6a8;
+  transform: translateX(3px);
+}
+
+.sidebar a.active {
+  background-color: #10b981;
+  color: #ffffff;
+  font-weight: 600;
+  box-shadow: 0 0 10px rgba(16, 185, 129, 0.4);
+}
+
+.topbar {
+  position: fixed;
+  top: 0;
+  left: var(--sidebar-width);
+  right: 0;
+  height: var(--topbar-height);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 0 24px;
+  background: linear-gradient(90deg, #003b34 0%, #007a63 100%);
+  color: #f9fafb;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25);
+  transition: background 0.3s ease;
+  z-index: 950;
+}
+
+.topbar .welcome-text {
+  font-weight: 500;
+  color: #d1d5db !important;
+}
+
+.topbar .logout-btn {
+  background: linear-gradient(90deg, #10b981, #34d399);
+  border: none;
+  color: #ffffff;
+  border-radius: 10px;
+  padding: 8px 18px;
+  font-weight: 600;
+  transition: all 0.3s ease;
+}
+
+.topbar .logout-btn:hover {
+  background: linear-gradient(90deg, #34d399, #10b981);
+  box-shadow: 0 0 10px rgba(52, 211, 153, 0.6);
+  transform: scale(1.05);
+}
+
+body.shell-layout {
+  padding-left: var(--sidebar-width);
+  padding-top: var(--topbar-height);
+  min-height: 100vh;
+  box-sizing: border-box;
+  overflow-x: hidden;
+}
+
+body.shell-layout > main,
+body.shell-layout > .main,
+body.shell-layout > .page-content,
+body.shell-layout > .content-area,
+body.shell-layout > .app-main,
+body.shell-layout > .layout {
+  min-height: calc(100vh - var(--topbar-height));
+  padding: 32px;
+  box-sizing: border-box;
+}
+
+@media (max-width: 900px) {
+  :root {
+    --sidebar-width: 180px;
+  }
+
+  body.shell-layout {
+    padding-left: var(--sidebar-width);
+  }
+
+  body.shell-layout > main,
+  body.shell-layout > .main,
+  body.shell-layout > .page-content,
+  body.shell-layout > .content-area,
+  body.shell-layout > .app-main,
+  body.shell-layout > .layout {
+    padding: calc(var(--topbar-height) + 24px) 24px 24px;
+  }
+}
