@@ -1,0 +1,161 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Aramco Digital SlideMaker • Welcome</title>
+  <link rel="stylesheet" href="./css/welcome.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <!-- Stagewise Integration -->
+  <script>
+    // Stagewise configuration - reads from stagewise.json
+    window.STAGEWISE_CONFIG = {
+      appPort: 8000,
+      enabled: true,
+      page: 'welcome'
+    };
+  </script>
+</head>
+<body>
+  <!-- Gradient Shimmer Overlay -->
+  <div class="gradient-shimmer"></div>
+  
+  <!-- Floating Stars Background -->
+  <div class="stars-background">
+    <div class="star"></div>
+    <div class="star"></div>
+    <div class="star"></div>
+    <div class="star"></div>
+    <div class="star"></div>
+    <div class="star"></div>
+    <div class="star"></div>
+    <div class="star"></div>
+    <div class="star"></div>
+    <div class="star"></div>
+    <div class="star"></div>
+    <div class="star"></div>
+    <div class="star"></div>
+    <div class="star"></div>
+    <div class="star"></div>
+  </div>
+
+  <!-- Floating Particles -->
+  <div class="particles-container">
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+  </div>
+
+  <!-- Micro-Particles Floating Slowly -->
+  <div class="micro-particles">
+    <div class="micro-particle"></div>
+    <div class="micro-particle"></div>
+    <div class="micro-particle"></div>
+    <div class="micro-particle"></div>
+    <div class="micro-particle"></div>
+    <div class="micro-particle"></div>
+    <div class="micro-particle"></div>
+    <div class="micro-particle"></div>
+    <div class="micro-particle"></div>
+    <div class="micro-particle"></div>
+    <div class="micro-particle"></div>
+    <div class="micro-particle"></div>
+    <div class="micro-particle"></div>
+    <div class="micro-particle"></div>
+    <div class="micro-particle"></div>
+  </div>
+
+  <!-- Mountain Background -->
+  <div class="mountains-container">
+    <img src="./assets/backgrounds/mountains.svg" alt="Mountain Background" class="mountains-svg">
+  </div>
+
+  <!-- Top Navigation Bar -->
+  <nav class="top-nav" id="topNav">
+    <img src="./CURSOR-Project/public/aramco-digital.O&D.PNG" alt="Aramco Digital Logo" class="nav-logo">
+    <ul class="nav-links">
+      <li><a href="#about">About</a></li>
+      <li>
+        <button class="nav-signup-btn" onclick="window.location.href='./index.html'">
+          Sign Up
+        </button>
+      </li>
+    </ul>
+  </nav>
+
+  <!-- Hero Section -->
+  <main class="hero-container">
+    <div class="hero-card">
+      <h1 class="hero-title">HELLO & WELCOME</h1>
+      <p class="hero-subtitle">
+        Create stunning presentations, collaborate with your team, and bring your ideas to life with Aramco Digital SlideMaker.
+      </p>
+      <a href="./index.html" class="hero-cta">
+        <span class="cta-text">Enter SlideMaker</span>
+        <i class="fas fa-arrow-right cta-arrow"></i>
+      </a>
+    </div>
+  </main>
+
+  <script>
+    // Parallax effect for mountains on mouse move
+    document.addEventListener('mousemove', (e) => {
+      const mountains = document.querySelector('.mountains-svg');
+      if (mountains && window.innerWidth > 768) {
+        const x = (e.clientX / window.innerWidth - 0.5) * 20;
+        const y = (e.clientY / window.innerHeight - 0.5) * 10;
+        mountains.style.transform = `translate(${x}px, ${y}px)`;
+      }
+    });
+
+    // Navbar scroll effect
+    let lastScroll = 0;
+    const topNav = document.getElementById('topNav');
+    
+    window.addEventListener('scroll', () => {
+      const currentScroll = window.pageYOffset;
+      
+      if (currentScroll > 50) {
+        topNav.classList.add('scrolled');
+      } else {
+        topNav.classList.remove('scrolled');
+      }
+      
+      lastScroll = currentScroll;
+    });
+
+    // Smooth scroll for anchor links
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function (e) {
+        e.preventDefault();
+        const target = document.querySelector(this.getAttribute('href'));
+        if (target) {
+          target.scrollIntoView({
+            behavior: 'smooth',
+            block: 'start'
+          });
+        }
+      });
+    });
+
+    // Stagewise integration - enable when Stagewise CLI is running
+    // Stagewise will automatically detect and connect to this page when running on port 8000
+    if (window.location.search.includes('stagewise=true') || localStorage.getItem('stagewise-enabled') === 'true') {
+      // Stagewise is active - add data attributes for better element selection
+      document.querySelectorAll('.hero-card, .hero-title, .hero-subtitle, .hero-cta, .top-nav, .nav-logo, .nav-links a').forEach(el => {
+        el.setAttribute('data-stagewise-selectable', 'true');
+      });
+      
+      console.log('Stagewise integration active on welcome page');
+    }
+  </script>
+</body>
+</html>
+

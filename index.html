@@ -209,6 +209,43 @@
         animation: fadeIn 1s ease-in-out 0.4s both;
       }
       
+      .back-to-welcome-btn {
+        position: absolute;
+        top: 20px;
+        left: 20px;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        background: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        color: rgba(255, 255, 255, 0.9);
+        padding: 6px 12px;
+        border-radius: 16px;
+        font-size: 12px;
+        font-weight: 500;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        z-index: 10;
+        animation: fadeIn 1s ease-in-out 0.2s both;
+      }
+
+      .back-to-welcome-btn:hover {
+        background: rgba(255, 255, 255, 0.15);
+        color: #ffffff;
+        transform: translateX(-3px);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+      }
+
+      .back-to-welcome-btn i {
+        transition: transform 0.3s ease;
+      }
+
+      .back-to-welcome-btn:hover i {
+        transform: translateX(-3px);
+      }
+      
       .auth-buttons {
         display: flex;
         flex-direction: column;
@@ -235,6 +272,21 @@
         .auth-box h1 {
           font-size: 1.8rem;
         }
+
+        .back-to-welcome-btn {
+          top: 15px;
+          left: 15px;
+          padding: 5px 10px;
+          font-size: 11px;
+        }
+
+        .back-to-welcome-btn span {
+          display: none;
+        }
+
+        .back-to-welcome-btn i {
+          margin: 0;
+        }
       }
     </style>
   </head>
@@ -260,6 +312,10 @@
         <div class="access-icon">
           <img src="./CURSOR-Project/public/Saudi-Aramco.png" alt="Aramco Digital Logo" class="aramco-logo" />
         </div>
+        <button class="back-to-welcome-btn" onclick="window.location.href='./welcome.html'" title="Go back">
+          <i class="fas fa-arrow-left"></i>
+          <span>Go back</span>
+        </button>
         <h1 data-translate="access.welcomeTitle">Welcome to Aramco Digital SlideMaker</h1>
         <p data-translate="access.subtitle">Create, edit, and share stunning presentations easily.</p>
         <div class="auth-buttons">
