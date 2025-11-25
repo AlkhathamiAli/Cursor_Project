@@ -1,0 +1,150 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>SlideMaker • All Templates</title>
+    <script src="./scripts/database.js"></script>
+    <script src="./translations.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="./assets/theme.css">
+    <link rel="stylesheet" href="./css/home.css">
+    <link rel="stylesheet" href="./css/sidebar.css">
+    <link rel="stylesheet" href="./css/more_templates.css">
+    <style>
+      * { box-sizing: border-box; }
+      html {
+        scroll-behavior: smooth;
+      }
+      html, body {
+        margin: 0;
+        padding: 0;
+        min-height: 100%;
+        overflow-x: hidden;
+        font-family: 'Trebuchet MS', 'Lucida Grande', 'Lucida Sans Unicode', 'Lucida Sans', Tahoma, sans-serif;
+      }
+      body {
+        position: relative;
+      }
+
+      body.shell-layout {
+        display: flex;
+        min-height: 100vh;
+        background: radial-gradient(circle at 15% 20%, rgba(0, 255, 180, 0.25), transparent 45%), radial-gradient(circle at 80% 85%, rgba(0, 140, 255, 0.15), transparent 55%);
+        background-size: cover;
+        background-repeat: no-repeat;
+        position: relative;
+        color: #e8f5ed;
+      }
+
+      body.shell-layout::before {
+        content: "";
+        position: fixed;
+        inset: 0;
+        background: linear-gradient(140deg, rgba(6, 40, 36, 0.75) 0%, rgba(8, 25, 44, 0.8) 35%, rgba(12, 64, 40, 0.85) 100%), url("./CURSOR-Project/Background/B2.jpg") center / cover no-repeat;
+        filter: saturate(115%) contrast(105%);
+        z-index: -2;
+      }
+
+      body.shell-layout::after {
+        content: "";
+        position: fixed;
+        inset: 0;
+        background: radial-gradient(circle at 25% 25%, rgba(0, 255, 200, 0.18), transparent 55%), radial-gradient(circle at 80% 70%, rgba(0, 140, 255, 0.12), transparent 60%);
+        z-index: -1;
+      }
+
+      .content-area {
+        flex: 1 1 auto;
+        display: flex;
+        flex-direction: column;
+        min-height: 100vh;
+        position: relative;
+        padding: 28px 48px 72px;
+        gap: 32px;
+        margin-left: 260px;
+        background: rgba(6, 48, 40, 0.3);
+        border-left: 1px solid rgba(0, 255, 150, 0.08);
+        transition: margin-left 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        overflow-x: hidden;
+        max-width: calc(100vw - 260px);
+        box-sizing: border-box;
+      }
+      a { color: inherit; text-decoration: none; }
+      img { max-width: 100%; display: block; }
+    </style>
+  </head>
+  <body class="page-container shell-layout" data-page="templates">
+    <!-- Left Sidebar -->
+    <button class="sidebar-toggle" id="sidebarToggle" aria-label="Toggle sidebar" onclick="toggleSidebar()">
+      <i class="fas fa-bars"></i>
+    </button>
+    <nav class="sidebar" id="mainSidebar">
+      <div class="logo-container">
+        <img src="./CURSOR-Project/public/aramco-digital.O&D.PNG" alt="Aramco Digital Logo" class="sidebar-logo">
+      </div>
+      <div class="sidebar-sections">
+        <div class="sidebar-section">
+          <div class="section-header" onclick="toggleSection('presentations')">
+            <div class="section-title">
+              <i class="fas fa-file-powerpoint"></i>
+              <span>Presentations</span>
+            </div>
+            <i class="fas fa-chevron-down section-arrow" id="presentations-arrow"></i>
+          </div>
+          <div class="section-content" id="presentations-content">
+            <button class="section-action-btn" onclick="window.location.href='./Home.html'">
+              <i class="fas fa-home"></i>
+              <span>Back to Home</span>
+            </button>
+          </div>
+        </div>
+      </div>
+      
+      <div class="nav-menu" style="margin-top: auto; padding-top: 20px; border-top: 1px solid rgba(255, 255, 255, 0.1);">
+        <a href="./settings.html">
+          <div class="nav-item">
+            <i class="fas fa-cog"></i>
+            <span>Settings</span>
+          </div>
+        </a>
+      </div>
+    </nav>
+
+    <!-- Top Bar -->
+    <div class="content-area">
+      <header class="topbar">
+        <div class="topbar-left">
+          <a href="./Home.html" class="back-link">
+            <i class="fas fa-arrow-left"></i>
+            <span>Back to Home</span>
+          </a>
+        </div>
+        <div class="topbar-center">
+          <h1 style="margin: 0; font-size: 24px; color: #E8F5E9;">All Templates</h1>
+        </div>
+        <div class="topbar-right">
+          <div id="userInfo" style="display: none;">
+            <span id="userName">User</span>
+          </div>
+        </div>
+      </header>
+
+      <!-- Main Content -->
+      <main style="flex: 1;">
+        <section class="templates-gallery">
+          <div id="templatesGrid" class="templates-grid">
+            <!-- Templates will be loaded dynamically -->
+          </div>
+        </section>
+      </main>
+    </div>
+
+
+    <!-- Scripts -->
+    <script src="./scripts/templates.js"></script>
+    <script src="./scripts/more_templates.js"></script>
+    <script src="./scripts/sidebar.js"></script>
+  </body>
+</html>
+

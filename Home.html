@@ -4,12 +4,15 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>SlideMaker • Home</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <script src="./scripts/database.js"></script>
     <script src="./translations.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="./assets/theme.css">
+    <link rel="stylesheet" href="./css/chatbot.css">
+    <link rel="stylesheet" href="./css/home.css">
+    <link rel="stylesheet" href="./css/sidebar.css">
+    <!-- DISABLE ALL ANIMATIONS FOR PERFORMANCE TEST -->
+    <link rel="stylesheet" href="./css/disable-animations.css">
     <style>
       * { box-sizing: border-box; }
       html {
@@ -20,6 +23,7 @@
         padding: 0;
         min-height: 100%;
         overflow-x: hidden;
+        font-family: 'Trebuchet MS', 'Lucida Grande', 'Lucida Sans Unicode', 'Lucida Sans', Tahoma, sans-serif;
       }
       body {
         position: relative;
@@ -63,7 +67,10 @@
         margin-left: 260px;
         background: rgba(6, 48, 40, 0.3);
         border-left: 1px solid rgba(0, 255, 150, 0.08);
-        transition: margin-left 0.3s ease;
+        transition: margin-left 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        overflow-x: hidden;
+        max-width: calc(100vw - 260px);
+        box-sizing: border-box;
       }
       a { color: inherit; text-decoration: none; }
       img { max-width: 100%; display: block; }
@@ -129,8 +136,11 @@
         bottom: 0;
         height: 100vh;
         z-index: 40;
-        transition: transform 0.3s ease, opacity 0.3s ease;
+        transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1), visibility 0.4s;
         transform: translateX(0);
+        opacity: 1;
+        visibility: visible;
+        will-change: transform, opacity;
       }
       
       .sidebar::before {
@@ -152,11 +162,14 @@
       .sidebar.collapsed {
         transform: translateX(-100%) !important;
         opacity: 0 !important;
+        visibility: hidden !important;
         pointer-events: none !important;
       }
       
       body.sidebar-collapsed .content-area {
         margin-left: 0 !important;
+        max-width: 100vw !important;
+        width: 100% !important;
       }
       
       body.sidebar-collapsed .sidebar-toggle {
@@ -237,6 +250,183 @@
         background: rgba(0, 200, 83, 0.15);
         color: #00c853;
       }
+
+      /* Phase 3: Collapsible Sidebar Sections */
+      .sidebar-sections {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        gap: 12px;
+        padding-top: 28px;
+        border-top: 1px solid rgba(255, 255, 255, 0.08);
+        flex: 1 1 auto;
+        overflow-y: auto;
+      }
+
+      .sidebar-section {
+        width: 100%;
+        border-radius: 8px;
+        background: rgba(0, 0, 0, 0.1);
+        overflow: hidden;
+      }
+
+      .section-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 12px 14px;
+        cursor: pointer;
+        transition: background 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        user-select: none;
+      }
+
+      .section-header:hover {
+        background: rgba(255, 255, 255, 0.05);
+      }
+
+      .section-title {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        color: #d1e7dc;
+        font-size: 0.95rem;
+        font-weight: 600;
+      }
+
+      .section-title i {
+        font-size: 1rem;
+        width: 18px;
+        text-align: center;
+      }
+
+      .section-arrow {
+        color: rgba(255, 255, 255, 0.6);
+        font-size: 0.85rem;
+        transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1), color 0.3s ease;
+      }
+
+      .section-header.active .section-arrow {
+        transform: rotate(180deg);
+        color: #00c853;
+      }
+
+      .section-content {
+        max-height: 0;
+        overflow: hidden;
+        transition: max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1), padding 0.4s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s ease;
+        padding: 0 14px;
+        opacity: 0;
+      }
+
+      .section-content.expanded {
+        max-height: 1000px;
+        padding: 8px 14px 14px;
+        opacity: 1;
+      }
+
+      .section-action-btn {
+        width: 100%;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 10px 12px;
+        margin-bottom: 12px;
+        background: rgba(0, 200, 83, 0.15);
+        border: 1px solid rgba(0, 200, 83, 0.3);
+        border-radius: 6px;
+        color: #00c853;
+        font-size: 0.9rem;
+        font-weight: 500;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        font-family: 'Trebuchet MS', 'Lucida Grande', 'Lucida Sans Unicode', 'Lucida Sans', Tahoma, sans-serif;
+      }
+
+      .section-action-btn:hover {
+        background: rgba(0, 200, 83, 0.25);
+        border-color: rgba(0, 200, 83, 0.5);
+        transform: translateY(-1px);
+      }
+
+      .section-action-btn i {
+        font-size: 0.85rem;
+      }
+
+      .recent-items {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+        margin-bottom: 8px;
+      }
+
+      .recent-item {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 8px 10px;
+        border-radius: 6px;
+        color: rgba(255, 255, 255, 0.8);
+        font-size: 0.85rem;
+        cursor: pointer;
+        transition: all 0.3s ease;
+      }
+
+      .recent-item:hover {
+        background: rgba(255, 255, 255, 0.08);
+        color: #fff;
+      }
+
+      .recent-item i {
+        font-size: 0.8rem;
+        width: 16px;
+        text-align: center;
+        color: rgba(255, 255, 255, 0.6);
+      }
+
+      .recent-item-name {
+        flex: 1;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+
+      .see-more-link {
+        display: block;
+        padding: 8px 10px;
+        color: rgba(0, 200, 83, 0.8);
+        font-size: 0.85rem;
+        text-decoration: none;
+        text-align: center;
+        border-radius: 6px;
+        transition: all 0.3s ease;
+      }
+
+      .see-more-link:hover {
+        background: rgba(0, 200, 83, 0.1);
+        color: #00c853;
+      }
+
+      .template-categories {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        margin-bottom: 12px;
+      }
+
+      .template-category {
+        padding: 8px 10px;
+        border-radius: 6px;
+        background: rgba(255, 255, 255, 0.05);
+        color: rgba(255, 255, 255, 0.8);
+        font-size: 0.85rem;
+        cursor: pointer;
+        transition: all 0.3s ease;
+      }
+
+      .template-category:hover {
+        background: rgba(255, 255, 255, 0.1);
+        color: #fff;
+      }
       
       /* Top Bar */
       .topbar {
@@ -265,6 +455,9 @@
         top: 24px;
         z-index: 30;
         margin-left: 70px;
+        transition: margin-left 0.4s cubic-bezier(0.4, 0, 0.2, 1), width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        width: calc(100% - 70px);
+        box-sizing: border-box;
       }
       
       .topbar::before {
@@ -285,11 +478,13 @@
       }
       
       body.sidebar-collapsed .topbar {
-        margin-left: 70px;
+        margin-left: 0 !important;
+        width: 100% !important;
+        max-width: 100% !important;
       }
       
       body.sidebar-collapsed .topbar .notifications-btn {
-        margin-left: 2px;
+        margin-left: -12px;
       }
 
       .topbar .search-bar {
@@ -303,6 +498,7 @@
         padding: 10px 18px;
         border: 1px solid rgba(255, 255, 255, 0.15);
         transition: border-color 0.2s ease, box-shadow 0.2s ease;
+        position: relative;
       }
 
       .topbar .search-bar:focus-within {
@@ -346,6 +542,86 @@
         box-shadow: 0 6px 16px rgba(0, 200, 131, 0.25);
       }
 
+      /* Search Results Dropdown */
+      .search-results {
+        position: absolute;
+        top: calc(100% + 8px);
+        left: 0;
+        width: 520px;
+        max-height: 500px;
+        overflow-y: auto;
+        background: rgba(4, 63, 50, 0.95);
+        backdrop-filter: blur(20px) saturate(180%);
+        -webkit-backdrop-filter: blur(20px) saturate(180%);
+        border: 1px solid rgba(0, 255, 150, 0.2);
+        border-radius: 12px;
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+        z-index: 1000;
+        padding: 12px;
+      }
+
+      .search-results-section {
+        margin-bottom: 16px;
+      }
+
+      .search-results-section:last-child {
+        margin-bottom: 0;
+      }
+
+      .search-results-section-title {
+        font-size: 0.75rem;
+        font-weight: 600;
+        color: rgba(255, 255, 255, 0.6);
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        margin-bottom: 8px;
+        padding: 0 8px;
+      }
+
+      .search-result-item {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 10px 12px;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: background 0.2s ease;
+        color: rgba(255, 255, 255, 0.9);
+      }
+
+      .search-result-item:hover {
+        background: rgba(0, 255, 150, 0.15);
+      }
+
+      .search-result-item i {
+        font-size: 1rem;
+        width: 20px;
+        text-align: center;
+        color: rgba(0, 255, 150, 0.8);
+      }
+
+      .search-result-item-content {
+        flex: 1;
+      }
+
+      .search-result-item-title {
+        font-weight: 500;
+        font-size: 0.9rem;
+        margin-bottom: 2px;
+      }
+
+      .search-result-item-subtitle {
+        font-size: 0.75rem;
+        color: rgba(255, 255, 255, 0.6);
+      }
+
+      .search-results-empty {
+        padding: 24px;
+        text-align: center;
+        color: rgba(255, 255, 255, 0.6);
+        font-size: 0.9rem;
+      }
+
       .topbar .notifications-btn {
         display: flex;
         align-items: center;
@@ -360,7 +636,7 @@
         position: relative;
         transition: all 0.3s ease;
         cursor: pointer;
-        margin-left: 2px;
+        margin-left: -12px;
         margin-right: 0;
       }
       
@@ -567,17 +843,25 @@
       }
       .container { 
         max-width: 1200px; 
+        width: 100%;
         margin: 0 auto;
         padding: 48px 32px 120px 32px; 
         position: relative; 
         z-index: 1;
         opacity: 0;
         animation: fadeInUp 0.8s ease-out forwards;
+        box-sizing: border-box;
+        overflow-x: hidden;
+        transition: max-width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      }
+      
+      body.sidebar-collapsed .container {
+        max-width: 100% !important;
       }
       .start-section { 
         text-align: center; 
         width: 100%; 
-        margin-bottom: 80px;
+        margin-bottom: 0;
         opacity: 0;
         animation: fadeInUp 0.8s ease-out 0.2s forwards;
       }
@@ -620,11 +904,6 @@
         animation: fadeInUp 0.8s ease-out 0.4s forwards;
       }
       
-      .beautiful-templates {
-        opacity: 0;
-        animation: fadeInUp 0.8s ease-out 0.6s forwards;
-      }
-      
       .recent-section {
         opacity: 0;
         animation: fadeInUp 0.8s ease-out 0.8s forwards;
@@ -650,16 +929,134 @@
         text-align: center;
         color: #ffffff;
       }
+      
+      .template-section-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        margin-bottom: 40px;
+        text-align: left;
+      }
+      
+      .template-header-left {
+        flex: 1;
+      }
+      
       .template-examples h2 {
         font-size: 28px;
         margin-bottom: 10px;
         color: #E8F5E9;
+        text-align: left;
       }
-      .template-examples > p {
+      .template-examples > .template-section-header > .template-header-left > p {
         font-size: 16px;
-        margin-bottom: 40px;
+        margin-bottom: 0;
         color: #A5D6A7;
+        text-align: left;
       }
+      
+      .see-more-btn {
+        background: linear-gradient(165deg, rgba(0, 156, 112, 0.78) 0%, rgba(0, 112, 150, 0.65) 100%);
+        border: 1px solid rgba(0, 220, 150, 0.2);
+        border-radius: 12px;
+        color: #ffffff;
+        padding: 12px 24px;
+        font-size: 14px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        white-space: nowrap;
+        margin-top: 8px;
+      }
+      
+      .see-more-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(0, 220, 150, 0.4);
+        background: linear-gradient(165deg, rgba(0, 180, 130, 0.9) 0%, rgba(0, 130, 170, 0.75) 100%);
+      }
+      
+      .see-more-btn:active {
+        transform: translateY(0);
+      }
+      /* Infinite Scrolling Template Container */
+      .template-scroll-container {
+        width: 100%;
+        max-width: 100%;
+        overflow: hidden;
+        position: relative;
+        margin: 40px 0;
+        padding: 20px 0;
+        box-sizing: border-box;
+      }
+
+      .template-scroll-container::before,
+      .template-scroll-container::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        width: 100px;
+        z-index: 10;
+        pointer-events: none;
+      }
+
+      .template-scroll-container::before {
+        left: 0;
+        background: linear-gradient(to right, rgba(6, 48, 40, 1), rgba(6, 48, 40, 0.8), transparent);
+      }
+
+      .template-scroll-container::after {
+        right: 0;
+        background: linear-gradient(to left, rgba(6, 48, 40, 1), rgba(6, 48, 40, 0.8), transparent);
+      }
+
+      .template-scroll-track {
+        display: flex;
+        gap: 20px;
+        width: fit-content;
+        animation: scrollTemplates 40s linear infinite;
+        will-change: transform;
+      }
+
+      .template-scroll-track:hover {
+        animation-play-state: paused;
+      }
+
+      @keyframes scrollTemplates {
+        0% {
+          transform: translateX(0);
+        }
+        100% {
+          transform: translateX(-50%);
+        }
+      }
+
+      .template-scroll-container .template-card {
+        flex: 0 0 200px;
+        width: 200px;
+        min-width: 200px;
+        max-width: 200px;
+        margin: 0;
+        padding: 18px 14px;
+        box-sizing: border-box;
+      }
+
+      .template-scroll-container .template-card i {
+        font-size: 28px;
+        margin-bottom: 10px;
+      }
+
+      .template-scroll-container .template-card h3 {
+        font-size: 0.95rem;
+        margin-bottom: 6px;
+      }
+
+      .template-scroll-container .template-card p {
+        font-size: 0.8rem;
+        line-height: 1.4;
+      }
+
       .template-grid {
         display: grid;
         grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
@@ -967,245 +1364,42 @@
         --shape5-opacity: 0.26;
         --shape5-speed: 6.2s;
       }
+      @media (max-width: 768px) {
+        .template-scroll-container .template-card {
+          flex: 0 0 200px;
+          width: 200px;
+          min-width: 200px;
+          max-width: 200px;
+          padding: 16px 12px;
+        }
+        .template-scroll-track {
+          gap: 16px;
+        }
+        .template-scroll-container .template-card i {
+          font-size: 28px;
+        }
+        .template-scroll-container .template-card h3 {
+          font-size: 0.95rem;
+        }
+        .template-scroll-container .template-card p {
+          font-size: 0.8rem;
+        }
+      }
+
       @media (max-width: 600px) {
         .template-grid {
           grid-template-columns: 1fr;
         }
-      }
-      
-      /* Beautiful Templates Section */
-      .beautiful-templates {
-        text-align: center;
-        padding: 80px 0;
-        margin-top: 60px;
-      }
-      
-      .beautiful-templates h2 {
-        font-size: 2rem;
-        font-weight: 700;
-        color: #E8F5E9;
-        margin-bottom: 10px;
-      }
-      
-      .beautiful-templates p {
-        color: #b5d9c5;
-        font-size: 1.1rem;
-        margin-bottom: 40px;
-      }
-      
-      .template-gallery {
-        display: flex;
-        justify-content: center;
-        gap: 36px;
-        flex-wrap: wrap;
-        max-width: 1200px;
-        margin: 0 auto;
-      }
-      
-      .template-item {
-        position: relative;
-        overflow: hidden;
-        width: 320px;
-        border-radius: 18px;
-        padding: 24px 22px 28px;
-        background: linear-gradient(165deg, rgba(0, 154, 112, 0.72) 0%, rgba(0, 110, 145, 0.6) 100%);
-        border: 1px solid rgba(0, 220, 150, 0.15);
-        box-shadow: 0 10px 24px rgba(0, 0, 0, 0.25);
-        cursor: pointer;
-        transition: transform 0.2s ease, box-shadow 0.2s ease;
-        text-align: center;
-        --shape1-size: 128px;
-        --shape1-top: 14%;
-        --shape1-left: 12%;
-        --shape1-radius: 28px;
-        --shape1-opacity: 0.42;
-        --shape1-speed: 8.5s;
-        --shape2-size: 92px;
-        --shape2-top: 60%;
-        --shape2-left: 64%;
-        --shape2-radius: 50%;
-        --shape2-opacity: 0.34;
-        --shape2-speed: 11s;
-        --shape-shift: 12px;
-      }
-      
-      .template-item::before,
-      .template-item::after {
-        content: "";
-        position: absolute;
-        background: linear-gradient(140deg, rgba(255, 255, 255, 0.42) 0%, rgba(255, 255, 255, 0));
-        pointer-events: none;
-        transform: translateX(0);
-        transition: transform 0.35s ease;
-        will-change: transform;
-        border-radius: 50%;
-        z-index: 0;
-      }
-      
-      .template-item::before {
-        width: var(--shape1-size);
-        height: var(--shape1-size);
-        top: var(--shape1-top);
-        left: var(--shape1-left);
-        border-radius: var(--shape1-radius);
-        opacity: var(--shape1-opacity);
-      }
-      
-      .template-item::after {
-        width: var(--shape2-size);
-        height: var(--shape2-size);
-        top: var(--shape2-top);
-        left: var(--shape2-left);
-        border-radius: var(--shape2-radius);
-        opacity: var(--shape2-opacity);
-      }
-      
-      .template-item > * {
-        position: relative;
-        z-index: 1;
-      }
-      
-      .template-item:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 14px 32px rgba(0, 0, 0, 0.3);
-      }
-      
-      .template-gallery .template-item:nth-child(1) {
-        --shape1-size: 122px;
-        --shape1-top: 12%;
-        --shape1-left: 10%;
-        --shape1-radius: 30px;
-        --shape1-opacity: 0.44;
-        --shape1-speed: 9s;
-        --shape2-size: 88px;
-        --shape2-top: 58%;
-        --shape2-left: 63%;
-        --shape2-radius: 45%;
-        --shape2-opacity: 0.32;
-        --shape2-speed: 11.5s;
-      }
-      
-      .template-gallery .template-item:nth-child(2) {
-        --shape1-size: 118px;
-        --shape1-top: 18%;
-        --shape1-left: 16%;
-        --shape1-radius: 26px;
-        --shape1-opacity: 0.4;
-        --shape1-speed: 8.5s;
-        --shape2-size: 94px;
-        --shape2-top: 64%;
-        --shape2-left: 56%;
-        --shape2-radius: 32px;
-        --shape2-opacity: 0.36;
-        --shape2-speed: 10.5s;
-      }
-      
-      .template-gallery .template-item:nth-child(3) {
-        --shape1-size: 130px;
-        --shape1-top: 10%;
-        --shape1-left: 8%;
-        --shape1-radius: 50%;
-        --shape1-opacity: 0.38;
-        --shape1-speed: 9.5s;
-        --shape2-size: 90px;
-        --shape2-top: 60%;
-        --shape2-left: 68%;
-        --shape2-radius: 26px;
-        --shape2-opacity: 0.34;
-        --shape2-speed: 12s;
-      }
-      
-      .template-item:hover::before {
-        animation: cardFloatRight var(--shape1-speed, 8.5s) ease-in-out infinite alternate;
-      }
-      
-      .template-item:hover::after {
-        animation: cardFloatLeft var(--shape2-speed, 11s) ease-in-out infinite alternate;
-      }
-      
-      .template-thumb {
-        position: relative;
-        width: 100%;
-        padding-bottom: 60%;
-        border-radius: 14px;
-        overflow: hidden;
-        background: rgba(0, 165, 130, 0.5);
-      }
-      
-      .template-thumb img {
-        position: absolute;
-        inset: 0;
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-        opacity: 0;
-        transition: opacity 0.3s ease;
-      }
-
-      .template-thumb img.loaded {
-        opacity: 1;
-      }
-      
-      .template-icon {
-        position: absolute;
-        inset: 0;
-        display: grid;
-        place-items: center;
-        font-size: 2.3rem;
-        color: rgba(255, 255, 255, 0.92);
-        text-shadow: 0 10px 25px rgba(0, 0, 0, 0.35);
-        pointer-events: none;
-        transition: opacity 0.35s ease;
-      }
-      
-      .template-thumb img.loaded ~ .template-icon {
-        opacity: 0.2;
-      }
-      
-      .template-item h3 {
-        margin: 22px 0 8px;
-        color: #f2fffb;
-        font-size: 1.18rem;
-        font-weight: 700;
-        letter-spacing: 0.01em;
-      }
-      
-      .template-summary {
-        margin: 0;
-        color: rgba(215, 245, 235, 0.78);
-        font-size: 0.92rem;
-        line-height: 1.5;
-      }
-      
-      .browse-btn {
-        margin-top: 48px;
-        padding: 12px 32px;
-        background: linear-gradient(135deg, #0df7a3 0%, #27d8ff 100%);
-        color: #033629;
-        font-size: 1rem;
-        font-weight: 700;
-        border: none;
-        border-radius: 999px;
-        cursor: pointer;
-        transition: transform 0.2s ease, box-shadow 0.2s ease;
-        font-family: Poppins, sans-serif;
-        display: inline-flex;
-        align-items: center;
-        gap: 10px;
-        opacity: 0;
-        transform: translateY(20px);
-        animation: fadeInUp 0.6s ease-out forwards;
-        animation-delay: 0.4s;
-        box-shadow: 0 8px 20px rgba(35, 195, 200, 0.3);
-      }
-      
-      .browse-btn:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 12px 28px rgba(20, 160, 185, 0.4);
-      }
-      
-      .browse-btn i {
-        font-size: 1.1rem;
+        .template-scroll-container .template-card {
+          flex: 0 0 180px;
+          width: 180px;
+          min-width: 180px;
+          max-width: 180px;
+          padding: 14px 10px;
+        }
+        .template-scroll-track {
+          gap: 12px;
+        }
       }
       
       @media (max-width: 768px) {
@@ -1512,7 +1706,7 @@
         backdrop-filter: blur(6px);
         -webkit-backdrop-filter: blur(6px);
       }
-      .icon-plus { position: relative; width: 42px; height: 42px; }
+      .icon-plus { position: relative; width: 56px; height: 56px; }
       .icon-plus::before,
       .icon-plus::after {
         content: '';
@@ -1522,13 +1716,13 @@
       }
       .icon-plus::before {
         width: 100%;
-        height: 4px;
+        height: 6px;
         top: 50%;
         left: 50%;
         transform: translate(-50%, -50%);
       }
       .icon-plus::after {
-        width: 4px;
+        width: 6px;
         height: 100%;
         top: 50%;
         left: 50%;
@@ -1547,7 +1741,7 @@
       .card-desc { color: rgba(205, 245, 232, 0.82); font-size: 13.5px; margin: 0; }
 
       /* Recent Presentations */
-      .recent-section { margin-top: 60px; width: 100%; }
+      .recent-section { margin-top: 0; width: 100%; }
       .recent-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 20px; }
       .recent-card { position: relative; }
       .recent-card .card { width: 100%; }
@@ -1837,31 +2031,289 @@
         color: rgba(0, 0, 0, 0.5);
       }
       
-      body.light-mode .beautiful-templates h2 {
-        color: #1a1a1a !important;
-      }
-      
-      body.light-mode .beautiful-templates p {
-        color: #555 !important;
-      }
-      
-      body.light-mode .template-item {
-        background: rgba(255, 255, 255, 0.8);
-        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
-      }
-      
-      body.light-mode .template-item h3 {
-        color: #1a1a1a;
-      }
-
       body.light-mode .chip {
         color: #1a1a1a !important;
         background: rgba(255, 255, 255, 0.5);
         border-color: rgba(0, 0, 0, 0.15);
       }
+
+      /* Phase 3: AI Assistant Chatbot */
+      .ai-assistant-btn {
+        position: fixed;
+        bottom: 24px;
+        right: 24px;
+        z-index: 1000;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 14px 20px;
+        background: linear-gradient(135deg, #003B2E 0%, #004a42 100%);
+        color: #ffffff;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        border-radius: 30px;
+        font-size: 0.95rem;
+        font-weight: 600;
+        font-family: 'Trebuchet MS', 'Lucida Grande', 'Lucida Sans Unicode', 'Lucida Sans', Tahoma, sans-serif;
+        cursor: pointer;
+        box-shadow: 0 4px 20px rgba(0, 59, 46, 0.4),
+                    0 0 15px rgba(0, 200, 150, 0.2);
+        transition: all 0.3s ease;
+        animation: fadeInUp 0.6s ease-out 0.5s both;
+      }
+
+      .ai-assistant-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 25px rgba(0, 59, 46, 0.5),
+                    0 0 20px rgba(0, 200, 150, 0.3);
+        background: linear-gradient(135deg, #004a42 0%, #005a52 100%);
+      }
+
+      .ai-assistant-btn i {
+        font-size: 1.1rem;
+      }
+
+      .ai-chatbot {
+        position: fixed;
+        bottom: 90px;
+        right: 24px;
+        width: 380px;
+        max-width: calc(100vw - 48px);
+        height: 550px;
+        max-height: calc(100vh - 120px);
+        background: rgba(4, 63, 50, 0.95);
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+        border: 1px solid rgba(0, 255, 150, 0.2);
+        border-radius: 16px;
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4),
+                    0 0 20px rgba(0, 200, 150, 0.2);
+        display: flex;
+        flex-direction: column;
+        z-index: 999;
+        opacity: 0;
+        transform: translateY(20px) scale(0.95);
+        pointer-events: none;
+        transition: all 0.3s ease;
+        font-family: 'Trebuchet MS', 'Lucida Grande', 'Lucida Sans Unicode', 'Lucida Sans', Tahoma, sans-serif;
+      }
+
+      .ai-chatbot.active {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+        pointer-events: all;
+      }
+
+      .chatbot-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 16px 20px;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        background: rgba(0, 0, 0, 0.2);
+        border-radius: 16px 16px 0 0;
+      }
+
+      .chatbot-title {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        color: #ffffff;
+        font-size: 1rem;
+        font-weight: 600;
+      }
+
+      .chatbot-title i {
+        font-size: 1.2rem;
+        color: #00c853;
+      }
+
+      .chatbot-close {
+        background: transparent;
+        border: none;
+        color: rgba(255, 255, 255, 0.7);
+        font-size: 1.2rem;
+        cursor: pointer;
+        padding: 4px 8px;
+        border-radius: 6px;
+        transition: all 0.3s ease;
+      }
+
+      .chatbot-close:hover {
+        background: rgba(255, 255, 255, 0.1);
+        color: #ffffff;
+      }
+
+      .chatbot-messages {
+        flex: 1;
+        overflow-y: auto;
+        padding: 20px;
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+      }
+
+      .chatbot-messages::-webkit-scrollbar {
+        width: 6px;
+      }
+
+      .chatbot-messages::-webkit-scrollbar-track {
+        background: rgba(0, 0, 0, 0.1);
+        border-radius: 3px;
+      }
+
+      .chatbot-messages::-webkit-scrollbar-thumb {
+        background: rgba(0, 200, 150, 0.3);
+        border-radius: 3px;
+      }
+
+      .chatbot-messages::-webkit-scrollbar-thumb:hover {
+        background: rgba(0, 200, 150, 0.5);
+      }
+
+      .chat-message {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+        max-width: 80%;
+        animation: fadeIn 0.3s ease;
+      }
+
+      .chat-message.user {
+        align-self: flex-end;
+      }
+
+      .chat-message.assistant {
+        align-self: flex-start;
+      }
+
+      .message-content {
+        padding: 10px 14px;
+        border-radius: 12px;
+        font-size: 0.9rem;
+        line-height: 1.5;
+        word-wrap: break-word;
+      }
+
+      .chat-message.user .message-content {
+        background: linear-gradient(135deg, #003B2E 0%, #004a42 100%);
+        color: #ffffff;
+        border-bottom-right-radius: 4px;
+      }
+
+      .chat-message.assistant .message-content {
+        background: rgba(255, 255, 255, 0.1);
+        color: #e8f5ed;
+        border-bottom-left-radius: 4px;
+      }
+
+      .message-time {
+        font-size: 0.75rem;
+        color: rgba(255, 255, 255, 0.5);
+        padding: 0 4px;
+      }
+
+      .chatbot-input-container {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 16px;
+        border-top: 1px solid rgba(255, 255, 255, 0.1);
+        background: rgba(0, 0, 0, 0.2);
+        border-radius: 0 0 16px 16px;
+      }
+
+      .chatbot-input {
+        flex: 1;
+        padding: 10px 14px;
+        background: rgba(0, 0, 0, 0.3);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 20px;
+        color: #ffffff;
+        font-size: 0.9rem;
+        font-family: 'Trebuchet MS', 'Lucida Grande', 'Lucida Sans Unicode', 'Lucida Sans', Tahoma, sans-serif;
+        outline: none;
+        transition: all 0.3s ease;
+      }
+
+      .chatbot-input:focus {
+        border-color: rgba(0, 200, 150, 0.4);
+        background: rgba(0, 0, 0, 0.4);
+      }
+
+      .chatbot-input::placeholder {
+        color: rgba(255, 255, 255, 0.5);
+      }
+
+      .chatbot-voice-btn,
+      .chatbot-send-btn {
+        width: 36px;
+        height: 36px;
+        border-radius: 50%;
+        border: none;
+        background: rgba(0, 200, 150, 0.2);
+        color: #00c853;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.3s ease;
+        font-size: 0.9rem;
+      }
+
+      .chatbot-voice-btn:hover,
+      .chatbot-send-btn:hover {
+        background: rgba(0, 200, 150, 0.3);
+        transform: scale(1.1);
+      }
+
+      .chatbot-voice-btn.listening {
+        background: rgba(255, 0, 0, 0.3);
+        color: #ff4444;
+        animation: pulse 1.5s ease infinite;
+      }
+
+      @keyframes pulse {
+        0%, 100% {
+          transform: scale(1);
+        }
+        50% {
+          transform: scale(1.1);
+        }
+      }
+
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+          transform: translateY(10px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      @media (max-width: 768px) {
+        .ai-chatbot {
+          width: calc(100vw - 32px);
+          right: 16px;
+          bottom: 80px;
+          height: calc(100vh - 160px);
+        }
+
+        .ai-assistant-btn {
+          bottom: 16px;
+          right: 16px;
+          padding: 12px 16px;
+          font-size: 0.85rem;
+        }
+
+        .ai-assistant-btn span {
+          display: none;
+        }
+      }
     </style>
   </head>
-  <body class="page-container shell-layout">
+  <body class="page-container shell-layout" data-page="home">
     <!-- Left Sidebar -->
     <button class="sidebar-toggle" id="sidebarToggle" aria-label="Toggle sidebar" onclick="toggleSidebar()">
       <i class="fas fa-bars"></i>
@@ -1870,30 +2322,90 @@
       <div class="logo-container">
         <img src="./CURSOR-Project/public/aramco-digital.O&amp;D.PNG" alt="Aramco Digital Logo" class="sidebar-logo">
       </div>
-      <div class="nav-menu">
-        <a href="#start" class="active">
-          <i class="fas fa-home"></i>
-          <span data-translate="common.home">Home</span>
-        </a>
-        <a href="#recent">
-          <i class="fas fa-folder-open"></i>
-          <span data-translate="common.myPresentations">Recent Presentations</span>
-        </a>
-        <a href="#templates">
+      <!-- Phase 3: Collapsible Sidebar Sections (Reordered: 1. Presentations, 2. Templates, 3. Groups) -->
+      <div class="sidebar-sections">
+        <!-- 1. Presentations Section -->
+        <div class="sidebar-section">
+          <div class="section-header" onclick="toggleSection('presentations')">
+            <div class="section-title">
+              <i class="fas fa-file-powerpoint"></i>
+              <span>Presentations</span>
+            </div>
+            <i class="fas fa-chevron-down section-arrow" id="presentations-arrow"></i>
+          </div>
+          <div class="section-content" id="presentations-content">
+            <button class="section-action-btn" onclick="createNewPresentation()">
+              <i class="fas fa-plus"></i>
+              <span>New Presentation</span>
+            </button>
+            <h4 class="recent-presentations-heading">Recent Presentations</h4>
+            <div class="recent-items" id="recent-presentations">
+              <div class="recent-item" style="display: none;">
+                <i class="fas fa-file"></i>
+                <span class="recent-item-name"></span>
+              </div>
+            </div>
+            <a href="#" class="see-more-link" id="presentations-see-more" onclick="showAllPresentations(); return false;" style="display: none;">
+              See More
+            </a>
+          </div>
+        </div>
+
+        <!-- 2. Templates Section -->
+        <div class="sidebar-section">
+          <div class="section-header" onclick="toggleSection('templates')">
+            <div class="section-title">
           <i class="fas fa-layer-group"></i>
-          <span data-translate="common.templates">Templates</span>
-        </a>
-        <a href="./groups.html">
+              <span>Templates</span>
+            </div>
+            <i class="fas fa-chevron-down section-arrow" id="templates-arrow"></i>
+          </div>
+          <div class="section-content" id="templates-content">
+            <div class="template-categories" id="template-categories">
+              <!-- Categories will be loaded dynamically -->
+            </div>
+            <div class="recent-items" id="recent-templates">
+              <div class="recent-item" style="display: none;">
+                <i class="fas fa-image"></i>
+                <span class="recent-item-name"></span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 3. Groups Section -->
+        <div class="sidebar-section">
+          <div class="section-header" onclick="toggleSection('groups')">
+            <div class="section-title">
           <i class="fas fa-users"></i>
-          <span data-translate="common.groups">Groups</span>
-        </a>
+              <span>Groups</span>
+            </div>
+            <i class="fas fa-chevron-down section-arrow" id="groups-arrow"></i>
+          </div>
+          <div class="section-content" id="groups-content">
+            <button class="section-action-btn" onclick="createNewGroup()">
+              <i class="fas fa-plus"></i>
+              <span>New Group</span>
+            </button>
+            <h4 class="recent-groups-heading">Recent Groups</h4>
+            <div class="recent-items" id="recent-groups">
+              <div class="recent-item" style="display: none;">
+                <i class="fas fa-folder"></i>
+                <span class="recent-item-name"></span>
+              </div>
+            </div>
+            <a href="#" class="see-more-link" id="groups-see-more" onclick="showAllGroups(); return false;" style="display: none;">
+              See More
+            </a>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Settings Links -->
+      <div class="nav-menu" style="margin-top: auto; padding-top: 20px; border-top: 1px solid rgba(255, 255, 255, 0.1);">
         <a href="./settings.html">
           <i class="fas fa-cog"></i>
           <span data-translate="common.settings">Settings</span>
-        </a>
-        <a href="#" onclick="alert(window.getTranslation ? window.getTranslation('common.helpComingSoon') : 'Help section coming soon!'); return false;">
-          <i class="fas fa-question-circle"></i>
-          <span data-translate="common.help">Help</span>
         </a>
       </div>
         </nav>
@@ -1901,11 +2413,12 @@
     <div class="content-area">
     <!-- Top Bar -->
     <header class="topbar">
-      <form class="search-bar" action="https://www.google.com/search" method="get" target="_blank" role="search">
+      <form class="search-bar" id="searchForm" role="search" onsubmit="handleSearch(event)">
         <i class="fas fa-search" aria-hidden="true"></i>
-        <input type="search" name="q" placeholder="Search the web..." aria-label="Search the web">
+        <input type="search" id="searchInput" placeholder="Search presentations, groups, templates..." aria-label="Search presentations, groups, templates">
         <button type="submit">Search</button>
       </form>
+      <div id="searchResults" class="search-results" style="display: none;"></div>
       <a href="#notifications" class="notifications-btn" id="notificationsBtn" aria-label="Notifications">
         <i class="fas fa-bell"></i>
         <span class="notification-badge" id="notificationBadge" style="display: none;">0</span>
@@ -1926,164 +2439,250 @@
     </header>
 
     <main class="container">
-      <section id="start" class="start-section">
-        <h2 data-translate="home.newPresentationTitle">Create a New Presentation</h2>
-        <p class="subtitle" data-translate="home.newPresentationSubtitle">Start a new deck instantly.</p>
-        <div class="card-wrapper">
-          <a class="card blank-presentation" data-action="open_blank_page" href="#">
-            <div class="thumb blank">
-              <i class="fas fa-plus tool-icon icon1"></i>
-              <i class="fas fa-copy tool-icon icon2"></i>
-              <i class="fas fa-edit tool-icon icon3"></i>
-              <i class="fas fa-layer-group tool-icon icon4"></i>
-              <i class="fas fa-palette tool-icon icon5"></i>
-              <div class="icon-plus"></div>
+      <section id="presentations" class="recent-section">
+        <h2>Presentations</h2>
+        <p class="subtitle">Create new presentations and access your recent decks</p>
+        <div class="recent-split-container">
+          <div class="recent-create-box">
+            <a class="card blank-presentation small" data-action="open_blank_page" href="#">
+              <div class="thumb blank small">
+                <i class="fas fa-plus"></i>
             </div>
             <div class="card-body">
-              <div class="card-title" data-translate="home.blankTitle">Blank Presentation</div>
-              <div class="card-desc" data-translate="home.blankSubtitle">Start from a clean slide</div>
+                <div class="card-title">New Presentation</div>
+                <div class="card-desc">Start from scratch</div>
             </div>
-            <div class="tutorial-overlay">
-              <h4 data-translate="home.quickStartTitle">Quick Start Guide</h4>
-              <div class="tutorial-step">
-                <i class="fas fa-plus-circle"></i>
-                <span data-translate="home.quickStartAdd">Click + to add new slides</span>
+            </a>
               </div>
-              <div class="tutorial-step">
-                <i class="fas fa-edit"></i>
-                <span data-translate="home.quickStartEdit">Use toolbar to edit text and styles</span>
+          <div class="recent-list-container">
+            <h3 class="recent-list-heading">Recent Presentations</h3>
+            <div class="recent-list" id="recentGrid">
+              <div class="empty-state" data-translate="home.recentEmpty">No saved presentations yet. Create and save your first one!</div>
               </div>
-              <div class="tutorial-step">
-                <i class="fas fa-save"></i>
-                <span data-translate="home.quickStartSave">Save your work to access it later</span>
               </div>
-            </div>
-          </a>
-        </div>
-      </section>
-
-      <section id="recent" class="recent-section">
-        <h2 data-translate="home.recentTitle">Recent Presentations</h2>
-        <p class="subtitle" data-translate="home.recentSubtitle">Access your latest decks quickly.</p>
-        <div class="recent-grid" id="recentGrid">
-          <div class="empty-state" data-translate="home.recentEmpty">No saved presentations yet. Create and save your first one!</div>
         </div>
       </section>
 
       <section id="templates" class="template-examples">
-        <h2 data-translate="home.templateExamplesTitle">Template Examples</h2>
-        <p data-translate="home.templateExamplesSubtitle">Choose a ready design to start quickly:</p>
-        <div class="template-grid">
-          <div class="template-card" onclick="useTemplate('business')">
-            <div class="card-shape shape1"></div>
-            <div class="card-shape shape2"></div>
-            <div class="card-shape shape3"></div>
-            <div class="card-shape shape4"></div>
-            <div class="card-shape shape5"></div>
-            <i class="fas fa-briefcase"></i>
-            <h3 data-translate="home.templateBusinessTitle">Business Template</h3>
-            <p data-translate="home.templateBusinessDesc">Professional slides for corporate presentations and meetings</p>
+        <div class="templates-wrapper">
+          <div class="templates-header">
+            <h2 class="templates-title" data-translate="home.templateExamplesTitle">Template Examples</h2>
+            <button id="seeMoreBtn" class="see-more-btn">See More</button>
           </div>
-          <div class="template-card" onclick="useTemplate('education')">
-            <div class="card-shape shape1"></div>
-            <div class="card-shape shape2"></div>
-            <div class="card-shape shape3"></div>
-            <div class="card-shape shape4"></div>
-            <div class="card-shape shape5"></div>
-            <i class="fas fa-graduation-cap"></i>
-            <h3 data-translate="home.templateEducationTitle">Education Template</h3>
-            <p data-translate="home.templateEducationDesc">Engaging designs perfect for educational content and lectures</p>
-          </div>
-          <div class="template-card" onclick="useTemplate('marketing')">
-            <div class="card-shape shape1"></div>
-            <div class="card-shape shape2"></div>
-            <div class="card-shape shape3"></div>
-            <div class="card-shape shape4"></div>
-            <div class="card-shape shape5"></div>
-            <i class="fas fa-chart-line"></i>
-            <h3 data-translate="home.templateMarketingTitle">Marketing Template</h3>
-            <p data-translate="home.templateMarketingDesc">Eye-catching layouts for marketing campaigns and pitches</p>
-          </div>
-          <div class="template-card" onclick="useTemplate('project')">
-            <div class="card-shape shape1"></div>
-            <div class="card-shape shape2"></div>
-            <div class="card-shape shape3"></div>
-            <div class="card-shape shape4"></div>
-            <div class="card-shape shape5"></div>
-            <i class="fas fa-project-diagram"></i>
-            <h3 data-translate="home.templateProjectTitle">Project Template</h3>
-            <p data-translate="home.templateProjectDesc">Structured layouts for project planning and progress tracking</p>
+          
+          <p class="templates-subtitle" data-translate="home.templateExamplesSubtitle">Choose a ready design to start quickly:</p>
+          
+          <div class="template-scroll-container">
+            <div class="template-scroll-track">
+              <!-- First set of templates -->
+              <div class="template-card" data-template="business">
+                <div class="card-shape shape1"></div>
+                <div class="card-shape shape2"></div>
+                <div class="card-shape shape3"></div>
+                <div class="card-shape shape4"></div>
+                <div class="card-shape shape5"></div>
+                <i class="fas fa-briefcase"></i>
+                <h3>Business</h3>
+                <p>Professional slides for corporate presentations and meetings</p>
+              </div>
+              <div class="template-card" onclick="useTemplate('education')">
+                <div class="card-shape shape1"></div>
+                <div class="card-shape shape2"></div>
+                <div class="card-shape shape3"></div>
+                <div class="card-shape shape4"></div>
+                <div class="card-shape shape5"></div>
+                <i class="fas fa-graduation-cap"></i>
+                <h3>Education</h3>
+                <p>Engaging designs perfect for educational content and training</p>
+              </div>
+              <div class="template-card" onclick="useTemplate('project')">
+                <div class="card-shape shape1"></div>
+                <div class="card-shape shape2"></div>
+                <div class="card-shape shape3"></div>
+                <div class="card-shape shape4"></div>
+                <div class="card-shape shape5"></div>
+                <i class="fas fa-project-diagram"></i>
+                <h3>Project</h3>
+                <p>Structured layouts for project planning and progress tracking</p>
+              </div>
+              <div class="template-card" onclick="useTemplate('weekly-report')">
+                <div class="card-shape shape1"></div>
+                <div class="card-shape shape2"></div>
+                <div class="card-shape shape3"></div>
+                <div class="card-shape shape4"></div>
+                <div class="card-shape shape5"></div>
+                <i class="fas fa-calendar-week"></i>
+                <h3>Weekly Report</h3>
+                <p>Weekly status updates and progress reports for teams</p>
+              </div>
+              <div class="template-card" onclick="useTemplate('meeting-minutes')">
+                <div class="card-shape shape1"></div>
+                <div class="card-shape shape2"></div>
+                <div class="card-shape shape3"></div>
+                <div class="card-shape shape4"></div>
+                <div class="card-shape shape5"></div>
+                <i class="fas fa-clipboard-list"></i>
+                <h3>Meeting Minutes</h3>
+                <p>Professional templates for documenting meeting discussions</p>
+              </div>
+              <div class="template-card" onclick="useTemplate('financial-report')">
+                <div class="card-shape shape1"></div>
+                <div class="card-shape shape2"></div>
+                <div class="card-shape shape3"></div>
+                <div class="card-shape shape4"></div>
+                <div class="card-shape shape5"></div>
+                <i class="fas fa-chart-pie"></i>
+                <h3>Financial Report</h3>
+                <p>Financial data visualization and quarterly reports</p>
+              </div>
+              <div class="template-card" onclick="useTemplate('training')">
+                <div class="card-shape shape1"></div>
+                <div class="card-shape shape2"></div>
+                <div class="card-shape shape3"></div>
+                <div class="card-shape shape4"></div>
+                <div class="card-shape shape5"></div>
+                <i class="fas fa-chalkboard-teacher"></i>
+                <h3>Training</h3>
+                <p>Employee training materials and onboarding presentations</p>
+              </div>
+              <div class="template-card" onclick="useTemplate('executive-summary')">
+                <div class="card-shape shape1"></div>
+                <div class="card-shape shape2"></div>
+                <div class="card-shape shape3"></div>
+                <div class="card-shape shape4"></div>
+                <div class="card-shape shape5"></div>
+                <i class="fas fa-file-alt"></i>
+                <h3>Executive Summary</h3>
+                <p>High-level summaries for executive briefings and reviews</p>
+              </div>
+              <div class="template-card" onclick="useTemplate('marketing')">
+                <div class="card-shape shape1"></div>
+                <div class="card-shape shape2"></div>
+                <div class="card-shape shape3"></div>
+                <div class="card-shape shape4"></div>
+                <div class="card-shape shape5"></div>
+                <i class="fas fa-chart-line"></i>
+                <h3>Marketing</h3>
+                <p>Eye-catching layouts for marketing campaigns and pitches</p>
+              </div>
+              <!-- Duplicate set for seamless loop -->
+              <div class="template-card" data-template="business">
+                <div class="card-shape shape1"></div>
+                <div class="card-shape shape2"></div>
+                <div class="card-shape shape3"></div>
+                <div class="card-shape shape4"></div>
+                <div class="card-shape shape5"></div>
+                <i class="fas fa-briefcase"></i>
+                <h3>Business</h3>
+                <p>Professional slides for corporate presentations and meetings</p>
+              </div>
+              <div class="template-card" onclick="useTemplate('education')">
+                <div class="card-shape shape1"></div>
+                <div class="card-shape shape2"></div>
+                <div class="card-shape shape3"></div>
+                <div class="card-shape shape4"></div>
+                <div class="card-shape shape5"></div>
+                <i class="fas fa-graduation-cap"></i>
+                <h3>Education</h3>
+                <p>Engaging designs perfect for educational content and training</p>
+              </div>
+              <div class="template-card" onclick="useTemplate('project')">
+                <div class="card-shape shape1"></div>
+                <div class="card-shape shape2"></div>
+                <div class="card-shape shape3"></div>
+                <div class="card-shape shape4"></div>
+                <div class="card-shape shape5"></div>
+                <i class="fas fa-project-diagram"></i>
+                <h3>Project</h3>
+                <p>Structured layouts for project planning and progress tracking</p>
+              </div>
+              <div class="template-card" onclick="useTemplate('weekly-report')">
+                <div class="card-shape shape1"></div>
+                <div class="card-shape shape2"></div>
+                <div class="card-shape shape3"></div>
+                <div class="card-shape shape4"></div>
+                <div class="card-shape shape5"></div>
+                <i class="fas fa-calendar-week"></i>
+                <h3>Weekly Report</h3>
+                <p>Weekly status updates and progress reports for teams</p>
+              </div>
+              <div class="template-card" onclick="useTemplate('meeting-minutes')">
+                <div class="card-shape shape1"></div>
+                <div class="card-shape shape2"></div>
+                <div class="card-shape shape3"></div>
+                <div class="card-shape shape4"></div>
+                <div class="card-shape shape5"></div>
+                <i class="fas fa-clipboard-list"></i>
+                <h3>Meeting Minutes</h3>
+                <p>Professional templates for documenting meeting discussions</p>
+              </div>
+              <div class="template-card" onclick="useTemplate('financial-report')">
+                <div class="card-shape shape1"></div>
+                <div class="card-shape shape2"></div>
+                <div class="card-shape shape3"></div>
+                <div class="card-shape shape4"></div>
+                <div class="card-shape shape5"></div>
+                <i class="fas fa-chart-pie"></i>
+                <h3>Financial Report</h3>
+                <p>Financial data visualization and quarterly reports</p>
+              </div>
+              <div class="template-card" onclick="useTemplate('training')">
+                <div class="card-shape shape1"></div>
+                <div class="card-shape shape2"></div>
+                <div class="card-shape shape3"></div>
+                <div class="card-shape shape4"></div>
+                <div class="card-shape shape5"></div>
+                <i class="fas fa-chalkboard-teacher"></i>
+                <h3>Training</h3>
+                <p>Employee training materials and onboarding presentations</p>
+              </div>
+              <div class="template-card" onclick="useTemplate('executive-summary')">
+                <div class="card-shape shape1"></div>
+                <div class="card-shape shape2"></div>
+                <div class="card-shape shape3"></div>
+                <div class="card-shape shape4"></div>
+                <div class="card-shape shape5"></div>
+                <i class="fas fa-file-alt"></i>
+                <h3>Executive Summary</h3>
+                <p>High-level summaries for executive briefings and reviews</p>
+              </div>
+              <div class="template-card" onclick="useTemplate('marketing')">
+                <div class="card-shape shape1"></div>
+                <div class="card-shape shape2"></div>
+                <div class="card-shape shape3"></div>
+                <div class="card-shape shape4"></div>
+                <div class="card-shape shape5"></div>
+                <i class="fas fa-chart-line"></i>
+                <h3>Marketing</h3>
+                <p>Eye-catching layouts for marketing campaigns and pitches</p>
+              </div>
+            </div>
           </div>
         </div>
       </section>
 
-      <section class="beautiful-templates">
-        <h2 data-translate="home.beautifulTitle">Beautiful Templates</h2>
-        <p data-translate="home.beautifulSubtitle">Start with professionally designed templates and make them your own.</p>
-        <div class="template-gallery">
-          <div class="template-item" onclick="useTemplate('business-pro')">
-            <div class="template-thumb">
-            <img
-              class="lazy-template-img"
-              src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw=="
-                data-src="https://source.unsplash.com/featured/320x200?business,presentation"
-                alt="Business Pro Template Preview"
-              width="320"
-              height="200"
-              loading="lazy">
-              <div class="template-icon">
-                <i class="fas fa-briefcase"></i>
-              </div>
-            </div>
-            <h3 data-translate="home.beautifulBusinessTitle">Business Pro</h3>
-            <p class="template-summary">Boardroom-ready layouts with polished charts and executive gradients.</p>
-          </div>
-          <div class="template-item" onclick="useTemplate('creative-bold')">
-            <div class="template-thumb">
-            <img
-              class="lazy-template-img"
-              src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw=="
-                data-src="https://source.unsplash.com/featured/320x200?creative,design"
-                alt="Creative Bold Template Preview"
-              width="320"
-              height="200"
-              loading="lazy">
-              <div class="template-icon">
-                <i class="fas fa-lightbulb"></i>
-              </div>
-            </div>
-            <h3 data-translate="home.beautifulCreativeTitle">Creative Bold</h3>
-            <p class="template-summary">Dynamic compositions for storytellers and visionary pitch decks.</p>
-          </div>
-          <div class="template-item" onclick="useTemplate('corporate-clean')">
-            <div class="template-thumb">
-            <img
-              class="lazy-template-img"
-              src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw=="
-                data-src="https://source.unsplash.com/featured/320x200?modern,architecture"
-                alt="Corporate Clean Template Preview"
-              width="320"
-              height="200"
-              loading="lazy">
-              <div class="template-icon">
-                <i class="fas fa-building"></i>
-              </div>
-            </div>
-            <h3 data-translate="home.beautifulCorporateTitle">Corporate Clean</h3>
-            <p class="template-summary">Minimal structure with generous whitespace and confident typography.</p>
-          </div>
-        </div>
-        <button class="browse-btn" onclick="alert(window.getTranslation ? window.getTranslation('common.browseComingSoon') : 'Browse all templates feature coming soon!')">
-          <span data-translate="home.browseAll">Browse All Templates</span>
-          <i class="fas fa-arrow-right"></i>
-        </button>
-      </section>
 
       <section id="recentGroups" class="recent-section">
-        <h2>Recent Groups</h2>
+        <h2>Groups</h2>
         <p class="subtitle">Your collaborative workspaces</p>
-        <div class="recent-grid" id="recentGroupsGrid">
+        <div class="recent-split-container">
+          <div class="recent-create-box">
+            <div class="card blank-presentation small" onclick="createNewGroup()">
+              <div class="thumb blank small">
+                <i class="fas fa-users"></i>
+              </div>
+              <div class="card-body">
+                <div class="card-title">New Group</div>
+                <div class="card-desc">Create workspace</div>
+              </div>
+            </div>
+          </div>
+          <div class="recent-list-container">
+            <h3 class="recent-list-heading">Recent Groups</h3>
+            <div class="recent-list" id="recentGroupsGrid">
           <div class="empty-state">No groups yet. Create your first group to get started!</div>
+            </div>
+          </div>
         </div>
       </section>
 
@@ -2098,6 +2697,43 @@
         </div>
       </section>
     </main>
+  </div>
+
+    <!-- Phase 3: AI Assistant Chatbot Button -->
+    <button class="ai-assistant-btn" id="aiAssistantBtn" onclick="toggleChatbot()" aria-label="Open AI Assistant">
+      <i class="fas fa-robot"></i>
+      <span>AI Assistant</span>
+    </button>
+
+    <!-- AI Assistant Chatbot Window -->
+    <div class="ai-chatbot" id="ai-chatbot">
+      <div class="chatbot-header">
+        <div class="chatbot-title">
+          <i class="fas fa-robot"></i>
+          <span>AI Assistant</span>
+        </div>
+        <button class="chatbot-close" onclick="toggleChatbot()" aria-label="Close chatbot">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+      <div class="chatbot-messages" id="chatbot-messages">
+        <!-- Messages will be added here -->
+      </div>
+      <div class="chatbot-input-container">
+        <input 
+          type="text" 
+          id="chatbot-input" 
+          class="chatbot-input" 
+          placeholder="Ask me about SlideMaker..."
+          autocomplete="off"
+        >
+        <button class="chatbot-voice-btn" id="voice-input-btn" aria-label="Voice input">
+          <i class="fas fa-microphone"></i>
+        </button>
+        <button class="chatbot-send-btn" id="send-input-btn" aria-label="Send message">
+          <i class="fas fa-paper-plane"></i>
+        </button>
+      </div>
   </div>
 
     <!-- Auth Modals -->
@@ -2188,6 +2824,224 @@
         window.location.href = './blank.html';
       });
 
+      // ============================================
+      // LOCAL SEARCH FUNCTIONALITY
+      // ============================================
+      function handleSearch(event) {
+        event.preventDefault();
+        const searchInput = document.getElementById('searchInput');
+        const query = searchInput.value.trim().toLowerCase();
+        const resultsContainer = document.getElementById('searchResults');
+        
+        if (!query) {
+          resultsContainer.style.display = 'none';
+          return;
+        }
+
+        const results = performSearch(query);
+        displaySearchResults(results, query);
+      }
+
+      function performSearch(query) {
+        const results = {
+          presentations: [],
+          groups: [],
+          templates: []
+        };
+
+        const currentUser = JSON.parse(localStorage.getItem('currentUser') || 'null');
+        const isGuest = localStorage.getItem('guest') === 'true';
+
+        // Search Presentations
+        if (currentUser || isGuest) {
+          const username = currentUser ? currentUser.username : 'guest';
+          const saved = JSON.parse(localStorage.getItem(`presentations_${username}`) || '[]');
+          results.presentations = saved.filter(pres => {
+            const title = (pres.title || '').toLowerCase();
+            return title.includes(query);
+          });
+        }
+
+        // Search Groups
+        if (currentUser && typeof Database !== 'undefined') {
+          const userGroups = Database.getGroupsByUser(currentUser.userID);
+          results.groups = userGroups.filter(group => {
+            const name = (group.groupName || '').toLowerCase();
+            return name.includes(query);
+          });
+        }
+
+        // Search Templates
+        if (typeof Database !== 'undefined') {
+          const allTemplates = Database.getAllTemplates();
+          results.templates = allTemplates.filter(template => {
+            const name = (template.templateName || '').toLowerCase();
+            const category = (template.category || '').toLowerCase();
+            return name.includes(query) || category.includes(query);
+          });
+        }
+
+        return results;
+      }
+
+      function displaySearchResults(results, query) {
+        const resultsContainer = document.getElementById('searchResults');
+        const totalResults = results.presentations.length + results.groups.length + results.templates.length;
+
+        // Store results for click handlers
+        currentSearchResults = results;
+
+        if (totalResults === 0) {
+          resultsContainer.innerHTML = `
+            <div class="search-results-empty">
+              No results found for "${escapeHtml(query)}"
+            </div>
+          `;
+          resultsContainer.style.display = 'block';
+          return;
+        }
+
+        let html = '';
+
+        // Presentations Section
+        if (results.presentations.length > 0) {
+          html += '<div class="search-results-section">';
+          html += '<div class="search-results-section-title">Presentations</div>';
+          results.presentations.forEach((pres, index) => {
+            const title = pres.title || 'Untitled';
+            const date = pres.date ? new Date(pres.date).toLocaleDateString() : '';
+            html += `
+              <div class="search-result-item" data-pres-index="${index}" data-pres-type="presentation">
+                <i class="fas fa-file-powerpoint"></i>
+                <div class="search-result-item-content">
+                  <div class="search-result-item-title">${escapeHtml(title)}</div>
+                  ${date ? `<div class="search-result-item-subtitle">Last edited: ${date}</div>` : ''}
+                </div>
+              </div>
+            `;
+          });
+          html += '</div>';
+        }
+
+        // Groups Section
+        if (results.groups.length > 0) {
+          html += '<div class="search-results-section">';
+          html += '<div class="search-results-section-title">Groups</div>';
+          results.groups.forEach(group => {
+            const name = group.groupName || 'Unnamed Group';
+            html += `
+              <div class="search-result-item" onclick="window.location.href='./groups.html?group=${group.groupID}'">
+                <i class="fas fa-folder"></i>
+                <div class="search-result-item-content">
+                  <div class="search-result-item-title">${name}</div>
+                  <div class="search-result-item-subtitle">Group</div>
+                </div>
+              </div>
+            `;
+          });
+          html += '</div>';
+        }
+
+        // Templates Section
+        if (results.templates.length > 0) {
+          html += '<div class="search-results-section">';
+          html += '<div class="search-results-section-title">Templates</div>';
+          results.templates.forEach(template => {
+            const name = template.templateName || 'Unnamed Template';
+            const category = template.category || 'general';
+            html += `
+              <div class="search-result-item" onclick="useTemplate('${template.templateID || template.templateName}')">
+                <i class="fas fa-layer-group"></i>
+                <div class="search-result-item-content">
+                  <div class="search-result-item-title">${name}</div>
+                  <div class="search-result-item-subtitle">${category.charAt(0).toUpperCase() + category.slice(1)} Template</div>
+                </div>
+              </div>
+            `;
+          });
+          html += '</div>';
+        }
+
+        resultsContainer.innerHTML = html;
+        resultsContainer.style.display = 'block';
+
+        // Add click handlers for presentation items
+        resultsContainer.querySelectorAll('[data-pres-type="presentation"]').forEach(item => {
+          item.addEventListener('click', () => {
+            const index = parseInt(item.getAttribute('data-pres-index'));
+            if (currentSearchResults && currentSearchResults.presentations[index]) {
+              openPresentation(currentSearchResults.presentations[index]);
+            }
+          });
+        });
+      }
+
+      function escapeHtml(text) {
+        const div = document.createElement('div');
+        div.textContent = text;
+        return div.innerHTML;
+      }
+
+      function formatDate(dateString) {
+        if (!dateString) return 'Unknown';
+        const date = new Date(dateString);
+        const now = new Date();
+        const diff = now - date;
+        const seconds = Math.floor(diff / 1000);
+        const minutes = Math.floor(seconds / 60);
+        const hours = Math.floor(minutes / 60);
+        const days = Math.floor(hours / 24);
+        
+        if (days > 7) {
+          return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: date.getFullYear() !== now.getFullYear() ? 'numeric' : undefined });
+        } else if (days > 0) {
+          return `${days} ${days === 1 ? 'day' : 'days'} ago`;
+        } else if (hours > 0) {
+          return `${hours} ${hours === 1 ? 'hour' : 'hours'} ago`;
+        } else if (minutes > 0) {
+          return `${minutes} ${minutes === 1 ? 'minute' : 'minutes'} ago`;
+        } else {
+          return 'Just now';
+        }
+      }
+
+      function openPresentation(pres) {
+        if (pres && typeof pres === 'object') {
+          sessionStorage.setItem('loadPresentation', JSON.stringify(pres));
+          window.location.href = './blank.html';
+        }
+      }
+
+      // Store search results for click handlers
+      let currentSearchResults = null;
+
+      // Close search results when clicking outside
+      document.addEventListener('click', (e) => {
+        const searchForm = document.getElementById('searchForm');
+        const resultsContainer = document.getElementById('searchResults');
+        if (resultsContainer && !searchForm.contains(e.target) && !resultsContainer.contains(e.target)) {
+          resultsContainer.style.display = 'none';
+        }
+      });
+
+      // Real-time search as user types
+      const searchInput = document.getElementById('searchInput');
+      if (searchInput) {
+        let searchTimeout;
+        searchInput.addEventListener('input', (e) => {
+          clearTimeout(searchTimeout);
+          searchTimeout = setTimeout(() => {
+            const query = e.target.value.trim().toLowerCase();
+            if (query.length >= 2) {
+              const results = performSearch(query);
+              displaySearchResults(results, query);
+            } else if (query.length === 0) {
+              document.getElementById('searchResults').style.display = 'none';
+            }
+          }, 300);
+        });
+      }
+
       // Use Template function
       function useTemplate(templateName) {
         // Store template selection in sessionStorage
@@ -2277,113 +3131,181 @@
           return;
         }
 
-        const grid = document.getElementById('recentGrid');
+        const list = document.getElementById('recentGrid');
         
         if (saved.length === 0) {
-          grid.innerHTML = `<div class="empty-state">${translate('home.recentEmpty')}</div>`;
+          list.innerHTML = `<div class="empty-state">${translate('home.recentEmpty')}</div>`;
           return;
         }
 
         // Sort by date (newest first)
         const sorted = saved.sort((a, b) => new Date(b.date) - new Date(a.date));
         
-        grid.innerHTML = '';
+        list.innerHTML = '';
         sorted.forEach((pres, index) => {
-          const card = document.createElement('div');
-          card.className = 'card recent-card';
+          const recentItem = document.createElement('div');
+          recentItem.className = 'recent-item';
           const title = pres.title || translate('common.untitled');
-          const dateLabel = pres.date ? formatTranslation('common.lastEdited', pres.date) : formatTranslation('common.lastEdited', translate('common.unknown'));
-          card.innerHTML = `
-            <div class="thumb" data-title="${title}">
-              <div style="width:100%;height:100%;background:linear-gradient(135deg, rgba(17,51,34,0.8), rgba(26,64,45,0.8));display:grid;place-items:center;color:#fff;font-weight:600;font-size:14px;">${title}</div>
+          const dateLabel = pres.date ? formatDate(pres.date) : translate('common.unknown');
+          
+          recentItem.innerHTML = `
+            <div class="recent-info">
+              <div class="recent-title">${escapeHtml(title)}</div>
+              <div class="recent-date">${escapeHtml(dateLabel)}</div>
             </div>
-            <div class="card-body">
-              <div class="card-title">${title}</div>
-              <div class="muted">${dateLabel}</div>
-            </div>
-            <div class="hover-actions">
-              <button class="chip" data-open="${index}">${translate('common.open')}</button>
-              <button class="chip danger" data-delete="${index}">${translate('common.delete')}</button>
+            <div class="recent-actions">
+              <button class="edit-btn" data-type="presentation" data-index="${index}" title="Edit">
+                <i class="fas fa-pencil-alt"></i>
+              </button>
+              <div class="edit-dropdown hidden" data-type="presentation" data-index="${index}">
+                <button class="edit-dropdown-item rename-btn" data-type="presentation" data-index="${index}">
+                  <i class="fas fa-edit"></i>
+                  <span>Rename</span>
+                </button>
+                <button class="edit-dropdown-item duplicate-btn" data-type="presentation" data-index="${index}">
+                  <i class="fas fa-copy"></i>
+                  <span>Duplicate</span>
+                </button>
+                <button class="edit-dropdown-item share-btn" data-type="presentation" data-index="${index}">
+                  <i class="fas fa-share"></i>
+                  <span>Share</span>
+                </button>
+                <div class="edit-dropdown-divider"></div>
+                <button class="edit-dropdown-item delete-btn edit-dropdown-item-danger" data-type="presentation" data-index="${index}">
+                  <i class="fas fa-trash"></i>
+                  <span>Delete</span>
+                </button>
+              </div>
             </div>
           `;
-          grid.appendChild(card);
+          
+          // Set up click handler for the card (not the actions area)
+          const recentInfo = recentItem.querySelector('.recent-info');
+          if (recentInfo) {
+            recentInfo.addEventListener('click', () => {
+              sessionStorage.setItem('loadPresentation', JSON.stringify(pres));
+              window.location.href = './blank.html';
+            });
+          }
+          
+          list.appendChild(recentItem);
         });
-
-        // Add event listeners for open and delete
-        grid.querySelectorAll('[data-open]').forEach(btn => {
-          btn.addEventListener('click', (e) => {
-            e.stopPropagation();
-            const idx = parseInt(btn.getAttribute('data-open'));
-            const pres = sorted[idx];
-            sessionStorage.setItem('loadPresentation', JSON.stringify(pres));
-            window.location.href = './blank.html';
-          });
-        });
-
-        grid.querySelectorAll('[data-delete]').forEach(btn => {
-          btn.addEventListener('click', (e) => {
-            e.stopPropagation();
-            const idx = parseInt(btn.getAttribute('data-delete'));
-            const pres = sorted[idx];
-            const title = pres.title || translate('common.untitled');
-            const confirmMsg = formatTranslation('common.confirmDelete', title);
-            if (confirm(confirmMsg)) {
-              const currentUser = JSON.parse(localStorage.getItem('currentUser') || 'null');
-              if (currentUser) {
-                saved.splice(saved.indexOf(sorted[idx]), 1);
-                localStorage.setItem(`presentations_${currentUser.username}`, JSON.stringify(saved));
-                loadRecentPresentations(); // Reload
-              }
-            }
-          });
-        });
+        
+        // Reinitialize dropdowns after adding items
+        if (typeof initEditDropdowns === 'function') {
+          setTimeout(initEditDropdowns, 100);
+        }
       }
 
       function loadRecentGroups() {
         const currentUser = JSON.parse(localStorage.getItem('currentUser') || 'null');
-        const grid = document.getElementById('recentGroupsGrid');
+        const list = document.getElementById('recentGroupsGrid');
         
-        if (!grid) return;
+        if (!list) return;
         
         if (!currentUser) {
-          grid.innerHTML = '<div class="empty-state">Please log in to view your groups.</div>';
+          list.innerHTML = '<div class="empty-state">Please log in to view your groups.</div>';
           return;
         }
         
         try {
-          const recentGroupsKey = `recentGroups_${currentUser.username}`;
-          const recentGroups = JSON.parse(localStorage.getItem(recentGroupsKey) || '[]');
-          
-          if (recentGroups.length === 0) {
-            grid.innerHTML = '<div class="empty-state">No groups yet. Create your first group to get started!</div>';
+          // Use Database module to get groups
+          if (typeof Database === 'undefined') {
+            list.innerHTML = '<div class="empty-state">Database not loaded. Please refresh.</div>';
             return;
           }
           
-          grid.innerHTML = '';
-          recentGroups.slice(0, 6).forEach((group) => {
-            const card = document.createElement('div');
-            card.className = 'card recent-card';
-            card.style.cursor = 'pointer';
-            const groupName = group.name || 'Untitled Group';
-            const groupDesc = group.description || 'No description';
-            const encodedName = encodeURIComponent(groupName);
+          const userID = currentUser.userID || currentUser.email;
+          const userGroups = Database.getGroupsByUser(userID);
+          const userRecents = Database.getRecents(userID);
+          const recentGroupIDs = userRecents.recentGroups || [];
+          
+          // Get recent groups in order
+          const recentGroups = recentGroupIDs
+            .map(id => userGroups.find(g => g.groupID === id))
+            .filter(g => g !== undefined)
+            .slice(0, 6);
+          
+          if (recentGroups.length === 0) {
+            list.innerHTML = '<div class="empty-state">No groups yet. Create your first group to get started!</div>';
+            return;
+          }
+          
+          list.innerHTML = '';
+          recentGroups.forEach((group, index) => {
+            const recentItem = document.createElement('div');
+            recentItem.className = 'recent-item';
+            const groupName = group.groupName || 'Untitled Group';
+            const groupID = group.groupID;
+            const memberCount = (group.members || []).length;
+            const createdDate = group.createdAt ? formatDate(group.createdAt) : 'Unknown';
             
-            card.innerHTML = `
-              <div class="thumb" style="background: linear-gradient(135deg, rgba(0,255,150,0.2), rgba(33,174,253,0.2));">
-                <i class="fas fa-users" style="font-size: 2rem; color: rgba(0,255,150,0.6);"></i>
+            if (!groupID) {
+              console.warn('Group missing ID:', group);
+              return;
+            }
+            
+            recentItem.innerHTML = `
+              <div class="recent-info">
+                <div class="recent-title">${escapeHtml(groupName)}</div>
+                <div class="recent-date">${memberCount} ${memberCount === 1 ? 'member' : 'members'} • ${createdDate}</div>
               </div>
-              <div class="card-body">
-                <div class="card-title">${groupName}</div>
-                <div class="muted">${groupDesc}</div>
+              <div class="recent-actions">
+                <button class="edit-btn" data-type="group" data-index="${index}" title="Edit">
+                  <i class="fas fa-pencil-alt"></i>
+                </button>
+                <div class="edit-dropdown hidden" data-type="group" data-index="${index}">
+                  <div class="group-info-display">
+                    <div class="group-info-item">
+                      <span class="group-info-label">Title:</span>
+                      <span class="group-info-value">${escapeHtml(groupName)}</span>
+                    </div>
+                    <div class="group-info-item">
+                      <span class="group-info-label">Created:</span>
+                      <span class="group-info-value">${group.createdAt ? new Date(group.createdAt).toLocaleDateString() : 'Unknown'}</span>
+                    </div>
+                    <div class="group-info-item">
+                      <span class="group-info-label">Members:</span>
+                      <span class="group-info-value">${memberCount}</span>
+                    </div>
+                  </div>
+                  <div class="edit-dropdown-divider"></div>
+                  <button class="edit-dropdown-item rename-btn" data-type="group" data-index="${index}">
+                    <i class="fas fa-edit"></i>
+                    <span>Rename</span>
+                  </button>
+                  <button class="edit-dropdown-item duplicate-btn" data-type="group" data-index="${index}">
+                    <i class="fas fa-copy"></i>
+                    <span>Duplicate</span>
+                  </button>
+                  <button class="edit-dropdown-item share-btn" data-type="group" data-index="${index}">
+                    <i class="fas fa-share"></i>
+                    <span>Share</span>
+                  </button>
+                  <div class="edit-dropdown-divider"></div>
+                  <button class="edit-dropdown-item delete-btn edit-dropdown-item-danger" data-type="group" data-index="${index}">
+                    <i class="fas fa-trash"></i>
+                    <span>Delete</span>
+                  </button>
+                </div>
               </div>
             `;
             
-            card.addEventListener('click', () => {
-              window.location.href = `./groups.html?group=${encodedName}`;
-            });
+            // Set up click handler for the card (not the actions area)
+            const recentInfo = recentItem.querySelector('.recent-info');
+            if (recentInfo) {
+              recentInfo.addEventListener('click', () => {
+                window.location.href = `./groups.html?group=${groupID}`;
+              });
+            }
             
-            grid.appendChild(card);
+            list.appendChild(recentItem);
           });
+          
+          // Reinitialize dropdowns after adding items
+          if (typeof initEditDropdowns === 'function') {
+            setTimeout(initEditDropdowns, 100);
+          }
         } catch (e) {
           console.error('Error loading recent groups:', e);
           grid.innerHTML = '<div class="empty-state">Error loading groups.</div>';
@@ -2571,33 +3493,48 @@
         logoutBtn.addEventListener('click', handleLogout);
       }
 
-      // Initialize auth status and load presentations on page load
+      // Initialize auth status and load presentations on page load (optimized)
       checkAuthStatus();
-      loadRecentPresentations();
-      loadRecentGroups();
-      initPageAnimations();
-      scheduleGalleryLazyLoad();
+      
+      // Defer non-critical operations
+      requestAnimationFrame(() => {
+        loadRecentPresentations();
+        loadRecentGroups();
+      });
+      
+      // Defer animations to avoid blocking
+      requestIdleCallback(() => {
+        initPageAnimations();
+        scheduleGalleryLazyLoad();
+      }, { timeout: 500 });
 
-      seedDemoNotificationData();
-      renderNotifications();
+      // Defer notifications (non-critical)
+      requestIdleCallback(() => {
+        seedDemoNotificationData();
+        renderNotifications();
+      }, { timeout: 1000 });
 
       const markAllReadBtn = document.getElementById('markAllReadBtn');
       if (markAllReadBtn) {
         markAllReadBtn.addEventListener('click', markAllNotificationsRead);
       }
       
-      // Introduction Animation - Animate cards and elements with staggered delays
+      // Introduction Animation - Re-enabled (background animations remain disabled)
       function animateOnLoad() {
         // Animate blank presentation card
         const blankCard = document.querySelector('.blank-presentation');
         if (blankCard) {
           blankCard.style.opacity = '0';
           blankCard.style.transform = 'scale(0.95)';
-          setTimeout(() => {
-            blankCard.style.transition = 'all 0.6s ease-out';
-            blankCard.style.opacity = '1';
-            blankCard.style.transform = 'scale(1)';
-          }, 400);
+          requestAnimationFrame(() => {
+            setTimeout(() => {
+              requestAnimationFrame(() => {
+                blankCard.style.transition = 'all 0.6s ease-out';
+                blankCard.style.opacity = '1';
+                blankCard.style.transform = 'scale(1)';
+              });
+            }, 400);
+          });
         }
         
         // Animate browse button
@@ -2605,11 +3542,15 @@
         if (browseBtn) {
           browseBtn.style.opacity = '0';
           browseBtn.style.transform = 'translateY(10px)';
-          setTimeout(() => {
-            browseBtn.style.transition = 'all 0.6s ease-out';
-            browseBtn.style.opacity = '1';
-            browseBtn.style.transform = 'translateY(0)';
-          }, 1400);
+          requestAnimationFrame(() => {
+            setTimeout(() => {
+              requestAnimationFrame(() => {
+                browseBtn.style.transition = 'all 0.6s ease-out';
+                browseBtn.style.opacity = '1';
+                browseBtn.style.transform = 'translateY(0)';
+              });
+            }, 1400);
+          });
         }
       }
       
@@ -2728,6 +3669,448 @@
           });
         }
       })();
+
+      // Phase 3: Collapsible Sidebar Sections
+      function toggleSection(sectionId) {
+        const header = document.querySelector(`#${sectionId}-arrow`).closest('.section-header');
+        const content = document.getElementById(`${sectionId}-content`);
+        const arrow = document.getElementById(`${sectionId}-arrow`);
+
+        if (content.classList.contains('expanded')) {
+          content.classList.remove('expanded');
+          header.classList.remove('active');
+        } else {
+          content.classList.add('expanded');
+          header.classList.add('active');
+        }
+      }
+
+      // Phase 3: Load sidebar data from database
+      function loadSidebarData() {
+        if (typeof Database === 'undefined') {
+          console.error('Database module not loaded');
+          return;
+        }
+
+        const currentUser = JSON.parse(localStorage.getItem('currentUser') || '{}');
+        if (!currentUser.userID) {
+          console.warn('No user logged in');
+          return;
+        }
+
+        // Load Groups
+        loadRecentGroupsSidebar(currentUser.userID);
+        
+        // Load Presentations
+        loadRecentPresentationsSidebar(currentUser.userID);
+        
+        // Load Templates
+        loadTemplatesSidebar(currentUser.userID);
+      }
+
+      function loadRecentGroupsSidebar(userID) {
+        const userGroups = Database.getGroupsByUser(userID);
+        const userRecents = Database.getRecents(userID);
+        const recentGroupIDs = userRecents.recentGroups || [];
+        
+        const container = document.getElementById('recent-groups');
+        const seeMoreLink = document.getElementById('groups-see-more');
+        
+        // Clear existing items
+        container.innerHTML = '';
+        
+        // Show up to 3 recent groups
+        const recentGroups = recentGroupIDs
+          .map(id => userGroups.find(g => g.groupID === id))
+          .filter(g => g !== undefined)
+          .slice(0, 3);
+
+        if (recentGroups.length === 0) {
+          const emptyItem = document.createElement('div');
+          emptyItem.className = 'recent-item';
+          emptyItem.style.color = 'rgba(255, 255, 255, 0.5)';
+          emptyItem.innerHTML = '<span>No recent groups</span>';
+          container.appendChild(emptyItem);
+          seeMoreLink.style.display = 'none';
+          return;
+        }
+
+        recentGroups.forEach((group, index) => {
+          const item = document.createElement('div');
+          item.className = 'recent-item';
+          item.innerHTML = `
+            <i class="fas fa-folder"></i>
+            <span class="recent-item-name">${group.groupName || 'Unnamed Group'}</span>
+          `;
+          item.onclick = () => window.location.href = `./groups.html?group=${group.groupID}`;
+          container.appendChild(item);
+        });
+
+        // Show "See More" if there are more than 3 groups
+        if (userGroups.length > 3) {
+          seeMoreLink.style.display = 'block';
+        }
+      }
+
+      function loadRecentPresentationsSidebar(userID) {
+        const userRecents = Database.getRecents(userID);
+        const recentPresentationIDs = userRecents.recentPresentations || [];
+        
+        const container = document.getElementById('recent-presentations');
+        const seeMoreLink = document.getElementById('presentations-see-more');
+        
+        // Clear existing items
+        container.innerHTML = '';
+        
+        // Show up to 3 recent presentations
+        const recentPresentations = recentPresentationIDs.slice(0, 3);
+
+        if (recentPresentations.length === 0) {
+          const emptyItem = document.createElement('div');
+          emptyItem.className = 'recent-item';
+          emptyItem.style.color = 'rgba(255, 255, 255, 0.5)';
+          emptyItem.innerHTML = '<span>No recent presentations</span>';
+          container.appendChild(emptyItem);
+          seeMoreLink.style.display = 'none';
+          return;
+        }
+
+        recentPresentations.forEach((presId) => {
+          const item = document.createElement('div');
+          item.className = 'recent-item';
+          item.innerHTML = `
+            <i class="fas fa-file"></i>
+            <span class="recent-item-name">Presentation ${presId.substring(0, 8)}</span>
+          `;
+          item.onclick = () => window.location.href = `./blank.html?presentation=${presId}`;
+          container.appendChild(item);
+        });
+
+        // Show "See More" if there are more than 3 presentations
+        if (recentPresentationIDs.length > 3) {
+          seeMoreLink.style.display = 'block';
+        }
+      }
+
+      function loadTemplatesSidebar(userID) {
+        const allTemplates = Database.getAllTemplates();
+        const userRecents = Database.getRecents(userID);
+        const recentTemplateIDs = userRecents.recentTemplates || [];
+        
+        const categoriesContainer = document.getElementById('template-categories');
+        const recentContainer = document.getElementById('recent-templates');
+        
+        // Clear existing items
+        categoriesContainer.innerHTML = '';
+        recentContainer.innerHTML = '';
+        
+        // Group templates by category
+        const templatesByCategory = {};
+        allTemplates.forEach(template => {
+          const category = template.category || 'general';
+          if (!templatesByCategory[category]) {
+            templatesByCategory[category] = [];
+          }
+          templatesByCategory[category].push(template);
+        });
+
+        // Display categories
+        Object.keys(templatesByCategory).forEach(category => {
+          const categoryItem = document.createElement('div');
+          categoryItem.className = 'template-category';
+          categoryItem.textContent = category.charAt(0).toUpperCase() + category.slice(1);
+          categoryItem.onclick = () => window.location.href = `./templates.html?category=${category}`;
+          categoriesContainer.appendChild(categoryItem);
+        });
+
+        // Display recent templates (up to 3)
+        const recentTemplates = recentTemplateIDs
+          .map(id => allTemplates.find(t => t.templateID === id))
+          .filter(t => t !== undefined)
+          .slice(0, 3);
+
+        if (recentTemplates.length === 0) {
+          const emptyItem = document.createElement('div');
+          emptyItem.className = 'recent-item';
+          emptyItem.style.color = 'rgba(255, 255, 255, 0.5)';
+          emptyItem.innerHTML = '<span>No recent templates</span>';
+          recentContainer.appendChild(emptyItem);
+          return;
+        }
+
+        recentTemplates.forEach((template) => {
+          const item = document.createElement('div');
+          item.className = 'recent-item';
+          item.innerHTML = `
+            <i class="fas fa-image"></i>
+            <span class="recent-item-name">${template.templateName || 'Unnamed Template'}</span>
+          `;
+          item.onclick = () => window.location.href = `./templates.html?template=${template.templateID}`;
+          recentContainer.appendChild(item);
+        });
+      }
+
+      function createNewGroup() {
+        // Check for current user - try multiple ways
+        let currentUserStr = localStorage.getItem('currentUser');
+        let currentUser = null;
+        
+        if (currentUserStr) {
+          try {
+            currentUser = JSON.parse(currentUserStr);
+            if (currentUser && Object.keys(currentUser).length === 0) {
+              currentUser = null;
+            }
+          } catch (e) {
+            console.warn('Error parsing currentUser:', e);
+            currentUser = null;
+          }
+        }
+        
+        if (!currentUser) {
+          alert('Please log in to create a group');
+          return;
+        }
+
+        // Open the modal instead of using prompt
+        openCreateGroupModal();
+      }
+
+      function openCreateGroupModal() {
+        const modal = document.getElementById('createGroupModal');
+        const input = document.getElementById('newGroupName');
+        if (modal) {
+          modal.classList.remove('hidden');
+          // Focus input after modal animation
+          setTimeout(() => {
+            if (input) {
+              input.focus();
+              input.select();
+            }
+          }, 100);
+        }
+      }
+
+      function closeCreateGroupModal() {
+        const modal = document.getElementById('createGroupModal');
+        const input = document.getElementById('newGroupName');
+        if (modal) {
+          modal.classList.add('hidden');
+          if (input) {
+            input.value = '';
+          }
+        }
+      }
+
+      function submitCreateGroup() {
+        const input = document.getElementById('newGroupName');
+        if (!input) return;
+
+        const groupName = input.value.trim();
+        if (!groupName) {
+          input.focus();
+          return;
+        }
+
+        // Check for current user
+        let currentUserStr = localStorage.getItem('currentUser');
+        let currentUser = null;
+        
+        if (currentUserStr) {
+          try {
+            currentUser = JSON.parse(currentUserStr);
+            if (currentUser && Object.keys(currentUser).length === 0) {
+              currentUser = null;
+            }
+          } catch (e) {
+            console.warn('Error parsing currentUser:', e);
+            currentUser = null;
+          }
+        }
+        
+        if (!currentUser) {
+          alert('Please log in to create a group');
+          closeCreateGroupModal();
+          return;
+        }
+
+        if (typeof Database === 'undefined') {
+          alert('Database module not available. Please refresh the page.');
+          closeCreateGroupModal();
+          return;
+        }
+
+        const userID = currentUser.userID || currentUser.email;
+        if (!userID) {
+          alert('Unable to identify user. Please log in again.');
+          closeCreateGroupModal();
+          return;
+        }
+
+        const newGroup = Database.createGroup({
+          groupName: groupName,
+          createdBy: userID,
+          members: [userID],
+          roles: [{ userID: userID, role: 'admin' }],
+          slides: []
+        });
+
+        // Add to recents - use userID or email as fallback
+        const userIdentifier = currentUser.userID || currentUser.email || userID;
+        if (userIdentifier && typeof Database !== 'undefined') {
+          try {
+            Database.addRecentGroup(userIdentifier, newGroup.groupID);
+            console.log('Group added to recents:', newGroup.groupID, 'for user:', userIdentifier);
+          } catch (e) {
+            console.error('Error adding group to recents:', e);
+          }
+        } else {
+          console.error('Could not add to recents: No user identifier found', { currentUser, userID });
+        }
+        
+        // Reload sidebar to show new group
+        if (typeof loadSidebarData === 'function') {
+          try {
+        loadSidebarData();
+          } catch (e) {
+            console.warn('Could not reload sidebar:', e);
+          }
+        }
+        
+        // Reload groups list to show new group
+        if (typeof loadRecentGroups === 'function') {
+          try {
+            loadRecentGroups();
+          } catch (e) {
+            console.warn('Could not reload groups list:', e);
+          }
+        }
+        
+        // Close modal
+        closeCreateGroupModal();
+        
+        // Redirect to group page
+        window.location.href = `./groups.html?group=${newGroup.groupID}`;
+      }
+
+      // Make functions globally available
+      window.createNewGroup = createNewGroup;
+      window.openCreateGroupModal = openCreateGroupModal;
+      window.closeCreateGroupModal = closeCreateGroupModal;
+      window.submitCreateGroup = submitCreateGroup;
+
+      // ESC key to close modal
+      document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') {
+          const modal = document.getElementById('createGroupModal');
+          if (modal && !modal.classList.contains('hidden')) {
+            closeCreateGroupModal();
+          }
+        }
+      });
+
+      function createNewPresentation() {
+        window.location.href = './blank.html';
+      }
+
+      function showAllGroups() {
+        window.location.href = './groups.html';
+      }
+
+      function showAllPresentations() {
+        // Navigate to presentations section or page
+        window.location.href = './Home.html#recent';
+      }
+
+      // Initialize sidebar on page load
+      window.addEventListener('DOMContentLoaded', () => {
+        // Expand all sections by default (in order: presentations, templates, groups)
+        ['presentations', 'templates', 'groups'].forEach(sectionId => {
+          const header = document.querySelector(`#${sectionId}-arrow`)?.closest('.section-header');
+          const content = document.getElementById(`${sectionId}-content`);
+          if (header && content) {
+            content.classList.add('expanded');
+            header.classList.add('active');
+          }
+        });
+
+        // Load data from database
+        loadSidebarData();
+      });
+
+      // Phase 3: AI Assistant Chatbot - Now handled by chatbot.js module
     </script>
+    
+    <!-- Home Page Scripts -->
+    <script src="./scripts/templates.js"></script>
+    <script src="./scripts/sidebar.js"></script>
+    <script src="./scripts/home.js"></script>
+    
+    <!-- Performance Optimization -->
+    <script src="./scripts/performance.js"></script>
+    
+    <!-- AI Assistant Chatbot Module -->
+    <script src="./scripts/chatbot.js"></script>
+    
+    <!-- Create Group Modal -->
+    <div id="createGroupModal" class="create-group-modal hidden" onclick="if(event.target === this) closeCreateGroupModal()">
+      <div class="modal-backdrop"></div>
+      <div class="modal-content" onclick="event.stopPropagation()">
+        <div class="modal-header">
+          <h2>Create New Group</h2>
+          <button class="modal-close-btn" onclick="closeCreateGroupModal()" aria-label="Close">
+            <i class="fas fa-times"></i>
+          </button>
+        </div>
+        <div class="modal-body">
+          <input 
+            id="newGroupName" 
+            type="text" 
+            placeholder="Enter group name..."
+            autocomplete="off"
+            onkeydown="if(event.key === 'Enter') submitCreateGroup(); if(event.key === 'Escape') closeCreateGroupModal();"
+          >
+          <div class="modal-actions">
+            <button id="cancelGroupBtn" class="btn-cancel" onclick="closeCreateGroupModal()">Cancel</button>
+            <button id="createGroupBtn" class="btn-create" onclick="submitCreateGroup()">Create Group</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Global Edit Menus -->
+    <div id="presentationEditMenu" class="edit-dropdown hidden">
+      <button data-action="rename">Rename</button>
+      <button data-action="delete">Delete</button>
+    </div>
+
+    <div id="groupEditMenu" class="edit-dropdown hidden">
+      <div class="group-info-display">
+        <div class="group-info-item">
+          <span class="group-info-label">Title:</span>
+          <span class="group-info-value" id="groupInfoTitle">-</span>
+        </div>
+        <div class="group-info-item">
+          <span class="group-info-label">Created:</span>
+          <span class="group-info-value" id="groupInfoCreated">-</span>
+        </div>
+        <div class="group-info-item">
+          <span class="group-info-label">Members:</span>
+          <span class="group-info-value" id="groupInfoMembers">-</span>
+        </div>
+      </div>
+      <div class="edit-dropdown-divider"></div>
+      <button data-action="rename">Rename</button>
+      <button data-action="delete">Delete</button>
+    </div>
+
+    <script>
+      // Setup "See More" button for templates
+      document.getElementById("seeMoreBtn")?.addEventListener("click", (e) => {
+        e.stopPropagation();
+        window.location.href = "more_templates.html";
+      });
+    </script>
+
   </body>
 </html>
