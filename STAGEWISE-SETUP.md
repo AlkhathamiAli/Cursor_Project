@@ -56,3 +56,4 @@ The following elements on welcome.html are marked for easy selection:
 - You can undo changes using git if needed
 - Stagewise toolbar appears as an overlay on your page
 
+

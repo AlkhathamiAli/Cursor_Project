@@ -6,3 +6,4 @@ cd "$(dirname "$0")"
 echo "Starting local server..."
 python3 server.py
 
+

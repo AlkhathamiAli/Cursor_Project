@@ -1,3 +1,6 @@
 {
-  "appPort": 8000
+  "appPort": 8000,
+  "workspacePath": "/Users/hnceloz/.cursor/worktrees/CURSOR_2/E4pPd",
+  "enableAgentIntegration": true,
+  "agentType": "cursor"
 }

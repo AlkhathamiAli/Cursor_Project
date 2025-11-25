@@ -6,15 +6,13 @@
   <title>Aramco Digital SlideMaker • Welcome</title>
   <link rel="stylesheet" href="./css/welcome.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  <!-- Stagewise Integration -->
-  <script>
-    // Stagewise configuration - reads from stagewise.json
-    window.STAGEWISE_CONFIG = {
-      appPort: 8000,
-      enabled: true,
-      page: 'welcome'
-    };
-  </script>
+  <script src="./scripts/database.js"></script>
+  <style>
+    /* Phase 1: Trebuchet font for all text */
+    * {
+      font-family: 'Trebuchet MS', 'Lucida Grande', 'Lucida Sans Unicode', 'Lucida Sans', Tahoma, sans-serif !important;
+    }
+  </style>
 </head>
 <body>
   <!-- Gradient Shimmer Overlay -->
@@ -93,42 +91,81 @@
   <!-- Hero Section -->
   <main class="hero-container">
     <div class="hero-card">
-      <h1 class="hero-title">HELLO & WELCOME</h1>
+      <h1 class="hero-title">Welcome</h1>
       <p class="hero-subtitle">
         Create stunning presentations, collaborate with your team, and bring your ideas to life with Aramco Digital SlideMaker.
       </p>
-      <a href="./index.html" class="hero-cta">
-        <span class="cta-text">Enter SlideMaker</span>
+      <button class="hero-cta" id="getStartedBtn" onclick="handleGetStarted()">
+        <span class="cta-text">Get Started</span>
         <i class="fas fa-arrow-right cta-arrow"></i>
-      </a>
+      </button>
     </div>
   </main>
 
   <script>
-    // Parallax effect for mountains on mouse move
-    document.addEventListener('mousemove', (e) => {
-      const mountains = document.querySelector('.mountains-svg');
-      if (mountains && window.innerWidth > 768) {
-        const x = (e.clientX / window.innerWidth - 0.5) * 20;
-        const y = (e.clientY / window.innerHeight - 0.5) * 10;
-        mountains.style.transform = `translate(${x}px, ${y}px)`;
+    // Phase 1: Auto-login check - skip access page if already logged in
+    function checkAutoLogin() {
+      // First, check if user is already logged in (currentUser exists)
+      const currentUserStr = localStorage.getItem('currentUser');
+      if (currentUserStr) {
+        try {
+          const currentUser = JSON.parse(currentUserStr);
+          if (currentUser && (currentUser.userID || currentUser.email)) {
+            // User is already logged in - skip Access Page and go directly to Home
+            window.location.href = './Home.html';
+            return true;
+          }
+        } catch (e) {
+          console.warn('Error parsing currentUser:', e);
+        }
       }
-    });
 
-    // Navbar scroll effect
-    let lastScroll = 0;
-    const topNav = document.getElementById('topNav');
-    
-    window.addEventListener('scroll', () => {
-      const currentScroll = window.pageYOffset;
+      // Second, check for deviceToken for auto-login
+      const deviceToken = localStorage.getItem('deviceToken');
       
-      if (currentScroll > 50) {
-        topNav.classList.add('scrolled');
-      } else {
-        topNav.classList.remove('scrolled');
+      if (deviceToken && typeof Database !== 'undefined') {
+        // Find user by deviceToken
+        const user = Database.getUserByDeviceToken(deviceToken);
+        
+        if (user) {
+          // User found with valid deviceToken - skip Access Page
+          // Set current user and go directly to Home
+          const currentUserData = {
+            userID: user.userID,
+            fullName: user.fullName,
+            email: user.email,
+            username: user.fullName || user.email
+          };
+          
+          localStorage.setItem('currentUser', JSON.stringify(currentUserData));
+          localStorage.removeItem('guest');
+          
+          // Load recents, templates, groups
+          // Then redirect to Home
+          window.location.href = './Home.html';
+          return true;
+        }
       }
       
-      lastScroll = currentScroll;
+      return false;
+    }
+
+    // Handle Get Started button click
+    function handleGetStarted() {
+      // Check if user is already logged in or has deviceToken
+      if (!checkAutoLogin()) {
+        // No current user or deviceToken - go to Access Page
+        window.location.href = './index.html';
+      }
+      // If checkAutoLogin() returns true, it will redirect to Home.html automatically
+    }
+
+    // Check auto-login on page load
+    document.addEventListener('DOMContentLoaded', () => {
+      // Small delay to ensure Database is initialized
+      setTimeout(() => {
+        checkAutoLogin();
+      }, 100);
     });
 
     // Smooth scroll for anchor links
@@ -144,18 +181,9 @@
         }
       });
     });
-
-    // Stagewise integration - enable when Stagewise CLI is running
-    // Stagewise will automatically detect and connect to this page when running on port 8000
-    if (window.location.search.includes('stagewise=true') || localStorage.getItem('stagewise-enabled') === 'true') {
-      // Stagewise is active - add data attributes for better element selection
-      document.querySelectorAll('.hero-card, .hero-title, .hero-subtitle, .hero-cta, .top-nav, .nav-logo, .nav-links a').forEach(el => {
-        el.setAttribute('data-stagewise-selectable', 'true');
-      });
-      
-      console.log('Stagewise integration active on welcome page');
-    }
   </script>
+  
+  <!-- Performance Optimization -->
+  <script src="./scripts/performance.js"></script>
 </body>
 </html>
-

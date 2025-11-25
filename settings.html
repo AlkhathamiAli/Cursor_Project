@@ -7,6 +7,10 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="./css/chatbot.css">
+    <!-- DISABLE ALL ANIMATIONS FOR PERFORMANCE TEST -->
+    <link rel="stylesheet" href="./css/disable-animations.css">
     <script src="./translations.js"></script>
     <style>
       * { box-sizing: border-box; }
@@ -2139,7 +2143,7 @@
       }
     </style>
   </head>
-  <body>
+  <body data-page="settings">
     <header>
       <div class="nav">
         <div class="logo" data-translate="common.slideMaker">SlideMaker</div>
@@ -2332,6 +2336,40 @@
             <input type="checkbox" id="animationsToggle" aria-label="Enable Animations">
             <span class="toggle-slider"></span>
           </label>
+        </div>
+
+        <div class="preference-row" style="flex-direction: column; align-items: flex-start; gap: 12px;">
+          <div class="preference-details" style="max-width: 100%;">
+            <h3>AI Assistant API Key (Optional)</h3>
+            <p>Add a free Google Gemini API key for enhanced AI responses in the chatbot. <a href="https://makersuite.google.com/app/apikey" target="_blank" style="color: #00c853; text-decoration: underline;">Get free API key →</a></p>
+          </div>
+          <div style="width: 100%; display: flex; gap: 8px; align-items: center;">
+            <input 
+              type="password" 
+              id="geminiApiKeyInput" 
+              placeholder="Enter your Gemini API key"
+              style="flex: 1; padding: 10px 14px; background: rgba(0, 0, 0, 0.3); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 8px; color: #E8F5E9; font-family: 'Trebuchet MS', sans-serif; font-size: 14px; outline: none; transition: all 0.3s ease;"
+            >
+            <button 
+              type="button" 
+              id="saveApiKeyBtn"
+              style="padding: 10px 20px; background: rgba(0, 200, 83, 0.2); border: 1px solid rgba(0, 200, 83, 0.4); border-radius: 8px; color: #00c853; font-weight: 600; cursor: pointer; transition: all 0.3s ease;"
+              onmouseover="this.style.background='rgba(0, 200, 83, 0.3)'; this.style.borderColor='rgba(0, 200, 83, 0.6)';"
+              onmouseout="this.style.background='rgba(0, 200, 83, 0.2)'; this.style.borderColor='rgba(0, 200, 83, 0.4)';"
+            >
+              Save
+            </button>
+            <button 
+              type="button" 
+              id="clearApiKeyBtn"
+              style="padding: 10px 16px; background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 8px; color: #E8F5E9; cursor: pointer; transition: all 0.3s ease;"
+              onmouseover="this.style.background='rgba(255, 255, 255, 0.1)'; this.style.borderColor='rgba(255, 255, 255, 0.2)';"
+              onmouseout="this.style.background='rgba(255, 255, 255, 0.05)'; this.style.borderColor='rgba(255, 255, 255, 0.1)';"
+            >
+              Clear
+            </button>
+          </div>
+          <div id="apiKeyStatus" style="font-size: 12px; color: rgba(255, 255, 255, 0.6); margin-top: -8px;"></div>
         </div>
       </section>
           </div>
@@ -3534,6 +3572,51 @@
             });
           });
         }
+
+        // 4. AI Assistant API Key Management
+        const apiKeyInput = document.getElementById('geminiApiKeyInput');
+        const saveApiKeyBtn = document.getElementById('saveApiKeyBtn');
+        const clearApiKeyBtn = document.getElementById('clearApiKeyBtn');
+        const apiKeyStatus = document.getElementById('apiKeyStatus');
+
+        // Load saved API key on page load
+        const savedApiKey = localStorage.getItem('gemini_api_key');
+        if (savedApiKey) {
+          apiKeyInput.value = savedApiKey;
+          apiKeyStatus.textContent = '✓ API key saved';
+          apiKeyStatus.style.color = '#00c853';
+        }
+
+        // Save API key
+        saveApiKeyBtn.addEventListener('click', () => {
+          const apiKey = apiKeyInput.value.trim();
+          if (apiKey) {
+            localStorage.setItem('gemini_api_key', apiKey);
+            apiKeyStatus.textContent = '✓ API key saved successfully';
+            apiKeyStatus.style.color = '#00c853';
+            showToast('API key saved', 'success');
+          } else {
+            apiKeyStatus.textContent = 'Please enter an API key';
+            apiKeyStatus.style.color = '#ff6b6b';
+          }
+        });
+
+        // Clear API key
+        clearApiKeyBtn.addEventListener('click', () => {
+          apiKeyInput.value = '';
+          localStorage.removeItem('gemini_api_key');
+          apiKeyStatus.textContent = 'API key cleared';
+          apiKeyStatus.style.color = 'rgba(255, 255, 255, 0.6)';
+          showToast('API key cleared', 'success');
+        });
+
+        // Update status on input
+        apiKeyInput.addEventListener('input', () => {
+          if (apiKeyInput.value.trim()) {
+            apiKeyStatus.textContent = 'Click Save to store the API key';
+            apiKeyStatus.style.color = 'rgba(255, 255, 255, 0.6)';
+          }
+        });
       })();
 
       // Notifications Functionality
@@ -4213,6 +4296,49 @@
         option.setAttribute('tabindex', '0');
       });
     </script>
+    
+    <!-- AI Assistant Floating Button -->
+    <button class="ai-assistant-btn" id="aiAssistantBtn" onclick="toggleChatbot()" aria-label="Open AI Assistant">
+      <i class="fas fa-robot"></i>
+      <span>AI Assistant</span>
+    </button>
+
+    <!-- AI Assistant Chatbot Window -->
+    <div class="ai-chatbot" id="ai-chatbot">
+      <div class="chatbot-header">
+        <div class="chatbot-title">
+          <i class="fas fa-robot"></i>
+          <span>AI Assistant</span>
+        </div>
+        <button class="chatbot-close" onclick="toggleChatbot()" aria-label="Close chatbot">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+      <div class="chatbot-messages" id="chatbot-messages">
+        <!-- Messages will be added here -->
+      </div>
+      <div class="chatbot-input-container">
+        <input 
+          type="text" 
+          id="chatbot-input" 
+          class="chatbot-input" 
+          placeholder="Ask me about SlideMaker..."
+          autocomplete="off"
+        >
+        <button class="chatbot-voice-btn" id="voice-input-btn" aria-label="Voice input">
+          <i class="fas fa-microphone"></i>
+        </button>
+        <button class="chatbot-send-btn" id="send-input-btn" aria-label="Send message">
+          <i class="fas fa-paper-plane"></i>
+        </button>
+      </div>
+    </div>
+    
+    <!-- Performance Optimization -->
+    <script src="./scripts/performance.js"></script>
+    
+    <!-- AI Assistant Chatbot Module -->
+    <script src="./scripts/chatbot.js"></script>
   </body>
   </html>
 

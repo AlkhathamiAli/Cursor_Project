@@ -1,13 +1,3 @@
-const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
-
-if (isSafari) {
-  // Disable features Safari doesn't support
-  disableSpeechRecognition();
-  useFallbackDownloader();
-  fixButtonsSafari();
-  enablePointerEventsFix();
-}
-
 let currentLanguage =
   (typeof window.getCurrentLanguage === "function" && window.getCurrentLanguage()) ||
   localStorage.getItem("siteLanguage") ||
@@ -43,6 +33,238 @@ function continueAsVisitor() {
   localStorage.setItem("guest", "true");
   localStorage.removeItem("currentUser");
   window.location.href = "./Home.html";
+}
+
+function openForgotPasswordModal() {
+  const loginModal = document.getElementById('loginModal');
+  const forgotModal = document.getElementById('forgotPasswordModal');
+  if (loginModal) closeModal(loginModal);
+  if (forgotModal) openModal(forgotModal);
+}
+
+// Make it globally available
+window.openForgotPasswordModal = openForgotPasswordModal;
+
+function handleForgotPassword(event) {
+  event.preventDefault();
+  const email = document.getElementById("forgot_password_email")?.value.trim();
+  const errorEl = document.getElementById("forgot_password_error");
+  const successEl = document.getElementById("forgot_password_success");
+
+  if (!email) {
+    if (errorEl) {
+      errorEl.textContent = translate("auth.emailRequired");
+      errorEl.classList.add("show");
+      successEl.style.display = 'none';
+    }
+    return;
+  }
+
+  // Clear previous messages
+  if (errorEl) {
+    errorEl.textContent = "";
+    errorEl.classList.remove("show");
+  }
+  if (successEl) {
+    successEl.style.display = 'none';
+  }
+
+  // Check if user exists - try Database first, then fallback to old users array
+  let user = null;
+  let useDatabase = false;
+  let userIdentifier = null;
+
+  // First, try Database module
+  if (typeof Database !== 'undefined') {
+    user = Database.getUserByEmail(email);
+    if (user) {
+      useDatabase = true;
+      userIdentifier = user.userID;
+    }
+  }
+
+  // If not found in Database, check old users array
+  if (!user) {
+    const users = JSON.parse(localStorage.getItem("users") || "[]");
+    user = users.find((u) => u.email === email);
+    if (user) {
+      useDatabase = false;
+      userIdentifier = email;
+    }
+  }
+
+  // If still not found, show error
+  if (!user) {
+    if (errorEl) {
+      errorEl.textContent = translate("auth.emailNotFound");
+      errorEl.classList.add("show");
+    }
+    return;
+  }
+
+  // Show success message and allow password reset
+  if (successEl) {
+    const resetFunction = useDatabase ? `resetPassword('${userIdentifier}')` : `resetPasswordOld('${userIdentifier}')`;
+    successEl.innerHTML = `
+      <div style="margin-bottom: 16px;">
+        <strong>${translate("auth.emailFound")}</strong><br>
+        ${translate("auth.enterNewPassword")}
+      </div>
+      <div class="form-group">
+        <label class="form-label" for="new_password">${translate("auth.newPassword")}</label>
+        <div class="password-field">
+          <input class="form-input" type="password" id="new_password" required placeholder="${translate("auth.newPasswordPlaceholder")}">
+          <button type="button" class="toggle-password" onclick="togglePasswordVisibility('new_password', this)">
+            <i class="fa-solid fa-eye"></i>
+            <i class="fa-solid fa-eye-slash"></i>
+          </button>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label" for="confirm_new_password">${translate("auth.confirmPassword")}</label>
+        <div class="password-field">
+          <input class="form-input" type="password" id="confirm_new_password" required placeholder="${translate("auth.confirmPasswordPlaceholder")}">
+          <button type="button" class="toggle-password" onclick="togglePasswordVisibility('confirm_new_password', this)">
+            <i class="fa-solid fa-eye"></i>
+            <i class="fa-solid fa-eye-slash"></i>
+          </button>
+        </div>
+      </div>
+      <button type="button" class="form-submit secondary" onclick="${resetFunction}">${translate("auth.updatePassword")}</button>
+    `;
+    successEl.style.display = 'block';
+  }
+}
+
+function resetPassword(userID) {
+  const newPassword = document.getElementById("new_password")?.value;
+  const confirmPassword = document.getElementById("confirm_new_password")?.value;
+  const errorEl = document.getElementById("forgot_password_error");
+  const successEl = document.getElementById("forgot_password_success");
+
+  if (!newPassword || !confirmPassword) {
+    if (errorEl) {
+      errorEl.textContent = translate("auth.allFieldsRequired");
+      errorEl.classList.add("show");
+    }
+    return;
+  }
+
+  if (newPassword !== confirmPassword) {
+    if (errorEl) {
+      errorEl.textContent = translate("auth.passwordsDoNotMatch");
+      errorEl.classList.add("show");
+    }
+    return;
+  }
+
+  if (newPassword.length < 6) {
+    if (errorEl) {
+      errorEl.textContent = translate("auth.passwordTooShort");
+      errorEl.classList.add("show");
+    }
+    return;
+  }
+
+  // Update password using Database module
+  if (typeof Database !== 'undefined') {
+    const passwordHash = Database.hashPassword(newPassword);
+    Database.updateUser(userID, { passwordHash });
+
+    // Show success and redirect to login
+    if (successEl) {
+      successEl.innerHTML = `<strong>${translate("auth.passwordResetSuccess")}</strong><br>${translate("auth.redirectingToLogin")}`;
+      successEl.style.display = 'block';
+    }
+    if (errorEl) {
+      errorEl.classList.remove("show");
+    }
+
+    setTimeout(() => {
+      closeModal(document.getElementById('forgotPasswordModal'));
+      openModal(document.getElementById('loginModal'));
+      // Pre-fill email in login form
+      const loginEmail = document.getElementById("login_email");
+      const forgotEmail = document.getElementById("forgot_password_email");
+      if (loginEmail && forgotEmail) {
+        loginEmail.value = forgotEmail.value;
+      }
+    }, 2000);
+  }
+}
+
+// Make resetPassword functions globally available
+window.resetPassword = resetPassword;
+window.resetPasswordOld = resetPasswordOld;
+window.handleForgotPassword = handleForgotPassword;
+
+function resetPasswordOld(email) {
+  const newPassword = document.getElementById("new_password")?.value;
+  const confirmPassword = document.getElementById("confirm_new_password")?.value;
+  const errorEl = document.getElementById("forgot_password_error");
+  const successEl = document.getElementById("forgot_password_success");
+
+  if (!newPassword || !confirmPassword) {
+    if (errorEl) {
+      errorEl.textContent = translate("auth.allFieldsRequired");
+      errorEl.classList.add("show");
+    }
+    return;
+  }
+
+  if (newPassword !== confirmPassword) {
+    if (errorEl) {
+      errorEl.textContent = translate("auth.passwordsDoNotMatch");
+      errorEl.classList.add("show");
+    }
+    return;
+  }
+
+  if (newPassword.length < 6) {
+    if (errorEl) {
+      errorEl.textContent = translate("auth.passwordTooShort");
+      errorEl.classList.add("show");
+    }
+    return;
+  }
+
+  // Update password in old users array
+  const users = JSON.parse(localStorage.getItem("users") || "[]");
+  const userIndex = users.findIndex((u) => u.email === email);
+  
+  if (userIndex !== -1) {
+    users[userIndex].password = newPassword;
+    localStorage.setItem("users", JSON.stringify(users));
+
+    // Also update Database module if user exists there (keep them in sync)
+    if (typeof Database !== 'undefined') {
+      const dbUser = Database.getUserByEmail(email);
+      if (dbUser) {
+        const passwordHash = Database.hashPassword(newPassword);
+        Database.updateUser(dbUser.userID, { passwordHash });
+      }
+    }
+
+    // Show success and redirect to login
+    if (successEl) {
+      successEl.innerHTML = `<strong>${translate("auth.passwordResetSuccess")}</strong><br>${translate("auth.redirectingToLogin")}`;
+      successEl.style.display = 'block';
+    }
+    if (errorEl) {
+      errorEl.classList.remove("show");
+    }
+
+    setTimeout(() => {
+      closeModal(document.getElementById('forgotPasswordModal'));
+      openModal(document.getElementById('loginModal'));
+      // Pre-fill email in login form
+      const loginEmail = document.getElementById("login_email");
+      const forgotEmail = document.getElementById("forgot_password_email");
+      if (loginEmail && forgotEmail) {
+        loginEmail.value = forgotEmail.value;
+      }
+    }, 2000);
+  }
 }
 
 function closeModal(modal) {
@@ -169,6 +391,19 @@ function setupModalTriggers() {
   });
 }
 
+function togglePasswordVisibility(inputId, button) {
+  const input = document.getElementById(inputId);
+  if (!input) return;
+  const isVisible = input.type === "text";
+  input.type = isVisible ? "password" : "text";
+  const eyeIcon = button.querySelector(".fa-eye");
+  const eyeSlashIcon = button.querySelector(".fa-eye-slash");
+  if (eyeIcon && eyeSlashIcon) {
+    eyeIcon.style.display = isVisible ? "inline" : "none";
+    eyeSlashIcon.style.display = isVisible ? "none" : "inline";
+  }
+}
+
 function setupPasswordToggles() {
   document.querySelectorAll(".toggle-password").forEach((button) => {
     button.addEventListener("click", () => {
@@ -182,6 +417,9 @@ function setupPasswordToggles() {
     });
   });
 }
+
+// Make togglePasswordVisibility globally available
+window.togglePasswordVisibility = togglePasswordVisibility;
 
 function saveRecentUser(user) {
   const recentUsers = JSON.parse(localStorage.getItem("recentUsers") || "[]");
@@ -204,6 +442,19 @@ function saveRecentUser(user) {
   const limitedUsers = updatedUsers.slice(0, 5);
   
   localStorage.setItem("recentUsers", JSON.stringify(limitedUsers));
+}
+
+function deleteRecentUser(email) {
+  if (!confirm(`Are you sure you want to remove this account from recent users?`)) {
+    return;
+  }
+  
+  const recentUsers = JSON.parse(localStorage.getItem("recentUsers") || "[]");
+  const filteredUsers = recentUsers.filter((u) => u.email !== email);
+  localStorage.setItem("recentUsers", JSON.stringify(filteredUsers));
+  
+  // Refresh the display
+  displayRecentUsers();
 }
 
 function displayRecentUsers() {
@@ -234,11 +485,58 @@ function displayRecentUsers() {
           <div class="recent-user-name">${user.name || user.firstName || user.email}</div>
           <div class="recent-user-email">${user.email}</div>
         </div>
+        <button class="recent-user-delete" aria-label="Delete user" title="Delete this account">
+          <i class="fas fa-times"></i>
+        </button>
       `;
       
-      userCard.addEventListener("click", () => {
-        selectRecentUser(user.email);
+      // Handle card click (for login)
+      userCard.addEventListener("click", (e) => {
+        // Don't trigger login if clicking the delete button
+        if (!e.target.closest('.recent-user-delete')) {
+          // Check if user has a deviceToken stored (for auto-login)
+          const deviceToken = localStorage.getItem('deviceToken');
+          let shouldAutoLogin = false;
+          let tokenToUse = null;
+          
+          // First, check if there's a deviceToken in localStorage that matches this user
+          if (deviceToken && typeof Database !== 'undefined') {
+            const userByToken = Database.getUserByDeviceToken(deviceToken);
+            if (userByToken && userByToken.email === user.email) {
+              shouldAutoLogin = true;
+              tokenToUse = deviceToken;
+            }
+          }
+          
+          // If not found, check if this user has a deviceToken stored in Database
+          if (!shouldAutoLogin && typeof Database !== 'undefined') {
+            const userFromDB = Database.getUserByEmail(user.email);
+            if (userFromDB && userFromDB.deviceToken) {
+              shouldAutoLogin = true;
+              tokenToUse = userFromDB.deviceToken;
+              localStorage.setItem('deviceToken', userFromDB.deviceToken);
+            }
+          }
+          
+          // If user has deviceToken, auto-login
+          if (shouldAutoLogin && tokenToUse) {
+            autoLoginWithDeviceToken(user.email, tokenToUse);
+            return;
+          }
+          
+          // If no deviceToken, show login form
+          selectRecentUser(user.email);
+        }
       });
+      
+      // Handle delete button click
+      const deleteBtn = userCard.querySelector('.recent-user-delete');
+      if (deleteBtn) {
+        deleteBtn.addEventListener("click", (e) => {
+          e.stopPropagation(); // Prevent card click
+          deleteRecentUser(user.email);
+        });
+      }
       
       recentUsersList.appendChild(userCard);
     });
@@ -247,6 +545,62 @@ function displayRecentUsers() {
     recentUsersSection.style.display = "none";
     loginForm.style.display = "block";
   }
+}
+
+function autoLoginWithDeviceToken(email, deviceToken) {
+  // Find user by email
+  let user = null;
+  let useDatabase = false;
+  
+  // First, try Database module
+  if (typeof Database !== 'undefined') {
+    user = Database.getUserByEmail(email);
+    if (user) {
+      useDatabase = true;
+    }
+  }
+  
+  // If not found in Database, check old users array
+  if (!user) {
+    const users = JSON.parse(localStorage.getItem("users") || "[]");
+    user = users.find((u) => u.email === email);
+  }
+  
+  if (!user) {
+    // User not found, fall back to normal login
+    selectRecentUser(email);
+    return;
+  }
+  
+  // Prepare user data
+  let currentUserData;
+  if (useDatabase) {
+    currentUserData = {
+      userID: user.userID,
+      fullName: user.fullName || user.email,
+      email: user.email,
+      username: user.fullName || user.email
+    };
+  } else {
+    currentUserData = {
+      email: user.email,
+      name: user.name || user.firstName || user.email,
+      firstName: user.firstName,
+      lastName: user.lastName
+    };
+  }
+  
+  // Save current user
+  localStorage.setItem("currentUser", JSON.stringify(currentUserData));
+  localStorage.removeItem("guest");
+  
+  // Save deviceToken if not already saved
+  if (deviceToken) {
+    localStorage.setItem('deviceToken', deviceToken);
+  }
+  
+  // Redirect to Home
+  window.location.href = "./Home.html";
 }
 
 function selectRecentUser(email) {
@@ -285,12 +639,40 @@ function handleLoginSubmit(event) {
   event.preventDefault();
   const email = document.getElementById("login_email")?.value.trim();
   const password = document.getElementById("login_password")?.value;
+  const rememberDevice = document.getElementById("remember_device")?.checked || false;
   const errorEl = document.getElementById("login_error");
 
-  const users = JSON.parse(localStorage.getItem("users") || "[]");
-  const user = users.find((u) => u.email === email && u.password === password);
+  let user = null;
+  let useDatabase = false;
+  let passwordValid = false;
 
-  if (!user) {
+  // First, try Database module
+  if (typeof Database !== 'undefined') {
+    user = Database.getUserByEmail(email);
+    if (user && user.passwordHash) {
+      // User exists in Database with hashed password
+      passwordValid = Database.verifyPassword(password, user.passwordHash);
+      useDatabase = true;
+    }
+  }
+
+  // If not found in Database or password doesn't match, check old users array
+  if (!user || !passwordValid) {
+    const users = JSON.parse(localStorage.getItem("users") || "[]");
+    const oldUser = users.find((u) => u.email === email);
+    
+    if (oldUser) {
+      // Check plain text password match
+      if (oldUser.password === password) {
+        user = oldUser;
+        useDatabase = false;
+        passwordValid = true;
+      }
+    }
+  }
+
+  // If still not valid, show error
+  if (!user || !passwordValid) {
     if (errorEl) {
       errorEl.textContent = translate("auth.invalidCredentials");
       errorEl.classList.add("show");
@@ -298,25 +680,54 @@ function handleLoginSubmit(event) {
     return;
   }
 
-  const derivedFirstName =
-    user.firstName ||
-    (user.name ? user.name.split(" ")[0] : undefined) ||
-    (user.username ? user.username.split(" ")[0] : undefined) ||
-    "";
+  // Generate and save deviceToken if "Remember this device" is checked
+  if (rememberDevice) {
+    if (useDatabase && typeof Database !== 'undefined') {
+      const deviceToken = Database.generateDeviceToken();
+      Database.updateUser(user.userID, { deviceToken });
+      localStorage.setItem('deviceToken', deviceToken);
+    } else {
+      // For old users, generate a simple device token
+      const deviceToken = `DEV${Date.now()}${Math.random().toString(36).substr(2, 16)}`;
+      localStorage.setItem('deviceToken', deviceToken);
+    }
+  }
 
-  const currentUserData = {
-    username: user.username || user.firstName || user.name,
-    email: user.email,
-    name: user.name || `${user.firstName || ""} ${user.lastName || ""}`.trim(),
-    firstName: derivedFirstName,
-    lastName: user.lastName || "",
-  };
+  // Prepare user data
+  let currentUserData;
+  if (useDatabase) {
+    currentUserData = {
+      userID: user.userID,
+      username: user.fullName || user.email,
+      email: user.email,
+      fullName: user.fullName,
+      name: user.fullName || user.email
+    };
+  } else {
+    // Old user format
+    const derivedFirstName =
+      user.firstName ||
+      (user.name ? user.name.split(" ")[0] : undefined) ||
+      (user.username ? user.username.split(" ")[0] : undefined) ||
+      "";
+
+    currentUserData = {
+      username: user.username || user.firstName || user.name,
+      email: user.email,
+      name: user.name || `${user.firstName || ""} ${user.lastName || ""}`.trim(),
+      firstName: derivedFirstName,
+      lastName: user.lastName || "",
+    };
+  }
 
   // Save to recent users
   saveRecentUser(currentUserData);
 
   localStorage.setItem("currentUser", JSON.stringify(currentUserData));
   localStorage.removeItem("guest");
+  
+  // Load recents, templates, groups
+  // Then redirect to Home
   window.location.href = "./Home.html";
 }
 

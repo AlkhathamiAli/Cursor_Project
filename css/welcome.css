@@ -1,5 +1,5 @@
 /* Welcome Page Styles */
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+/* Using Trebuchet MS font - no external font import needed */
 
 * {
   box-sizing: border-box;
@@ -10,7 +10,12 @@
 html, body {
   height: 100%;
   overflow-x: hidden;
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-family: 'Trebuchet MS', 'Lucida Grande', 'Lucida Sans Unicode', 'Lucida Sans', Tahoma, sans-serif !important;
+}
+
+/* Ensure all text elements use Trebuchet MS */
+*, *::before, *::after {
+  font-family: 'Trebuchet MS', 'Lucida Grande', 'Lucida Sans Unicode', 'Lucida Sans', Tahoma, sans-serif !important;
 }
 
 body {
@@ -411,6 +416,7 @@ body::after {
   text-decoration: none;
   font-weight: 500;
   font-size: 15px;
+  font-family: 'Trebuchet MS', 'Lucida Grande', 'Lucida Sans Unicode', 'Lucida Sans', Tahoma, sans-serif !important;
   transition: all 0.3s ease;
   position: relative;
   padding: 5px 0;
@@ -445,6 +451,7 @@ body::after {
   border-radius: 25px;
   font-weight: 600;
   font-size: 14px;
+  font-family: 'Trebuchet MS', 'Lucida Grande', 'Lucida Sans Unicode', 'Lucida Sans', Tahoma, sans-serif !important;
   border: 1px solid rgba(255, 255, 255, 0.3);
   cursor: pointer;
   transition: all 0.3s ease;
@@ -540,116 +547,30 @@ body::after {
               0 0 60px rgba(0, 152, 121, 0.1),
               inset 0 2px 4px rgba(255, 255, 255, 0.2),
               inset 0 1px 0 rgba(255, 255, 255, 0.25);
-  animation: heroCardEntrance 1.2s ease-out, heroCardFloat 4s ease-in-out 1.2s infinite;
+  /* Removed animations inside the box */
   position: relative;
   overflow: hidden;
   z-index: 10;
 }
 
-/* Hero Card Entrance Animation - Fade-in from bottom */
-@keyframes heroCardEntrance {
-  from {
-    opacity: 0;
-    transform: translateY(60px) scale(0.95);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0) scale(1);
-  }
-}
+/* Removed hero card entrance and floating animations */
 
-/* Hero Card Floating Animation */
-@keyframes heroCardFloat {
-  0%, 100% {
-    transform: translateY(0);
-  }
-  50% {
-    transform: translateY(-2px);
-  }
-}
+/* Removed moving glow animation inside the box */
 
-/* Moving Glow Behind Hero Card - Calm Subtle Glow */
-.hero-card::before {
-  content: '';
-  position: absolute;
-  top: -50%;
-  left: -50%;
-  width: 200%;
-  height: 200%;
-  background: radial-gradient(circle, rgba(0, 200, 180, 0.2) 0%, rgba(0, 152, 121, 0.15) 25%, rgba(0, 132, 61, 0.08) 45%, transparent 70%);
-  animation: glow-move 6s ease-in-out infinite;
-  pointer-events: none;
-  z-index: -1;
-  filter: blur(35px);
-}
+/* Removed scroll shine animation inside the box */
 
-/* Scroll Shine Animation - Faint White Shimmer */
-.hero-card::after {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: -100%;
-  width: 50%;
-  height: 100%;
-  background: linear-gradient(
-    90deg,
-    transparent 0%,
-    rgba(255, 255, 255, 0.08) 20%,
-    rgba(255, 255, 255, 0.12) 50%,
-    rgba(255, 255, 255, 0.08) 80%,
-    transparent 100%
-  );
-  transform: skewX(-20deg);
-  animation: scrollShine 10s ease-in-out infinite;
-  pointer-events: none;
-  z-index: 1;
-}
-
-@keyframes scrollShine {
-  0% {
-    left: -100%;
-    opacity: 0;
-  }
-  5% {
-    opacity: 1;
-  }
-  95% {
-    opacity: 1;
-  }
-  100% {
-    left: 150%;
-    opacity: 0;
-  }
-}
-
-@keyframes glow-move {
-  0%, 100% { 
-    transform: translate(0, 0) scale(1);
-    opacity: 0.8;
-  }
-  25% {
-    transform: translate(20px, -20px) scale(1.1);
-    opacity: 1;
-  }
-  50% {
-    transform: translate(-20px, 20px) scale(1.05);
-    opacity: 0.9;
-  }
-  75% {
-    transform: translate(15px, 15px) scale(1.08);
-    opacity: 0.95;
-  }
-}
+/* Removed scrollShine and glow-move animations */
 
 .hero-title {
-  font-size: 56px; /* Reduced by ~22% from 72px */
+  font-size: 72px; /* Increased size */
   font-weight: 800;
   color: #ffffff;
   margin-bottom: 24px; /* Improved spacing */
-  letter-spacing: 3px; /* Reduced by 1.5px from 4.5px */
+  letter-spacing: 3px;
   line-height: 1.1; /* Tightened line-height */
   text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* Subtle text shadow */
-  animation: titleFadeInUp 1.4s ease-out 0.3s both;
+  font-family: 'Trebuchet MS', 'Lucida Grande', 'Lucida Sans Unicode', 'Lucida Sans', Tahoma, sans-serif !important;
+  /* Removed title animation */
   background: linear-gradient(to bottom, #f5f5f5 0%, #e2e2e2 50%, #cfcfcf 100%); /* Metallic gradient */
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -657,16 +578,7 @@ body::after {
   background-size: 100% 100%;
 }
 
-@keyframes titleFadeInUp {
-  from {
-    opacity: 0;
-    transform: translateY(30px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
+/* Removed titleFadeInUp animation */
 
 .hero-subtitle {
   font-size: 23px; /* Increased by 1px from 22px */
@@ -674,7 +586,8 @@ body::after {
   margin-bottom: 35px; /* Tighter spacing under title */
   font-weight: 400;
   line-height: 1.9; /* Increased line-height slightly */
-  animation: fadeIn 1.2s ease-out 0.4s both;
+  font-family: 'Trebuchet MS', 'Lucida Grande', 'Lucida Sans Unicode', 'Lucida Sans', Tahoma, sans-serif !important;
+  /* Removed subtitle animation */
   letter-spacing: 0.3px;
 }
 
@@ -690,11 +603,12 @@ body::after {
   border-radius: 30px;
   font-size: 18px;
   font-weight: 600;
+  font-family: 'Trebuchet MS', 'Lucida Grande', 'Lucida Sans Unicode', 'Lucida Sans', Tahoma, sans-serif !important;
   text-decoration: none;
   border: 2px solid rgba(255, 255, 255, 0.2);
   cursor: pointer;
   transition: all 0.4s ease;
-  animation: fadeIn 1.2s ease-out 0.6s both, gradient-shift 3s ease infinite;
+  animation: gradient-shift 3s ease infinite;
   position: relative;
   overflow: hidden;
 }
@@ -808,8 +722,8 @@ body::after {
   }
 
   .hero-title {
-    font-size: 38px; /* Reduced proportionally */
-    letter-spacing: 2px; /* Reduced for smaller size */
+    font-size: 48px; /* Increased proportionally */
+    letter-spacing: 2px;
   }
 
   .hero-subtitle {
@@ -853,8 +767,8 @@ body::after {
   }
 
   .hero-title {
-    font-size: 32px; /* Reduced proportionally */
-    letter-spacing: 1.5px; /* Reduced for smaller size */
+    font-size: 40px; /* Increased proportionally */
+    letter-spacing: 1.5px;
   }
 
   .hero-subtitle {

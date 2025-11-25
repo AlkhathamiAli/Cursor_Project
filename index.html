@@ -6,8 +6,8 @@
     <title>Aramco Digital SlideMaker • Welcome</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
     <script src="./translations.js"></script>
+    <script src="./scripts/database.js"></script>
     <link rel="stylesheet" href="./assets/theme.css">
     <link rel="stylesheet" href="./css/auth.css">
     <link rel="stylesheet" href="./css/signup_art.css">
@@ -23,6 +23,16 @@
       html, body {
         height: 100%;
         overflow: hidden;
+        font-family: 'Trebuchet MS', 'Lucida Grande', 'Lucida Sans Unicode', 'Lucida Sans', Tahoma, sans-serif;
+      }
+      
+      /* Phase 2: Trebuchet font for all text inputs */
+      input[type="text"],
+      input[type="email"],
+      input[type="password"],
+      textarea,
+      select {
+        font-family: 'Trebuchet MS', 'Lucida Grande', 'Lucida Sans Unicode', 'Lucida Sans', Tahoma, sans-serif;
       }
       
       .auth-container {
@@ -377,6 +387,15 @@
                 </button>
               </div>
             </div>
+            <div class="form-group">
+              <label class="checkbox-label">
+                <input type="checkbox" id="remember_device" name="remember_device">
+                <span data-translate="auth.rememberDevice">Remember this device</span>
+              </label>
+            </div>
+            <div class="form-group" style="text-align: right; margin-top: -8px;">
+              <a href="#" class="forget-password-link" onclick="openForgotPasswordModal(); return false;" data-translate="auth.forgetPassword">Forget Password?</a>
+            </div>
             <div id="login_error" class="error-message"></div>
             <button type="submit" class="form-submit secondary" data-translate="common.logIn">Log In</button>
           </form>
@@ -530,6 +549,36 @@
                 additive="sum" />
             </g>
           </svg>
+        </div>
+      </div>
+    </div>
+
+    <!-- Forgot Password Modal -->
+    <div class="modal" id="forgotPasswordModal">
+      <div class="modal-content split">
+        <div class="modal-pane form-pane">
+          <button class="modal-close" data-modal-close="forgotPasswordModal" aria-label="Close Forgot Password modal">&times;</button>
+          <div class="modal-header">
+            <h3 class="modal-title" data-translate="auth.forgotPasswordTitle">Reset Password</h3>
+            <p class="modal-subtitle" data-translate="auth.forgotPasswordSubtitle">Enter your email address and we'll help you reset your password.</p>
+          </div>
+          <form id="forgot_password_form" class="modal-form signup-flow" onsubmit="handleForgotPassword(event)">
+            <div class="profile-circle">
+              <i class="fa-solid fa-key"></i>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="forgot_password_email" data-translate="common.email">Email</label>
+              <input class="form-input" type="email" id="forgot_password_email" required placeholder="Enter your email" data-translate-placeholder="auth.emailPlaceholder">
+            </div>
+            <div id="forgot_password_error" class="error-message"></div>
+            <div id="forgot_password_success" class="success-message" style="display: none;"></div>
+            <button type="submit" class="form-submit secondary" data-translate="auth.resetPassword">Reset Password</button>
+            <div style="text-align: center; margin-top: 16px;">
+              <a href="#" onclick="closeModal('forgotPasswordModal'); openModal('loginModal'); return false;" style="color: rgba(0, 255, 150, 0.8); text-decoration: none; font-size: 0.9rem;" data-translate="auth.backToLogin">Back to Login</a>
+            </div>
+          </form>
+        </div>
+        <div class="modal-pane login-art-pane auth-art-pane">
         </div>
       </div>
     </div>
