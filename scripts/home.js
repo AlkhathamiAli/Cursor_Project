@@ -270,8 +270,11 @@ function loadRecentPresentations() {
         <button class="present-btn" data-id="${pres.id}" title="Present Mode">
           <i class="fas fa-play"></i>
         </button>
-        <button class="edit-btn" data-type="presentation" data-id="${pres.id}" data-index="${index}" type="button" title="Edit" onclick="toggleEditMenu(event, 'edit-menu-${index}')">
+        <button class="edit-btn" data-type="presentation" data-id="${pres.id}" data-index="${index}" type="button" title="Edit Presentation">
           <i class="fas fa-pencil-alt"></i>
+        </button>
+        <button class="menu-btn" data-type="presentation" data-id="${pres.id}" data-index="${index}" type="button" title="More Options" onclick="toggleEditMenu(event, 'edit-menu-${index}')">
+          <i class="fas fa-ellipsis-v"></i>
         </button>
         <div class="edit-menu" id="edit-menu-${index}">
           <div onclick="renamePresentationFromMenu(${index}, '${escapeHtml(title).replace(/'/g, "\\'")}')">
@@ -324,6 +327,49 @@ function loadRecentPresentations() {
       }
       console.log('Presenting presentation with ID:', id);
       window.location.href = `slide-editor.html?id=${id}&present=true`;
+    });
+  });
+  
+  // FIXED: Attach event listeners to Edit (pencil) buttons
+  initRecentEditButtons();
+}
+
+// FIXED: Initialize edit button handlers for recent presentations
+function initRecentEditButtons() {
+  document.querySelectorAll(".edit-btn").forEach(btn => {
+    btn.addEventListener("click", (e) => {
+      e.stopPropagation();
+      const id = btn.getAttribute("data-id");
+      if (!id || id === 'undefined') {
+        console.error('Edit button clicked but no ID found:', id);
+        alert('Unable to open this presentation. Please try again.');
+        return;
+      }
+      
+      // Get presentation from saved list
+      const currentUser = JSON.parse(localStorage.getItem('currentUser') || 'null');
+      if (!currentUser) {
+        alert('Please log in to edit presentations.');
+        return;
+      }
+      
+      const userKey = `presentations_${currentUser.username}`;
+      const saved = JSON.parse(localStorage.getItem(userKey) || '[]');
+      const pres = saved.find(p => p.id === id);
+      
+      if (!pres) {
+        console.error('Presentation not found:', id);
+        alert('Unable to find this presentation. Please try again.');
+        return;
+      }
+      
+      console.log('Opening presentation for editing:', id, pres);
+      
+      // Store the presentation data for the editor to load
+      sessionStorage.setItem('loadPresentation', JSON.stringify(pres));
+      
+      // Navigate to editor
+      window.location.href = './blank.html';
     });
   });
 }
