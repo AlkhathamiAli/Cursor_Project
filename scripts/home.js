@@ -16,6 +16,34 @@ function escapeHtml(text) {
   return div.innerHTML;
 }
 
+// Format date helper
+function formatDate(dateString) {
+  if (!dateString) return 'Unknown';
+  const date = new Date(dateString);
+  const now = new Date();
+  const diff = now - date;
+  const seconds = Math.floor(diff / 1000);
+  const minutes = Math.floor(seconds / 60);
+  const hours = Math.floor(minutes / 60);
+  const days = Math.floor(hours / 24);
+  
+  if (days > 7) {
+    return date.toLocaleDateString('en-US', { 
+      month: 'short', 
+      day: 'numeric', 
+      year: date.getFullYear() !== now.getFullYear() ? 'numeric' : undefined 
+    });
+  } else if (days > 0) {
+    return `${days} ${days === 1 ? 'day' : 'days'} ago`;
+  } else if (hours > 0) {
+    return `${hours} ${hours === 1 ? 'hour' : 'hours'} ago`;
+  } else if (minutes > 0) {
+    return `${minutes} ${minutes === 1 ? 'minute' : 'minutes'} ago`;
+  } else {
+    return 'Just now';
+  }
+}
+
 // ============================================
 // SEARCH FUNCTIONALITY
 // ============================================
@@ -257,50 +285,67 @@ function loadRecentPresentations() {
   grid.innerHTML = '';
   sorted.forEach((pres, index) => {
     const item = document.createElement('div');
-    item.className = 'recent-item';
+    item.className = 'presentation-card';
     const title = escapeHtml(pres.title || 'Untitled');
     const date = pres.date ? formatDate(pres.date) : translate('common.unknown');
+    const slideCount = pres.slides ? (typeof pres.slides === 'string' ? JSON.parse(pres.slides).length : pres.slides.length) : 1;
+    const groupName = pres.groupName || null;
     
     item.innerHTML = `
-      <div class="recent-info">
-        <div class="recent-title">${title}</div>
-        <div class="recent-date">${date}</div>
+      <div class="presentation-preview" data-id="${pres.id}">
+        <div class="presentation-thumbnail">
+          <span class="thumbnail-placeholder">PNG OF FIRST SLIDE</span>
+        </div>
       </div>
-      <div class="recent-actions">
-        <button class="present-btn" data-id="${pres.id}" title="Present Mode">
-          <i class="fas fa-play"></i>
-        </button>
-        <button class="edit-btn" data-type="presentation" data-id="${pres.id}" data-index="${index}" type="button" title="Edit Presentation">
-          <i class="fas fa-pencil-alt"></i>
-        </button>
-        <button class="menu-btn" data-type="presentation" data-id="${pres.id}" data-index="${index}" type="button" title="More Options" onclick="toggleEditMenu(event, 'edit-menu-${index}')">
-          <i class="fas fa-ellipsis-v"></i>
-        </button>
-        <div class="edit-menu" id="edit-menu-${index}">
-          <div onclick="renamePresentationFromMenu(${index}, '${escapeHtml(title).replace(/'/g, "\\'")}')">
-            <i class="fas fa-edit"></i> Rename
-          </div>
-          <div onclick="duplicatePresentationFromMenu(${index})">
-            <i class="fas fa-copy"></i> Duplicate
-          </div>
-          <div onclick="sharePresentationFromMenu('${pres.id}')">
-            <i class="fas fa-share"></i> Share
-          </div>
-          <div class="divider"></div>
-          <div onclick="deletePresentationFromMenu(${index})" style="color: #ff6b6b;">
-            <i class="fas fa-trash"></i> Delete
+      <div class="presentation-info-bar">
+        <div class="presentation-name" title="${title}">${title}</div>
+        <div class="presentation-actions">
+          <button class="info-icon-btn" data-id="${pres.id}" title="Presentation Info">
+            <i class="fas fa-info-circle"></i>
+            <div class="info-tooltip">
+              <div class="info-tooltip-item">
+                <i class="fas fa-calendar"></i>
+                <span>Created: ${date}</span>
+              </div>
+              <div class="info-tooltip-item">
+                <i class="fas fa-file"></i>
+                <span>${slideCount} ${slideCount === 1 ? 'slide' : 'slides'}</span>
+              </div>
+              ${groupName ? `
+              <div class="info-tooltip-item">
+                <i class="fas fa-users"></i>
+                <span>Group: ${escapeHtml(groupName)}</span>
+              </div>
+              ` : ''}
+            </div>
+          </button>
+          <button class="edit-pen-btn" data-id="${pres.id}" data-index="${index}" title="Edit Options">
+            <i class="fas fa-pen"></i>
+          </button>
+          <div class="presentation-edit-menu" id="pres-edit-menu-${index}">
+            <div class="menu-item" onclick="renamePresentationFromMenu(${index}, '${title.replace(/'/g, "\\'")}')">
+              <i class="fas fa-edit"></i>
+              <span>Rename</span>
+            </div>
+            <div class="menu-item danger" onclick="deletePresentationFromMenu(${index})">
+              <i class="fas fa-trash"></i>
+              <span>Delete</span>
+            </div>
+            <div class="menu-item" onclick="presentPresentationFromMenu('${pres.id}')">
+              <i class="fas fa-play"></i>
+              <span>Present</span>
+            </div>
           </div>
         </div>
       </div>
     `;
     
-    // Set up click handler for the card (not the actions area)
-    const recentInfo = item.querySelector('.recent-info');
-    if (recentInfo) {
-      recentInfo.style.cursor = 'pointer';
-      recentInfo.addEventListener('click', (e) => {
-        // Don't navigate if clicking on the edit button area
-        if (!e.target.closest('.recent-actions')) {
+    // Set up click handler for the preview to open presentation
+    const preview = item.querySelector('.presentation-preview');
+    if (preview) {
+      preview.style.cursor = 'pointer';
+      preview.addEventListener('click', (e) => {
+        if (!e.target.closest('.presentation-actions')) {
           sessionStorage.setItem('loadPresentation', JSON.stringify(pres));
           window.location.href = './blank.html';
         }
@@ -330,49 +375,40 @@ function loadRecentPresentations() {
     });
   });
   
-  // FIXED: Attach event listeners to Edit (pencil) buttons
-  initRecentEditButtons();
+  // FIXED: Attach event listeners to Edit pen buttons and info icons
+  initPresentationCardButtons();
 }
 
-// FIXED: Initialize edit button handlers for recent presentations
-function initRecentEditButtons() {
-  document.querySelectorAll(".edit-btn").forEach(btn => {
+// FIXED: Initialize presentation card button handlers
+function initPresentationCardButtons() {
+  // Handle edit pen button clicks to toggle dropdown
+  document.querySelectorAll(".edit-pen-btn").forEach(btn => {
     btn.addEventListener("click", (e) => {
       e.stopPropagation();
-      const id = btn.getAttribute("data-id");
-      if (!id || id === 'undefined') {
-        console.error('Edit button clicked but no ID found:', id);
-        alert('Unable to open this presentation. Please try again.');
-        return;
+      const index = btn.getAttribute("data-index");
+      const menuId = `pres-edit-menu-${index}`;
+      const menu = document.getElementById(menuId);
+      
+      // Close all other menus
+      document.querySelectorAll('.presentation-edit-menu').forEach(m => {
+        if (m.id !== menuId) m.classList.remove('show');
+      });
+      
+      // Toggle this menu
+      if (menu) {
+        menu.classList.toggle('show');
       }
-      
-      // Get presentation from saved list
-      const currentUser = JSON.parse(localStorage.getItem('currentUser') || 'null');
-      if (!currentUser) {
-        alert('Please log in to edit presentations.');
-        return;
-      }
-      
-      const userKey = `presentations_${currentUser.username}`;
-      const saved = JSON.parse(localStorage.getItem(userKey) || '[]');
-      const pres = saved.find(p => p.id === id);
-      
-      if (!pres) {
-        console.error('Presentation not found:', id);
-        alert('Unable to find this presentation. Please try again.');
-        return;
-      }
-      
-      console.log('Opening presentation for editing:', id, pres);
-      
-      // Store the presentation data for the editor to load
-      sessionStorage.setItem('loadPresentation', JSON.stringify(pres));
-      
-      // Navigate to editor
-      window.location.href = './blank.html';
     });
   });
+  
+  // Close menus when clicking outside
+  document.addEventListener('click', (e) => {
+    if (!e.target.closest('.edit-pen-btn') && !e.target.closest('.presentation-edit-menu')) {
+      document.querySelectorAll('.presentation-edit-menu').forEach(m => m.classList.remove('show'));
+    }
+  });
 }
+
 
 function createNewPresentation() {
   window.location.href = './blank.html';
@@ -1041,6 +1077,21 @@ function deletePresentationFromMenu(index) {
   
   // Close menu
   document.querySelectorAll('.edit-menu').forEach(m => m.classList.remove('show'));
+  document.querySelectorAll('.presentation-edit-menu').forEach(m => m.classList.remove('show'));
+}
+
+function presentPresentationFromMenu(id) {
+  if (!id || id === 'undefined') {
+    console.error('No presentation ID provided:', id);
+    alert('Unable to present this presentation. Please try again.');
+    return;
+  }
+  
+  // Close all menus
+  document.querySelectorAll('.presentation-edit-menu').forEach(m => m.classList.remove('show'));
+  
+  console.log('Presenting presentation with ID:', id);
+  window.location.href = `slide-editor.html?id=${id}&present=true`;
 }
 
 // Present presentation function
@@ -1328,6 +1379,7 @@ document.addEventListener('keydown', (e) => {
 window.updatePresentation = updatePresentation;
 window.renderRecentPresentations = renderRecentPresentations;
 window.presentPresentation = presentPresentation;
+window.presentPresentationFromMenu = presentPresentationFromMenu;
 window.toggleEditMenu = toggleEditMenu;
 window.renamePresentationFromMenu = renamePresentationFromMenu;
 window.duplicatePresentationFromMenu = duplicatePresentationFromMenu;
