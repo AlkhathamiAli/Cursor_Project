@@ -10,6 +10,12 @@
     <script src="./translations.js"></script>
     <link rel="stylesheet" href="./assets/theme.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+    
     <style>
       * { 
         box-sizing: border-box; 
@@ -378,6 +384,56 @@
           font-size: 1.8rem;
         }
       }
+
+      /* Loading Spinner */
+      .loading-overlay {
+        position: fixed;
+        inset: 0;
+        background: rgba(5, 15, 10, 0.85);
+        backdrop-filter: blur(8px);
+        display: none;
+        align-items: center;
+        justify-content: center;
+        z-index: 10000;
+        animation: fadeInSpinner 0.3s ease;
+      }
+
+      .loading-overlay.active {
+        display: flex;
+      }
+
+      .loading-spinner {
+        width: 60px;
+        height: 60px;
+        border: 4px solid rgba(0, 200, 83, 0.2);
+        border-top: 4px solid #00c853;
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+      }
+
+      .loading-text {
+        color: #E8F5E9;
+        margin-top: 20px;
+        font-size: 16px;
+        font-weight: 500;
+        text-align: center;
+      }
+
+      .loading-content {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+
+      @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+      }
+
+      @keyframes fadeInSpinner {
+        from { opacity: 0; }
+        to { opacity: 1; }
+      }
     </style>
   </head>
   <body class="page-container">
@@ -385,17 +441,21 @@
       <!-- Left animated slides (duplicated for seamless loop) -->
       <div class="slides-left">
         <div class="track">
-          <div class="slide-preview" style="--i: 1"><img src="./CURSOR-Project/accessTobackground/B1.jpg" alt="slide" /></div>
-          <div class="slide-preview" style="--i: 2"><img src="./CURSOR-Project/accessTobackground/B2.jpg" alt="slide" /></div>
-          <div class="slide-preview" style="--i: 3"><img src="./CURSOR-Project/accessTobackground/B3.jpg" alt="slide" /></div>
-          <div class="slide-preview" style="--i: 4"><img src="./CURSOR-Project/accessTobackground/B4.jpg" alt="slide" /></div>
-          <div class="slide-preview" style="--i: 5"><img src="./CURSOR-Project/accessTobackground/B5.jpg" alt="slide" /></div>
+          <div class="slide-preview" style="--i: 1"><img src="./CURSOR-Project/accessTobackground%20/b1.png" alt="slide" /></div>
+          <div class="slide-preview" style="--i: 2"><img src="./CURSOR-Project/accessTobackground%20/b2.png" alt="slide" /></div>
+          <div class="slide-preview" style="--i: 3"><img src="./CURSOR-Project/accessTobackground%20/b3.png" alt="slide" /></div>
+          <div class="slide-preview" style="--i: 4"><img src="./CURSOR-Project/accessTobackground%20/b4.png" alt="slide" /></div>
+          <div class="slide-preview" style="--i: 5"><img src="./CURSOR-Project/accessTobackground%20/b5.png" alt="slide" /></div>
+          <div class="slide-preview" style="--i: 6"><img src="./CURSOR-Project/accessTobackground%20/b6.png" alt="slide" /></div>
+          <div class="slide-preview" style="--i: 7"><img src="./CURSOR-Project/accessTobackground%20/b7.png" alt="slide" /></div>
           <!-- duplicate -->
-          <div class="slide-preview" style="--i: 6"><img src="./CURSOR-Project/accessTobackground/B1.jpg" alt="slide" /></div>
-          <div class="slide-preview" style="--i: 7"><img src="./CURSOR-Project/accessTobackground/B2.jpg" alt="slide" /></div>
-          <div class="slide-preview" style="--i: 8"><img src="./CURSOR-Project/accessTobackground/B3.jpg" alt="slide" /></div>
-          <div class="slide-preview" style="--i: 9"><img src="./CURSOR-Project/accessTobackground/B4.jpg" alt="slide" /></div>
-          <div class="slide-preview" style="--i: 10"><img src="./CURSOR-Project/accessTobackground/B5.jpg" alt="slide" /></div>
+          <div class="slide-preview" style="--i: 8"><img src="./CURSOR-Project/accessTobackground%20/b1.png" alt="slide" /></div>
+          <div class="slide-preview" style="--i: 9"><img src="./CURSOR-Project/accessTobackground%20/b2.png" alt="slide" /></div>
+          <div class="slide-preview" style="--i: 10"><img src="./CURSOR-Project/accessTobackground%20/b3.png" alt="slide" /></div>
+          <div class="slide-preview" style="--i: 11"><img src="./CURSOR-Project/accessTobackground%20/b4.png" alt="slide" /></div>
+          <div class="slide-preview" style="--i: 12"><img src="./CURSOR-Project/accessTobackground%20/b5.png" alt="slide" /></div>
+          <div class="slide-preview" style="--i: 13"><img src="./CURSOR-Project/accessTobackground%20/b6.png" alt="slide" /></div>
+          <div class="slide-preview" style="--i: 14"><img src="./CURSOR-Project/accessTobackground%20/b7.png" alt="slide" /></div>
         </div>
       </div>
       <div class="auth-box surface-panel">
@@ -406,25 +466,37 @@
         <p data-translate="access.subtitle">Create, edit, and share stunning presentations easily.</p>
         <div class="auth-buttons">
           <button class="btn login" onclick="openModal('signinModal')" data-translate="common.logIn">Log In</button>
-          <button class="btn signin" onclick="openModal('signinModal')" data-translate="common.signIn">Sign In</button>
+          <button class="btn signin" onclick="openModal('signinModal')" data-translate="common.signUp">Sign Up</button>
           <button class="btn visitor" onclick="continueAsVisitor()" data-translate="common.continueVisitor">Continue as Visitor</button>
         </div>
       </div>
       <!-- Right animated slides (duplicated for seamless loop) -->
       <div class="slides-right">
         <div class="track">
-          <div class="slide-preview" style="--i: 1"><img src="./CURSOR-Project/accessTobackground/B6.jpg" alt="slide" /></div>
-          <div class="slide-preview" style="--i: 2"><img src="./CURSOR-Project/accessTobackground/B7.jpg" alt="slide" /></div>
-          <div class="slide-preview" style="--i: 3"><img src="./CURSOR-Project/accessTobackground/B8.jpg" alt="slide" /></div>
-          <div class="slide-preview" style="--i: 4"><img src="./CURSOR-Project/accessTobackground/B9.jpg" alt="slide" /></div>
-          <div class="slide-preview" style="--i: 5"><img src="./CURSOR-Project/accessTobackground/B10.jpg" alt="slide" /></div>
+          <div class="slide-preview" style="--i: 1"><img src="./CURSOR-Project/accessTobackground%20/b8.png" alt="slide" /></div>
+          <div class="slide-preview" style="--i: 2"><img src="./CURSOR-Project/accessTobackground%20/b9.png" alt="slide" /></div>
+          <div class="slide-preview" style="--i: 3"><img src="./CURSOR-Project/accessTobackground%20/b10.png" alt="slide" /></div>
+          <div class="slide-preview" style="--i: 4"><img src="./CURSOR-Project/accessTobackground%20/b11.png" alt="slide" /></div>
+          <div class="slide-preview" style="--i: 5"><img src="./CURSOR-Project/accessTobackground%20/b12.png" alt="slide" /></div>
+          <div class="slide-preview" style="--i: 6"><img src="./CURSOR-Project/accessTobackground%20/b13.png" alt="slide" /></div>
+          <div class="slide-preview" style="--i: 7"><img src="./CURSOR-Project/accessTobackground%20/b14.png" alt="slide" /></div>
           <!-- duplicate -->
-          <div class="slide-preview" style="--i: 6"><img src="./CURSOR-Project/accessTobackground/B6.jpg" alt="slide" /></div>
-          <div class="slide-preview" style="--i: 7"><img src="./CURSOR-Project/accessTobackground/B7.jpg" alt="slide" /></div>
-          <div class="slide-preview" style="--i: 8"><img src="./CURSOR-Project/accessTobackground/B8.jpg" alt="slide" /></div>
-          <div class="slide-preview" style="--i: 9"><img src="./CURSOR-Project/accessTobackground/B9.jpg" alt="slide" /></div>
-          <div class="slide-preview" style="--i: 10"><img src="./CURSOR-Project/accessTobackground/B10.jpg" alt="slide" /></div>
+          <div class="slide-preview" style="--i: 8"><img src="./CURSOR-Project/accessTobackground%20/b8.png" alt="slide" /></div>
+          <div class="slide-preview" style="--i: 9"><img src="./CURSOR-Project/accessTobackground%20/b9.png" alt="slide" /></div>
+          <div class="slide-preview" style="--i: 10"><img src="./CURSOR-Project/accessTobackground%20/b10.png" alt="slide" /></div>
+          <div class="slide-preview" style="--i: 11"><img src="./CURSOR-Project/accessTobackground%20/b11.png" alt="slide" /></div>
+          <div class="slide-preview" style="--i: 12"><img src="./CURSOR-Project/accessTobackground%20/b12.png" alt="slide" /></div>
+          <div class="slide-preview" style="--i: 13"><img src="./CURSOR-Project/accessTobackground%20/b13.png" alt="slide" /></div>
+          <div class="slide-preview" style="--i: 14"><img src="./CURSOR-Project/accessTobackground%20/b14.png" alt="slide" /></div>
         </div>
+      </div>
+    </div>
+
+    <!-- Loading Overlay -->
+    <div class="loading-overlay" id="loadingOverlay">
+      <div class="loading-content">
+        <div class="loading-spinner"></div>
+        <div class="loading-text" id="loadingText">Please wait...</div>
       </div>
     </div>
 
@@ -433,8 +505,8 @@
       <div class="modal-content">
         <button class="modal-close" onclick="closeModal('signinModal')">&times;</button>
         <div class="modal-header">
-          <h3 class="modal-title" data-translate="auth.signInTitle">Sign In</h3>
-          <p class="modal-subtitle" data-translate="auth.signInSubtitle">Welcome back! Please sign in to continue.</p>
+          <h3 class="modal-title" data-translate="auth.signUpTitle">Sign Up</h3>
+          <p class="modal-subtitle" data-translate="auth.signUpSubtitle">Create an account to get started.</p>
         </div>
         <form id="signin_form" onsubmit="signInUser(event)">
           <div class="form-group">
@@ -446,21 +518,36 @@
             <input class="form-input" type="password" id="signin_password" required placeholder="Enter your password" data-translate-placeholder="auth.passwordPlaceholder">
           </div>
           <div id="signin_error" class="error-message"></div>
-          <button type="submit" class="form-submit" data-translate="common.signIn">Sign In</button>
+          <button type="submit" class="form-submit" data-translate="common.signUp">Sign Up</button>
         </form>
       </div>
     </div>
 
     
 
+    <script src="./scripts/firebase.js"></script>
     <script>
       // Check if user is already authenticated
       function checkAuth() {
-        const currentUser = JSON.parse(localStorage.getItem('currentUser') || 'null');
-        const isGuest = localStorage.getItem('guest') === 'true';
-        
-        if (currentUser || isGuest) {
-          window.location.href = './Home.html';
+        // Check Firebase authentication first
+        if (window.FirebaseAuth && window.FirebaseAuth.isEnabled()) {
+          window.FirebaseAuth.onAuthStateChanged((user) => {
+            if (user && !user.guest) {
+              // User is authenticated, redirect to Home
+              window.location.href = './Home.html';
+            } else if (user && user.guest) {
+              // Guest user, redirect to Home
+              window.location.href = './Home.html';
+            }
+          });
+        } else {
+          // Fallback to localStorage check
+          const currentUser = JSON.parse(localStorage.getItem('currentUser') || 'null');
+          const isGuest = localStorage.getItem('guest') === 'true';
+          
+          if (currentUser || isGuest) {
+            window.location.href = './Home.html';
+          }
         }
       }
       
@@ -508,12 +595,49 @@
       });
       
       // Sign In function
-      function signInUser(event) {
+      async function signInUser(event) {
         event.preventDefault();
         const email = document.getElementById('signin_email').value.trim();
         const password = document.getElementById('signin_password').value;
         const errorEl = document.getElementById('signin_error');
         
+        // Clear previous errors
+        if (errorEl) {
+          errorEl.textContent = '';
+          errorEl.classList.remove('show');
+        }
+        
+        // Try Firebase first
+        if (window.FirebaseAuth && window.FirebaseAuth.isEnabled()) {
+          try {
+            const result = await window.FirebaseAuth.signInUser(email, password);
+            
+            if (result.success) {
+              const currentUserData = {
+                userID: result.user.uid,
+                username: result.user.fullName || result.user.displayName || result.user.email,
+                email: result.user.email,
+                fullName: result.user.fullName || result.user.displayName,
+                name: result.user.fullName || result.user.displayName || result.user.email
+              };
+
+              localStorage.setItem('currentUser', JSON.stringify(currentUserData));
+              localStorage.removeItem('guest');
+              window.location.href = './Home.html';
+            } else {
+              if (errorEl) {
+                errorEl.textContent = result.error;
+                errorEl.classList.add('show');
+              }
+            }
+            return;
+          } catch (error) {
+            console.error('[Auth] Firebase signin error:', error);
+            // Fall through to localStorage
+          }
+        }
+        
+        // Fallback to localStorage
         const users = JSON.parse(localStorage.getItem('users') || '[]');
         const user = users.find(u => u.email === email && u.password === password);
         
@@ -531,7 +655,7 @@
           email: user.email,
           name: user.name || user.username 
         }));
-        localStorage.removeItem('guest'); // Remove guest status if exists
+        localStorage.removeItem('guest');
         
         // Redirect to home
         window.location.href = './Home.html';
@@ -541,8 +665,15 @@
       
       // Continue as Visitor
       function continueAsVisitor() {
+        // Generate a unique visitor ID if doesn't exist
+        let visitorId = localStorage.getItem('visitorId');
+        if (!visitorId) {
+          visitorId = `VISITOR_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+          localStorage.setItem('visitorId', visitorId);
+        }
+        
         localStorage.setItem('guest', 'true');
-        localStorage.removeItem('currentUser'); // Clear any existing user
+        localStorage.removeItem('currentUser');
         window.location.href = './Home.html';
       }
     </script>

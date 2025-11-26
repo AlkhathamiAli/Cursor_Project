@@ -35,3 +35,4 @@ async function loadTemplate(name) {
 // Export for global use
 window.loadTemplate = loadTemplate;
 
+

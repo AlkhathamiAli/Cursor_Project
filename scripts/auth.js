@@ -21,15 +21,37 @@ function setLanguageHandlers() {
 }
 
 function checkAuth() {
-  const currentUser = JSON.parse(localStorage.getItem("currentUser") || "null");
-  const isGuest = localStorage.getItem("guest") === "true";
+  // Check Firebase authentication first
+  if (window.FirebaseAuth && window.FirebaseAuth.isEnabled()) {
+    window.FirebaseAuth.onAuthStateChanged((user) => {
+      if (user && !user.guest) {
+        // User is authenticated, redirect to Home
+        window.location.href = "./Home.html";
+      } else if (user && user.guest) {
+        // Guest user, redirect to Home
+        window.location.href = "./Home.html";
+      }
+      // Otherwise, stay on the auth page
+    });
+  } else {
+    // Fallback to localStorage check
+    const currentUser = JSON.parse(localStorage.getItem("currentUser") || "null");
+    const isGuest = localStorage.getItem("guest") === "true";
 
-  if (currentUser || isGuest) {
-    window.location.href = "./Home.html";
+    if (currentUser || isGuest) {
+      window.location.href = "./Home.html";
+    }
   }
 }
 
 function continueAsVisitor() {
+  // Generate a unique visitor ID if doesn't exist
+  let visitorId = localStorage.getItem("visitorId");
+  if (!visitorId) {
+    visitorId = `VISITOR_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+    localStorage.setItem("visitorId", visitorId);
+  }
+  
   localStorage.setItem("guest", "true");
   localStorage.removeItem("currentUser");
   window.location.href = "./Home.html";
@@ -45,7 +67,7 @@ function openForgotPasswordModal() {
 // Make it globally available
 window.openForgotPasswordModal = openForgotPasswordModal;
 
-function handleForgotPassword(event) {
+async function handleForgotPassword(event) {
   event.preventDefault();
   const email = document.getElementById("forgot_password_email")?.value.trim();
   const errorEl = document.getElementById("forgot_password_error");
@@ -55,7 +77,7 @@ function handleForgotPassword(event) {
     if (errorEl) {
       errorEl.textContent = translate("auth.emailRequired");
       errorEl.classList.add("show");
-      successEl.style.display = 'none';
+      if (successEl) successEl.style.display = 'none';
     }
     return;
   }
@@ -69,6 +91,48 @@ function handleForgotPassword(event) {
     successEl.style.display = 'none';
   }
 
+  // Try Firebase password reset first
+  if (window.FirebaseAuth && window.FirebaseAuth.isEnabled()) {
+    try {
+      const result = await window.FirebaseAuth.sendPasswordResetEmail(email);
+      
+      if (result.success) {
+        if (successEl) {
+          successEl.innerHTML = `
+            <div style="color: #00c853; font-weight: 600; margin-bottom: 8px;">
+              <i class="fas fa-check-circle"></i> Email Sent!
+            </div>
+            <div style="margin-bottom: 16px;">
+              ${result.message}<br>
+              <small style="opacity: 0.8;">If you don't see the email, check your spam folder.</small>
+            </div>
+          `;
+          successEl.style.display = 'block';
+        }
+        
+        // Close modal and go back to login after 3 seconds
+        setTimeout(() => {
+          closeModal(document.getElementById('forgotPasswordModal'));
+          openModal(document.getElementById('loginModal'));
+        }, 3000);
+      } else {
+        if (errorEl) {
+          errorEl.textContent = result.error;
+          errorEl.classList.add("show");
+        }
+      }
+      return;
+    } catch (error) {
+      console.error('[Auth] Firebase password reset error:', error);
+      // Fall through to localStorage method
+    }
+  }
+
+  // Fallback to localStorage method
+  handleForgotPasswordLocalStorage(email, errorEl, successEl);
+}
+
+function handleForgotPasswordLocalStorage(email, errorEl, successEl) {
   // Check if user exists - try Database first, then fallback to old users array
   let user = null;
   let useDatabase = false;
@@ -635,13 +699,60 @@ function selectRecentUser(email) {
   }
 }
 
-function handleLoginSubmit(event) {
+async function handleLoginSubmit(event) {
   event.preventDefault();
   const email = document.getElementById("login_email")?.value.trim();
   const password = document.getElementById("login_password")?.value;
   const rememberDevice = document.getElementById("remember_device")?.checked || false;
   const errorEl = document.getElementById("login_error");
 
+  // Clear previous errors
+  if (errorEl) {
+    errorEl.textContent = "";
+    errorEl.classList.remove("show");
+  }
+
+  // Try Firebase first, fall back to localStorage
+  if (window.FirebaseAuth && window.FirebaseAuth.isEnabled()) {
+    try {
+      const result = await window.FirebaseAuth.signInUser(email, password);
+      
+      if (result.success) {
+        const currentUserData = {
+          userID: result.user.uid,
+          username: result.user.fullName || result.user.displayName || result.user.email,
+          email: result.user.email,
+          fullName: result.user.fullName || result.user.displayName,
+          name: result.user.fullName || result.user.displayName || result.user.email,
+          firstName: result.user.firstName || "",
+          lastName: result.user.lastName || "",
+        };
+
+        // Save to recent users
+        saveRecentUser(currentUserData);
+
+        localStorage.setItem("currentUser", JSON.stringify(currentUserData));
+        localStorage.removeItem("guest");
+        window.location.href = "./Home.html";
+      } else {
+        if (errorEl) {
+          errorEl.textContent = result.error;
+          errorEl.classList.add("show");
+        }
+      }
+    } catch (error) {
+      console.error('[Auth] Firebase login error:', error);
+      // Fall back to localStorage
+      handleLoginLocalStorage(email, password, rememberDevice, errorEl);
+    }
+  } else {
+    // Use localStorage fallback
+    handleLoginLocalStorage(email, password, rememberDevice, errorEl);
+  }
+}
+
+// localStorage fallback for login
+function handleLoginLocalStorage(email, password, rememberDevice, errorEl) {
   let user = null;
   let useDatabase = false;
   let passwordValid = false;
@@ -731,7 +842,7 @@ function handleLoginSubmit(event) {
   window.location.href = "./Home.html";
 }
 
-function handleSignupSubmit(event) {
+async function handleSignupSubmit(event) {
   event.preventDefault();
 
   const firstName = document.getElementById("signup_first_name")?.value.trim();
@@ -741,6 +852,13 @@ function handleSignupSubmit(event) {
   const confirmPassword = document.getElementById("signup_confirm_password")?.value;
   const errorEl = document.getElementById("signup_error");
 
+  // Clear previous errors
+  if (errorEl) {
+    errorEl.textContent = "";
+    errorEl.classList.remove("show");
+  }
+
+  // Validation
   if (!firstName || !lastName || !email || !password || !confirmPassword) {
     if (errorEl) {
       errorEl.textContent = translate("auth.allFieldsRequired") || "Please complete all fields.";
@@ -757,6 +875,54 @@ function handleSignupSubmit(event) {
     return;
   }
 
+  if (password.length < 6) {
+    if (errorEl) {
+      errorEl.textContent = "Password must be at least 6 characters long.";
+      errorEl.classList.add("show");
+    }
+    return;
+  }
+
+  // Try Firebase first, fall back to localStorage
+  if (window.FirebaseAuth && window.FirebaseAuth.isEnabled()) {
+    try {
+      const result = await window.FirebaseAuth.createUserAccount(email, password, firstName, lastName);
+      
+      if (result.success) {
+        const currentUserData = {
+          userID: result.user.uid,
+          username: result.user.fullName || `${firstName} ${lastName}`.trim(),
+          email: result.user.email,
+          name: result.user.fullName || `${firstName} ${lastName}`.trim(),
+          firstName: firstName,
+          lastName: lastName,
+        };
+
+        // Save to recent users
+        saveRecentUser(currentUserData);
+
+        localStorage.setItem("currentUser", JSON.stringify(currentUserData));
+        localStorage.removeItem("guest");
+        window.location.href = "./Home.html";
+      } else {
+        if (errorEl) {
+          errorEl.textContent = result.error;
+          errorEl.classList.add("show");
+        }
+      }
+    } catch (error) {
+      console.error('[Auth] Firebase signup error:', error);
+      // Fall back to localStorage
+      handleSignupLocalStorage(firstName, lastName, email, password, errorEl);
+    }
+  } else {
+    // Use localStorage fallback
+    handleSignupLocalStorage(firstName, lastName, email, password, errorEl);
+  }
+}
+
+// localStorage fallback for signup
+function handleSignupLocalStorage(firstName, lastName, email, password, errorEl) {
   const users = JSON.parse(localStorage.getItem("users") || "[]");
   if (users.some((u) => u.email === email)) {
     if (errorEl) {

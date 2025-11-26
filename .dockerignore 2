@@ -1,0 +1,72 @@
+# Git files
+.git
+.gitignore
+.gitattributes
+
+# Documentation
+*.md
+README*.md
+STAGEWISE-SETUP.md
+CURSOR-PLANS.md
+CHANGELOG.md
+LICENSE
+DEPLOY.md
+DEPLOY-CLOUD-RUN.md
+
+# IDE and editor files
+.vscode
+.idea
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Node modules (if not needed for runtime)
+node_modules
+npm-debug.log
+yarn-error.log
+
+# Python cache
+__pycache__
+*.pyc
+*.pyo
+*.pyd
+.Python
+
+# Environment files (should use Cloud Run secrets)
+.env
+.env.local
+.env.*.local
+
+# Build artifacts
+dist
+build
+*.log
+
+# Backup files
+*.backup
+*.bak
+*.tmp
+
+# Training and development files
+Training/
+
+# Stagewise config (contains absolute paths)
+stagewise.json
+
+# Test files
+test/
+tests/
+*.test.js
+*.spec.js
+test-docker.sh
+
+# Development scripts
+start-server.sh
+
+# Cloud Build config (not needed in image)
+cloudbuild.yaml
+
+# Docker files (not needed in image)
+Dockerfile
+.dockerignore

@@ -216,6 +216,24 @@ function loadRecentPresentations() {
   
   if (currentUser) {
     saved = JSON.parse(localStorage.getItem(`presentations_${currentUser.username}`) || '[]');
+    
+    // Ensure all presentations have IDs (add if missing)
+    let needsSave = false;
+    saved = saved.map(pres => {
+      if (!pres.id) {
+        needsSave = true;
+        return {
+          ...pres,
+          id: crypto.randomUUID ? crypto.randomUUID() : `pres-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`
+        };
+      }
+      return pres;
+    });
+    
+    // Save back if any IDs were added
+    if (needsSave) {
+      localStorage.setItem(`presentations_${currentUser.username}`, JSON.stringify(saved));
+    }
   } else if (isGuest) {
     const grid = document.getElementById('recentGrid');
     grid.innerHTML = `<div class="empty-state">${translate('home.recentSignIn')}</div>`;
@@ -249,9 +267,27 @@ function loadRecentPresentations() {
         <div class="recent-date">${date}</div>
       </div>
       <div class="recent-actions">
-        <button class="edit-btn" data-type="presentation" data-id="${pres.id}" type="button">
+        <button class="present-btn" data-id="${pres.id}" title="Present Mode">
+          <i class="fas fa-play"></i>
+        </button>
+        <button class="edit-btn" data-type="presentation" data-id="${pres.id}" data-index="${index}" type="button" title="Edit" onclick="toggleEditMenu(event, 'edit-menu-${index}')">
           <i class="fas fa-pencil-alt"></i>
         </button>
+        <div class="edit-menu" id="edit-menu-${index}">
+          <div onclick="renamePresentationFromMenu(${index}, '${escapeHtml(title).replace(/'/g, "\\'")}')">
+            <i class="fas fa-edit"></i> Rename
+          </div>
+          <div onclick="duplicatePresentationFromMenu(${index})">
+            <i class="fas fa-copy"></i> Duplicate
+          </div>
+          <div onclick="sharePresentationFromMenu('${pres.id}')">
+            <i class="fas fa-share"></i> Share
+          </div>
+          <div class="divider"></div>
+          <div onclick="deletePresentationFromMenu(${index})" style="color: #ff6b6b;">
+            <i class="fas fa-trash"></i> Delete
+          </div>
+        </div>
       </div>
     `;
     
@@ -275,6 +311,21 @@ function loadRecentPresentations() {
   setTimeout(() => {
     initPresentationEditMenu();
   }, 100);
+  
+  // Attach event listeners to Present buttons
+  document.querySelectorAll(".present-btn").forEach(btn => {
+    btn.addEventListener("click", (e) => {
+      e.stopPropagation();
+      const id = btn.getAttribute("data-id");
+      if (!id || id === 'undefined') {
+        console.error('Present button clicked but no ID found:', id);
+        alert('Unable to present this presentation. Please try again.');
+        return;
+      }
+      console.log('Presenting presentation with ID:', id);
+      window.location.href = `slide-editor.html?id=${id}&present=true`;
+    });
+  });
 }
 
 function createNewPresentation() {
@@ -511,8 +562,45 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
-  // Note: The "See More" button for templates is now handled by inline script in Home.html
-  // This was the old button that navigated to more_templates.html
+  // Handle "See More" button for expandable templates section - IMPROVED
+  const moreBox = document.getElementById("moreTemplates");
+  const btn = document.getElementById("toggleMore");
+
+  let open = false;
+
+  if (btn && moreBox) {
+    btn.addEventListener("click", () => {
+      open = !open;
+
+      if (open) {
+        // Expand
+        moreBox.classList.add("expanded");
+        moreBox.style.maxHeight = moreBox.scrollHeight + "px";
+        btn.textContent = "See Less";
+        btn.style.marginTop = "30px";
+      } else {
+        // Collapse
+        moreBox.classList.remove("expanded");
+        moreBox.style.maxHeight = "0px";
+        btn.textContent = "See More";
+        btn.style.marginTop = "20px";
+      }
+    });
+  }
+
+  // Make All Template Cards Clickable
+  document.querySelectorAll('.template-card').forEach(card => {
+    card.addEventListener("click", async () => {
+      const templateId = card.dataset.template || card.dataset.templateId;
+      if (templateId) {
+        await useTemplate(templateId);
+      } else if (card.hasAttribute('onclick')) {
+        // Let the onclick handler take care of it
+      } else {
+        console.warn('Template card has no template ID', card);
+      }
+    });
+  });
 });
 
 // ============================================
@@ -745,6 +833,181 @@ function closeEditContextMenu() {
   currentEditData = null;
 }
 
+// Helper function to update a presentation
+function updatePresentation(id, updated) {
+  const currentUser = JSON.parse(localStorage.getItem('currentUser') || 'null');
+  const isGuest = localStorage.getItem('guest') === 'true';
+  
+  let storageKey = '';
+  if (currentUser) {
+    storageKey = `presentations_${currentUser.username}`;
+  } else if (isGuest) {
+    storageKey = 'presentations_guest';
+  } else {
+    console.error('No user found for updating presentation');
+    return;
+  }
+  
+  let recents = JSON.parse(localStorage.getItem(storageKey) || '[]');
+  
+  recents = recents.map(p => {
+    if (p.id === id) return {...p, ...updated};
+    return p;
+  });
+  
+  localStorage.setItem(storageKey, JSON.stringify(recents));
+  renderRecentPresentations();
+  
+  console.log('Presentation updated:', id, updated);
+}
+
+// Helper function to render recent presentations
+function renderRecentPresentations() {
+  const currentUser = JSON.parse(localStorage.getItem('currentUser') || 'null');
+  const userID = currentUser?.userID || currentUser?.email;
+  
+  // Call sidebar reload function
+  if (typeof loadSidebarData === 'function') {
+    try {
+      loadSidebarData();
+    } catch (e) {
+      console.warn('Could not reload sidebar:', e);
+    }
+  }
+  
+  // Also call specific sidebar presentation loader if available
+  if (typeof loadRecentPresentationsSidebar === 'function' && userID) {
+    try {
+      loadRecentPresentationsSidebar(userID);
+    } catch (e) {
+      console.warn('Could not reload presentations sidebar:', e);
+    }
+  }
+}
+
+// Toggle edit menu
+function toggleEditMenu(event, menuId) {
+  event.stopPropagation();
+  const menu = document.getElementById(menuId);
+  
+  // Close all other menus
+  document.querySelectorAll('.edit-menu').forEach(m => {
+    if (m.id !== menuId) m.classList.remove('show');
+  });
+  
+  // Toggle this menu
+  menu.classList.toggle('show');
+}
+
+// Close menus when clicking outside
+document.addEventListener('click', function() {
+  document.querySelectorAll('.edit-menu').forEach(m => m.classList.remove('show'));
+});
+
+// Menu action functions
+function renamePresentationFromMenu(index, currentTitle) {
+  const currentUser = JSON.parse(localStorage.getItem('currentUser') || 'null');
+  if (!currentUser) return;
+  
+  const saved = JSON.parse(localStorage.getItem(`presentations_${currentUser.username}`) || '[]');
+  const sorted = saved.sort((a, b) => new Date(b.date) - new Date(a.date));
+  const pres = sorted[index];
+  
+  if (!pres) return;
+  
+  const newTitle = prompt('Enter new name:', currentTitle);
+  if (newTitle && newTitle.trim() !== '' && newTitle !== currentTitle) {
+    updatePresentation(pres.id, { title: newTitle.trim() });
+    loadRecentPresentations();
+  }
+  
+  // Close menu
+  document.querySelectorAll('.edit-menu').forEach(m => m.classList.remove('show'));
+}
+
+function duplicatePresentationFromMenu(index) {
+  const currentUser = JSON.parse(localStorage.getItem('currentUser') || 'null');
+  if (!currentUser) return;
+  
+  const saved = JSON.parse(localStorage.getItem(`presentations_${currentUser.username}`) || '[]');
+  const sorted = saved.sort((a, b) => new Date(b.date) - new Date(a.date));
+  const pres = sorted[index];
+  
+  if (!pres) return;
+  
+  const duplicate = {
+    ...pres,
+    id: crypto.randomUUID ? crypto.randomUUID() : `pres-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
+    title: `${pres.title || 'Untitled'} (Copy)`,
+    date: new Date().toISOString()
+  };
+  
+  saved.push(duplicate);
+  localStorage.setItem(`presentations_${currentUser.username}`, JSON.stringify(saved));
+  loadRecentPresentations();
+  
+  // Close menu
+  document.querySelectorAll('.edit-menu').forEach(m => m.classList.remove('show'));
+}
+
+function sharePresentationFromMenu(id) {
+  // Simple share functionality
+  const shareUrl = `${window.location.origin}/blank.html?share=${id}`;
+  
+  if (navigator.share) {
+    navigator.share({
+      title: 'Share Presentation',
+      url: shareUrl
+    }).catch(err => console.log('Share cancelled'));
+  } else {
+    // Fallback: copy to clipboard
+    navigator.clipboard.writeText(shareUrl).then(() => {
+      alert('Link copied to clipboard!');
+    }).catch(() => {
+      prompt('Copy this link:', shareUrl);
+    });
+  }
+  
+  // Close menu
+  document.querySelectorAll('.edit-menu').forEach(m => m.classList.remove('show'));
+}
+
+function deletePresentationFromMenu(index) {
+  const confirmDelete = confirm('Are you sure you want to delete this presentation?');
+  if (!confirmDelete) return;
+  
+  const currentUser = JSON.parse(localStorage.getItem('currentUser') || 'null');
+  if (!currentUser) return;
+  
+  const saved = JSON.parse(localStorage.getItem(`presentations_${currentUser.username}`) || '[]');
+  const sorted = saved.sort((a, b) => new Date(b.date) - new Date(a.date));
+  const pres = sorted[index];
+  
+  if (!pres) return;
+  
+  // Find and remove from original array
+  const originalIndex = saved.findIndex(p => p.id === pres.id);
+  if (originalIndex !== -1) {
+    saved.splice(originalIndex, 1);
+    localStorage.setItem(`presentations_${currentUser.username}`, JSON.stringify(saved));
+    loadRecentPresentations();
+  }
+  
+  // Close menu
+  document.querySelectorAll('.edit-menu').forEach(m => m.classList.remove('show'));
+}
+
+// Present presentation function
+function presentPresentation(id) {
+  if (!id || id === 'undefined') {
+    console.error('No presentation ID provided or ID is undefined:', id);
+    alert('Unable to present this presentation. Please try again.');
+    return;
+  }
+  console.log('Presenting presentation with ID:', id);
+  window.location.href = `slide-editor.html?id=${id}&present=true`;
+}
+
 function handleRename(type, index) {
   // Close all dropdowns
   document.querySelectorAll('.edit-dropdown').forEach(d => {
@@ -785,19 +1048,9 @@ function handleRename(type, index) {
   if (!newName || newName.trim() === '' || newName === currentName) return;
   
   if (type === 'presentation') {
-    const currentUser = JSON.parse(localStorage.getItem('currentUser') || 'null');
-    if (currentUser) {
-      const saved = JSON.parse(localStorage.getItem(`presentations_${currentUser.username}`) || '[]');
-      const sorted = saved.sort((a, b) => new Date(b.date) - new Date(a.date));
-      if (sorted[index]) {
-        sorted[index].title = newName.trim();
-        localStorage.setItem(`presentations_${currentUser.username}`, JSON.stringify(saved));
-        if (typeof loadRecentPresentations === 'function') {
-          loadRecentPresentations();
-        } else {
-          location.reload();
-        }
-      }
+    if (editData && editData.id) {
+      // Use the new updatePresentation helper
+      updatePresentation(editData.id, { title: newName.trim() });
     }
   } else if (type === 'group') {
     if (typeof Database !== 'undefined' && editData && editData.groupID) {
@@ -829,6 +1082,7 @@ function handleDuplicate(type, index) {
       if (editData) {
         const duplicate = {
           ...editData,
+          id: crypto.randomUUID ? crypto.randomUUID() : `pres-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
           title: `${editData.title || 'Untitled'} (Copy)`,
           date: new Date().toISOString()
         };
@@ -1025,6 +1279,14 @@ document.addEventListener('keydown', (e) => {
 });
 
 // Export functions for global use
+window.updatePresentation = updatePresentation;
+window.renderRecentPresentations = renderRecentPresentations;
+window.presentPresentation = presentPresentation;
+window.toggleEditMenu = toggleEditMenu;
+window.renamePresentationFromMenu = renamePresentationFromMenu;
+window.duplicatePresentationFromMenu = duplicatePresentationFromMenu;
+window.sharePresentationFromMenu = sharePresentationFromMenu;
+window.deletePresentationFromMenu = deletePresentationFromMenu;
 window.handleSearch = handleSearch;
 window.createNewPresentation = createNewPresentation;
 window.createNewGroup = createNewGroup;

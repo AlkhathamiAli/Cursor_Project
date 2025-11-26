@@ -12,6 +12,8 @@
     <!-- DISABLE ALL ANIMATIONS FOR PERFORMANCE TEST -->
     <link rel="stylesheet" href="./css/disable-animations.css">
     <script src="./translations.js"></script>
+    <script src="./scripts/database.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js" onload="console.log('[QR] qrcodejs library loaded successfully');" onerror="console.error('[QR ERROR] Failed to load qrcodejs library');"></script>
     <style>
       * { box-sizing: border-box; }
       html, body { height: 100%; margin: 0; }
@@ -750,6 +752,42 @@
 
       .profile-field:last-child {
         margin-bottom: 0;
+      }
+
+      /* Readonly fields styling */
+      .profile-field[data-readonly="true"] {
+        opacity: 0.9;
+      }
+
+      .profile-field[data-readonly="true"] .field-value {
+        background: rgba(255, 255, 255, 0.04);
+        cursor: not-allowed;
+      }
+
+      /* QR Code container */
+      .qr-code-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 20px;
+        background: rgba(255, 255, 255, 0.06);
+        border-radius: 14px;
+      }
+
+      .qr-code-container #userQRCode {
+        display: flex !important;
+        justify-content: center !important;
+        align-items: center !important;
+        visibility: visible !important;
+        opacity: 1 !important;
+        min-height: 200px;
+      }
+      
+      .qr-code-container #userQRCode canvas,
+      .qr-code-container #userQRCode img {
+        max-width: 180px;
+        height: auto;
+        display: block;
       }
 
       .field-head {
@@ -2011,6 +2049,183 @@
         border-color: rgba(0, 0, 0, 0.15);
       }
 
+      /* About Modal - Special Styling */
+      .about-modal-overlay {
+        z-index: 9999;
+        animation: fadeIn 0.4s ease;
+      }
+
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+        }
+        to {
+          opacity: 1;
+        }
+      }
+
+      .about-modal-card {
+        width: min(560px, 90vw);
+        padding: 40px;
+        background: linear-gradient(145deg, rgba(13, 53, 38, 0.95), rgba(9, 34, 24, 0.92));
+        border: 1px solid rgba(0, 222, 168, 0.3);
+        box-shadow: 0 24px 60px rgba(0, 50, 30, 0.45), 0 0 60px rgba(0, 200, 83, 0.2);
+        backdrop-filter: blur(24px);
+        position: relative;
+        animation: slideInUp 0.4s ease;
+      }
+
+      @keyframes slideInUp {
+        from {
+          opacity: 0;
+          transform: translateY(30px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      .about-modal-close {
+        position: absolute;
+        top: 16px;
+        right: 16px;
+        background: rgba(255, 255, 255, 0.1);
+        border: none;
+        color: #a9d9c1;
+        font-size: 20px;
+        cursor: pointer;
+        width: 36px;
+        height: 36px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+        transition: all 0.3s ease;
+        z-index: 10;
+      }
+
+      .about-modal-close:hover {
+        background: rgba(255, 255, 255, 0.2);
+        color: #fff;
+        transform: rotate(90deg);
+      }
+
+      .about-modal-content {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+      }
+
+      .about-modal-title {
+        font-size: 28px;
+        font-weight: 700;
+        color: #fff;
+        margin: 0 0 8px 0;
+        text-align: center;
+        line-height: 1.3;
+      }
+
+      .about-modal-description {
+        font-size: 16px;
+        line-height: 1.7;
+        color: #a9d9c1;
+        margin: 0;
+        text-align: center;
+      }
+
+      .about-modal-features {
+        list-style: none;
+        padding: 0;
+        margin: 16px 0 0 0;
+        display: flex;
+        flex-direction: column;
+        gap: 14px;
+      }
+
+      .about-modal-features li {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        font-size: 15px;
+        color: #E8F5E9;
+        padding: 12px 16px;
+        background: rgba(0, 200, 83, 0.08);
+        border-radius: 12px;
+        border: 1px solid rgba(0, 200, 83, 0.15);
+        transition: all 0.3s ease;
+      }
+
+      .about-modal-features li:hover {
+        background: rgba(0, 200, 83, 0.15);
+        border-color: rgba(0, 200, 83, 0.3);
+        transform: translateX(4px);
+      }
+
+      .about-modal-features li i {
+        color: #00c853;
+        font-size: 18px;
+        flex-shrink: 0;
+      }
+
+      body.light-mode .about-modal-card {
+        background: linear-gradient(145deg, rgba(233, 248, 240, 0.98), rgba(203, 240, 223, 0.95));
+        border: 1px solid rgba(26, 156, 109, 0.3);
+        box-shadow: 0 24px 60px rgba(0, 0, 0, 0.15), 0 0 40px rgba(46, 213, 115, 0.15);
+      }
+
+      body.light-mode .about-modal-close {
+        background: rgba(0, 0, 0, 0.08);
+        color: #1a7c5a;
+      }
+
+      body.light-mode .about-modal-close:hover {
+        background: rgba(0, 0, 0, 0.15);
+        color: #0d3b2c;
+      }
+
+      body.light-mode .about-modal-title {
+        color: #0d3b2c;
+      }
+
+      body.light-mode .about-modal-description {
+        color: #1a7c5a;
+      }
+
+      body.light-mode .about-modal-features li {
+        color: #0d3b2c;
+        background: rgba(46, 213, 115, 0.12);
+        border-color: rgba(46, 213, 115, 0.25);
+      }
+
+      body.light-mode .about-modal-features li:hover {
+        background: rgba(46, 213, 115, 0.2);
+        border-color: rgba(46, 213, 115, 0.4);
+      }
+
+      body.light-mode .about-modal-features li i {
+        color: #1a7c5a;
+      }
+
+      @media (max-width: 600px) {
+        .about-modal-card {
+          padding: 32px 24px;
+        }
+
+        .about-modal-title {
+          font-size: 24px;
+        }
+
+        .about-modal-description {
+          font-size: 15px;
+        }
+
+        .about-modal-features li {
+          font-size: 14px;
+          padding: 10px 14px;
+        }
+      }
+
       /* Toast/Snackbar */
       .toast {
         position: fixed;
@@ -2218,17 +2433,38 @@
                 <input type="text" class="field-input hidden" data-field-input="lastName" placeholder="Enter last name" value="Johnson">
               </div>
 
-              <div class="profile-field" data-field="email">
+              <div class="profile-field" data-field="email" data-readonly="true">
                 <div class="field-head">
                   <span class="field-label">Email Address</span>
                   <div class="field-actions">
-                    <button type="button" class="field-edit-btn">Edit</button>
-                    <button type="button" class="field-save-btn hidden">Save</button>
-                    <button type="button" class="field-cancel-btn hidden">Cancel</button>
+                    <!-- Email is readonly, no edit button -->
                   </div>
                 </div>
                 <div class="field-value" data-field-value="email">avery.johnson@example.com</div>
-                <input type="email" class="field-input hidden" data-field-input="email" placeholder="name@example.com" value="avery.johnson@example.com">
+                <input type="email" class="field-input hidden" data-field-input="email" placeholder="name@example.com" value="avery.johnson@example.com" readonly disabled>
+              </div>
+
+              <div class="profile-field" data-field="userID" data-readonly="true">
+                <div class="field-head">
+                  <span class="field-label">User ID</span>
+                  <div class="field-actions">
+                    <!-- UserID is readonly, no edit button -->
+                  </div>
+                </div>
+                <div class="field-value" data-field-value="userID">-</div>
+                <input type="text" class="field-input hidden" data-field-input="userID" placeholder="User ID" value="" readonly disabled>
+              </div>
+
+              <div class="profile-field" data-field="qrcode" data-readonly="true">
+                <div class="field-head">
+                  <span class="field-label">QR Code</span>
+                  <div class="field-actions">
+                    <!-- QR code is readonly, no edit button -->
+                  </div>
+                </div>
+                <div class="field-value qr-code-container" data-field-value="qrcode">
+                  <div id="userQRCode" style="display: flex; justify-content: center; align-items: center; min-height: 200px;"></div>
+                </div>
               </div>
 
               <div class="profile-field" data-field="country">
@@ -2734,6 +2970,49 @@
         }
       })();
 
+      // About Modal Functions
+      function openAboutModal() {
+        const modal = document.getElementById('aboutModal');
+        if (modal) {
+          modal.classList.add('is-visible');
+          modal.setAttribute('aria-hidden', 'false');
+          // Prevent body scroll when modal is open
+          document.body.style.overflow = 'hidden';
+        }
+      }
+
+      function closeAboutModal() {
+        const modal = document.getElementById('aboutModal');
+        if (modal) {
+          modal.classList.remove('is-visible');
+          modal.setAttribute('aria-hidden', 'true');
+          // Restore body scroll
+          document.body.style.overflow = '';
+        }
+      }
+
+      // Close modal on outside click
+      document.addEventListener('DOMContentLoaded', () => {
+        const modal = document.getElementById('aboutModal');
+        if (modal) {
+          modal.addEventListener('click', (e) => {
+            if (e.target === modal) {
+              closeAboutModal();
+            }
+          });
+        }
+      });
+
+      // Close modal on Escape key
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') {
+          const modal = document.getElementById('aboutModal');
+          if (modal && modal.classList.contains('is-visible')) {
+            closeAboutModal();
+          }
+        }
+      });
+
       // Tab Switching Logic
       (function() {
         const tabs = document.querySelectorAll('.sidebar-tab');
@@ -2770,6 +3049,13 @@
           tab.addEventListener('click', (e) => {
             e.preventDefault();
             const tabId = tab.getAttribute('data-tab');
+            
+            // Special handling for About tab - open modal instead
+            if (tabId === 'about') {
+              openAboutModal();
+              return;
+            }
+            
             if (tabId) {
               switchTab(tabId);
             }
@@ -2790,66 +3076,403 @@
       (function() {
         const STORAGE_KEY = 'userProfileData';
         
-        // Load profile data from localStorage or use defaults
+        // Load profile data from currentUser (logged-in user) or use defaults
         function loadProfileData() {
-          const saved = localStorage.getItem(STORAGE_KEY);
-          if (saved) {
+          // Get current logged-in user
+          const currentUserStr = localStorage.getItem('currentUser');
+          let currentUser = null;
+          
+          if (currentUserStr) {
             try {
-              return JSON.parse(saved);
+              currentUser = JSON.parse(currentUserStr);
             } catch (e) {
-              console.error('Error parsing profile data:', e);
+              console.error('Error parsing currentUser:', e);
             }
           }
-          // Default values
+          
+          // If we have a logged-in user, use their data
+          if (currentUser) {
+            // Also check Database for additional fields
+            let dbUser = null;
+            if (typeof Database !== 'undefined') {
+              // Try to find user by userID first
+              if (currentUser.userID) {
+                dbUser = Database.getUserByID(currentUser.userID);
+              }
+              // If not found by userID, try by email
+              if (!dbUser && currentUser.email) {
+                dbUser = Database.getUserByEmail(currentUser.email);
+              }
+            }
+            
+            // Get or generate userID
+            let userID = currentUser.userID;
+            console.log('Current userID from currentUser:', userID);
+            
+            // If no userID exists or userID is not a 5-digit number, generate one and save it immediately
+            if (!userID || userID === '' || userID === null || userID === undefined || !/^\d{5}$/.test(userID)) {
+              console.log('No valid 5-digit userID found, generating new one...');
+              
+              // Generate unique 5-digit userID
+              function generateUnique5DigitID() {
+                let newUserID;
+                let attempts = 0;
+                const maxAttempts = 100;
+                
+                // Check existing userIDs in Database
+                const existingUserIDs = new Set();
+                if (typeof Database !== 'undefined') {
+                  const allUsers = Database.getAllUsers();
+                  allUsers.forEach(user => {
+                    if (user.userID && /^\d{5}$/.test(user.userID)) {
+                      existingUserIDs.add(user.userID);
+                    }
+                  });
+                }
+                
+                // Also check old users array
+                const oldUsers = JSON.parse(localStorage.getItem("users") || "[]");
+                oldUsers.forEach(user => {
+                  if (user.userID && /^\d{5}$/.test(user.userID)) {
+                    existingUserIDs.add(user.userID);
+                  }
+                });
+                
+                // Generate random 5-digit number (10000 to 99999)
+                do {
+                  newUserID = String(Math.floor(Math.random() * 90000) + 10000);
+                  attempts++;
+                  if (attempts > maxAttempts) {
+                    // Fallback: use timestamp-based ID if too many collisions
+                    newUserID = String(Date.now() % 90000 + 10000);
+                    break;
+                  }
+                } while (existingUserIDs.has(newUserID));
+                
+                return newUserID;
+              }
+              
+              userID = generateUnique5DigitID();
+              console.log('Generated new 5-digit userID:', userID);
+              
+              // Update currentUser with new userID
+              currentUser.userID = userID;
+              localStorage.setItem('currentUser', JSON.stringify(currentUser));
+              console.log('Saved userID to currentUser');
+              
+              // Also update Database if user exists there
+              if (typeof Database !== 'undefined' && dbUser) {
+                // Use the dbUser's current userID to find and update it
+                const oldUserID = dbUser.userID;
+                Database.updateUser(oldUserID, { userID: userID });
+                console.log('Updated Database user with new UUID');
+              } else if (typeof Database !== 'undefined' && currentUser.email) {
+                // If user exists in Database but we couldn't find them, try to update by email
+                const userByEmail = Database.getUserByEmail(currentUser.email);
+                if (userByEmail) {
+                  const oldUserID = userByEmail.userID;
+                  Database.updateUser(oldUserID, { userID: userID });
+                  console.log('Updated Database user (found by email) with new UUID');
+                }
+              }
+            }
+            
+            console.log('Final userID to use:', userID);
+            
+            // Extract firstName and lastName
+            let firstName = currentUser.firstName;
+            let lastName = currentUser.lastName;
+            
+            // If not in currentUser, try to get from Database
+            if (!firstName && dbUser && dbUser.firstName) {
+              firstName = dbUser.firstName;
+            }
+            if (!lastName && dbUser && dbUser.lastName) {
+              lastName = dbUser.lastName;
+            }
+            
+            // If still not found, try to extract from name/fullName
+            if (!firstName || !lastName) {
+              const nameToSplit = currentUser.name || currentUser.fullName || currentUser.username || '';
+              if (nameToSplit) {
+                const nameParts = nameToSplit.trim().split(' ');
+                if (!firstName && nameParts.length > 0) {
+                  firstName = nameParts[0];
+                }
+                if (!lastName && nameParts.length > 1) {
+                  lastName = nameParts.slice(1).join(' ');
+                }
+              }
+            }
+            
+            // Merge currentUser with Database data
+            return {
+              firstName: firstName || '',
+              lastName: lastName || '',
+              email: currentUser.email || '',
+              userID: userID || '',
+              country: 'United States', // Default, can be stored separately if needed
+              aboutMe: 'Passionate about crafting engaging slide decks and visual storytelling that resonates with every audience.' // Default
+            };
+          }
+          
+          // Default values (fallback) - user is not logged in
           return {
-            firstName: 'Avery',
-            lastName: 'Johnson',
-            email: 'avery.johnson@example.com',
+            firstName: '',
+            lastName: '',
+            email: '',
+            userID: '',
             country: 'United States',
             aboutMe: 'Passionate about crafting engaging slide decks and visual storytelling that resonates with every audience.'
           };
         }
 
-        // Save profile data to localStorage
+        // Save profile data - update currentUser and Database
         function saveProfileData(data) {
+          // Update currentUser in localStorage
+          const currentUserStr = localStorage.getItem('currentUser');
+          if (currentUserStr) {
+            try {
+              const currentUser = JSON.parse(currentUserStr);
+              currentUser.firstName = data.firstName;
+              currentUser.lastName = data.lastName;
+              currentUser.name = `${data.firstName} ${data.lastName}`.trim();
+              currentUser.fullName = currentUser.name;
+              currentUser.username = currentUser.name;
+              localStorage.setItem('currentUser', JSON.stringify(currentUser));
+              
+              // Also update Database if available
+              if (typeof Database !== 'undefined' && currentUser.userID) {
+                Database.updateUser(currentUser.userID, {
+                  firstName: data.firstName,
+                  lastName: data.lastName,
+                  fullName: `${data.firstName} ${data.lastName}`.trim()
+                });
+              }
+            } catch (e) {
+              console.error('Error updating currentUser:', e);
+            }
+          }
+          
+          // Also save to separate storage for backward compatibility
           localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+        }
+
+        // ============================================
+        // COMPLETELY NEW QR CODE GENERATOR - FRESH START
+        // ============================================
+        
+        // OLD FUNCTIONS REMOVED - Now using qrcodejs library (DOM-based)
+        
+        // Generate QR code using qrcodejs library (DOM-based, not canvas)
+        function generateQRCode(userID) {
+          console.log('[QR] ===== QR CODE GENERATION START =====');
+          console.log('[QR] UserID received:', userID);
+          console.log('[QR] UserID type:', typeof userID);
+          
+          // Check if qrcodejs library is loaded
+          if (typeof QRCode === 'undefined') {
+            console.error('[QR ERROR] QRCode library (qrcodejs) not loaded!');
+            console.error('[QR ERROR] Available globals:', Object.keys(window).filter(k => k.toLowerCase().includes('qr')));
+            return false;
+          }
+          
+          console.log('[QR] ✓ QRCode library (qrcodejs) is loaded');
+          console.log('[QR] QRCode constructor:', typeof QRCode);
+          
+          // Validate userID
+          if (!userID || userID === '' || userID === '-' || userID === null || userID === undefined) {
+            console.error('[QR ERROR] No valid userID provided');
+            return false;
+          }
+          
+          // Extract digits from userID and format with # prefix
+          let userIDDigits = String(userID).trim();
+          const digitsMatch = userIDDigits.match(/\d{5}/);
+          if (digitsMatch) {
+            userIDDigits = digitsMatch[0];
+          } else if (/^\d{5}$/.test(userIDDigits)) {
+            // Already 5 digits
+          } else {
+            console.error('[QR ERROR] Invalid userID format:', userID);
+            return false;
+          }
+          
+          const qrText = '#' + userIDDigits;
+          console.log('[QR] QR code text will be:', qrText);
+          
+          // Get the container div (not canvas)
+          const qrContainer = document.getElementById('userQRCode');
+          if (!qrContainer) {
+            console.error('[QR ERROR] QR container div (#userQRCode) not found!');
+            return false;
+          }
+          
+          console.log('[QR] QR container found:', qrContainer.id);
+          console.log('[QR] Container element:', qrContainer);
+          
+          // Clear any existing QR code
+          qrContainer.innerHTML = '';
+          console.log('[QR] Container cleared');
+          
+          // Generate QR code using qrcodejs
+          try {
+            console.log('[QR] Creating QRCode instance...');
+            console.log('[QR] Text:', qrText);
+            console.log('[QR] Width: 180, Height: 180');
+            
+            const qr = new QRCode(qrContainer, {
+              text: qrText,
+              width: 180,
+              height: 180
+            });
+            
+            console.log('[QR] ✓ QRCode instance created successfully');
+            console.log('[QR] QRCode object:', qr);
+            
+            // Verify QR code was generated by checking if container has content
+            setTimeout(() => {
+              if (qrContainer.innerHTML && qrContainer.innerHTML.trim() !== '') {
+                console.log('[QR OK] QR code rendered successfully!');
+                console.log('[QR] Container now has content');
+                qrContainer.style.display = 'flex';
+                qrContainer.style.visibility = 'visible';
+                qrContainer.style.opacity = '1';
+              } else {
+                console.error('[QR ERROR] Container is still empty after QR generation');
+              }
+            }, 100);
+            
+            return true;
+          } catch (e) {
+            console.error('[QR ERROR] Exception during QR code generation:', e);
+            console.error('[QR ERROR] Exception details:', e.message, e.stack);
+            return false;
+          }
         }
 
         // Initialize profile fields with saved data
         function initializeProfileFields() {
+          console.log('Initializing profile fields...');
           const profileData = loadProfileData();
+          console.log('Loaded profile data:', profileData);
           
           // Update all field values
           Object.keys(profileData).forEach(fieldName => {
             const valueElement = document.querySelector(`[data-field-value="${fieldName}"]`);
             const inputElement = document.querySelector(`[data-field-input="${fieldName}"]`);
             
+            if (fieldName === 'qrcode') {
+              // Handle QR code separately - skip for now, will handle after all fields are set
+              return;
+            }
+            
             if (valueElement) {
-              valueElement.textContent = profileData[fieldName];
+              let value = profileData[fieldName] || '-';
+              
+              // Special handling for userID - always display with hashtag
+              if (fieldName === 'userID') {
+                const userIDValue = String(value).trim();
+                // If userID is just digits, add # prefix for display
+                if (userIDValue && userIDValue !== '-' && /^\d{5}$/.test(userIDValue)) {
+                  value = '#' + userIDValue;
+                } else if (userIDValue && !userIDValue.startsWith('#') && userIDValue !== '-') {
+                  // Extract digits and format
+                  const digits = userIDValue.match(/\d+/);
+                  if (digits && digits[0].length === 5) {
+                    value = '#' + digits[0];
+                  }
+                }
+                // If already has #, keep it
+              }
+              
+              valueElement.textContent = value;
+              console.log(`Set ${fieldName} value:`, value);
             }
             
             if (inputElement) {
               if (inputElement.tagName === 'SELECT') {
-                inputElement.value = profileData[fieldName];
+                inputElement.value = profileData[fieldName] || '';
                 // Update selected option
                 Array.from(inputElement.options).forEach(option => {
                   option.selected = option.value === profileData[fieldName];
                 });
               } else {
-                inputElement.value = profileData[fieldName];
+                inputElement.value = profileData[fieldName] || '';
               }
             }
           });
+          
+          // Generate QR code after all fields are set and DOM is ready
+          // Get userID (can be digits only or with #)
+          const userID = profileData.userID;
+          
+          // Validate userID - accept #74169 or 74169 format
+          const isValidUserID = userID && 
+                                userID !== '' && 
+                                userID !== '-' &&
+                                (/^#\d{5}$/.test(String(userID)) || /^\d{5}$/.test(String(userID)));
+          
+          if (isValidUserID) {
+            console.log('[QR] Scheduling QR code generation for userID:', userID);
+            
+            // Function to attempt QR code generation with retries
+            const attemptQRGeneration = (delay) => {
+              setTimeout(() => {
+                console.log(`[QR] Attempt ${delay}ms - Checking prerequisites...`);
+                
+                // Check QR container div exists
+                const qrContainer = document.getElementById('userQRCode');
+                if (!qrContainer) {
+                  console.warn(`[QR] QR container not found at ${delay}ms, retrying...`);
+                  if (delay < 3000) {
+                    attemptQRGeneration(delay + 500);
+                  }
+                  return;
+                }
+                
+                // Check if qrcodejs library is available
+                if (typeof QRCode === 'undefined') {
+                  console.warn(`[QR] QRCode library (qrcodejs) not loaded at ${delay}ms, retrying...`);
+                  if (delay < 3000) {
+                    attemptQRGeneration(delay + 500);
+                  }
+                  return;
+                }
+                
+                console.log(`[QR] All prerequisites met at ${delay}ms, generating QR code...`);
+                generateQRCode(userID);
+              }, delay);
+            };
+            
+            // Try multiple times with increasing delays
+            attemptQRGeneration(300);   // First attempt
+            attemptQRGeneration(600);   // Second attempt
+            attemptQRGeneration(1000);  // Third attempt
+            attemptQRGeneration(2000);  // Fourth attempt
+          } else {
+            console.warn('[QR] No valid userID available. userID:', userID);
+          }
         }
 
-        // Enter edit mode for a field
-        function enterEditMode(fieldElement) {
-          const fieldName = fieldElement.getAttribute('data-field');
-          const valueElement = fieldElement.querySelector(`[data-field-value="${fieldName}"]`);
-          const inputElement = fieldElement.querySelector(`[data-field-input="${fieldName}"]`);
-          const editBtn = fieldElement.querySelector('.field-edit-btn');
-          const saveBtn = fieldElement.querySelector('.field-save-btn');
-          const cancelBtn = fieldElement.querySelector('.field-cancel-btn');
+          // Enter edit mode for a field
+          function enterEditMode(fieldElement) {
+            // Don't allow editing readonly fields
+            if (fieldElement && fieldElement.getAttribute('data-readonly') === 'true') {
+              return;
+            }
+            
+            const fieldName = fieldElement.getAttribute('data-field');
+            const valueElement = fieldElement.querySelector(`[data-field-value="${fieldName}"]`);
+            const inputElement = fieldElement.querySelector(`[data-field-input="${fieldName}"]`);
+            const editBtn = fieldElement.querySelector('.field-edit-btn');
+            const saveBtn = fieldElement.querySelector('.field-save-btn');
+            const cancelBtn = fieldElement.querySelector('.field-cancel-btn');
+            
+            // Safety check - if no edit button, field is readonly
+            if (!editBtn) {
+              return;
+            }
 
           // Store original value for cancel
           const originalValue = inputElement.tagName === 'SELECT' 
@@ -2950,15 +3573,87 @@
           cancelBtn.classList.add('hidden');
         }
 
-        // Initialize on page load
-        initializeProfileFields();
+        // Initialize on page load - wait for DOM and Database to be ready
+        function initProfile() {
+          // Wait a bit for Database module to load if needed
+          if (typeof Database === 'undefined') {
+            setTimeout(initProfile, 100);
+            return;
+          }
+          
+          initializeProfileFields();
+        }
+        
+        // Run initialization when DOM is ready
+        function runInitialization() {
+          console.log('[Profile] Running initialization, readyState:', document.readyState);
+          initProfile();
+          
+          // Ensure QR code is generated after everything loads
+          setTimeout(() => {
+            console.log('[Profile] Final QR code check...');
+            const profileData = loadProfileData();
+            const userID = profileData.userID;
+            if (userID) {
+              // Format userID with # prefix
+              let userIDString = String(userID).trim();
+              if (/^\d{5}$/.test(userIDString)) {
+                userIDString = '#' + userIDString;
+              } else if (!userIDString.startsWith('#')) {
+                const digits = userIDString.match(/\d{5}/);
+                if (digits) {
+                  userIDString = '#' + digits[0];
+                }
+              }
+              
+              const qrContainer = document.getElementById('userQRCode');
+              if (qrContainer && typeof QRCode !== 'undefined') {
+                console.log('[Profile] Final attempt to generate QR code for:', userIDString);
+                generateQRCode(userID);
+              }
+            }
+          }, 2500);
+        }
+        
+        if (document.readyState === 'loading') {
+          document.addEventListener('DOMContentLoaded', runInitialization);
+        } else {
+          // DOM is already ready
+          runInitialization();
+        }
+        
+        // Also run on window load as backup
+        window.addEventListener('load', () => {
+          console.log('[Profile] Window loaded, final QR code check...');
+          setTimeout(() => {
+            const profileData = loadProfileData();
+            const userID = profileData.userID;
+            if (userID) {
+              const qrContainer = document.getElementById('userQRCode');
+              if (qrContainer && typeof QRCode !== 'undefined') {
+                // Check if QR code container is empty
+                if (qrContainer.innerHTML.trim() === '') {
+                  console.log('[Profile] QR container is empty, generating QR code for userID:', userID);
+                  generateQRCode(userID);
+                } else {
+                  console.log('[Profile] QR code already exists');
+                }
+              }
+            }
+          }, 1000);
+        });
 
-        // Add click handlers to all edit buttons
-        document.querySelectorAll('.field-edit-btn').forEach(editBtn => {
-          editBtn.addEventListener('click', () => {
-            const fieldElement = editBtn.closest('.profile-field');
+        // Add click handlers to all edit buttons (skip readonly fields)
+        // Use event delegation to handle dynamically loaded buttons
+        document.addEventListener('click', (e) => {
+          if (e.target.classList.contains('field-edit-btn')) {
+            const fieldElement = e.target.closest('.profile-field');
+            // Skip readonly fields
+            if (fieldElement && fieldElement.getAttribute('data-readonly') === 'true') {
+              return;
+            }
             enterEditMode(fieldElement);
-          });
+          }
         });
       })();
 
@@ -4296,6 +4991,28 @@
         option.setAttribute('tabindex', '0');
       });
     </script>
+
+    <!-- About App Modal -->
+    <div class="modal-overlay about-modal-overlay" id="aboutModal" role="dialog" aria-modal="true" aria-labelledby="aboutModalHeading" aria-hidden="true">
+      <div class="modal-card about-modal-card">
+        <button class="about-modal-close" onclick="closeAboutModal()" aria-label="Close About modal">
+          <i class="fas fa-times"></i>
+        </button>
+        <div class="about-modal-content">
+          <h3 id="aboutModalHeading" class="about-modal-title">About Aramco Digital SlideMaker</h3>
+          <p class="about-modal-description">
+            Aramco Digital SlideMaker is a modern presentation builder designed to help teams create professional slides quickly. It supports real-time collaboration, smart templates, AI assistance, and a clean, modern interface.
+          </p>
+          <ul class="about-modal-features">
+            <li><i class="fas fa-check-circle"></i> Smart ready-made templates</li>
+            <li><i class="fas fa-check-circle"></i> Real-time team collaboration</li>
+            <li><i class="fas fa-check-circle"></i> AI-powered slide suggestions</li>
+            <li><i class="fas fa-check-circle"></i> Organized group workspaces</li>
+            <li><i class="fas fa-check-circle"></i> Smooth exporting and sharing tools</li>
+          </ul>
+        </div>
+      </div>
+    </div>
     
     <!-- AI Assistant Floating Button -->
     <button class="ai-assistant-btn" id="aiAssistantBtn" onclick="toggleChatbot()" aria-label="Open AI Assistant">

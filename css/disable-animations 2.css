@@ -1,0 +1,56 @@
+/* ============================================
+   DISABLE BACKGROUND ANIMATIONS ONLY
+   UI animations (buttons, cards, etc.) remain enabled
+   ============================================ */
+
+/* Disable floating particles and stars */
+.stars-background,
+.particles-container,
+.micro-particles,
+.gradient-shimmer {
+  animation: none !important;
+  display: none !important;
+}
+
+/* Disable parallax effects on mountains */
+.mountains-svg,
+.mountains-container {
+  animation: none !important;
+  transform: none !important;
+}
+
+/* Disable animated background overlays */
+body::before,
+body::after {
+  animation: none !important;
+}
+
+/* Disable background gradient animations */
+body,
+.shell-layout {
+  background-attachment: fixed !important;
+}
+
+/* Remove tool icons inside New Presentation card */
+.tool-icon,
+.icon1,
+.icon2,
+.icon3,
+.icon4,
+.icon5 {
+  display: none !important;
+  visibility: hidden !important;
+}
+
+/* Remove card shapes completely */
+.card-shape,
+.shape1,
+.shape2,
+.shape3,
+.shape4,
+.shape5 {
+  display: none !important;
+  visibility: hidden !important;
+}
+
+/* Keep all other UI animations enabled - buttons, cards, hover effects work normally */

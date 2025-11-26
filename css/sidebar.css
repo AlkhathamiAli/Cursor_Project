@@ -34,6 +34,26 @@
   will-change: transform, opacity;
   overflow-y: auto;
   overflow-x: hidden;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(0, 200, 150, 0.3) transparent;
+}
+
+/* Sidebar Scrollbar Styling */
+.sidebar::-webkit-scrollbar {
+  width: 6px;
+}
+
+.sidebar::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.sidebar::-webkit-scrollbar-thumb {
+  background-color: rgba(0, 200, 150, 0.3);
+  border-radius: 3px;
+}
+
+.sidebar::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(0, 200, 150, 0.5);
 }
 
 .sidebar::before {
@@ -177,6 +197,28 @@
   max-height: 1000px;
   padding: clamp(6px, 0.8vw, 8px) clamp(10px, 1.2vw, 14px) clamp(10px, 1.2vw, 14px);
   opacity: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(0, 200, 150, 0.3) transparent;
+}
+
+/* Section Content Scrollbar Styling */
+.section-content.expanded::-webkit-scrollbar {
+  width: 6px;
+}
+
+.section-content.expanded::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.section-content.expanded::-webkit-scrollbar-thumb {
+  background-color: rgba(0, 200, 150, 0.3);
+  border-radius: 3px;
+}
+
+.section-content.expanded::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(0, 200, 150, 0.5);
 }
 
 .section-action-btn {
@@ -227,10 +269,18 @@
   padding: clamp(6px, 0.8vw, 8px) clamp(8px, 1vw, 10px);
   border-radius: 8px;
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: all 0.3s ease;
   color: rgba(255, 255, 255, 0.8);
   font-size: clamp(0.85rem, 1vw, 0.9rem);
   position: relative;
+}
+
+.recent-item.hidden-item {
+  opacity: 0;
+  max-height: 0;
+  padding: 0 clamp(8px, 1vw, 10px);
+  overflow: hidden;
+  transition: all 0.3s ease, opacity 0.2s ease;
 }
 
 .recent-item:hover {
@@ -260,8 +310,30 @@
   letter-spacing: -0.2px;
 }
   white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+
+/* Scrollable container for recent items */
+.sidebar-recents {
+  max-height: 180px;
+  overflow-y: auto;
+  padding-right: 6px;
+}
+
+.sidebar-recents::-webkit-scrollbar {
+  width: 4px;
+}
+
+.sidebar-recents::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.1);
+  border-radius: 4px;
+}
+
+.sidebar-recents::-webkit-scrollbar-thumb {
+  background: rgba(0, 200, 150, 0.3);
+  border-radius: 4px;
+}
+
+.sidebar-recents::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 200, 150, 0.5);
 }
 
 /* Sidebar Edit Dropdown */
@@ -269,6 +341,7 @@
   position: relative;
   display: flex;
   align-items: center;
+  gap: 8px;
   margin-left: auto;
 }
 
@@ -384,6 +457,27 @@
   font-weight: 500;
 }
 
+/* Present Button */
+.present-btn {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  color: #00e09a;
+  font-size: 18px;
+  padding: 4px 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+  transition: all 0.2s ease;
+}
+
+.present-btn:hover {
+  color: white;
+  background: rgba(0, 224, 154, 0.1);
+  transform: scale(1.1);
+}
+
 /* Template Categories */
 .template-categories {
   display: flex;
@@ -418,11 +512,13 @@
   border-radius: 6px;
   transition: all 0.2s ease;
   margin-top: 4px;
+  cursor: pointer;
 }
 
 .see-more-link:hover {
   background: rgba(0, 255, 150, 0.1);
   color: #00ff9f;
+  text-decoration: underline;
 }
 
 /* Navigation Menu (Settings, etc.) */

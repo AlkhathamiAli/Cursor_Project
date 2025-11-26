@@ -1,0 +1,54 @@
+# This file specifies files that are *not* uploaded to Google Cloud
+# using gcloud. It follows the same syntax as .gitignore
+
+.git
+.gitignore
+.gitattributes
+
+# Documentation
+*.md
+README*.md
+STAGEWISE-SETUP.md
+CURSOR-PLANS.md
+
+# IDE files
+.vscode
+.idea
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Node modules
+node_modules
+npm-debug.log
+yarn-error.log
+
+# Python cache
+__pycache__
+*.pyc
+*.pyo
+*.pyd
+
+# Environment files
+.env
+.env.local
+
+# Backup files
+*.backup
+*.bak
+*.tmp
+
+# Training files
+Training/
+
+# Stagewise config
+stagewise.json
+
+# Icons source
+Icons/src/
+Icons/scripts/
+
+# Development scripts
+start-server.sh
+

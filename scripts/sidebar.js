@@ -83,9 +83,14 @@ function loadRecentGroupsSidebar(userID) {
     return;
   }
 
-  sortedGroups.slice(0, 3).forEach((group, index) => {
+  sortedGroups.forEach((group, index) => {
     const item = document.createElement('div');
     item.className = 'recent-item';
+    // Hide items after the first 3
+    if (index >= 3) {
+      item.classList.add('hidden-item');
+      item.style.display = 'none';
+    }
     // Store groupID for edit functions
     const groupID = group.groupID;
     item.innerHTML = `
@@ -135,8 +140,19 @@ function loadRecentGroupsSidebar(userID) {
     container.appendChild(item);
   });
 
-  if (sortedGroups.length > 3 && seeMoreLink) {
-    seeMoreLink.style.display = 'block';
+  // Show or hide "See More" link based on number of items
+  if (seeMoreLink) {
+    if (sortedGroups.length > 3) {
+      seeMoreLink.style.display = 'block';
+      seeMoreLink.textContent = 'See More';
+      seeMoreLink.onclick = (e) => {
+        e.preventDefault();
+        toggleSeeMore('groups');
+        return false;
+      };
+    } else {
+      seeMoreLink.style.display = 'none';
+    }
   }
 }
 
@@ -171,9 +187,14 @@ function loadRecentPresentationsSidebar(userID) {
   // Sort by date (newest first)
   const sorted = saved.sort((a, b) => new Date(b.date || 0) - new Date(a.date || 0));
 
-  sorted.slice(0, 3).forEach(pres => {
+  sorted.forEach((pres, index) => {
     const item = document.createElement('div');
     item.className = 'recent-item';
+    // Hide items after the first 3
+    if (index >= 3) {
+      item.classList.add('hidden-item');
+      item.style.display = 'none';
+    }
     item.innerHTML = `
       <i class="fas fa-file"></i>
       <span class="recent-item-name">${escapeHtml(pres.title || 'Untitled')}</span>
@@ -185,8 +206,19 @@ function loadRecentPresentationsSidebar(userID) {
     container.appendChild(item);
   });
 
-  if (sorted.length > 3 && seeMoreLink) {
-    seeMoreLink.style.display = 'block';
+  // Show or hide "See More" link based on number of items
+  if (seeMoreLink) {
+    if (sorted.length > 3) {
+      seeMoreLink.style.display = 'block';
+      seeMoreLink.textContent = 'See More';
+      seeMoreLink.onclick = (e) => {
+        e.preventDefault();
+        toggleSeeMore('presentations');
+        return false;
+      };
+    } else {
+      seeMoreLink.style.display = 'none';
+    }
   }
 }
 
@@ -401,6 +433,53 @@ function handleDeleteSidebar(type, id) {
   }
 }
 
+// Toggle See More functionality
+function toggleSeeMore(type) {
+  const containerId = type === 'groups' ? 'recent-groups' : 'recent-presentations';
+  const linkId = type === 'groups' ? 'groups-see-more' : 'presentations-see-more';
+  
+  const container = document.getElementById(containerId);
+  const link = document.getElementById(linkId);
+  
+  if (!container || !link) return;
+  
+  const hiddenItems = container.querySelectorAll('.hidden-item');
+  const isExpanded = link.textContent === 'See Less';
+  
+  if (isExpanded) {
+    // Collapse: hide items
+    hiddenItems.forEach(item => {
+      item.style.opacity = '0';
+      item.style.maxHeight = '0';
+      item.style.padding = '0 ' + getComputedStyle(item).paddingLeft;
+      setTimeout(() => {
+        item.style.display = 'none';
+      }, 300);
+    });
+    link.textContent = 'See More';
+  } else {
+    // Expand: show items
+    hiddenItems.forEach(item => {
+      item.style.display = 'flex';
+      setTimeout(() => {
+        item.style.opacity = '1';
+        item.style.maxHeight = '100px';
+        item.style.padding = 'clamp(6px, 0.8vw, 8px) clamp(8px, 1vw, 10px)';
+      }, 10);
+    });
+    link.textContent = 'See Less';
+  }
+}
+
+// Present presentation function
+function presentPresentation(id) {
+  if (!id) {
+    console.error('No presentation ID provided');
+    return;
+  }
+  window.location.href = `slide-editor.html?id=${id}&present=true`;
+}
+
 // Export functions for global use
 window.toggleSidebar = toggleSidebar;
 window.toggleSection = toggleSection;
@@ -410,4 +489,6 @@ window.handleRenameSidebar = handleRenameSidebar;
 window.handleDuplicateSidebar = handleDuplicateSidebar;
 window.handleShareSidebar = handleShareSidebar;
 window.handleDeleteSidebar = handleDeleteSidebar;
+window.presentPresentation = presentPresentation;
+window.toggleSeeMore = toggleSeeMore;
 

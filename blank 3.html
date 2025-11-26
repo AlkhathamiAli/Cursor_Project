@@ -13768,6 +13768,13 @@ Generate ONLY plain text. No design elements, HTML, or markdown.`;
           updateProgress(100, 'Presentation created!');
           setAIPresentationStatus(`Successfully created ${presentationSlides.length} slides with Llama AI!`, 'success');
           
+          // FIXED: Save AI-generated slides to recents after slides array is updated
+          setTimeout(() => {
+            if (typeof saveToRecents === 'function') {
+              saveToRecents();
+            }
+          }, 200);
+          
           // Close modal after a short delay
           setTimeout(() => {
             hideAIPresentationModal();
@@ -23820,6 +23827,52 @@ Generate ONLY plain text. No design elements, HTML, or markdown.`;
         showNotification('Presentation saved!');
       }
 
+      // FIXED: Save presentation to recents with full slides data
+      function saveToRecents() {
+        const currentUser = JSON.parse(localStorage.getItem('currentUser') || 'null');
+        const isGuest = localStorage.getItem('guest') === 'true';
+        
+        if (!currentUser) {
+          console.warn('Cannot save to recents: no user logged in');
+          return;
+        }
+
+        // Ensure slides array exists and has content
+        if (typeof slides === 'undefined' || !Array.isArray(slides) || slides.length === 0) {
+          console.warn('Cannot save to recents: slides array is empty or undefined');
+          return;
+        }
+
+        // Get the presentation title
+        const title = (typeof titleBox !== 'undefined' && titleBox.textContent) 
+          ? titleBox.textContent.trim() 
+          : 'AI Generated Presentation';
+        
+        // Create presentation object
+        const presentation = {
+          id: crypto.randomUUID ? crypto.randomUUID() : `pres-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
+          title: title || 'Untitled',
+          date: new Date().toISOString(),
+          slides: JSON.stringify(slides) // Store slides as JSON string
+        };
+        
+        // Save to user-specific key
+        const userKey = `presentations_${currentUser.username}`;
+        const saved = JSON.parse(localStorage.getItem(userKey) || '[]');
+        
+        // Add new presentation to the beginning of the array
+        saved.unshift(presentation);
+        
+        // Keep only the 50 most recent presentations
+        if (saved.length > 50) {
+          saved.splice(50);
+        }
+        
+        localStorage.setItem(userKey, JSON.stringify(saved));
+        
+        console.log('Presentation saved to recents with', slides.length, 'slides');
+      }
+
       // Topbar button actions per slides.json
       document.getElementById('btnDel').addEventListener('click', () => {
         deleteSlide(active);
@@ -23930,9 +23983,31 @@ Generate ONLY plain text. No design elements, HTML, or markdown.`;
       if (loadPres) {
         try {
           const pres = JSON.parse(loadPres);
-          // Set the title and content from saved presentation
-          slides[0].title = pres.title || slides[0].title || '';
-          slides[0].content = pres.content || '';
+          
+          // FIXED: Load full slides array if available
+          if (pres.slides && typeof pres.slides === 'string') {
+            // Parse the slides array from JSON string
+            const loadedSlides = JSON.parse(pres.slides);
+            if (Array.isArray(loadedSlides) && loadedSlides.length > 0) {
+              // Clear existing slides and load the saved ones
+              slides.length = 0;
+              slides.push(...loadedSlides);
+              active = 0;
+              // Re-render the editor with loaded slides
+              if (typeof render === 'function') {
+                render();
+              }
+              if (typeof renderSlideList === 'function') {
+                renderSlideList();
+              }
+              console.log('Loaded presentation with', slides.length, 'slides');
+            }
+          } else {
+            // Fallback: Set the title and content from saved presentation (old format)
+            slides[0].title = pres.title || slides[0].title || '';
+            slides[0].content = pres.content || '';
+          }
+          
           sessionStorage.removeItem('loadPresentation'); // Clear after loading
         } catch (e) {
           console.error('Error loading presentation:', e);

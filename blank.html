@@ -1309,6 +1309,7 @@
         transform: scale(0.96);
         transition: transform 0.2s ease;
         overflow-y: auto;
+        overflow-x: hidden;
       }
       .ai-presentation-modal.show .ai-presentation-modal-content {
         transform: scale(1);
@@ -1496,6 +1497,173 @@
         color: #86efac;
         background: rgba(20, 83, 45, 0.3);
         border-color: rgba(34, 197, 94, 0.4);
+      }
+      .ai-presentation-theme-section {
+        margin-bottom: 18px;
+        padding: 18px;
+        background: rgba(8, 32, 51, 0.5);
+        border: 1px solid rgba(96, 165, 250, 0.3);
+        border-radius: 14px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+      }
+      .ai-presentation-theme-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 12px;
+      }
+      .ai-presentation-theme-title {
+        font-size: 14px;
+        font-weight: 600;
+        color: rgba(191, 219, 254, 0.88);
+        margin: 0;
+      }
+      .ai-presentation-theme-presets {
+        display: flex;
+        gap: 8px;
+        margin-bottom: 16px;
+      }
+      .ai-presentation-theme-preset {
+        flex: 1;
+        padding: 12px;
+        border: 2px solid rgba(96, 165, 250, 0.3);
+        border-radius: 10px;
+        background: rgba(8, 32, 51, 0.6);
+        cursor: pointer;
+        transition: all 0.25s ease;
+        text-align: center;
+        font-size: 13px;
+        font-weight: 500;
+        color: rgba(191, 219, 254, 0.9);
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: flex-start;
+        min-height: 100px;
+      }
+      .ai-presentation-theme-preset[data-preset="custom"] {
+        cursor: default;
+      }
+      .ai-presentation-theme-preset[data-preset="custom"] .ai-presentation-color-picker-wrapper {
+        pointer-events: auto;
+      }
+      .ai-presentation-theme-preset:hover {
+        border-color: rgba(96, 165, 250, 0.6);
+        background: rgba(8, 32, 51, 0.7);
+        transform: translateY(-1px);
+      }
+      .ai-presentation-theme-preset.active {
+        border-color: rgba(56, 189, 248, 0.9);
+        background: rgba(56, 189, 248, 0.25);
+        box-shadow: 0 4px 12px rgba(56, 189, 248, 0.3);
+        transform: translateY(-1px);
+      }
+      .ai-presentation-theme-preset-gradient {
+        height: 40px;
+        border-radius: 6px;
+        margin-bottom: 4px;
+        width: 100%;
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+      }
+      .ai-presentation-color-controls {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 12px;
+        width: 100%;
+        box-sizing: border-box;
+        margin-top: 16px;
+        padding-top: 16px;
+        border-top: 1px solid rgba(96, 165, 250, 0.2);
+      }
+      @keyframes slideDown {
+        from {
+          opacity: 0;
+          transform: translateY(-10px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+      .ai-presentation-color-control {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+      }
+      .ai-presentation-color-label {
+        font-size: 12px;
+        color: rgba(191, 219, 254, 0.75);
+        font-weight: 500;
+      }
+      .ai-presentation-color-picker-wrapper {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+      .ai-presentation-color-preview {
+        width: 40px;
+        height: 40px;
+        border-radius: 8px;
+        border: 2px solid rgba(96, 165, 250, 0.3);
+        cursor: pointer;
+        transition: all 0.2s ease;
+        background: #ffffff;
+      }
+      .ai-presentation-color-preview:hover {
+        border-color: rgba(96, 165, 250, 0.6);
+        transform: scale(1.05);
+      }
+      .ai-presentation-color-input {
+        flex: 1;
+        min-width: 0;
+        padding: 8px;
+        border: 1px solid rgba(96, 165, 250, 0.3);
+        border-radius: 6px;
+        background: rgba(8, 32, 51, 0.6);
+        color: #eafcff;
+        font-size: 13px;
+        font-family: monospace;
+        box-sizing: border-box;
+      }
+      .ai-presentation-color-input:focus {
+        outline: none;
+        border-color: rgba(56, 189, 248, 0.6);
+        background: rgba(8, 32, 51, 0.8);
+      }
+      body.light-mode .ai-presentation-theme-section {
+        background: rgba(248, 250, 252, 0.8);
+        border: 1px solid rgba(203, 213, 225, 0.6);
+      }
+      body.light-mode .ai-presentation-theme-title {
+        color: rgba(30, 41, 59, 0.9);
+      }
+      body.light-mode .ai-presentation-theme-preset {
+        background: rgba(255, 255, 255, 0.8);
+        border: 2px solid rgba(203, 213, 225, 0.6);
+        color: rgba(30, 41, 59, 0.9);
+      }
+      body.light-mode .ai-presentation-theme-preset:hover {
+        border-color: rgba(59, 130, 246, 0.5);
+        background: rgba(255, 255, 255, 0.95);
+      }
+      body.light-mode .ai-presentation-theme-preset.active {
+        border-color: rgba(37, 99, 235, 0.8);
+        background: rgba(59, 130, 246, 0.15);
+      }
+      body.light-mode .ai-presentation-color-label {
+        color: rgba(30, 41, 59, 0.75);
+      }
+      body.light-mode .ai-presentation-color-input {
+        border: 1px solid rgba(203, 213, 225, 0.6);
+        background: rgba(255, 255, 255, 0.9);
+        color: #0f172a;
+      }
+      body.light-mode .ai-presentation-color-input:focus {
+        border-color: rgba(59, 130, 246, 0.6);
+        background: rgba(255, 255, 255, 1);
       }
 
       .main { 
@@ -2665,6 +2833,10 @@ body.dark-theme > .slide-canvas-context-menu {
       body.light-mode .chart-option-label {
         color: #0f172a;
       }
+      body.light-mode .shape-category-header {
+        color: rgba(15, 23, 42, 0.7);
+        border-bottom-color: rgba(203, 213, 225, 0.5);
+      }
       body.light-mode .icon-option {
         background: rgba(248, 250, 252, 0.96);
         border: 1px solid rgba(203, 213, 225, 0.7);
@@ -2983,6 +3155,10 @@ body.dark-theme > .slide-canvas-context-menu {
       body.dark-theme .shape-option:hover,
       body.dark-theme .chart-option:hover {
         background: rgba(72, 80, 92, 0.9);
+      }
+      body.dark-theme .shape-category-header {
+        color: rgba(226, 232, 240, 0.7);
+        border-bottom-color: rgba(148, 163, 184, 0.3);
       }
       body.dark-theme .zoom-display {
         color: rgba(226, 232, 240, 0.9);
@@ -4169,7 +4345,7 @@ body.dark-theme .sidebar.thumbnail-view .slide-preview-title {
         border-radius: 10px;
         box-shadow: 0 12px 40px rgba(0, 0, 0, 0.5);
         padding: 8px;
-        max-height: 360px;
+        max-height: 500px;
         overflow-y: auto;
         z-index: 4000;
         min-width: 240px;
@@ -4639,6 +4815,19 @@ body.dark-theme .sidebar.thumbnail-view .slide-preview-title {
       .chart-option-label {
         font-size: 15px;
         font-weight: 600;
+      }
+      .shape-category-header {
+        font-size: 12px;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        color: rgba(255, 255, 255, 0.7);
+        padding: 8px 12px 4px 12px;
+        margin-top: 8px;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      }
+      .shape-category-header:first-child {
+        margin-top: 0;
       }
       .chart-option-preview {
         width: 44px;
@@ -5645,6 +5834,9 @@ body.dark-theme .sidebar.thumbnail-view .slide-preview-title {
       .icon-element.resizing .resize-edge {
         opacity: 1;
       }
+      .shape-element.resizing .resize-edge {
+        opacity: 1;
+      }
       .image-element:hover .resize-edge,
       .image-element.resizing .resize-edge {
         opacity: 1;
@@ -5675,6 +5867,10 @@ body.dark-theme .sidebar.thumbnail-view .slide-preview-title {
       .additional-text-box .resize-edge.corner {
         width: 16px;
         height: 16px;
+      }
+      .shape-element .resize-edge.corner {
+        background: linear-gradient(135deg, rgba(59,130,246,0.95), rgba(129,230,217,0.95));
+        border-color: rgba(56, 189, 248, 0.85);
       }
       .shape-element .resize-edge.top,
       .chart-element .resize-edge.top,
@@ -5798,19 +5994,125 @@ body.dark-theme .sidebar.thumbnail-view .slide-preview-title {
       .shape-color-picker {
         position: fixed;
         display: flex;
-        align-items: center;
-        justify-content: center;
-        background: rgba(4, 44, 28, 0.9);
-        border: 1px solid rgba(255, 255, 255, 0.18);
-        border-radius: 999px;
-        padding: 6px;
+        flex-direction: column;
+        align-items: stretch;
+        background: linear-gradient(135deg, rgba(13, 79, 65, 0.98) 0%, rgba(10, 95, 112, 0.98) 100%);
+        border: 1px solid rgba(148, 232, 203, 0.3);
+        border-radius: 12px;
+        padding: 10px;
         gap: 8px;
-        box-shadow: 0 10px 24px rgba(0, 0, 0, 0.35);
+        box-shadow: 0 12px 32px rgba(0, 0, 0, 0.4);
         opacity: 0;
         transform: translateY(8px) scale(0.96);
         pointer-events: none;
         transition: opacity 0.2s ease, transform 0.2s ease;
         z-index: 4100;
+        min-width: auto;
+        backdrop-filter: blur(10px);
+      }
+      .shape-color-picker-row {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        width: 100%;
+      }
+      .shape-color-picker-main {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        flex: 1;
+      }
+      .shape-gradient-controls {
+        display: none;
+        flex-direction: row;
+        align-items: center;
+        gap: 8px;
+        width: 100%;
+        padding-top: 8px;
+        border-top: 1px solid rgba(148, 232, 203, 0.2);
+      }
+      .shape-gradient-controls.visible {
+        display: flex;
+      }
+      .shape-gradient-direction-wrapper {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+      }
+      .shape-gradient-direction-label {
+        font-size: 11px;
+        font-weight: 600;
+        color: rgba(255, 255, 255, 0.9);
+        white-space: nowrap;
+      }
+      .shape-gradient-direction-btn {
+        height: 36px;
+        padding: 0 12px;
+        border-radius: 8px;
+        border: 2px solid rgba(148, 232, 203, 0.3);
+        background: rgba(255, 255, 255, 0.08);
+        color: #e8f5e9;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 6px;
+        transition: all 0.2s ease;
+        font-size: 12px;
+        font-weight: 500;
+        white-space: nowrap;
+      }
+      .shape-gradient-direction-btn:hover {
+        background: rgba(148, 232, 203, 0.15);
+        border-color: rgba(148, 232, 203, 0.5);
+        transform: translateY(-1px);
+      }
+      .shape-gradient-direction-btn:active {
+        transform: translateY(0);
+      }
+      .shape-gradient-color-inputs {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        flex: 1;
+      }
+      .shape-gradient-color-wrapper {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+        align-items: center;
+      }
+      .shape-gradient-color-label {
+        font-size: 10px;
+        font-weight: 600;
+        color: rgba(255, 255, 255, 0.9);
+        text-align: center;
+        white-space: nowrap;
+      }
+      .shape-gradient-toggle {
+        width: 36px;
+        height: 36px;
+        border-radius: 8px;
+        border: 2px solid rgba(148, 232, 203, 0.3);
+        background: rgba(255, 255, 255, 0.08);
+        color: #e8f5e9;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.2s ease;
+        font-size: 14px;
+        flex-shrink: 0;
+      }
+      .shape-gradient-toggle:hover {
+        background: rgba(148, 232, 203, 0.15);
+        border-color: rgba(148, 232, 203, 0.5);
+        transform: translateY(-1px);
+      }
+      .shape-gradient-toggle.active {
+        background: rgba(56, 189, 248, 0.25);
+        border-color: rgba(56, 189, 248, 0.6);
+        box-shadow: 0 0 0 2px rgba(56, 189, 248, 0.2);
       }
       .shape-color-picker.visible {
         opacity: 1;
@@ -5994,18 +6296,24 @@ body.dark-theme .sidebar.thumbnail-view .slide-preview-title {
         animation: imageInsertFade 0.28s ease-out;
       }
       .shape-color-button {
-        width: 32px;
-        height: 32px;
-        border-radius: 999px;
-        border: 1px solid rgba(96, 165, 250, 0.35);
-        background: rgba(13, 52, 78, 0.7);
+        width: 36px;
+        height: 36px;
+        border-radius: 8px;
+        border: 2px solid rgba(148, 232, 203, 0.3);
+        background: rgba(255, 255, 255, 0.08);
         display: flex;
         align-items: center;
         justify-content: center;
-        color: #e0f2ff;
-        font-size: 16px;
+        color: #e8f5e9;
+        font-size: 14px;
         cursor: pointer;
-        transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.2s ease;
+        transition: all 0.2s ease;
+        flex-shrink: 0;
+      }
+      .shape-color-button:hover {
+        background: rgba(148, 232, 203, 0.15);
+        border-color: rgba(148, 232, 203, 0.5);
+        transform: translateY(-1px);
       }
       .shape-color-button:hover {
         transform: translateY(-2px);
@@ -6021,6 +6329,40 @@ body.dark-theme .sidebar.thumbnail-view .slide-preview-title {
         overflow: hidden;
         clip: rect(0, 0, 0, 0);
         border: 0;
+      }
+      .shape-gradient-color-input {
+        position: relative;
+        width: 36px;
+        height: 36px;
+        padding: 0;
+        margin: 0;
+        overflow: visible;
+        clip: auto;
+        border: 2px solid rgba(148, 232, 203, 0.3);
+        border-radius: 8px;
+        background: rgba(255, 255, 255, 0.08);
+        cursor: pointer;
+        transition: all 0.2s ease;
+        -webkit-appearance: none;
+        appearance: none;
+        flex-shrink: 0;
+      }
+      .shape-gradient-color-input::-webkit-color-swatch-wrapper {
+        padding: 0;
+      }
+      .shape-gradient-color-input::-webkit-color-swatch {
+        border: none;
+        border-radius: 8px;
+      }
+      .shape-gradient-color-input::-moz-color-swatch {
+        border: none;
+        border-radius: 8px;
+      }
+      .shape-gradient-color-input:hover {
+        border-color: rgba(148, 232, 203, 0.5);
+        background: rgba(255, 255, 255, 0.12);
+        transform: translateY(-1px);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
       }
       .tool-select { 
         background: rgba(13, 52, 78, 0.7);
@@ -7279,7 +7621,41 @@ body.dark-theme .sidebar.thumbnail-view .slide-preview-title {
             </div>
             <div class="ai-presentation-form-group">
               <label for="aiPresentationSlides" class="ai-presentation-form-label">Number of Slides</label>
-              <input type="number" id="aiPresentationSlides" class="ai-presentation-form-input" min="3" max="20" value="5" autocomplete="off">
+              <input type="number" id="aiPresentationSlides" class="ai-presentation-form-input" min="6" max="20" value="8" autocomplete="off">
+            </div>
+            <div class="ai-presentation-theme-section">
+              <div class="ai-presentation-theme-header">
+                <h4 class="ai-presentation-theme-title">Theme Colors</h4>
+              </div>
+              <div class="ai-presentation-theme-presets">
+                <div class="ai-presentation-theme-preset" data-preset="gradient" title="Blue-Green Gradient">
+                  <div class="ai-presentation-theme-preset-gradient"></div>
+                  <div>Gradient</div>
+                </div>
+                <div class="ai-presentation-theme-preset" data-preset="custom" title="Custom Background">
+                  <label class="ai-presentation-color-label" style="margin-bottom: 6px; font-size: 11px;">Background</label>
+                  <div class="ai-presentation-color-picker-wrapper" style="flex-direction: column; gap: 6px; align-items: center;">
+                    <input type="color" id="aiThemeBackgroundColor" class="ai-presentation-color-preview" value="#ffffff" style="width: 40px; height: 40px; border: 2px solid rgba(96, 165, 250, 0.3); border-radius: 8px; cursor: pointer; padding: 0;">
+                    <input type="text" id="aiThemeBackgroundColorText" class="ai-presentation-color-input" value="#ffffff" placeholder="#ffffff" style="width: 100%; font-size: 11px; padding: 4px;">
+                  </div>
+                </div>
+              </div>
+              <div class="ai-presentation-color-controls">
+                <div class="ai-presentation-color-control">
+                  <label class="ai-presentation-color-label">Headings</label>
+                  <div class="ai-presentation-color-picker-wrapper">
+                    <input type="color" id="aiThemeHeadingColor" class="ai-presentation-color-preview" value="#000000" style="width: 40px; height: 40px; border: 2px solid rgba(96, 165, 250, 0.3); border-radius: 8px; cursor: pointer; padding: 0;">
+                    <input type="text" id="aiThemeHeadingColorText" class="ai-presentation-color-input" value="#000000" placeholder="#000000">
+                  </div>
+                </div>
+                <div class="ai-presentation-color-control">
+                  <label class="ai-presentation-color-label">Text</label>
+                  <div class="ai-presentation-color-picker-wrapper">
+                    <input type="color" id="aiThemeTextColor" class="ai-presentation-color-preview" value="#000000" style="width: 40px; height: 40px; border: 2px solid rgba(96, 165, 250, 0.3); border-radius: 8px; cursor: pointer; padding: 0;">
+                    <input type="text" id="aiThemeTextColorText" class="ai-presentation-color-input" value="#000000" placeholder="#000000">
+                  </div>
+                </div>
+              </div>
             </div>
             <div class="ai-presentation-progress" id="aiPresentationProgress">
               <div class="ai-presentation-progress-bar">
@@ -7553,10 +7929,6 @@ body.dark-theme .sidebar.thumbnail-view .slide-preview-title {
                 <button type="button" class="tool" id="translateToolButton" title="Translate text" aria-label="Translate text">
                   <i class="fas fa-language" aria-hidden="true"></i>
                   <span>Translate</span>
-                </button>
-                <button type="button" class="tool" id="aiDesignerButton" title="Image Generator" aria-label="Image Generator">
-                  <i class="fas fa-magic" aria-hidden="true"></i>
-                  <span>Image Generator</span>
                 </button>
                 <button type="button" class="tool" id="aiPresentationButton" title="AI Presentation Designer" aria-label="AI Presentation Designer">
                   <i class="fas fa-wand-magic-sparkles" aria-hidden="true"></i>
@@ -8217,7 +8589,6 @@ body.dark-theme .sidebar.thumbnail-view .slide-preview-title {
           tools: [
             { selector: '#spellCheckToggle', title: 'Spell Check', description: 'Toggle spell checking on or off. When enabled, misspelled words will be underlined in red.' },
             { selector: '#translateToolButton', title: 'Translate', description: 'Translate selected text to different languages. Click to open the translation tool.' },
-            { selector: '#aiDesignerButton', title: 'Image Generator', description: 'Generate images using AI. Click to create custom images based on text descriptions.' },
             { selector: '#aiPresentationButton', title: 'AI Presentation', description: 'Generate an entire presentation using AI. Click to create slides automatically based on a topic.' }
           ]
         };
@@ -11017,9 +11388,63 @@ body.dark-theme .sidebar.thumbnail-view .slide-preview-title {
       }
 
       const SHAPE_OPTIONS = [
+        // Lines Category
+        {
+          id: 'line-diagonal',
+          name: 'Line',
+          category: 'Lines',
+          viewBox: '0 0 100 40',
+          svg: '<line x1="8" y1="32" x2="92" y2="8" stroke-linecap="round" fill="none"></line>',
+          defaultWidth: 220,
+          defaultHeight: 60,
+          minWidth: 80,
+          minHeight: 30,
+          defaultColor: '#63b3ed',
+          strokeWidth: 8
+        },
+        {
+          id: 'line-arrow-down-right',
+          name: 'Line with Arrow',
+          category: 'Lines',
+          viewBox: '0 0 100 40',
+          svg: '<line x1="8" y1="32" x2="92" y2="8" stroke-linecap="round" fill="none"></line><polygon points="92,8 85,4 85,12 92,8" fill="currentColor"></polygon>',
+          defaultWidth: 220,
+          defaultHeight: 60,
+          minWidth: 80,
+          minHeight: 30,
+          defaultColor: '#63b3ed',
+          strokeWidth: 8
+        },
+        // Rectangles Category
+        {
+          id: 'rectangle-sharp',
+          name: 'Rectangle',
+          category: 'Rectangles',
+          viewBox: '0 0 100 100',
+          svg: '<rect x="10" y="10" width="80" height="80"></rect>',
+          defaultWidth: 200,
+          defaultHeight: 200,
+          minWidth: 80,
+          minHeight: 80,
+          defaultColor: '#9ae6b4'
+        },
+        {
+          id: 'rectangle-rounded',
+          name: 'Rounded Rectangle',
+          category: 'Rectangles',
+          viewBox: '0 0 100 100',
+          svg: '<rect x="10" y="10" width="80" height="80" rx="8" ry="8"></rect>',
+          defaultWidth: 200,
+          defaultHeight: 200,
+          minWidth: 80,
+          minHeight: 80,
+          defaultColor: '#9ae6b4'
+        },
+        // Basic Shapes Category
         {
           id: 'rectangle',
           name: 'Rectangle',
+          category: 'Basic Shapes',
           viewBox: '0 0 100 70',
           svg: '<rect x="6" y="10" width="88" height="50" rx="10" ry="10"></rect>',
           defaultWidth: 200,
@@ -11031,6 +11456,7 @@ body.dark-theme .sidebar.thumbnail-view .slide-preview-title {
         {
           id: 'square',
           name: 'Square',
+          category: 'Basic Shapes',
           viewBox: '0 0 100 100',
           svg: '<rect x="12" y="12" width="76" height="76" rx="12" ry="12"></rect>',
           defaultWidth: 140,
@@ -11042,6 +11468,7 @@ body.dark-theme .sidebar.thumbnail-view .slide-preview-title {
         {
           id: 'circle',
           name: 'Circle',
+          category: 'Basic Shapes',
           viewBox: '0 0 100 100',
           svg: '<circle cx="50" cy="50" r="38"></circle>',
           defaultWidth: 140,
@@ -11053,6 +11480,7 @@ body.dark-theme .sidebar.thumbnail-view .slide-preview-title {
         {
           id: 'triangle',
           name: 'Triangle',
+          category: 'Basic Shapes',
           viewBox: '0 0 100 90',
           svg: '<path d="M50 12 L90 78 H10 Z"></path>',
           defaultWidth: 160,
@@ -11062,8 +11490,69 @@ body.dark-theme .sidebar.thumbnail-view .slide-preview-title {
           defaultColor: '#f6ad55'
         },
         {
+          id: 'parallelogram',
+          name: 'Parallelogram',
+          category: 'Basic Shapes',
+          viewBox: '0 0 100 70',
+          svg: '<path d="M20 10 L90 10 L70 60 L0 60 Z"></path>',
+          defaultWidth: 200,
+          defaultHeight: 120,
+          minWidth: 80,
+          minHeight: 60,
+          defaultColor: '#a5b4fc'
+        },
+        {
+          id: 'trapezium',
+          name: 'Trapezium',
+          category: 'Basic Shapes',
+          viewBox: '0 0 100 70',
+          svg: '<path d="M20 10 L80 10 L90 60 H10 Z"></path>',
+          defaultWidth: 200,
+          defaultHeight: 120,
+          minWidth: 80,
+          minHeight: 60,
+          defaultColor: '#a5b4fc'
+        },
+        {
+          id: 'pentagon',
+          name: 'Pentagon',
+          category: 'Basic Shapes',
+          viewBox: '0 0 100 90',
+          svg: '<path d="M50 8 L90 36 L74 80 H26 L10 36 Z"></path>',
+          defaultWidth: 160,
+          defaultHeight: 140,
+          minWidth: 80,
+          minHeight: 70,
+          defaultColor: '#f472b6'
+        },
+        {
+          id: 'hexagon',
+          name: 'Hexagon',
+          category: 'Basic Shapes',
+          viewBox: '0 0 100 90',
+          svg: '<path d="M50 8 L88 26 L88 64 L50 82 L12 64 L12 26 Z"></path>',
+          defaultWidth: 160,
+          defaultHeight: 140,
+          minWidth: 80,
+          minHeight: 70,
+          defaultColor: '#f472b6'
+        },
+        {
+          id: 'octagon',
+          name: 'Octagon',
+          category: 'Basic Shapes',
+          viewBox: '0 0 100 100',
+          svg: '<path d="M30 8 L70 8 L92 30 L92 70 L70 92 L30 92 L8 70 L8 30 Z"></path>',
+          defaultWidth: 160,
+          defaultHeight: 160,
+          minWidth: 80,
+          minHeight: 80,
+          defaultColor: '#f472b6'
+        },
+        {
           id: 'star',
           name: 'Star',
+          category: 'Basic Shapes',
           viewBox: '0 0 100 100',
           svg: '<path d="M50 6 L61 36 H92 L66 54 L76 84 L50 66 L24 84 L34 54 L8 36 H39 Z"></path>',
           defaultWidth: 160,
@@ -11072,9 +11561,11 @@ body.dark-theme .sidebar.thumbnail-view .slide-preview-title {
           minHeight: 80,
           defaultColor: '#fcd34d'
         },
+        // Block Arrows Category
         {
           id: 'arrow-right',
-          name: 'Arrow',
+          name: 'Arrow Right',
+          category: 'Block Arrows',
           viewBox: '0 0 120 70',
           svg: '<path d="M16 28 H70 V14 L104 35 L70 56 V42 H16 Z"></path>',
           defaultWidth: 200,
@@ -11084,27 +11575,40 @@ body.dark-theme .sidebar.thumbnail-view .slide-preview-title {
           defaultColor: '#4ade80'
         },
         {
-          id: 'line',
-          name: 'Line',
-          viewBox: '0 0 100 40',
-          svg: '<line x1="8" y1="32" x2="92" y2="8" stroke-linecap="round" fill="none"></line>',
-          defaultWidth: 220,
-          defaultHeight: 60,
+          id: 'arrow-left',
+          name: 'Arrow Left',
+          category: 'Block Arrows',
+          viewBox: '0 0 120 70',
+          svg: '<path d="M104 28 H50 V14 L16 35 L50 56 V42 H104 Z"></path>',
+          defaultWidth: 200,
+          defaultHeight: 120,
           minWidth: 80,
-          minHeight: 30,
-          defaultColor: '#63b3ed',
-          strokeWidth: 8
+          minHeight: 60,
+          defaultColor: '#4ade80'
         },
         {
-          id: 'pentagon',
-          name: 'Pentagon',
-          viewBox: '0 0 100 90',
-          svg: '<path d="M50 8 L90 36 L74 80 H26 L10 36 Z"></path>',
-          defaultWidth: 160,
-          defaultHeight: 140,
-          minWidth: 80,
-          minHeight: 70,
-          defaultColor: '#f472b6'
+          id: 'arrow-up',
+          name: 'Arrow Up',
+          category: 'Block Arrows',
+          viewBox: '0 0 70 120',
+          svg: '<path d="M28 104 V50 H14 L35 16 L56 50 H42 V104 Z"></path>',
+          defaultWidth: 120,
+          defaultHeight: 200,
+          minWidth: 60,
+          minHeight: 80,
+          defaultColor: '#4ade80'
+        },
+        {
+          id: 'arrow-down',
+          name: 'Arrow Down',
+          category: 'Block Arrows',
+          viewBox: '0 0 70 120',
+          svg: '<path d="M28 16 V70 H14 L35 104 L56 70 H42 V16 Z"></path>',
+          defaultWidth: 120,
+          defaultHeight: 200,
+          minWidth: 60,
+          minHeight: 80,
+          defaultColor: '#4ade80'
         }
       ];
 
@@ -11337,22 +11841,46 @@ body.dark-theme .sidebar.thumbnail-view .slide-preview-title {
       function renderShapeOptions() {
         shapeDropdown.innerHTML = '';
         shapeOptionButtons.clear();
+        
+        // Group shapes by category
+        const shapesByCategory = new Map();
         SHAPE_OPTIONS.forEach(shape => {
-          const option = document.createElement('button');
-          option.type = 'button';
-          option.className = 'shape-option';
-          option.innerHTML = `
-            <div class="shape-option-preview">${renderShapeSvg(shape)}</div>
-            <span class="shape-option-label">${shape.name}</span>
-          `;
-          option.addEventListener('click', (event) => {
-            event.preventDefault();
-            event.stopPropagation();
-            insertShape(shape.id);
-            hideShapeDropdown();
+          const category = shape.category || 'Basic Shapes';
+          if (!shapesByCategory.has(category)) {
+            shapesByCategory.set(category, []);
+          }
+          shapesByCategory.get(category).push(shape);
+        });
+        
+        // Render categories in order
+        const categoryOrder = ['Lines', 'Rectangles', 'Basic Shapes', 'Block Arrows'];
+        categoryOrder.forEach(category => {
+          if (!shapesByCategory.has(category)) return;
+          
+          // Add category header
+          const categoryHeader = document.createElement('div');
+          categoryHeader.className = 'shape-category-header';
+          categoryHeader.textContent = category;
+          shapeDropdown.appendChild(categoryHeader);
+          
+          // Add shapes in this category
+          shapesByCategory.get(category).forEach(shape => {
+            const option = document.createElement('button');
+            option.type = 'button';
+            option.className = 'shape-option';
+            option.innerHTML = `
+              <div class="shape-option-preview">${renderShapeSvg(shape)}</div>
+              <span class="shape-option-label">${shape.name}</span>
+            `;
+            option.addEventListener('click', (event) => {
+              event.preventDefault();
+              event.stopPropagation();
+              insertShape(shape.id);
+              hideShapeDropdown();
+            });
+            shapeDropdown.appendChild(option);
+            shapeOptionButtons.set(shape.id, option);
           });
-          shapeDropdown.appendChild(option);
-          shapeOptionButtons.set(shape.id, option);
         });
       }
 
@@ -11409,14 +11937,59 @@ body.dark-theme .sidebar.thumbnail-view .slide-preview-title {
       shapeColorPicker.id = 'shapeColorPicker';
       shapeColorPicker.className = 'shape-color-picker';
       shapeColorPicker.innerHTML = `
-        <button type="button" id="shapeColorButton" class="shape-color-button" title="Shape Fill Color">
-          <i class="fas fa-fill-drip"></i>
-        </button>
-        <input type="color" id="shapeColorInput" class="shape-color-input" value="#e8f5e9" aria-label="Shape Fill Color Picker">
+        <div class="shape-color-picker-row">
+          <div class="shape-color-picker-main">
+            <button type="button" id="shapeColorButton" class="shape-color-button" title="Shape Fill Color">
+              <i class="fas fa-fill-drip"></i>
+            </button>
+            <input type="color" id="shapeColorInput" class="shape-color-input" value="#e8f5e9" aria-label="Shape Fill Color Picker">
+          </div>
+          <button type="button" id="shapeGradientToggle" class="shape-gradient-toggle" title="Toggle Gradient">
+            <i class="fas fa-sliders-h"></i>
+          </button>
+        </div>
+        <div id="shapeGradientControls" class="shape-gradient-controls">
+          <div class="shape-gradient-direction-wrapper">
+            <span class="shape-gradient-direction-label">Dir:</span>
+            <button type="button" id="shapeGradientDirectionBtn" class="shape-gradient-direction-btn" title="Change Gradient Direction">
+              <i class="fas fa-arrow-right"></i>
+              <span id="shapeGradientDirectionText">→</span>
+            </button>
+          </div>
+          <div class="shape-gradient-color-inputs">
+            <div class="shape-gradient-color-wrapper">
+              <label class="shape-gradient-color-label">Start</label>
+              <input type="color" id="shapeGradientColor1" class="shape-gradient-color-input" value="#e8f5e9">
+            </div>
+            <div class="shape-gradient-color-wrapper">
+              <label class="shape-gradient-color-label">End</label>
+              <input type="color" id="shapeGradientColor2" class="shape-gradient-color-input" value="#cbd5e1">
+            </div>
+          </div>
+        </div>
       `;
       document.body.appendChild(shapeColorPicker);
       const shapeColorButton = document.getElementById('shapeColorButton');
       const shapeColorInput = document.getElementById('shapeColorInput');
+      const shapeGradientToggle = document.getElementById('shapeGradientToggle');
+      const shapeGradientControls = document.getElementById('shapeGradientControls');
+      const shapeGradientColor1 = document.getElementById('shapeGradientColor1');
+      const shapeGradientColor2 = document.getElementById('shapeGradientColor2');
+      const shapeGradientDirectionBtn = document.getElementById('shapeGradientDirectionBtn');
+      const shapeGradientDirectionText = document.getElementById('shapeGradientDirectionText');
+      
+      // Gradient direction options
+      const gradientDirections = [
+        { direction: 'to right', icon: 'fa-arrow-right', label: 'Left to Right' },
+        { direction: 'to left', icon: 'fa-arrow-left', label: 'Right to Left' },
+        { direction: 'to bottom', icon: 'fa-arrow-down', label: 'Top to Bottom' },
+        { direction: 'to top', icon: 'fa-arrow-up', label: 'Bottom to Top' },
+        { direction: 'to bottom right', icon: 'fa-arrow-down-right', label: 'Diagonal ↘' },
+        { direction: 'to bottom left', icon: 'fa-arrow-down-left', label: 'Diagonal ↙' },
+        { direction: 'to top right', icon: 'fa-arrow-up-right', label: 'Diagonal ↗' },
+        { direction: 'to top left', icon: 'fa-arrow-up-left', label: 'Diagonal ↖' }
+      ];
+      let currentGradientDirectionIndex = 0;
       const shapeSizeBadge = document.createElement('div');
       shapeSizeBadge.id = 'shapeSizeBadge';
       shapeSizeBadge.className = 'shape-size-badge';
@@ -13505,19 +14078,32 @@ body.dark-theme .sidebar.thumbnail-view .slide-preview-title {
         if (!element) return null;
         const elementId = ensureElementHasId(element, 'shape');
         const { left, top } = getElementPosition(element);
-        return {
+        const shapeData = {
           id: elementId,
           shapeId: element.dataset.shape,
           left,
           top,
           width: element.offsetWidth,
           height: element.offsetHeight,
-          color: normalizeColorHex(element.dataset.color || element.style.color || '#e8f5e9'),
           zIndex: element.style.zIndex ? parseInt(element.style.zIndex, 10) : undefined,
           minWidth: element.dataset.minWidth ? parseFloat(element.dataset.minWidth) : undefined,
           minHeight: element.dataset.minHeight ? parseFloat(element.dataset.minHeight) : undefined,
           rotation: parseFloat(element.dataset.rotation || '0') || 0
         };
+        
+        // Include gradient data if present
+        if (element.dataset.gradientData) {
+          try {
+            shapeData.gradientData = JSON.parse(element.dataset.gradientData);
+          } catch (e) {
+            // Invalid gradient data, fall back to color
+            shapeData.color = normalizeColorHex(element.dataset.color || element.style.color || '#e8f5e9');
+          }
+        } else {
+          shapeData.color = normalizeColorHex(element.dataset.color || element.style.color || '#e8f5e9');
+        }
+        
+        return shapeData;
       }
       function serializeChartElement(element) {
         if (!element) return null;
@@ -14504,13 +15090,81 @@ body.dark-theme .sidebar.thumbnail-view .slide-preview-title {
       if (translatorLanguageSelect) {
         translatorLanguageSelect.addEventListener('change', () => {
           setTranslatorStatus('');
+          // Auto-translate when language is changed if there's text
+          const sourceText = translatorSourceInput ? translatorSourceInput.value.trim() : '';
+          if (sourceText && !isTranslatorBusy) {
+            performTranslatorLookup();
+          }
+        });
+        // Translate when Enter is pressed in the language select
+        translatorLanguageSelect.addEventListener('keydown', (e) => {
+          if (e.key === 'Enter') {
+            e.preventDefault();
+            e.stopPropagation();
+            // Close the dropdown first
+            translatorLanguageSelect.blur();
+            // Then translate
+            setTimeout(() => {
+              const sourceText = translatorSourceInput ? translatorSourceInput.value.trim() : '';
+              if (sourceText && translatorLanguageSelect.value && !isTranslatorBusy) {
+                performTranslatorLookup();
+              } else if (!sourceText) {
+                setTranslatorStatus('Enter text to translate.');
+                if (translatorSourceInput) {
+                  translatorSourceInput.focus();
+                }
+              } else if (!translatorLanguageSelect.value) {
+                setTranslatorStatus('Select a target language.');
+              }
+            }, 50);
+          }
+        });
+        // Also handle keyup as fallback
+        translatorLanguageSelect.addEventListener('keyup', (e) => {
+          if (e.key === 'Enter' && document.activeElement === translatorLanguageSelect) {
+            const sourceText = translatorSourceInput ? translatorSourceInput.value.trim() : '';
+            if (sourceText && translatorLanguageSelect.value && !isTranslatorBusy) {
+              performTranslatorLookup();
+            }
+          }
         });
       }
       if (translatorSourceInput) {
+        let translationTimeout = null;
         translatorSourceInput.addEventListener('input', () => {
           setTranslatorStatus('');
           if (translatorResultArea) {
             translatorResultArea.value = '';
+          }
+          
+          // Auto-translate when user types (with debounce)
+          clearTimeout(translationTimeout);
+          const sourceText = translatorSourceInput.value.trim();
+          if (sourceText && translatorLanguageSelect && translatorLanguageSelect.value) {
+            // Debounce translation by 500ms to avoid too many requests
+            translationTimeout = setTimeout(() => {
+              if (!isTranslatorBusy && sourceText === translatorSourceInput.value.trim()) {
+                performTranslatorLookup();
+              }
+            }, 500);
+          }
+        });
+        // Translate when Enter is pressed in the source input
+        translatorSourceInput.addEventListener('keydown', (e) => {
+          if (e.key === 'Enter' && !e.shiftKey) {
+            e.preventDefault();
+            const sourceText = translatorSourceInput.value.trim();
+            if (sourceText && translatorLanguageSelect && translatorLanguageSelect.value && !isTranslatorBusy) {
+              clearTimeout(translationTimeout);
+              performTranslatorLookup();
+            } else if (!sourceText) {
+              setTranslatorStatus('Enter text to translate.');
+            } else if (!translatorLanguageSelect || !translatorLanguageSelect.value) {
+              setTranslatorStatus('Select a target language.');
+              if (translatorLanguageSelect) {
+                translatorLanguageSelect.focus();
+              }
+            }
           }
         });
       }
@@ -14541,6 +15195,9 @@ body.dark-theme .sidebar.thumbnail-view .slide-preview-title {
       const aiDesignerStatus = document.getElementById('aiDesignerStatus');
       
       let generatedImageDataUrl = null;
+      let isGeneratingImage = false; // Prevent concurrent image generation requests
+      let lastImageRequestTime = 0; // Track last image request time
+      const MIN_REQUEST_DELAY = 3000; // Minimum 3 seconds between image requests
       
       function showAIDesignerModal() {
         if (aiDesignerModal) {
@@ -14581,12 +15238,30 @@ body.dark-theme .sidebar.thumbnail-view .slide-preview-title {
       }
       
       async function generateImageWithHuggingFace(prompt) {
+        // Prevent concurrent requests
+        if (isGeneratingImage) {
+          setAIDesignerStatus('Image generation already in progress. Please wait...', 'error');
+          return null;
+        }
+        
+        // Enforce minimum delay between requests
+        const timeSinceLastRequest = Date.now() - lastImageRequestTime;
+        if (timeSinceLastRequest < MIN_REQUEST_DELAY) {
+          const waitTime = Math.ceil((MIN_REQUEST_DELAY - timeSinceLastRequest) / 1000);
+          setAIDesignerStatus(`Please wait ${waitTime} second${waitTime > 1 ? 's' : ''} before making another request.`, 'error');
+          return null;
+        }
+        
         if (!prompt || !prompt.trim()) {
           setAIDesignerStatus('Please enter an image description', 'error');
           return null;
         }
         
-        setAIDesignerStatus('Generating image... This may take 20-30 seconds', '');
+        // Set flag and update last request time
+        isGeneratingImage = true;
+        lastImageRequestTime = Date.now();
+        
+        setAIDesignerStatus('Generating image with DALL-E... This may take 10-20 seconds', '');
         if (aiDesignerPreview) {
           aiDesignerPreview.innerHTML = '<div class="ai-designer-preview-loading">Generating your image... Please wait</div>';
         }
@@ -14595,25 +15270,20 @@ body.dark-theme .sidebar.thumbnail-view .slide-preview-title {
         }
         
         try {
-          // Use HF_IMAGE_TOKEN specifically for image generation
-          const apiToken = HF_IMAGE_TOKEN;
+          const apiUrl = "https://api.openai.com/v1/images/generations";
           
-          // Use the standard Hugging Face Inference API endpoint
-          // The model black-forest-labs/FLUX.1-dev works with the standard endpoint (provider: auto)
-          const apiUrl = "https://api-inference.huggingface.co/models/black-forest-labs/FLUX.1-dev";
-          
-          // Request body format for Hugging Face Inference API
-          // For text-to-image, just send the prompt as inputs
           const requestBody = {
-            inputs: prompt.trim()
+            model: "dall-e-3",
+            prompt: prompt.trim(),
+            n: 1,
+            size: "1024x1024",
+            quality: "standard"
           };
           
           const headers = {
-            'Authorization': `Bearer ${apiToken}`,
+            'Authorization': `Bearer ${OPENAI_API_KEY}`,
             'Content-Type': 'application/json'
           };
-          
-          console.log('Generating image with:', { apiUrl, prompt: prompt.trim() });
           
           const response = await fetch(apiUrl, {
             method: 'POST',
@@ -14621,16 +15291,18 @@ body.dark-theme .sidebar.thumbnail-view .slide-preview-title {
             body: JSON.stringify(requestBody)
           });
           
-          console.log('Response status:', response.status, response.statusText);
-          
           if (!response.ok) {
             let errorMessage = `API Error: ${response.status}`;
+            let retryAfter = null;
+            
             try {
               const errorData = await response.json();
               if (errorData.error) {
-                errorMessage = errorData.error;
-              } else if (typeof errorData === 'string') {
-                errorMessage = errorData;
+                errorMessage = errorData.error.message || errorData.error;
+                // Check for retry-after in error response
+                if (errorData.error.retry_after) {
+                  retryAfter = errorData.error.retry_after;
+                }
               }
             } catch (e) {
               const errorText = await response.text();
@@ -14639,32 +15311,47 @@ body.dark-theme .sidebar.thumbnail-view .slide-preview-title {
               }
             }
             
-            if (response.status === 503) {
-              // Model is loading, wait and retry
-              setAIDesignerStatus('Model is loading. Please wait 20 seconds and try again.', 'error');
-              if (aiDesignerGenerate) {
-                aiDesignerGenerate.disabled = false;
+            // Check for retry-after header
+            const retryAfterHeader = response.headers.get('retry-after');
+            if (retryAfterHeader) {
+              retryAfter = parseInt(retryAfterHeader, 10);
+            }
+            
+            // Handle rate limit specifically
+            if (response.status === 429) {
+              if (retryAfter) {
+                errorMessage = `Rate limit exceeded. Please wait ${retryAfter} second${retryAfter > 1 ? 's' : ''} before trying again.`;
+                // Update last request time to enforce the wait
+                lastImageRequestTime = Date.now() + (retryAfter * 1000);
+              } else {
+                errorMessage = 'Rate limit exceeded. Please wait at least 60 seconds before trying again.';
+                // Enforce a 60 second wait
+                lastImageRequestTime = Date.now() + 60000;
               }
-              return null;
             }
             
             throw new Error(errorMessage);
           }
           
-          // The router API returns the image directly as a blob
-          const imageBlob = await response.blob();
-          console.log('Received image blob, size:', imageBlob.size, 'type:', imageBlob.type);
+          const data = await response.json();
+          
+          if (!data.data || !data.data[0] || !data.data[0].url) {
+            throw new Error('Invalid response from OpenAI API');
+          }
+          
+          const imageUrl = data.data[0].url;
+          
+          // Fetch the image from the URL
+          const imageResponse = await fetch(imageUrl);
+          if (!imageResponse.ok) {
+            throw new Error('Failed to fetch generated image');
+          }
+          
+          const imageBlob = await imageResponse.blob();
           
           // Verify it's actually an image
           if (!imageBlob.type || !imageBlob.type.startsWith('image/')) {
-            // If not an image, try to read as text to see the error
-            const text = await imageBlob.text();
-            try {
-              const errorData = JSON.parse(text);
-              throw new Error(errorData.error || errorData.message || 'Invalid response from API');
-            } catch (e) {
-              throw new Error(`API returned non-image data: ${text.substring(0, 200)}`);
-            }
+            throw new Error('API returned non-image data');
           }
           
           // Convert blob to data URL
@@ -14682,14 +15369,19 @@ body.dark-theme .sidebar.thumbnail-view .slide-preview-title {
               if (aiDesignerGenerate) {
                 aiDesignerGenerate.disabled = false;
               }
+              isGeneratingImage = false; // Reset flag
               resolve(reader.result);
             };
-            reader.onerror = reject;
+            reader.onerror = (error) => {
+              isGeneratingImage = false; // Reset flag on error
+              reject(error);
+            };
             reader.readAsDataURL(imageBlob);
           });
           
         } catch (error) {
           console.error('Error generating image:', error);
+          isGeneratingImage = false; // Reset flag on error
           setAIDesignerStatus(`Error: ${error.message}. Please try again.`, 'error');
           if (aiDesignerPreview) {
             aiDesignerPreview.innerHTML = '<div class="ai-designer-preview-placeholder">Error generating image. Please try again.</div>';
@@ -14736,6 +15428,10 @@ body.dark-theme .sidebar.thumbnail-view .slide-preview-title {
       
       if (aiDesignerGenerate) {
         aiDesignerGenerate.addEventListener('click', async () => {
+          // Prevent rapid clicking
+          if (isGeneratingImage) {
+            return;
+          }
           const prompt = aiDesignerPrompt ? aiDesignerPrompt.value : '';
           await generateImageWithHuggingFace(prompt);
         });
@@ -14776,19 +15472,26 @@ body.dark-theme .sidebar.thumbnail-view .slide-preview-title {
       const aiPresentationSlides = document.getElementById('aiPresentationSlides');
       const aiPresentationGenerate = document.getElementById('aiPresentationGenerate');
       
-      // Hugging Face API Token (hardcoded)
-      // API Tokens - Replace with your own tokens
-      const HF_TOKEN = ""; // For Llama/Presentation generation - Add your token here
-      const HF_IMAGE_TOKEN = ""; // For Stable Diffusion/Image generation - Add your token here
+      // OpenAI API Key
+      const OPENAI_API_KEY = "YOUR_OPENAI_API_KEY_HERE";
       
       const aiPresentationProgress = document.getElementById('aiPresentationProgress');
       const aiPresentationProgressFill = document.getElementById('aiPresentationProgressFill');
       const aiPresentationProgressText = document.getElementById('aiPresentationProgressText');
       const aiPresentationStatus = document.getElementById('aiPresentationStatus');
       
+      let isGeneratingPresentation = false; // Prevent concurrent presentation generation requests
+      let lastPresentationRequestTime = 0; // Track last presentation request time
+      const MIN_PRESENTATION_DELAY = 5000; // Minimum 5 seconds between presentation requests
+      
       function showAIPresentationModal() {
         if (aiPresentationModal) {
           aiPresentationModal.classList.add('show');
+          // Set gradient preview image
+          const gradientPreview = document.querySelector('.ai-presentation-theme-preset-gradient');
+          if (gradientPreview && gradientImageDataUrl) {
+            gradientPreview.style.backgroundImage = `url(${gradientImageDataUrl})`;
+          }
           if (aiPresentationTopic) {
             aiPresentationTopic.focus();
           }
@@ -14816,7 +15519,7 @@ body.dark-theme .sidebar.thumbnail-view .slide-preview-title {
             aiPresentationTextStructure.value = '';
           }
           if (aiPresentationSlides) {
-            aiPresentationSlides.value = '5';
+            aiPresentationSlides.value = '8';
           }
         }
       }
@@ -15090,71 +15793,82 @@ body.dark-theme .sidebar.thumbnail-view .slide-preview-title {
         return validSlides.slice(0, numSlides);
       }
       
-      // Call Hugging Face Chat Completions API with Llama 3 model
+      // Call OpenAI Chat Completions API with GPT model
       async function callHuggingFaceLlamaAPI(topic, numSlides, textStructure, details) {
-        const apiToken = HF_TOKEN;
-        const model = "meta-llama/Meta-Llama-3-8B-Instruct:novita";
-        const apiUrl = "https://router.huggingface.co/v1/chat/completions";
+        const apiUrl = "https://api.openai.com/v1/chat/completions";
+        const model = "gpt-4.1-mini";
         
         console.log('API Configuration:', {
           url: apiUrl,
-          hasToken: !!apiToken,
-          tokenLength: apiToken ? apiToken.length : 0,
+          hasToken: !!OPENAI_API_KEY,
+          tokenLength: OPENAI_API_KEY ? OPENAI_API_KEY.length : 0,
           model: model
         });
         
         // Calculate slide distribution for the required structure
-        // Structure: Title (1) + Outline (1) + Subject slides (N) + Conclusion (1) + References (1) + Thank you (1) = 6 fixed + N subject slides
-        // Minimum structure needs 6 slides, so if numSlides < 6, we adjust
-        // If numSlides >= 6: subject slides = numSlides - 5 (5 fixed slides + subject slides)
-        // If numSlides < 6: we still need at least 1 subject slide, so we use all available slides
-        const fixedSlides = 5; // Title, Outline, Conclusion, References, Thank you
-        const subjectSlidesCount = Math.max(1, numSlides - fixedSlides);
+        // Structure: Title (1) + Outline (1) + Introduction (1) + Content slides (N) + Conclusion (1) + Thank You (1) = 6 fixed + N content slides
+        // Minimum structure needs 6 slides (5 fixed + 1 content slide minimum)
+        // If numSlides >= 6: content slides = numSlides - 5 (5 fixed slides + content slides)
+        // If numSlides < 6: enforce minimum of 6 slides (5 fixed + 1 content slide)
+        const fixedSlides = 5; // Title, Outline, Introduction, Conclusion, Thank You
+        const actualNumSlides = Math.max(6, numSlides); // Enforce minimum of 6 slides
+        const contentSlidesCount = Math.max(1, actualNumSlides - fixedSlides);
         
         // Create user request message - focus only on text content with proper structure
-        let userRequest = `Create a comprehensive ${numSlides}-slide presentation about "${topic}" following this EXACT structure:
+        let userRequest = `Create a comprehensive ${actualNumSlides}-slide presentation about "${topic}" following this EXACT structure:
 
-SLIDE STRUCTURE (MUST FOLLOW THIS ORDER):
+SLIDE STRUCTURE (MUST FOLLOW THIS ORDER - DO NOT DEVIATE):
 1. Slide 1: Title Slide
-   - Title: "${topic}"
-   - Subtitle or brief introduction (optional)
+   - Main title: "${topic}"
+   - NO subtitle or additional text - just the title
 
 2. Slide 2: Outline Slide
-   - List the main topics/points that will be covered
+   - List the main sections that will appear in the presentation
    - Use bullet points to show the presentation structure
+   - Each bullet should represent a main section
 
-3. Slides 3-${2 + subjectSlidesCount}: Subject Slides (${subjectSlidesCount} slides)
+3. Slide 3: Introduction Slide
+   - Introduction title (example: "Introduction to ${topic}")
+   - bullet 1
+   - bullet 2
+   - bullet 3
+   - (add more bullets as needed, typically 3-5 bullets)
+
+4. Slides 4-${3 + contentSlidesCount}: Content Slides (${contentSlidesCount} slides) - THE BODY
+   - Each content slide should follow this structure:
+     • Slide title (specific to the content)
+     • bullet 1
+     • bullet 2
+     • bullet 3
+     • (expand as needed, typically 3-6 bullets per slide)
    - These are the main content slides about "${topic}"
    - Cover different aspects, subtopics, and details
-   - Provide comprehensive information with bullet points
+   - Each slide should focus on a specific aspect or subtopic
 
-4. Slide ${3 + subjectSlidesCount}: Conclusion Slide
-   - Summarize key points
-   - Provide final thoughts or takeaways
+5. Slide ${4 + contentSlidesCount}: Conclusion Slide
+   - Summary bullets (key points from the presentation)
+   - Final key point or closing message
 
-5. Slide ${4 + subjectSlidesCount}: References Slide
-   - List sources, references, or further reading (if applicable)
-   - Or key resources related to the topic
+6. Slide ${5 + contentSlidesCount}: Thank You / Questions Slide
+   - Simple ending (example: "Thank you — any questions?")
+   - Keep it brief and professional
 
-6. Slide ${5 + subjectSlidesCount}: Thank You Slide
-   - Thank the audience
-   - Optional: contact information or closing message
-
-IMPORTANT FORMATTING:
-- Each slide must start with "Slide X: [Title]" on its own line
+IMPORTANT FORMATTING RULES:
+- Each slide MUST start with "Slide X: [Title]" on its own line
 - Use line breaks between different sections
 - Use bullet points with "- " prefix, each bullet on a separate line
-- Include subtitles using "### Subtitle" format when appropriate
-- Do NOT write everything in one continuous line
-- Each bullet point, subtitle, and section must be on separate lines
+- Do NOT write everything in one continuous line or paragraph
+- Each bullet point must be on a separate line
+- Keep content structured and clean, ready for insertion into slide editor
 
 CONTENT REQUIREMENTS:
 - Provide DETAILED and COMPREHENSIVE information about the topic
-- Include multiple bullet points per slide (at least 4-6 points per slide for subject slides)
+- Include multiple bullet points per slide (at least 3-6 points per content slide)
 - Add detailed explanations and context for each point
 - Include examples, benefits, applications, or relevant information
 - Make each slide informative and substantial
-- Write enough content to fully cover the topic`;
+- Write enough content to fully cover the topic
+- Ensure content is well-organized and not a single long paragraph`;
 
         // Add text structure preference if provided
         if (textStructure && textStructure.trim()) {
@@ -15167,50 +15881,99 @@ CONTENT REQUIREMENTS:
         }
         
         // System message focused only on text generation - no design elements
-        const systemMessage = `You are an expert content writer. Create a ${numSlides}-slide presentation about "${topic}" following this EXACT structure:
+        const systemMessage = `You are an expert content writer. Create a ${actualNumSlides}-slide presentation about "${topic}" following this EXACT structure (DO NOT DEVIATE):
 
-STRUCTURE (MUST FOLLOW):
-1. Slide 1: Title Slide - Title: "${topic}" with brief introduction
-2. Slide 2: Outline Slide - List main topics with bullet points
-3. Slides 3-${2 + subjectSlidesCount}: Subject Slides (${subjectSlidesCount} slides) - Main content about "${topic}" with detailed bullet points
-4. Slide ${3 + subjectSlidesCount}: Conclusion - Summary of key points
-5. Slide ${4 + subjectSlidesCount}: References - Sources and resources
-6. Slide ${5 + subjectSlidesCount}: Thank You - Closing message
+STRUCTURE (MUST FOLLOW IN THIS EXACT ORDER):
+1. Slide 1: Title Slide
+   - Main title: "${topic}"
+   - NO subtitle or additional text - just the title
 
-FORMATTING RULES:
+2. Slide 2: Outline Slide
+   - List the main sections that will appear in the presentation
+   - Use bullet points to show the presentation structure
+
+3. Slide 3: Introduction Slide
+   - Introduction title (example: "Introduction to ${topic}")
+   - bullet 1
+   - bullet 2
+   - bullet 3
+   - (add more bullets as needed, typically 3-5 bullets)
+
+4. Slides 4-${3 + contentSlidesCount}: Content Slides (${contentSlidesCount} slides) - THE BODY
+   - Each content slide should follow this structure:
+     • Slide title (specific to the content)
+     • bullet 1
+     • bullet 2
+     • bullet 3
+     • (expand as needed, typically 3-6 bullets per slide)
+   - These are the main content slides about "${topic}"
+   - Cover different aspects, subtopics, and details
+   - Each slide should focus on a specific aspect or subtopic
+
+5. Slide ${4 + contentSlidesCount}: Conclusion Slide
+   - Summary bullets (key points from the presentation)
+   - Final key point or closing message
+
+6. Slide ${5 + contentSlidesCount}: Thank You / Questions Slide
+   - Simple ending (example: "Thank you — any questions?")
+   - Keep it brief and professional
+
+FORMATTING RULES (CRITICAL):
 - Start each slide with "Slide X: [Title]" on its own line
 - Use line breaks (\\n) between sections
 - Use "- " for bullet points, each on a new line
 - NO HTML tags (<font>, <b>, etc.)
 - NO markdown (**bold**, __bold__, etc.)
 - Plain text only with proper line breaks
+- Do NOT write everything in one continuous line or paragraph
+- Each bullet point must be on a separate line
+- Keep content structured and clean, ready for insertion into slide editor
 
 CONTENT REQUIREMENTS:
-- Subject slides: 4-6 detailed bullet points each
+- Content slides: 3-6 detailed bullet points each
 - Include explanations, examples, benefits, applications
 - Make content comprehensive and informative
 - Each slide must have substantial content (not just 1-2 words)
+- Ensure content is well-organized and not a single long paragraph
 
-OUTPUT FORMAT:
-Slide 1: [Title]
-[Content with bullet points]
+OUTPUT FORMAT EXAMPLE:
+Slide 1: ${topic}
 
 Slide 2: Outline
+- Section 1
+- Section 2
+- Section 3
+
+Slide 3: Introduction to ${topic}
 - Point 1
 - Point 2
 - Point 3
 
+Slide 4: [Content Slide Title]
+- Bullet 1
+- Bullet 2
+- Bullet 3
+
 [Continue for all slides...]
 
-Generate ONLY plain text. No design elements, HTML, or markdown.`;
+Slide ${4 + contentSlidesCount}: Conclusion
+- Summary point 1
+- Summary point 2
+- Final key point
+
+Slide ${5 + contentSlidesCount}: Thank You / Questions
+Thank you — any questions?
+
+Generate ONLY plain text following this exact structure. No design elements, HTML, or markdown.`;
         
         const headers = {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${apiToken}`
+          'Authorization': `Bearer ${OPENAI_API_KEY}`
         };
         
-        // Chat Completions API format
+        // OpenAI Chat Completions API format
         const requestBody = {
+          model: model,
           messages: [
             {
               role: "system",
@@ -15221,14 +15984,12 @@ Generate ONLY plain text. No design elements, HTML, or markdown.`;
               content: userRequest
             }
           ],
-          model: model,
-          stream: false,
-          max_tokens: 2500,
+          max_tokens: 4000,
           temperature: 0.7,
           top_p: 0.9
         };
         
-        updateProgress(40, 'Sending request to Llama 3 model...');
+        updateProgress(40, 'Sending request to OpenAI GPT model...');
         
         let response;
         try {
@@ -15256,57 +16017,15 @@ Generate ONLY plain text. No design elements, HTML, or markdown.`;
           
           const errorMsg = networkError.message || 'Unknown network error';
           if (errorMsg.includes('Failed to fetch') || errorMsg.includes('Load failed') || errorMsg.includes('NetworkError')) {
-            throw new Error('Unable to connect to Hugging Face API.<br>Please check:<br>• Your internet connection<br>• If the model is available<br>• Try refreshing and attempting again');
+            throw new Error('Unable to connect to OpenAI API.<br>Please check:<br>• Your internet connection<br>• If the API is available<br>• Try refreshing and attempting again');
           }
           
           throw new Error(`Network error: ${errorMsg}`);
         }
         
         if (!response.ok) {
-          if (response.status === 503) {
-            // Model is loading, wait and retry
-            updateProgress(50, 'Model is loading, please wait 20 seconds...');
-            await new Promise(resolve => setTimeout(resolve, 20000));
-            
-            let retryResponse;
-            try {
-              retryResponse = await fetch(apiUrl, {
-                method: 'POST',
-                headers: headers,
-                body: JSON.stringify(requestBody)
-              });
-            } catch (retryError) {
-              throw new Error(`Retry failed: ${retryError.message}`);
-            }
-            
-            if (!retryResponse.ok) {
-              let errorText = '';
-              try {
-                errorText = await retryResponse.text();
-              } catch (e) {
-                errorText = 'Unable to read error response';
-              }
-              
-              let errorMessage = `Model is not ready. Status: ${retryResponse.status}`;
-              try {
-                const errorData = JSON.parse(errorText);
-                errorMessage = errorData.error || errorData.message || errorMessage;
-              } catch (e) {
-                if (errorText) errorMessage += ` - ${errorText}`;
-              }
-              
-              throw new Error(errorMessage);
-            }
-            
-            let retryData;
-            try {
-              retryData = await retryResponse.json();
-            } catch (parseError) {
-              throw new Error(`Failed to parse response: ${parseError.message}`);
-            }
-            
-            return extractGeneratedText(retryData);
-          }
+          // OpenAI doesn't have 503 model loading errors like Hugging Face
+          // So we skip the retry logic
           
           let errorText = '';
           try {
@@ -15328,15 +16047,40 @@ Generate ONLY plain text. No design elements, HTML, or markdown.`;
             }
           }
           
+          // Check for retry-after header
+          let retryAfter = null;
+          const retryAfterHeader = response.headers.get('retry-after');
+          if (retryAfterHeader) {
+            retryAfter = parseInt(retryAfterHeader, 10);
+          }
+          
+          // Try to extract retry-after from error data
+          try {
+            const errorData = JSON.parse(errorText);
+            if (errorData.error && errorData.error.retry_after) {
+              retryAfter = errorData.error.retry_after;
+            }
+          } catch (e) {
+            // Already parsed above
+          }
+          
           // Provide helpful error messages for common status codes
           if (response.status === 401) {
-            errorMessage = 'Authentication failed. Please check your Hugging Face API token.';
+            errorMessage = 'Authentication failed. Please check your OpenAI API key.';
           } else if (response.status === 403) {
-            errorMessage = 'Access forbidden. Your API token may not have access to this model.';
+            errorMessage = 'Access forbidden. Your API key may not have access to this model.';
           } else if (response.status === 429) {
-            errorMessage = 'Rate limit exceeded. Please wait a moment and try again.';
+            if (retryAfter) {
+              errorMessage = `Rate limit exceeded. Please wait ${retryAfter} second${retryAfter > 1 ? 's' : ''} before trying again.`;
+              // Update last request time to enforce the wait
+              lastPresentationRequestTime = Date.now() + (retryAfter * 1000);
+            } else {
+              errorMessage = 'Rate limit exceeded. Please wait at least 60 seconds before trying again.';
+              // Enforce a 60 second wait
+              lastPresentationRequestTime = Date.now() + 60000;
+            }
           } else if (response.status === 500) {
-            errorMessage = 'Server error. Hugging Face API is experiencing issues. Please try again later.';
+            errorMessage = 'Server error. OpenAI API is experiencing issues. Please try again later.';
           }
           
           throw new Error(errorMessage);
@@ -15368,11 +16112,11 @@ Generate ONLY plain text. No design elements, HTML, or markdown.`;
         return extractGeneratedText(data);
       }
       
-      // Extract generated text from Hugging Face Chat Completions API response
+      // Extract generated text from OpenAI Chat Completions API response
       function extractGeneratedText(data) {
         let text = '';
         
-        // Chat Completions API format - response has choices array
+        // OpenAI Chat Completions API format - response has choices array
         if (data && data.choices && Array.isArray(data.choices) && data.choices.length > 0) {
           const choice = data.choices[0];
           if (choice.message && choice.message.content) {
@@ -15381,35 +16125,16 @@ Generate ONLY plain text. No design elements, HTML, or markdown.`;
             text = choice.text;
           }
         }
-        // Fallback: Handle array responses (old Inference API format)
-        else if (Array.isArray(data) && data.length > 0) {
-          if (data[0].generated_text) {
-            text = data[0].generated_text;
-          } else {
-            text = data.map(item => item.generated_text || item.text || '').join('\n');
-          }
-        } 
-        // Handle object responses
+        // Fallback: Handle other response formats
         else if (typeof data === 'object' && data !== null) {
-          text = data.generated_text || data.text || data.content || data[0]?.generated_text || data[0]?.summary_text || '';
+          text = data.content || data.text || data.generated_text || '';
         } 
         // Handle string responses
         else if (typeof data === 'string') {
           text = data;
         }
         
-        // Clean up any special tokens if present
-        if (text) {
-          text = text.replace(/<\|begin_of_text\|>/g, '')
-                    .replace(/<\|end_of_text\|>/g, '')
-                    .replace(/<\|start_header_id\|>/g, '')
-                    .replace(/<\|end_header_id\|>/g, '')
-                    .replace(/<\|eot_id\|>/g, '')
-                    .replace(/<\|.*?\|>/g, '')
-                    .trim();
-        }
-        
-        return text;
+        return text ? text.trim() : '';
       }
       
       // Clean HTML tags and markdown formatting from text content
@@ -15439,34 +16164,52 @@ Generate ONLY plain text. No design elements, HTML, or markdown.`;
         return text.trim();
       }
 
-      // AI Presentation Generation - Using Hugging Face Llama API
-      async function generatePresentationWithAI(topic, numSlides, textStructure, details) {
+      // AI Presentation Generation - Using OpenAI GPT API
+      async function generatePresentationWithAI(topic, numSlides, textStructure, details, themeColors = null) {
+        // Prevent concurrent requests
+        if (isGeneratingPresentation) {
+          setAIPresentationStatus('Presentation generation already in progress. Please wait...', 'error');
+          return null;
+        }
+        
+        // Enforce minimum delay between requests
+        const timeSinceLastRequest = Date.now() - lastPresentationRequestTime;
+        if (timeSinceLastRequest < MIN_PRESENTATION_DELAY) {
+          const waitTime = Math.ceil((MIN_PRESENTATION_DELAY - timeSinceLastRequest) / 1000);
+          setAIPresentationStatus(`Please wait ${waitTime} second${waitTime > 1 ? 's' : ''} before making another request.`, 'error');
+          return null;
+        }
+        
         if (!topic || !topic.trim()) {
           setAIPresentationStatus('Please enter a presentation topic', 'error');
           return null;
         }
         
+        // Set flag and update last request time
+        isGeneratingPresentation = true;
+        lastPresentationRequestTime = Date.now();
+        
         // Store topic in a variable accessible throughout the function
         const presentationTopic = topic.trim();
         
-        setAIPresentationStatus('Generating presentation with Llama AI...', '');
+        setAIPresentationStatus('Generating presentation with OpenAI GPT...', '');
         updateProgress(10, 'Preparing AI request...');
         if (aiPresentationGenerate) {
           aiPresentationGenerate.disabled = true;
         }
         
         try {
-          updateProgress(20, 'Connecting to Hugging Face API...');
+          updateProgress(20, 'Connecting to OpenAI API...');
           
           let generatedText = null;
           
           try {
-            updateProgress(30, 'Calling Llama 3 model...');
-            console.log('Calling Hugging Face Chat Completions API with model: meta-llama/Meta-Llama-3-8B-Instruct:novita');
+            updateProgress(30, 'Calling OpenAI GPT model...');
+            console.log('Calling OpenAI Chat Completions API with model: gpt-4.1-mini');
             generatedText = await callHuggingFaceLlamaAPI(presentationTopic, numSlides, textStructure, details);
             console.log('API call successful, generated text length:', generatedText?.length || 0);
           } catch (error) {
-            console.error('Error calling Llama API:', error);
+            console.error('Error calling OpenAI API:', error);
             console.error('Error details:', {
               message: error.message,
               stack: error.stack,
@@ -15477,6 +16220,7 @@ Generate ONLY plain text. No design elements, HTML, or markdown.`;
             const errorMsg = error.message || 'Unknown error occurred';
             setAIPresentationStatus(`Error: ${errorMsg}`, 'error');
             
+            isGeneratingPresentation = false; // Reset flag on error
             if (aiPresentationGenerate) {
               aiPresentationGenerate.disabled = false;
             }
@@ -15487,6 +16231,7 @@ Generate ONLY plain text. No design elements, HTML, or markdown.`;
           
           if (!generatedText || generatedText.trim().length < 50) {
             setAIPresentationStatus('AI did not generate sufficient content. Please try again.', 'error');
+            isGeneratingPresentation = false; // Reset flag on error
             if (aiPresentationGenerate) {
               aiPresentationGenerate.disabled = false;
             }
@@ -15661,16 +16406,7 @@ Generate ONLY plain text. No design elements, HTML, or markdown.`;
                   }
                 }
                 
-                // Ensure content has proper line breaks - normalize multiple spaces but preserve line breaks
-                contentText = contentText.replace(/\r\n/g, '\n').replace(/\r/g, '\n');
-                // Remove excessive blank lines but keep single blank lines for structure
-                contentText = contentText.replace(/\n{3,}/g, '\n\n');
-                
-                newSlide.content = contentText;
-                newSlide.transition = 'fade';
-                newSlide.transitionDuration = 0.5;
-                
-                // Ensure all required arrays are initialized
+                // Ensure all required arrays are initialized BEFORE processing content
                 if (!Array.isArray(newSlide.shapes)) newSlide.shapes = [];
                 if (!Array.isArray(newSlide.charts)) newSlide.charts = [];
                 if (!Array.isArray(newSlide.images)) newSlide.images = [];
@@ -15680,14 +16416,65 @@ Generate ONLY plain text. No design elements, HTML, or markdown.`;
                 if (!Array.isArray(newSlide.comments)) newSlide.comments = [];
                 if (!Array.isArray(newSlide.animations)) newSlide.animations = [];
                 
-                // Ensure background is properly initialized with white color
-                newSlide.background = { 
-                  image: '', 
-                  size: '', 
-                  position: '', 
-                  repeat: '', 
-                  color: '#ffffff' 
-                };
+                // Ensure content has proper line breaks - normalize multiple spaces but preserve line breaks
+                contentText = contentText.replace(/\r\n/g, '\n').replace(/\r/g, '\n');
+                // Remove excessive blank lines but keep single blank lines for structure
+                contentText = contentText.replace(/\n{3,}/g, '\n\n');
+                
+                // Parse bullet points and create separate text boxes for each
+                // Split content into lines and identify bullet points
+                const lines = contentText.split('\n').filter(line => line.trim().length > 0);
+                const bulletPoints = [];
+                let nonBulletContent = [];
+                
+                lines.forEach(line => {
+                  const trimmedLine = line.trim();
+                  // Check if line is a bullet point (starts with "- ", "• ", "* ", or similar)
+                  if (/^[-•*]\s+/.test(trimmedLine) || /^\d+[\.\)]\s+/.test(trimmedLine)) {
+                    // Remove bullet marker and add dash indicator
+                    const bulletText = trimmedLine.replace(/^[-•*]\s+/, '').replace(/^\d+[\.\)]\s+/, '');
+                    bulletPoints.push(bulletText);
+                  } else if (trimmedLine.length > 0) {
+                    // Non-bullet content (like titles, subtitles, etc.)
+                    nonBulletContent.push(trimmedLine);
+                  }
+                });
+                
+                // Apply theme colors to background
+                if (themeColors) {
+                  if (themeColors.isGradient) {
+                    // For gradient, use the gradient image (diagonal from bottom-left to top-right)
+                    newSlide.background = { 
+                      image: gradientImageDataUrl || '', 
+                      size: 'cover', 
+                      position: 'center', 
+                      repeat: 'no-repeat', 
+                      color: '#ffffff' // Fallback color (white)
+                    };
+                  } else {
+                    // For custom, use the selected background color (ensure it's normalized)
+                    const bgColor = themeColors.background ? normalizeColorHex(themeColors.background) : '#ffffff';
+                    newSlide.background = { 
+                      image: '', 
+                      size: '', 
+                      position: '', 
+                      repeat: '', 
+                      color: bgColor
+                    };
+                  }
+                  // Store theme colors for title and text
+                  newSlide.titleColor = themeColors.heading || '#000000';
+                  newSlide.textColor = themeColors.text || '#000000';
+                } else {
+                  // Default background
+                  newSlide.background = { 
+                    image: '', 
+                    size: '', 
+                    position: '', 
+                    repeat: '', 
+                    color: '#ffffff' 
+                  };
+                }
                 
                 // Ensure title and text boxes are visible and properly initialized
                 // Initialize titleBox with proper defaults - ensure it stays within slide borders
@@ -15699,10 +16486,13 @@ Generate ONLY plain text. No design elements, HTML, or markdown.`;
                   height: null,
                   rotation: 0,
                   visible: true,
-                  id: newSlide.titleBox?.id || generateElementId('title')
+                  id: newSlide.titleBox?.id || generateElementId('title'),
+                  color: themeColors ? (themeColors.heading || '#000000') : undefined
                 };
                 
                 // Initialize textBox with proper defaults - ensure it stays within slide borders
+                // Set visible based on whether we have bullet points
+                const hasBulletPoints = bulletPoints.length > 0;
                 newSlide.textBox = {
                   top: 100,
                   left: 24,
@@ -15711,9 +16501,123 @@ Generate ONLY plain text. No design elements, HTML, or markdown.`;
                   width: null,
                   height: null,
                   rotation: 0,
-                  visible: true,
-                  id: newSlide.textBox?.id || generateElementId('body')
+                  visible: !hasBulletPoints, // Hide if we have bullet points, show otherwise
+                  id: newSlide.textBox?.id || generateElementId('body'),
+                    color: themeColors ? (themeColors.text || '#000000') : undefined
                 };
+                
+                // Special handling for Thank You slide
+                const isThankYouSlide = index === presentationSlides.length - 1 || 
+                                       slideTitle.toLowerCase().includes('thank') ||
+                                       slideTitle.toLowerCase().includes('questions');
+                
+                if (isThankYouSlide) {
+                  // Hide title box and main text box for Thank You slide
+                  newSlide.titleBox.visible = false;
+                  newSlide.textBox.visible = false;
+                  newSlide.content = '';
+                  
+                  // Calculate canvas center
+                  // Canvas has 16:9 aspect ratio, max width 960px, so height = 960 * 9/16 = 540px
+                  // Canvas has 24px padding, so content area is smaller
+                  // Using standard dimensions that match the actual canvas
+                  const canvasWidth = 960;
+                  const canvasHeight = 540;
+                  const canvasPadding = 24; // Canvas padding
+                  const canvasCenterX = canvasWidth / 2;
+                  const canvasCenterY = canvasHeight / 2;
+                  
+                  // Create "Thank You" text box - bigger, centered vertically
+                  const thankYouFontSize = '72px'; // Bigger font size
+                  const thankYouWidth = 500;
+                  const thankYouHeight = 100;
+                  
+                  // Create "Any questions?" text box - smaller, below, centered
+                  const questionsFontSize = '28px';
+                  const questionsWidth = 350;
+                  const questionsHeight = 50;
+                  const spacing = 30; // Space between "Thank You" and "Any questions?"
+                  
+                  // Calculate positions to center the entire block vertically
+                  // Position the block so it's visually centered on the slide
+                  // The visual center point of the block (midpoint between top of "Thank You" and bottom of "Any questions?")
+                  // should align with the canvas center
+                  const totalBlockHeight = thankYouHeight + spacing + questionsHeight;
+                  
+                  // Position "Thank You" so the center of the entire text block aligns with canvas center
+                  // Center of block = thankYouTop + (totalBlockHeight / 2)
+                  // We want: thankYouTop + (totalBlockHeight / 2) = canvasCenterY
+                  // Therefore: thankYouTop = canvasCenterY - (totalBlockHeight / 2)
+                  const thankYouTop = canvasCenterY - (totalBlockHeight / 2);
+                  const questionsTop = thankYouTop + thankYouHeight + spacing;
+                  
+                  // Adjustment to move text right for perfect centering
+                  const horizontalOffset = 30; // Offset to account for visual centering
+                  
+                  const thankYouTextBox = {
+                    id: generateElementId('textbox'),
+                    html: 'Thank You',
+                    top: thankYouTop,
+                    left: canvasCenterX - (thankYouWidth / 2) + horizontalOffset, // Center horizontally with small right adjustment
+                    width: thankYouWidth,
+                    height: thankYouHeight,
+                    fontSize: thankYouFontSize,
+                    fontFamily: DEFAULT_FONT_STACK,
+                    color: themeColors ? (themeColors.heading || '#000000') : '#000000',
+                    minWidth: 400,
+                    minHeight: 80,
+                    textAlign: 'center' // Center align text
+                  };
+                  newSlide.additionalTextBoxes.push(thankYouTextBox);
+                  
+                  const questionsTextBox = {
+                    id: generateElementId('textbox'),
+                    html: 'Any questions?',
+                    top: questionsTop,
+                    left: canvasCenterX - (questionsWidth / 2) + horizontalOffset, // Center horizontally with small right adjustment
+                    width: questionsWidth,
+                    height: questionsHeight,
+                    fontSize: questionsFontSize,
+                    fontFamily: DEFAULT_FONT_STACK,
+                    color: themeColors ? (themeColors.text || '#000000') : '#000000',
+                    minWidth: 250,
+                    minHeight: 40,
+                    textAlign: 'center' // Center align text
+                  };
+                  newSlide.additionalTextBoxes.push(questionsTextBox);
+                } else if (hasBulletPoints) {
+                  // If we have bullet points, create separate text boxes for each
+                  // Set main content to non-bullet content (if any) or empty
+                  newSlide.content = nonBulletContent.join('\n') || '';
+                  
+                  // Create additional text boxes for each bullet point
+                  const startTop = 120; // Start below title
+                  const leftPosition = 60; // Left margin
+                  const lineHeight = 50; // Vertical spacing between bullets
+                  const textBoxWidth = 600; // Width of each text box
+                  
+                  bulletPoints.forEach((bulletText, bulletIndex) => {
+                    const textBoxData = {
+                      id: generateElementId('textbox'),
+                      html: `— ${bulletText}`, // Add dash indicator (em dash)
+                      top: startTop + (bulletIndex * lineHeight),
+                      left: leftPosition,
+                      width: textBoxWidth,
+                      height: 40,
+                      fontSize: '16px',
+                      fontFamily: DEFAULT_FONT_STACK,
+                      color: themeColors ? (themeColors.text || '#000000') : '#000000',
+                      minWidth: 200,
+                      minHeight: 30
+                    };
+                    newSlide.additionalTextBoxes.push(textBoxData);
+                  });
+                } else {
+                  // No bullet points found, use content as-is in main text box
+                  newSlide.content = contentText;
+                }
+                newSlide.transition = 'fade';
+                newSlide.transitionDuration = 0.5;
                 
                 // Special handling for first slide to ensure proper positioning and constraints
                 if (index === 0) {
@@ -15854,14 +16758,17 @@ Generate ONLY plain text. No design elements, HTML, or markdown.`;
                 if (!Array.isArray(slide.additionalTextBoxes)) slide.additionalTextBoxes = [];
                 if (!Array.isArray(slide.comments)) slide.comments = [];
                 if (!Array.isArray(slide.animations)) slide.animations = [];
-                // Always ensure background is white - fix for wrong coloring issue
-                slide.background = { 
-                  image: '', 
-                  size: '', 
-                  position: '', 
-                  repeat: '', 
-                  color: '#ffffff' 
-                };
+                // Don't override background - it's already set with theme colors
+                // Only ensure background object exists if it wasn't set
+                if (!slide.background) {
+                  slide.background = { 
+                    image: '', 
+                    size: '', 
+                    position: '', 
+                    repeat: '', 
+                    color: '#ffffff' 
+                  };
+                }
                 if (!slide.titleFontFamily) slide.titleFontFamily = DEFAULT_FONT_STACK;
                 if (!slide.textFontFamily) slide.textFontFamily = DEFAULT_FONT_STACK;
                 if (!slide.transition) slide.transition = 'fade';
@@ -15879,6 +16786,17 @@ Generate ONLY plain text. No design elements, HTML, or markdown.`;
               // Capture state AFTER slides are created
               if (typeof capture === 'function') {
                 capture();
+              }
+              
+              // Update background color input to reflect the theme color
+              if (themeColors && backgroundColorInput) {
+                if (themeColors.isGradient) {
+                  // For gradient, set the fallback color
+                  backgroundColorInput.value = '#ffffff';
+                } else {
+                  // For custom, use the selected background color
+                  backgroundColorInput.value = normalizeColorHex(themeColors.background || '#ffffff');
+                }
               }
               
               // Load and render - this must happen after slides are created
@@ -15940,7 +16858,14 @@ Generate ONLY plain text. No design elements, HTML, or markdown.`;
           }
           
           updateProgress(100, 'Presentation created!');
-          setAIPresentationStatus(`Successfully created ${presentationSlides.length} slides with Llama AI!`, 'success');
+          setAIPresentationStatus(`Successfully created ${presentationSlides.length} slides with OpenAI GPT!`, 'success');
+          
+          // FIXED: Save AI-generated slides to recents after slides array is updated
+          setTimeout(() => {
+            if (typeof saveToRecents === 'function') {
+              saveToRecents();
+            }
+          }, 200);
           
           // Close modal after a short delay
           setTimeout(() => {
@@ -15950,6 +16875,7 @@ Generate ONLY plain text. No design elements, HTML, or markdown.`;
             }
           }, 1500);
           
+          isGeneratingPresentation = false; // Reset flag on success
           if (aiPresentationGenerate) {
             aiPresentationGenerate.disabled = false;
           }
@@ -15958,6 +16884,7 @@ Generate ONLY plain text. No design elements, HTML, or markdown.`;
           
         } catch (error) {
           console.error('Error generating presentation:', error);
+          isGeneratingPresentation = false; // Reset flag on error
           setAIPresentationStatus(`Error: ${error.message}. Please try again.`, 'error');
           
           if (aiPresentationGenerate) {
@@ -16142,6 +17069,29 @@ Generate ONLY plain text. No design elements, HTML, or markdown.`;
         return generateEnhancedFallbackPresentation(topic, numSlides, details);
       }
       
+      // Function to generate gradient image (diagonal from bottom-left to top-right)
+      function generateGradientImage(width = 1920, height = 1080) {
+        const canvas = document.createElement('canvas');
+        canvas.width = width;
+        canvas.height = height;
+        const ctx = canvas.getContext('2d');
+        
+        // Create gradient from bottom-left to top-right
+        // Bottom-left: yellowish-green/chartreuse, Center: teal/aquamarine, Top-right: soft blue
+        const gradient = ctx.createLinearGradient(0, height, width, 0);
+        gradient.addColorStop(0, '#adff2f'); // Chartreuse/yellowish-green at bottom-left
+        gradient.addColorStop(0.5, '#40e0d0'); // Teal/aquamarine in center
+        gradient.addColorStop(1, '#87ceeb'); // Sky blue/soft blue at top-right
+        
+        ctx.fillStyle = gradient;
+        ctx.fillRect(0, 0, width, height);
+        
+        return canvas.toDataURL('image/png');
+      }
+      
+      // Generate and store gradient image
+      const gradientImageDataUrl = generateGradientImage();
+      
       if (aiPresentationButton) {
         aiPresentationButton.addEventListener('click', () => {
           showAIPresentationModal();
@@ -16160,12 +17110,131 @@ Generate ONLY plain text. No design elements, HTML, or markdown.`;
         });
       }
       
+      // Theme color controls
+      const aiThemeBackgroundColor = document.getElementById('aiThemeBackgroundColor');
+      const aiThemeBackgroundColorText = document.getElementById('aiThemeBackgroundColorText');
+      const aiThemeHeadingColor = document.getElementById('aiThemeHeadingColor');
+      const aiThemeHeadingColorText = document.getElementById('aiThemeHeadingColorText');
+      const aiThemeTextColor = document.getElementById('aiThemeTextColor');
+      const aiThemeTextColorText = document.getElementById('aiThemeTextColorText');
+      const themePresets = document.querySelectorAll('.ai-presentation-theme-preset');
+      
+      // Sync color picker with text input
+      if (aiThemeBackgroundColor && aiThemeBackgroundColorText) {
+        aiThemeBackgroundColor.addEventListener('input', (e) => {
+          aiThemeBackgroundColorText.value = e.target.value;
+        });
+        aiThemeBackgroundColorText.addEventListener('input', (e) => {
+          const color = e.target.value;
+          if (/^#[0-9A-F]{6}$/i.test(color)) {
+            aiThemeBackgroundColor.value = color;
+          }
+        });
+      }
+      
+      if (aiThemeHeadingColor && aiThemeHeadingColorText) {
+        aiThemeHeadingColor.addEventListener('input', (e) => {
+          aiThemeHeadingColorText.value = e.target.value;
+        });
+        aiThemeHeadingColorText.addEventListener('input', (e) => {
+          const color = e.target.value;
+          if (/^#[0-9A-F]{6}$/i.test(color)) {
+            aiThemeHeadingColor.value = color;
+          }
+        });
+      }
+      
+      if (aiThemeTextColor && aiThemeTextColorText) {
+        aiThemeTextColor.addEventListener('input', (e) => {
+          aiThemeTextColorText.value = e.target.value;
+        });
+        aiThemeTextColorText.addEventListener('input', (e) => {
+          const color = e.target.value;
+          if (/^#[0-9A-F]{6}$/i.test(color)) {
+            aiThemeTextColor.value = color;
+          }
+        });
+      }
+      
+      // Theme preset handling
+      themePresets.forEach(preset => {
+        preset.addEventListener('click', () => {
+          themePresets.forEach(p => p.classList.remove('active'));
+          preset.classList.add('active');
+          
+          const presetType = preset.getAttribute('data-preset');
+          if (presetType === 'gradient') {
+            // Gradient preset - set default colors: white background, black headings and text
+            if (aiThemeBackgroundColor) {
+              aiThemeBackgroundColor.value = '#ffffff';
+              if (aiThemeBackgroundColorText) aiThemeBackgroundColorText.value = '#ffffff';
+            }
+            if (aiThemeHeadingColor) {
+              aiThemeHeadingColor.value = '#000000';
+              if (aiThemeHeadingColorText) aiThemeHeadingColorText.value = '#000000';
+            }
+            if (aiThemeTextColor) {
+              aiThemeTextColor.value = '#000000';
+              if (aiThemeTextColorText) aiThemeTextColorText.value = '#000000';
+            }
+          }
+          // For custom preset, the background color picker is already visible in the button
+          // Headings and Text color controls are always visible below
+        });
+      });
+      
+      // Prevent the custom preset button from being clickable on the color inputs
+      const customPreset = document.querySelector('.ai-presentation-theme-preset[data-preset="custom"]');
+      if (customPreset) {
+        const backgroundColorInput = customPreset.querySelector('#aiThemeBackgroundColor');
+        const backgroundColorText = customPreset.querySelector('#aiThemeBackgroundColorText');
+        if (backgroundColorInput) {
+          backgroundColorInput.addEventListener('click', (e) => {
+            e.stopPropagation();
+          });
+        }
+        if (backgroundColorText) {
+          backgroundColorText.addEventListener('click', (e) => {
+            e.stopPropagation();
+          });
+          backgroundColorText.addEventListener('focus', (e) => {
+            e.stopPropagation();
+            customPreset.classList.add('active');
+          });
+        }
+      }
+      
+      // Set default to gradient preset
+      const gradientPreset = document.querySelector('.ai-presentation-theme-preset[data-preset="gradient"]');
+      if (gradientPreset) {
+        gradientPreset.click();
+      }
+      
       if (aiPresentationGenerate) {
         aiPresentationGenerate.addEventListener('click', async () => {
+          // Prevent rapid clicking
+          if (isGeneratingPresentation) {
+            return;
+          }
           const topic = aiPresentationTopic ? aiPresentationTopic.value : '';
           const textStructure = aiPresentationTextStructure ? aiPresentationTextStructure.value : '';
-          const numSlides = aiPresentationSlides ? parseInt(aiPresentationSlides.value) || 5 : 5;
-          await generatePresentationWithAI(topic, numSlides, textStructure, '');
+          const numSlides = aiPresentationSlides ? Math.max(6, parseInt(aiPresentationSlides.value) || 8) : 8;
+          
+          // Get theme colors
+          const isGradient = document.querySelector('.ai-presentation-theme-preset[data-preset="gradient"]')?.classList.contains('active') || false;
+          // Normalize background color to ensure it's a valid hex color
+          let backgroundColor = '#ffffff';
+          if (aiThemeBackgroundColor && aiThemeBackgroundColor.value) {
+            backgroundColor = normalizeColorHex(aiThemeBackgroundColor.value);
+          }
+          const themeColors = {
+            background: backgroundColor,
+            heading: aiThemeHeadingColor ? normalizeColorHex(aiThemeHeadingColor.value) : '#000000',
+            text: aiThemeTextColor ? normalizeColorHex(aiThemeTextColor.value) : '#000000',
+            isGradient: isGradient
+          };
+          
+          await generatePresentationWithAI(topic, numSlides, textStructure, '', themeColors);
         });
       }
       
@@ -17903,8 +18972,6 @@ Generate ONLY plain text. No design elements, HTML, or markdown.`;
 
       function startPresentation() {
         if (isPresenting) return;
-        stopTranslation({ message: null });
-        stopSubtitles({ message: null });
         capture();
         presentationReturnIndex = active;
         isPresenting = true;
@@ -17913,6 +18980,9 @@ Generate ONLY plain text. No design elements, HTML, or markdown.`;
         document.body.classList.add('presenting');
         presentationControlsLocked = false;
         showPresentationControls(true);
+        // Start subtitles and translation when entering presentation mode
+        startSubtitles({ skipNotification: true });
+        startTranslation({ skipNotification: true });
         requestAnimationFrame(() => {
           try {
             presentationOverlay.focus({ preventScroll: true });
@@ -18083,16 +19153,90 @@ Generate ONLY plain text. No design elements, HTML, or markdown.`;
 
         shapeColorPicker.style.top = `${top}px`;
         shapeColorPicker.style.left = `${left}px`;
+        
+        // Reposition size badge to avoid overlap with color picker
+        if (shapeSizeBadge.classList.contains('visible') && activeResizeShape) {
+          updateShapeSizeBadge(activeResizeShape, activeResizeShape.offsetWidth, activeResizeShape.offsetHeight);
+        }
+        
         if (rotationTarget === element) {
           positionRotationHandle(element);
         }
       }
 
+      function updateGradientDirectionButton(direction) {
+        const dirIndex = gradientDirections.findIndex(d => d.direction === direction);
+        if (dirIndex !== -1) {
+          currentGradientDirectionIndex = dirIndex;
+        }
+        const currentDir = gradientDirections[currentGradientDirectionIndex];
+        // Use shorter arrow symbols for compact display
+        const arrowSymbols = {
+          'to right': '→',
+          'to left': '←',
+          'to bottom': '↓',
+          'to top': '↑',
+          'to bottom right': '↘',
+          'to bottom left': '↙',
+          'to top right': '↗',
+          'to top left': '↖'
+        };
+        const symbol = arrowSymbols[currentDir.direction] || '→';
+        shapeGradientDirectionBtn.innerHTML = `<i class="fas ${currentDir.icon}"></i><span>${symbol}</span>`;
+      }
+
       function showShapeColorPicker(element) {
         if (!element) return;
-        const color = normalizeColorHex(element.dataset.color || window.getComputedStyle(element).color || '#e8f5e9');
-        shapeColorInput.value = color;
-        updateShapeColorButtonAppearance(color);
+        
+        // Check if this is an icon (icons don't support gradients)
+        const isIcon = element.classList.contains('icon-element');
+        
+        // Hide gradient toggle for icons
+        if (isIcon) {
+          shapeGradientToggle.style.display = 'none';
+          shapeGradientControls.classList.remove('visible');
+          shapeGradientToggle.classList.remove('active');
+          const color = normalizeColorHex(element.dataset.color || window.getComputedStyle(element).color || '#e8f5e9');
+          shapeColorInput.value = color;
+          updateShapeColorButtonAppearance(color);
+        } else {
+          // Show gradient toggle for shapes
+          shapeGradientToggle.style.display = 'flex';
+          
+          // Check if shape has gradient data
+          let gradientData = null;
+          if (element.dataset.gradientData) {
+            try {
+              gradientData = JSON.parse(element.dataset.gradientData);
+            } catch (e) {
+              // Invalid gradient data, ignore
+            }
+          }
+          
+          if (gradientData && gradientData.type === 'gradient') {
+            // Show gradient controls
+            shapeGradientControls.classList.add('visible');
+            shapeGradientToggle.classList.add('active');
+            shapeGradientColor1.value = gradientData.color1 || '#e8f5e9';
+            shapeGradientColor2.value = gradientData.color2 || '#cbd5e1';
+            
+            // Update direction button
+            updateGradientDirectionButton(gradientData.direction || 'to right');
+            
+            // Update button appearance with gradient preview
+            const gradientPreview = `linear-gradient(${gradientData.direction || 'to right'}, ${gradientData.color1 || '#e8f5e9'}, ${gradientData.color2 || '#cbd5e1'})`;
+            shapeColorButton.style.background = gradientPreview;
+            shapeColorButton.style.backgroundImage = gradientPreview;
+          } else {
+            // Show solid color
+            shapeGradientControls.classList.remove('visible');
+            shapeGradientToggle.classList.remove('active');
+            const color = normalizeColorHex(element.dataset.color || window.getComputedStyle(element).color || '#e8f5e9');
+            shapeColorInput.value = color;
+            updateShapeColorButtonAppearance(color);
+          }
+        }
+        
         shapeColorPicker.classList.add('visible');
         positionShapeColorPicker(element);
         showRotationHandle(element);
@@ -18154,12 +19298,74 @@ Generate ONLY plain text. No design elements, HTML, or markdown.`;
         hideRotationHandle();
       }
 
+      function applyGradientToShape(element, gradientData) {
+        if (!element) return;
+        
+        // Store gradient data
+        element.dataset.gradientData = JSON.stringify(gradientData);
+        
+        // Remove solid color
+        delete element.dataset.color;
+        element.style.color = '';
+        
+        // Re-render shape with gradient
+        const shapeId = element.dataset.shape;
+        const shape = SHAPE_OPTION_MAP.get(shapeId);
+        if (shape) {
+          element.innerHTML = renderShapeSvg(shape, gradientData);
+          const svg = element.querySelector('.shape-svg');
+          if (svg) {
+            svg.style.width = '100%';
+            svg.style.height = '100%';
+          }
+        }
+        
+        // Recreate resize edges if shape is selected
+        if (element.classList.contains('selected')) {
+          createResizeEdges(element);
+        }
+        
+        // Update button appearance
+        const gradientPreview = `linear-gradient(${gradientData.direction || 'to right'}, ${gradientData.color1 || '#e8f5e9'}, ${gradientData.color2 || '#cbd5e1'})`;
+        shapeColorButton.style.background = gradientPreview;
+        shapeColorButton.style.backgroundImage = gradientPreview;
+      }
+      
+      function applySolidColorToShape(element, color) {
+        if (!element) return;
+        
+        // Remove gradient data
+        delete element.dataset.gradientData;
+        
+        // Apply solid color
+        const normalizedColor = normalizeColorHex(color);
+        element.dataset.color = normalizedColor;
+        element.style.color = normalizedColor;
+        
+        // Re-render shape without gradient
+        const shapeId = element.dataset.shape;
+        const shape = SHAPE_OPTION_MAP.get(shapeId);
+        if (shape) {
+          element.innerHTML = renderShapeSvg(shape, null);
+          const svg = element.querySelector('.shape-svg');
+          if (svg) {
+            svg.style.width = '100%';
+            svg.style.height = '100%';
+          }
+        }
+        
+        // Recreate resize edges if shape is selected
+        if (element.classList.contains('selected')) {
+          createResizeEdges(element);
+        }
+        
+        updateShapeColorButtonAppearance(normalizedColor);
+      }
+
       shapeColorInput.addEventListener('change', (event) => {
         if (selectedShape) {
           const color = normalizeColorHex(event.target.value);
-          selectedShape.dataset.color = color;
-          selectedShape.style.color = color;
-          updateShapeColorButtonAppearance(color);
+          applySolidColorToShape(selectedShape, color);
           positionShapeColorPicker(selectedShape);
           if (rotationTarget === selectedShape) {
             positionRotationHandle(selectedShape);
@@ -18177,6 +19383,102 @@ Generate ONLY plain text. No design elements, HTML, or markdown.`;
           }
           capture();
           saveEditorState('change_icon_color');
+        }
+      });
+
+      // Gradient toggle (only for shapes, not icons)
+      shapeGradientToggle.addEventListener('click', () => {
+        // Don't allow gradient toggle for icons
+        if (selectedIcon || (selectedShape && selectedShape.classList.contains('icon-element'))) {
+          return;
+        }
+        
+        shapeGradientToggle.classList.toggle('active');
+        shapeGradientControls.classList.toggle('visible');
+        
+        if (!shapeGradientControls.classList.contains('visible')) {
+          // Switching to solid color
+          if (selectedShape) {
+            const color = shapeColorInput.value;
+            applySolidColorToShape(selectedShape, color);
+            capture();
+            saveEditorState('change_shape_color');
+          }
+        } else {
+          // Switching to gradient
+          if (selectedShape) {
+            currentGradientDirectionIndex = 0;
+            updateGradientDirectionButton('to right');
+            const gradientData = {
+              type: 'gradient',
+              direction: gradientDirections[0].direction,
+              color1: shapeGradientColor1.value,
+              color2: shapeGradientColor2.value
+            };
+            applyGradientToShape(selectedShape, gradientData);
+            capture();
+            saveEditorState('change_shape_color');
+          }
+        }
+        positionShapeColorPicker(selectedShape || selectedIcon);
+        
+        // Reposition size badge after color picker size changes
+        if (selectedShape && shapeSizeBadge.classList.contains('visible')) {
+          setTimeout(() => {
+            updateShapeSizeBadge(selectedShape, selectedShape.offsetWidth, selectedShape.offsetHeight);
+          }, 10);
+        }
+      });
+
+      // Gradient direction cycling button (only for shapes, not icons)
+      shapeGradientDirectionBtn.addEventListener('click', () => {
+        if (!selectedShape || selectedShape.classList.contains('icon-element') || !shapeGradientControls.classList.contains('visible')) return;
+        
+        // Cycle to next direction
+        currentGradientDirectionIndex = (currentGradientDirectionIndex + 1) % gradientDirections.length;
+        const currentDir = gradientDirections[currentGradientDirectionIndex];
+        updateGradientDirectionButton(currentDir.direction);
+        
+        // Apply new direction
+        const gradientData = {
+          type: 'gradient',
+          direction: currentDir.direction,
+          color1: shapeGradientColor1.value,
+          color2: shapeGradientColor2.value
+        };
+        applyGradientToShape(selectedShape, gradientData);
+        capture();
+        saveEditorState('change_shape_color');
+      });
+
+      // Gradient color inputs (only for shapes, not icons)
+      shapeGradientColor1.addEventListener('input', () => {
+        if (selectedShape && !selectedShape.classList.contains('icon-element') && shapeGradientControls.classList.contains('visible')) {
+          const currentDir = gradientDirections[currentGradientDirectionIndex];
+          const gradientData = {
+            type: 'gradient',
+            direction: currentDir.direction,
+            color1: shapeGradientColor1.value,
+            color2: shapeGradientColor2.value
+          };
+          applyGradientToShape(selectedShape, gradientData);
+          capture();
+          saveEditorState('change_shape_color');
+        }
+      });
+
+      shapeGradientColor2.addEventListener('input', () => {
+        if (selectedShape && !selectedShape.classList.contains('icon-element') && shapeGradientControls.classList.contains('visible')) {
+          const currentDir = gradientDirections[currentGradientDirectionIndex];
+          const gradientData = {
+            type: 'gradient',
+            direction: currentDir.direction,
+            color1: shapeGradientColor1.value,
+            color2: shapeGradientColor2.value
+          };
+          applyGradientToShape(selectedShape, gradientData);
+          capture();
+          saveEditorState('change_shape_color');
         }
       });
 
@@ -18365,8 +19667,35 @@ Generate ONLY plain text. No design elements, HTML, or markdown.`;
         shapeSizeBadge.textContent = `${Math.round(width)} × ${Math.round(height)} px`;
         const rect = element.getBoundingClientRect();
         const badgeRect = shapeSizeBadge.getBoundingClientRect();
+        
+        // Check if color picker is visible and get its position
+        let colorPickerBottom = 0;
+        if (shapeColorPicker.classList.contains('visible')) {
+          const pickerRect = shapeColorPicker.getBoundingClientRect();
+          colorPickerBottom = pickerRect.bottom;
+        }
+        
+        // Position badge below the color picker if it's visible, otherwise above the element
         let top = rect.top - badgeRect.height - SHAPE_PICKER_MARGIN;
+        if (colorPickerBottom > 0 && top < colorPickerBottom + SHAPE_PICKER_MARGIN) {
+          top = colorPickerBottom + SHAPE_PICKER_MARGIN;
+        }
+        
         let left = rect.left + rect.width / 2 - badgeRect.width / 2;
+        
+        // If badge would overlap with color picker horizontally, adjust position
+        if (shapeColorPicker.classList.contains('visible')) {
+          const pickerRect = shapeColorPicker.getBoundingClientRect();
+          const badgeRight = left + badgeRect.width;
+          const pickerLeft = pickerRect.left;
+          const pickerRight = pickerRect.right;
+          
+          // If badge overlaps with picker, move it to the right
+          if (left < pickerRight && badgeRight > pickerLeft) {
+            left = pickerRight + SHAPE_PICKER_MARGIN;
+          }
+        }
+        
         if (top < 16) {
           top = rect.bottom + SHAPE_PICKER_MARGIN;
         }
@@ -18376,6 +19705,12 @@ Generate ONLY plain text. No design elements, HTML, or markdown.`;
         if (left < 16) {
           left = 16;
         }
+        
+        // Ensure badge doesn't go below viewport
+        if (top + badgeRect.height > window.innerHeight - 16) {
+          top = window.innerHeight - badgeRect.height - 16;
+        }
+        
         shapeSizeBadge.style.top = `${top}px`;
         shapeSizeBadge.style.left = `${left}px`;
       }
@@ -20902,11 +22237,52 @@ Generate ONLY plain text. No design elements, HTML, or markdown.`;
         updateElementContextMenuState();
       }
 
-      function renderShapeSvg(shape) {
+      function renderShapeSvg(shape, gradientData = null) {
         const strokeWidth = typeof shape.strokeWidth === 'number' ? shape.strokeWidth : 0;
+        let fillAttr = 'currentColor';
+        let gradientDef = '';
+        
+        if (gradientData && gradientData.type === 'gradient') {
+          const gradientId = `gradient-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+          const direction = gradientData.direction || 'to right';
+          const color1 = gradientData.color1 || '#e8f5e9';
+          const color2 = gradientData.color2 || '#cbd5e1';
+          
+          // Convert direction to SVG gradient coordinates
+          let x1 = '0%', y1 = '0%', x2 = '100%', y2 = '0%';
+          if (direction === 'to right') {
+            x1 = '0%'; y1 = '0%'; x2 = '100%'; y2 = '0%';
+          } else if (direction === 'to left') {
+            x1 = '100%'; y1 = '0%'; x2 = '0%'; y2 = '0%';
+          } else if (direction === 'to bottom') {
+            x1 = '0%'; y1 = '0%'; x2 = '0%'; y2 = '100%';
+          } else if (direction === 'to top') {
+            x1 = '0%'; y1 = '100%'; x2 = '0%'; y2 = '0%';
+          } else if (direction === 'to bottom right') {
+            x1 = '0%'; y1 = '0%'; x2 = '100%'; y2 = '100%';
+          } else if (direction === 'to bottom left') {
+            x1 = '100%'; y1 = '0%'; x2 = '0%'; y2 = '100%';
+          } else if (direction === 'to top right') {
+            x1 = '0%'; y1 = '100%'; x2 = '100%'; y2 = '0%';
+          } else if (direction === 'to top left') {
+            x1 = '100%'; y1 = '100%'; x2 = '0%'; y2 = '0%';
+          }
+          
+          gradientDef = `
+            <defs>
+              <linearGradient id="${gradientId}" x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}">
+                <stop offset="0%" stop-color="${color1}"/>
+                <stop offset="100%" stop-color="${color2}"/>
+              </linearGradient>
+            </defs>
+          `;
+          fillAttr = `url(#${gradientId})`;
+        }
+        
         return `
           <svg class="shape-svg" viewBox="${shape.viewBox}" preserveAspectRatio="none">
-            <g class="shape-geometry" fill="currentColor" stroke="currentColor"
+            ${gradientDef}
+            <g class="shape-geometry" fill="${fillAttr}" stroke="${fillAttr}"
                stroke-width="${strokeWidth}" stroke-linecap="round" stroke-linejoin="round">
               ${shape.svg}
             </g>
@@ -21632,7 +23008,19 @@ Generate ONLY plain text. No design elements, HTML, or markdown.`;
         const rotation = Number.isFinite(Number(options.rotation)) ? Number(options.rotation) : 0;
         element.dataset.rotation = String(rotation);
         element.style.transform = `rotate(${rotation}deg)`;
-        element.innerHTML = renderShapeSvg(shape);
+        // Check for gradient data
+        let gradientData = null;
+        if (options.gradientData) {
+          gradientData = options.gradientData;
+        } else if (element.dataset.gradientData) {
+          try {
+            gradientData = JSON.parse(element.dataset.gradientData);
+          } catch (e) {
+            // Invalid gradient data, ignore
+          }
+        }
+        
+        element.innerHTML = renderShapeSvg(shape, gradientData);
         const svg = element.querySelector('.shape-svg');
         if (svg) {
           svg.style.width = '100%';
@@ -21681,12 +23069,26 @@ Generate ONLY plain text. No design elements, HTML, or markdown.`;
           zIndex: shapeData.zIndex,
           minWidth: shapeData.minWidth,
           minHeight: shapeData.minHeight,
-          rotation: shapeData.rotation
+          rotation: shapeData.rotation,
+          gradientData: shapeData.gradientData
         });
-        if (element && shapeData.color) {
-          const normalizedColor = normalizeColorHex(shapeData.color);
-          element.dataset.color = normalizedColor;
-          element.style.color = normalizedColor;
+        if (element) {
+          if (shapeData.gradientData) {
+            // Apply gradient
+            element.dataset.gradientData = JSON.stringify(shapeData.gradientData);
+            element.innerHTML = renderShapeSvg(shape, shapeData.gradientData);
+            const svg = element.querySelector('.shape-svg');
+            if (svg) {
+              svg.style.width = '100%';
+              svg.style.height = '100%';
+            }
+          } else if (shapeData.color) {
+            const normalizedColor = normalizeColorHex(shapeData.color);
+            element.dataset.color = normalizedColor;
+            element.style.color = normalizedColor;
+          }
+          // Recreate resize edges (they're already created in createShapeElement, but ensure they exist)
+          createResizeEdges(element);
         }
         return element;
       }
@@ -23137,7 +24539,7 @@ Generate ONLY plain text. No design elements, HTML, or markdown.`;
         newTextBox.style.outline = 'none';
         newTextBox.style.overflow = 'visible';
         newTextBox.style.display = 'block';
-        newTextBox.style.textAlign = 'left';
+        newTextBox.style.textAlign = baseOptions.textAlign || baseOptions.align || 'left';
         newTextBox.style.color = baseOptions.color || '#000000';
         const backgroundColor = baseOptions.backgroundColor ?? 'transparent';
         newTextBox.style.backgroundColor = backgroundColor;
@@ -26230,12 +27632,13 @@ Generate ONLY plain text. No design elements, HTML, or markdown.`;
         );
         const isImageElement = element.classList && element.classList.contains('image-element');
         const isVideoElement = element.classList && element.classList.contains('video-element');
+        const isIconElement = element.classList && element.classList.contains('icon-element');
         let edges;
         if (isImageElement) {
           edges = ['top', 'bottom', 'left', 'right', 'top-left', 'top-right', 'bottom-left', 'bottom-right'];
         } else if (isVideoElement) {
           edges = ['bottom-right'];
-        } else if (isShapeLike) {
+        } else if (isShapeLike || isIconElement) {
           edges = ['top', 'bottom', 'left', 'right', 'bottom-right'];
         } else {
           edges = ['top', 'bottom', 'left', 'right', 'top-left', 'top-right', 'bottom-left', 'bottom-right'];
@@ -26252,8 +27655,12 @@ Generate ONLY plain text. No design elements, HTML, or markdown.`;
             }
           } else if (isVideoElement) {
             edgeEl.classList.add('corner');
-          } else if (isShapeLike) {
-            edgeEl.classList.add(edge === 'bottom-right' ? 'corner' : 'side');
+          } else if (isShapeLike || isIconElement) {
+            if (['top', 'bottom', 'left', 'right'].includes(edge)) {
+              edgeEl.classList.add('side');
+            } else {
+              edgeEl.classList.add('corner');
+            }
           } else {
             if (['top', 'bottom', 'left', 'right'].includes(edge)) {
               edgeEl.classList.add('side');
@@ -26278,11 +27685,33 @@ Generate ONLY plain text. No design elements, HTML, or markdown.`;
         const backgroundColor = backgroundConfig && backgroundConfig.color
           ? normalizeColorHex(backgroundConfig.color)
           : DEFAULT_SLIDE_BACKGROUND_COLOR;
-        canvas.style.backgroundColor = backgroundColor;
+        
+        // Handle background (image or gradient image, or solid color)
+        if (backgroundConfig.image) {
+          canvas.style.backgroundImage = `url(${backgroundConfig.image})`;
+          canvas.style.backgroundSize = backgroundConfig.size || 'cover';
+          canvas.style.backgroundPosition = backgroundConfig.position || 'center';
+          canvas.style.backgroundRepeat = backgroundConfig.repeat || 'no-repeat';
+          canvas.style.backgroundColor = backgroundColor;
+        } else if (backgroundConfig.gradient) {
+          // Legacy gradient support (CSS gradient)
+          canvas.style.backgroundImage = backgroundConfig.gradient;
+          canvas.style.backgroundColor = '';
+          canvas.style.backgroundSize = 'cover';
+          canvas.style.backgroundPosition = 'center';
+          canvas.style.backgroundRepeat = 'no-repeat';
+        } else {
+          // Apply solid background color
+          canvas.style.backgroundColor = backgroundColor;
+          canvas.style.backgroundImage = '';
+          canvas.style.backgroundSize = '';
+          canvas.style.backgroundPosition = '';
+          canvas.style.backgroundRepeat = '';
+        }
+        
         if (backgroundColorInput) {
           backgroundColorInput.value = backgroundColor;
         }
-        canvas.style.backgroundImage = backgroundConfig.image || '';
         canvas.style.backgroundSize = backgroundConfig.size || '';
         canvas.style.backgroundPosition = backgroundConfig.position || '';
         canvas.style.backgroundRepeat = backgroundConfig.repeat || '';
@@ -26326,9 +27755,11 @@ Generate ONLY plain text. No design elements, HTML, or markdown.`;
             if (slide.titleBox.fontSize) {
               titleBox.style.fontSize = slide.titleBox.fontSize;
             }
-            // Apply color if available
+            // Apply color if available (from titleBox or theme)
             if (slide.titleBox.color) {
               titleBox.style.color = slide.titleBox.color;
+            } else if (slide.titleColor) {
+              titleBox.style.color = slide.titleColor;
             }
             const titleRotation = Number.isFinite(slide.titleBox.rotation) ? slide.titleBox.rotation : 0;
             titleBox.dataset.rotation = String(titleRotation);
@@ -26378,9 +27809,11 @@ Generate ONLY plain text. No design elements, HTML, or markdown.`;
             if (slide.textBox.fontSize) {
               textBox.style.fontSize = slide.textBox.fontSize;
             }
-            // Apply color if available
+            // Apply color if available (from textBox or theme)
             if (slide.textBox.color) {
               textBox.style.color = slide.textBox.color;
+            } else if (slide.textColor) {
+              textBox.style.color = slide.textColor;
             }
             const textRotation = Number.isFinite(slide.textBox.rotation) ? slide.textBox.rotation : 0;
             textBox.dataset.rotation = String(textRotation);
@@ -26989,6 +28422,7 @@ Generate ONLY plain text. No design elements, HTML, or markdown.`;
         const isImage = element.classList.contains('image-element');
         const isVideo = element.classList.contains('video-element');
         const isTable = element.classList.contains('table-element');
+        const isIcon = element.classList.contains('icon-element');
         const isShapeLike = isShape || isChart || isTable || isImage || isVideo || element.classList.contains('text-box') || element.classList.contains('title-box') || element.classList.contains('additional-text-box');
         let newWidth = startWidth;
         let newHeight = startHeight;
@@ -27111,16 +28545,56 @@ Generate ONLY plain text. No design elements, HTML, or markdown.`;
           };
           
           if (resizeEdge === 'bottom-right') {
-            const centerX = startLeft + startWidth / 2;
-            const centerY = startTop + startHeight / 2;
-            let widthCandidate = Math.max(minWidth, startWidth + deltaX);
-            let heightCandidate = Math.max(minHeight, startHeight + deltaY);
-            let scale = Math.max(widthCandidate / startWidth, heightCandidate / startHeight);
-            scale = Math.max(scale, minScale);
+            // Bottom-right corner: Always resize both width and height together maintaining aspect ratio
+            const aspectRatio = startWidth / Math.max(startHeight, 0.01);
+            
+            // Calculate proposed dimensions based on mouse movement
+            const proposedWidth = startWidth + deltaX;
+            const proposedHeight = startHeight + deltaY;
+            
+            // Determine which dimension to use as the base (use the one with larger relative change)
+            const widthScale = proposedWidth / startWidth;
+            const heightScale = proposedHeight / startHeight;
+            
+            // Use the larger scale to maintain aspect ratio
+            const scale = Math.max(widthScale, heightScale);
+            
+            // Apply scale to both dimensions
             newWidth = startWidth * scale;
             newHeight = startHeight * scale;
-            newLeft = centerX - newWidth / 2;
-            newTop = centerY - newHeight / 2;
+            
+            // Ensure minimum dimensions
+            newWidth = Math.max(minWidth, newWidth);
+            newHeight = Math.max(minHeight, newHeight);
+            
+            // Recalculate to maintain aspect ratio if one dimension hit minimum
+            if (newWidth === minWidth && newHeight < minHeight) {
+              newHeight = minHeight;
+              newWidth = Math.max(minWidth, newHeight * aspectRatio);
+            } else if (newHeight === minHeight && newWidth < minWidth) {
+              newWidth = minWidth;
+              newHeight = Math.max(minHeight, newWidth / aspectRatio);
+            }
+            
+            // Ensure we don't go out of bounds
+            const maxWidth = bounds.right - startLeft;
+            const maxHeight = bounds.bottom - startTop;
+            
+            // If we exceed bounds, scale down proportionally
+            if (newWidth > maxWidth) {
+              const scaleDown = maxWidth / newWidth;
+              newWidth = maxWidth;
+              newHeight = newHeight * scaleDown;
+            }
+            if (newHeight > maxHeight) {
+              const scaleDown = maxHeight / newHeight;
+              newHeight = maxHeight;
+              newWidth = newWidth * scaleDown;
+            }
+            
+            // Final bounds check
+            newWidth = Math.max(minWidth, Math.min(newWidth, maxWidth));
+            newHeight = Math.max(minHeight, Math.min(newHeight, maxHeight));
           } else if (resizeEdge === 'left') {
             newWidth = Math.max(minWidth, startWidth - deltaX);
             newLeft = Math.max(bounds.left, startLeft + deltaX);
@@ -27154,6 +28628,141 @@ Generate ONLY plain text. No design elements, HTML, or markdown.`;
           element.style.height = newHeight + 'px';
           element.style.left = newLeft + 'px';
           element.style.top = newTop + 'px';
+          element.style.right = 'auto';
+          element.style.bottom = 'auto';
+          
+          activeResizeShape = element;
+          updateShapeSizeBadge(element, newWidth, newHeight);
+          showShapeSizeBadge();
+        } else if (isIcon) {
+          // Icon-specific resize logic
+          const bounds = {
+            left: 24,
+            top: 24,
+            right: canvasWidth - 24,
+            bottom: canvasHeight - 24
+          };
+          const isCornerHandle = resizeEdge === 'bottom-right';
+          const svg = element.querySelector('svg');
+          
+          if (isCornerHandle) {
+            // Corner handle: maintain aspect ratio (affect both h and w proportionally)
+            const aspectRatio = startWidth / Math.max(startHeight, 0.01);
+            
+            // Calculate proposed dimensions based on mouse movement
+            const proposedWidth = startWidth + deltaX;
+            const proposedHeight = startHeight + deltaY;
+            
+            // Determine which dimension to use as the base (use the one with larger relative change)
+            const widthScale = proposedWidth / startWidth;
+            const heightScale = proposedHeight / startHeight;
+            
+            // Use the larger scale to maintain aspect ratio
+            const scale = Math.max(widthScale, heightScale);
+            
+            // Apply scale to both dimensions
+            newWidth = startWidth * scale;
+            newHeight = startHeight * scale;
+            
+            // Ensure minimum dimensions
+            newWidth = Math.max(minWidth, newWidth);
+            newHeight = Math.max(minHeight, newHeight);
+            
+            // Recalculate to maintain aspect ratio if one dimension hit minimum
+            if (newWidth === minWidth && newHeight < minHeight) {
+              newHeight = minHeight;
+              newWidth = Math.max(minWidth, newHeight * aspectRatio);
+            } else if (newHeight === minHeight && newWidth < minWidth) {
+              newWidth = minWidth;
+              newHeight = Math.max(minHeight, newWidth / aspectRatio);
+            }
+            
+            // Ensure we don't go out of bounds
+            const maxWidth = bounds.right - startLeft;
+            const maxHeight = bounds.bottom - startTop;
+            
+            // If we exceed bounds, scale down proportionally
+            if (newWidth > maxWidth) {
+              const scaleDown = maxWidth / newWidth;
+              newWidth = maxWidth;
+              newHeight = newHeight * scaleDown;
+            }
+            if (newHeight > maxHeight) {
+              const scaleDown = maxHeight / newHeight;
+              newHeight = maxHeight;
+              newWidth = newWidth * scaleDown;
+            }
+            
+            // Final bounds check
+            newWidth = Math.max(minWidth, Math.min(newWidth, maxWidth));
+            newHeight = Math.max(minHeight, Math.min(newHeight, maxHeight));
+            
+            // Apply to container (maintains aspect ratio)
+            element.style.width = newWidth + 'px';
+            element.style.height = newHeight + 'px';
+            element.style.left = startLeft + 'px';
+            element.style.top = startTop + 'px';
+            
+            // Reset SVG to maintain aspect ratio for corner resize
+            if (svg) {
+              svg.style.transform = 'none';
+              svg.style.width = '100%';
+              svg.style.height = '100%';
+              svg.setAttribute('preserveAspectRatio', 'xMidYMid meet');
+            }
+          } else {
+            // Side handles: resize container and stretch the icon SVG to fill it
+            if (resizeEdge === 'left' || resizeEdge === 'right') {
+              newWidth = Math.max(minWidth, startWidth + (resizeEdge === 'right' ? deltaX : -deltaX));
+              newWidth = Math.min(newWidth, bounds.right - (resizeEdge === 'left' ? newLeft : startLeft));
+              
+              if (resizeEdge === 'left') {
+                newLeft = Math.max(bounds.left, startLeft + deltaX);
+                if (newLeft === bounds.left) {
+                  newWidth = startLeft + startWidth - bounds.left;
+                }
+              }
+              
+            // Resize container
+            element.style.width = newWidth + 'px';
+            element.style.height = startHeight + 'px';
+            element.style.left = (resizeEdge === 'left' ? newLeft : startLeft) + 'px';
+            element.style.top = startTop + 'px';
+            
+            // Stretch SVG to fill container (disable aspect ratio preservation)
+            if (svg) {
+              svg.style.transform = 'none';
+              svg.style.width = '100%';
+              svg.style.height = '100%';
+              svg.setAttribute('preserveAspectRatio', 'none');
+            }
+            } else if (resizeEdge === 'top' || resizeEdge === 'bottom') {
+              newHeight = Math.max(minHeight, startHeight + (resizeEdge === 'bottom' ? deltaY : -deltaY));
+              newHeight = Math.min(newHeight, bounds.bottom - (resizeEdge === 'top' ? newTop : startTop));
+              
+              if (resizeEdge === 'top') {
+                newTop = Math.max(bounds.top, startTop + deltaY);
+                if (newTop === bounds.top) {
+                  newHeight = startTop + startHeight - bounds.top;
+                }
+              }
+              
+              // Resize container
+              element.style.width = startWidth + 'px';
+              element.style.height = newHeight + 'px';
+              element.style.left = startLeft + 'px';
+              element.style.top = (resizeEdge === 'top' ? newTop : startTop) + 'px';
+              
+              // Stretch SVG to fill container (disable aspect ratio preservation)
+              if (svg) {
+                svg.style.transform = 'none';
+                svg.style.width = '100%';
+                svg.style.height = '100%';
+                svg.setAttribute('preserveAspectRatio', 'none');
+              }
+            }
+          }
+          
           element.style.right = 'auto';
           element.style.bottom = 'auto';
           
@@ -28583,6 +30192,52 @@ Generate ONLY plain text. No design elements, HTML, or markdown.`;
         showNotification('Presentation saved!');
       }
 
+      // FIXED: Save presentation to recents with full slides data
+      function saveToRecents() {
+        const currentUser = JSON.parse(localStorage.getItem('currentUser') || 'null');
+        const isGuest = localStorage.getItem('guest') === 'true';
+        
+        if (!currentUser) {
+          console.warn('Cannot save to recents: no user logged in');
+          return;
+        }
+
+        // Ensure slides array exists and has content
+        if (typeof slides === 'undefined' || !Array.isArray(slides) || slides.length === 0) {
+          console.warn('Cannot save to recents: slides array is empty or undefined');
+          return;
+        }
+
+        // Get the presentation title
+        const title = (typeof titleBox !== 'undefined' && titleBox.textContent) 
+          ? titleBox.textContent.trim() 
+          : 'AI Generated Presentation';
+        
+        // Create presentation object
+        const presentation = {
+          id: crypto.randomUUID ? crypto.randomUUID() : `pres-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
+          title: title || 'Untitled',
+          date: new Date().toISOString(),
+          slides: JSON.stringify(slides) // Store slides as JSON string
+        };
+        
+        // Save to user-specific key
+        const userKey = `presentations_${currentUser.username}`;
+        const saved = JSON.parse(localStorage.getItem(userKey) || '[]');
+        
+        // Add new presentation to the beginning of the array
+        saved.unshift(presentation);
+        
+        // Keep only the 50 most recent presentations
+        if (saved.length > 50) {
+          saved.splice(50);
+        }
+        
+        localStorage.setItem(userKey, JSON.stringify(saved));
+        
+        console.log('Presentation saved to recents with', slides.length, 'slides');
+      }
+
       // Topbar button actions per slides.json
       document.getElementById('btnDel').addEventListener('click', () => {
         deleteSlide(active);
@@ -28806,9 +30461,31 @@ Generate ONLY plain text. No design elements, HTML, or markdown.`;
       if (loadPres) {
         try {
           const pres = JSON.parse(loadPres);
-          // Set the title and content from saved presentation
-          slides[0].title = pres.title || slides[0].title || '';
-          slides[0].content = pres.content || '';
+          
+          // FIXED: Load full slides array if available
+          if (pres.slides && typeof pres.slides === 'string') {
+            // Parse the slides array from JSON string
+            const loadedSlides = JSON.parse(pres.slides);
+            if (Array.isArray(loadedSlides) && loadedSlides.length > 0) {
+              // Clear existing slides and load the saved ones
+              slides.length = 0;
+              slides.push(...loadedSlides);
+              active = 0;
+              // Re-render the editor with loaded slides
+              if (typeof render === 'function') {
+                render();
+              }
+              if (typeof renderSlideList === 'function') {
+                renderSlideList();
+              }
+              console.log('Loaded presentation with', slides.length, 'slides');
+            }
+          } else {
+            // Fallback: Set the title and content from saved presentation (old format)
+            slides[0].title = pres.title || slides[0].title || '';
+            slides[0].content = pres.content || '';
+          }
+          
           sessionStorage.removeItem('loadPresentation'); // Clear after loading
         } catch (e) {
           console.error('Error loading presentation:', e);

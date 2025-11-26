@@ -390,7 +390,7 @@ img {
   gap: clamp(32px, 4vw, 48px);
 }
 
-/* Sections */
+/* Sections - Consistent Spacing */
 .recent-section,
 .template-examples,
 .notifications-section {
@@ -400,6 +400,8 @@ img {
   padding: clamp(24px, 3vw, 32px);
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
+  margin-bottom: 40px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
 }
 
 /* Removed start-section styles - now merged into presentations section */
@@ -707,7 +709,8 @@ img {
   position: relative;
   display: flex;
   align-items: center;
-  z-index: 1;
+  gap: 8px;
+  z-index: 10;
 }
 
 /* Edit Button */
@@ -745,6 +748,101 @@ img {
 
 .edit-btn i {
   pointer-events: none;
+}
+
+/* Present Button */
+.present-btn {
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 255, 150, 0.15);
+  border: 1px solid rgba(0, 255, 150, 0.3);
+  cursor: pointer;
+  color: #00e09a;
+  font-size: 14px;
+  border-radius: 6px;
+  transition: all 0.2s ease;
+  padding: 0;
+}
+
+.present-btn i {
+  pointer-events: none;
+}
+
+.present-btn:hover {
+  background: rgba(0, 255, 150, 0.3);
+  color: white;
+  transform: scale(1.05);
+  border-color: rgba(0, 255, 150, 0.5);
+  box-shadow: 0 2px 8px rgba(0, 255, 150, 0.3);
+}
+
+.present-btn:active {
+  transform: scale(0.95);
+}
+
+/* Edit Menu Dropdown */
+.edit-menu {
+  position: absolute;
+  right: 0;
+  top: 42px;
+  width: 150px;
+  background: #134033;
+  border-radius: 8px;
+  padding: 8px 0;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+  display: none;
+  z-index: 999;
+  border: 1px solid rgba(0, 255, 150, 0.2);
+}
+
+.edit-menu.show {
+  display: block;
+  animation: fadeIn 0.2s ease;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-5px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.edit-menu div {
+  padding: 10px 15px;
+  cursor: pointer;
+  color: #d7fff1;
+  transition: 0.2s;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+}
+
+.edit-menu div:hover {
+  background: rgba(0, 255, 150, 0.15);
+}
+
+.edit-menu div i {
+  font-size: 13px;
+  width: 16px;
+}
+
+.edit-menu .divider {
+  height: 1px;
+  background: rgba(0, 255, 150, 0.2);
+  margin: 4px 0;
+  padding: 0;
+}
+
+.edit-menu .divider:hover {
+  background: rgba(0, 255, 150, 0.2);
 }
 
 /* Global Edit Dropdown Menus */
@@ -879,54 +977,123 @@ img {
   border-color: rgba(0, 255, 150, 0.4);
 }
 
-/* Template Grid */
-.template-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: 24px;
+/* Template Section Container - REDESIGNED */
+.template-section {
+  padding: 50px 45px;
+  border-radius: 24px;
+  background: linear-gradient(145deg, rgba(4, 50, 40, 0.6), rgba(0, 35, 28, 0.7));
+  border: 1px solid rgba(0, 255, 150, 0.18);
+  backdrop-filter: blur(12px);
+  margin: -60px 0 20px 0;
+  overflow: visible;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
 }
 
+.template-section h2 {
+  font-size: 32px;
+  font-weight: 700;
+  margin-bottom: 12px;
+  color: #E8F5E9;
+  letter-spacing: -0.5px;
+  text-align: left;
+}
+
+.template-section .subtitle {
+  margin: 0 0 40px 0;
+  font-size: 16px;
+  opacity: 0.9;
+  color: #A5D6A7;
+  font-weight: 400;
+  text-align: left;
+}
+
+/* Template Grid - Clean 3×2 Layout (6 cards) */
+.template-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(2, 1fr);
+  gap: 20px;
+  width: 100%;
+  margin-bottom: 0px;
+  grid-auto-flow: dense;
+}
+
+/* Positioning helpers for custom layout */
+.template-card.card-left {
+  grid-column: 1;
+}
+
+.template-card.card-right {
+  grid-column: 3;
+}
+
+/* Template Card - COMPACT SIZE (-1.5x) */
 .template-card {
   width: 100%;
-  height: 150px;       /* FIXED height → all rows stable */
+  min-height: 135px;
+  height: 100%;
+  padding: 18px 16px;
+  border-radius: 14px;
+  background: linear-gradient(135deg, rgba(0, 124, 92, 0.95), rgba(0, 89, 68, 0.95));
+  border: 1px solid rgba(0, 255, 150, 0.15);
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   display: flex;
   flex-direction: column;
-  justify-content: flex-start;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
   gap: 8px;
-  background: rgba(0, 0, 0, 0.3);
-  border: 1px solid rgba(0, 255, 150, 0.2);
-  border-radius: 16px;
-  padding: 24px;
-  cursor: pointer;
-  transition: all 0.3s ease;
   position: relative;
   overflow: hidden;
+  box-sizing: border-box;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.template-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, transparent, rgba(0, 255, 150, 0.05));
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
 }
 
 .template-card:hover {
   transform: translateY(-4px);
-  box-shadow: 0 12px 32px rgba(0, 255, 150, 0.2);
-  border-color: rgba(0, 255, 150, 0.4);
+  background: linear-gradient(135deg, rgba(0, 165, 120, 0.98), rgba(0, 124, 92, 0.98));
+  border-color: rgba(0, 255, 150, 0.3);
+  box-shadow: 0 8px 20px rgba(0, 255, 150, 0.25);
+}
+
+.template-card:hover::before {
+  opacity: 1;
 }
 
 .template-card i {
-  font-size: 2.5rem;
-  color: rgba(0, 255, 150, 0.8);
-  margin-bottom: 8px;
+  font-size: 2rem;
+  color: rgba(0, 255, 150, 0.9);
+  margin-bottom: 2px;
   flex-shrink: 0;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
 }
 
 .template-card h3 {
-  font-size: 1.2rem;
+  font-size: 1rem;
   font-weight: 600;
   color: #fff;
   margin: 0;
   flex-shrink: 0;
+  letter-spacing: -0.2px;
 }
 
 .template-card p {
-  font-size: 0.9rem;
-  color: rgba(255, 255, 255, 0.7);
+  font-size: 0.8rem;
+  color: rgba(255, 255, 255, 0.75);
   line-height: 1.4;
   margin: 0;
   overflow: hidden;
@@ -934,6 +1101,12 @@ img {
   display: -webkit-box;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
+  max-width: 100%;
+}
+
+/* Hide decorative shapes - not needed */
+.template-card .card-shape {
+  display: none;
 }
 
 /* Responsive Design */
@@ -1240,20 +1413,10 @@ img {
    ============================================ */
 
 .template-examples {
-  margin-top: 80px;
-  padding: 40px;
-  border-radius: 20px;
-  background: rgba(0, 40, 30, 0.35);
-  border: 1px solid rgba(0, 255, 150, 0.12);
-  backdrop-filter: blur(8px);
-}
-
-.templates-wrapper {
-  position: relative;
-  background: rgba(0, 60, 50, 0.35);
-  padding: 28px 32px;
-  border-radius: 22px;
-  margin-top: 20px;
+  margin-top: -60px;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
 }
 
 .templates-header {
@@ -1378,10 +1541,26 @@ img {
   transform: translateY(-2px);
 }
 
+/* See More Button - HIDDEN */
+.see-more-btn {
+  display: none;
+}
+
+/* Expandable More Templates Section - HIDDEN */
+.more-templates {
+  display: none;
+}
+
 /* Responsive Template Grid */
+/* Template Responsive Breakpoints - 3 COLUMN LAYOUT */
 @media (max-width: 1200px) {
   .template-grid {
     grid-template-columns: repeat(3, 1fr);
+    gap: 18px;
+  }
+  
+  .template-section {
+    padding: 40px 35px;
   }
 }
 
@@ -1391,14 +1570,55 @@ img {
     gap: 16px;
   }
   
-  .template-examples {
-    padding: 24px;
+  .template-section {
+    padding: 35px 25px;
+    margin: 40px 0;
+  }
+  
+  .template-section h2 {
+    font-size: 26px;
+  }
+  
+  .template-card {
+    height: 120px;
+    padding: 16px 14px;
+  }
+  
+  .template-card i {
+    font-size: 1.8rem;
+  }
+  
+  .template-card h3 {
+    font-size: 0.95rem;
+  }
+  
+  .template-card p {
+    font-size: 0.75rem;
   }
 }
 
 @media (max-width: 480px) {
   .template-grid {
     grid-template-columns: 1fr;
+    gap: 14px;
+  }
+  
+  .template-section {
+    padding: 30px 20px;
+    margin: 30px 0;
+  }
+  
+  .template-section h2 {
+    font-size: 24px;
+  }
+  
+  .template-section .subtitle {
+    font-size: 14px;
+    margin-bottom: 30px;
+  }
+  
+  .template-card {
+    height: 110px;
   }
 }
 

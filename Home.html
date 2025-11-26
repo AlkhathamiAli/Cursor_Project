@@ -2339,13 +2339,15 @@
               <span>New Presentation</span>
             </button>
             <h4 class="recent-presentations-heading">Recent Presentations</h4>
-            <div class="recent-items" id="recent-presentations">
-              <div class="recent-item" style="display: none;">
-                <i class="fas fa-file"></i>
-                <span class="recent-item-name"></span>
+            <div class="sidebar-recents">
+              <div class="recent-items" id="recent-presentations">
+                <div class="recent-item" style="display: none;">
+                  <i class="fas fa-file"></i>
+                  <span class="recent-item-name"></span>
+                </div>
               </div>
             </div>
-            <a href="#" class="see-more-link" id="presentations-see-more" onclick="showAllPresentations(); return false;" style="display: none;">
+            <a href="#" class="see-more-link" id="presentations-see-more" style="display: none;">
               See More
             </a>
           </div>
@@ -2388,13 +2390,15 @@
               <span>New Group</span>
             </button>
             <h4 class="recent-groups-heading">Recent Groups</h4>
-            <div class="recent-items" id="recent-groups">
-              <div class="recent-item" style="display: none;">
-                <i class="fas fa-folder"></i>
-                <span class="recent-item-name"></span>
+            <div class="sidebar-recents">
+              <div class="recent-items" id="recent-groups">
+                <div class="recent-item" style="display: none;">
+                  <i class="fas fa-folder"></i>
+                  <span class="recent-item-name"></span>
+                </div>
               </div>
             </div>
-            <a href="#" class="see-more-link" id="groups-see-more" onclick="showAllGroups(); return false;" style="display: none;">
+            <a href="#" class="see-more-link" id="groups-see-more" style="display: none;">
               See More
             </a>
           </div>
@@ -2416,7 +2420,7 @@
       <form class="search-bar" id="searchForm" role="search" onsubmit="handleSearch(event)">
         <i class="fas fa-search" aria-hidden="true"></i>
         <input type="search" id="searchInput" placeholder="Search presentations, groups, templates..." aria-label="Search presentations, groups, templates">
-        <button type="submit">Search</button>
+        <button type="submit" id="searchBtn">Search</button>
       </form>
       <div id="searchResults" class="search-results" style="display: none;"></div>
       <a href="#notifications" class="notifications-btn" id="notificationsBtn" aria-label="Notifications">
@@ -2464,198 +2468,44 @@
       </section>
 
       <section id="templates" class="template-examples">
-        <div class="templates-wrapper">
-          <div class="templates-header">
-            <h2 class="templates-title" data-translate="home.templateExamplesTitle">Template Examples</h2>
-            <button id="seeMoreBtn" class="see-more-btn">See More</button>
-          </div>
+        <div class="template-section">
+          <h2 data-translate="home.templateExamplesTitle">Template Examples</h2>
+          <p class="subtitle" data-translate="home.templateExamplesSubtitle">Choose a ready design to start quickly:</p>
           
-          <p class="templates-subtitle" data-translate="home.templateExamplesSubtitle">Choose a ready design to start quickly:</p>
-          
-          <div class="template-scroll-container">
-            <div class="template-scroll-track">
-              <!-- First set of templates -->
-              <div class="template-card" data-template="business">
-                <div class="card-shape shape1"></div>
-                <div class="card-shape shape2"></div>
-                <div class="card-shape shape3"></div>
-                <div class="card-shape shape4"></div>
-                <div class="card-shape shape5"></div>
-                <i class="fas fa-briefcase"></i>
-                <h3>Business</h3>
-                <p>Professional slides for corporate presentations and meetings</p>
-              </div>
-              <div class="template-card" onclick="useTemplate('education')">
-                <div class="card-shape shape1"></div>
-                <div class="card-shape shape2"></div>
-                <div class="card-shape shape3"></div>
-                <div class="card-shape shape4"></div>
-                <div class="card-shape shape5"></div>
-                <i class="fas fa-graduation-cap"></i>
-                <h3>Education</h3>
-                <p>Engaging designs perfect for educational content and training</p>
-              </div>
-              <div class="template-card" onclick="useTemplate('project')">
-                <div class="card-shape shape1"></div>
-                <div class="card-shape shape2"></div>
-                <div class="card-shape shape3"></div>
-                <div class="card-shape shape4"></div>
-                <div class="card-shape shape5"></div>
-                <i class="fas fa-project-diagram"></i>
-                <h3>Project</h3>
-                <p>Structured layouts for project planning and progress tracking</p>
-              </div>
-              <div class="template-card" onclick="useTemplate('weekly-report')">
-                <div class="card-shape shape1"></div>
-                <div class="card-shape shape2"></div>
-                <div class="card-shape shape3"></div>
-                <div class="card-shape shape4"></div>
-                <div class="card-shape shape5"></div>
-                <i class="fas fa-calendar-week"></i>
-                <h3>Weekly Report</h3>
-                <p>Weekly status updates and progress reports for teams</p>
-              </div>
-              <div class="template-card" onclick="useTemplate('meeting-minutes')">
-                <div class="card-shape shape1"></div>
-                <div class="card-shape shape2"></div>
-                <div class="card-shape shape3"></div>
-                <div class="card-shape shape4"></div>
-                <div class="card-shape shape5"></div>
-                <i class="fas fa-clipboard-list"></i>
-                <h3>Meeting Minutes</h3>
-                <p>Professional templates for documenting meeting discussions</p>
-              </div>
-              <div class="template-card" onclick="useTemplate('financial-report')">
-                <div class="card-shape shape1"></div>
-                <div class="card-shape shape2"></div>
-                <div class="card-shape shape3"></div>
-                <div class="card-shape shape4"></div>
-                <div class="card-shape shape5"></div>
-                <i class="fas fa-chart-pie"></i>
-                <h3>Financial Report</h3>
-                <p>Financial data visualization and quarterly reports</p>
-              </div>
-              <div class="template-card" onclick="useTemplate('training')">
-                <div class="card-shape shape1"></div>
-                <div class="card-shape shape2"></div>
-                <div class="card-shape shape3"></div>
-                <div class="card-shape shape4"></div>
-                <div class="card-shape shape5"></div>
-                <i class="fas fa-chalkboard-teacher"></i>
-                <h3>Training</h3>
-                <p>Employee training materials and onboarding presentations</p>
-              </div>
-              <div class="template-card" onclick="useTemplate('executive-summary')">
-                <div class="card-shape shape1"></div>
-                <div class="card-shape shape2"></div>
-                <div class="card-shape shape3"></div>
-                <div class="card-shape shape4"></div>
-                <div class="card-shape shape5"></div>
-                <i class="fas fa-file-alt"></i>
-                <h3>Executive Summary</h3>
-                <p>High-level summaries for executive briefings and reviews</p>
-              </div>
-              <div class="template-card" onclick="useTemplate('marketing')">
-                <div class="card-shape shape1"></div>
-                <div class="card-shape shape2"></div>
-                <div class="card-shape shape3"></div>
-                <div class="card-shape shape4"></div>
-                <div class="card-shape shape5"></div>
-                <i class="fas fa-chart-line"></i>
-                <h3>Marketing</h3>
-                <p>Eye-catching layouts for marketing campaigns and pitches</p>
-              </div>
-              <!-- Duplicate set for seamless loop -->
-              <div class="template-card" data-template="business">
-                <div class="card-shape shape1"></div>
-                <div class="card-shape shape2"></div>
-                <div class="card-shape shape3"></div>
-                <div class="card-shape shape4"></div>
-                <div class="card-shape shape5"></div>
-                <i class="fas fa-briefcase"></i>
-                <h3>Business</h3>
-                <p>Professional slides for corporate presentations and meetings</p>
-              </div>
-              <div class="template-card" onclick="useTemplate('education')">
-                <div class="card-shape shape1"></div>
-                <div class="card-shape shape2"></div>
-                <div class="card-shape shape3"></div>
-                <div class="card-shape shape4"></div>
-                <div class="card-shape shape5"></div>
-                <i class="fas fa-graduation-cap"></i>
-                <h3>Education</h3>
-                <p>Engaging designs perfect for educational content and training</p>
-              </div>
-              <div class="template-card" onclick="useTemplate('project')">
-                <div class="card-shape shape1"></div>
-                <div class="card-shape shape2"></div>
-                <div class="card-shape shape3"></div>
-                <div class="card-shape shape4"></div>
-                <div class="card-shape shape5"></div>
-                <i class="fas fa-project-diagram"></i>
-                <h3>Project</h3>
-                <p>Structured layouts for project planning and progress tracking</p>
-              </div>
-              <div class="template-card" onclick="useTemplate('weekly-report')">
-                <div class="card-shape shape1"></div>
-                <div class="card-shape shape2"></div>
-                <div class="card-shape shape3"></div>
-                <div class="card-shape shape4"></div>
-                <div class="card-shape shape5"></div>
-                <i class="fas fa-calendar-week"></i>
-                <h3>Weekly Report</h3>
-                <p>Weekly status updates and progress reports for teams</p>
-              </div>
-              <div class="template-card" onclick="useTemplate('meeting-minutes')">
-                <div class="card-shape shape1"></div>
-                <div class="card-shape shape2"></div>
-                <div class="card-shape shape3"></div>
-                <div class="card-shape shape4"></div>
-                <div class="card-shape shape5"></div>
-                <i class="fas fa-clipboard-list"></i>
-                <h3>Meeting Minutes</h3>
-                <p>Professional templates for documenting meeting discussions</p>
-              </div>
-              <div class="template-card" onclick="useTemplate('financial-report')">
-                <div class="card-shape shape1"></div>
-                <div class="card-shape shape2"></div>
-                <div class="card-shape shape3"></div>
-                <div class="card-shape shape4"></div>
-                <div class="card-shape shape5"></div>
-                <i class="fas fa-chart-pie"></i>
-                <h3>Financial Report</h3>
-                <p>Financial data visualization and quarterly reports</p>
-              </div>
-              <div class="template-card" onclick="useTemplate('training')">
-                <div class="card-shape shape1"></div>
-                <div class="card-shape shape2"></div>
-                <div class="card-shape shape3"></div>
-                <div class="card-shape shape4"></div>
-                <div class="card-shape shape5"></div>
-                <i class="fas fa-chalkboard-teacher"></i>
-                <h3>Training</h3>
-                <p>Employee training materials and onboarding presentations</p>
-              </div>
-              <div class="template-card" onclick="useTemplate('executive-summary')">
-                <div class="card-shape shape1"></div>
-                <div class="card-shape shape2"></div>
-                <div class="card-shape shape3"></div>
-                <div class="card-shape shape4"></div>
-                <div class="card-shape shape5"></div>
-                <i class="fas fa-file-alt"></i>
-                <h3>Executive Summary</h3>
-                <p>High-level summaries for executive briefings and reviews</p>
-              </div>
-              <div class="template-card" onclick="useTemplate('marketing')">
-                <div class="card-shape shape1"></div>
-                <div class="card-shape shape2"></div>
-                <div class="card-shape shape3"></div>
-                <div class="card-shape shape4"></div>
-                <div class="card-shape shape5"></div>
-                <i class="fas fa-chart-line"></i>
-                <h3>Marketing</h3>
-                <p>Eye-catching layouts for marketing campaigns and pitches</p>
-              </div>
+          <!-- Main Template Grid (3×2 = 6 templates) -->
+          <div class="template-grid" id="templateGrid">
+            <!-- Row 1 -->
+            <div class="template-card" data-template="business">
+              <i class="fas fa-briefcase"></i>
+              <h3 class="template-title">Business</h3>
+              <p>Professional slides for corporate presentations and meetings</p>
+            </div>
+            <div class="template-card" onclick="useTemplate('education')">
+              <i class="fas fa-graduation-cap"></i>
+              <h3 class="template-title">Education</h3>
+              <p>Engaging designs perfect for educational content and training</p>
+            </div>
+            <div class="template-card" onclick="useTemplate('project')">
+              <i class="fas fa-project-diagram"></i>
+              <h3 class="template-title">Project</h3>
+              <p>Structured layouts for project planning and progress tracking</p>
+            </div>
+            
+            <!-- Row 2 -->
+            <div class="template-card card-left" onclick="useTemplate('meeting-minutes')">
+              <i class="fas fa-clipboard-list"></i>
+              <h3 class="template-title">Meeting Minutes</h3>
+              <p>Professional templates for documenting meeting discussions</p>
+            </div>
+            <div class="template-card card-left" onclick="useTemplate('financial-report')">
+              <i class="fas fa-chart-pie"></i>
+              <h3 class="template-title">Financial Report</h3>
+              <p>Financial data visualization and quarterly reports</p>
+            </div>
+            <div class="template-card card-right" onclick="useTemplate('training')">
+              <i class="fas fa-chalkboard-teacher"></i>
+              <h3 class="template-title">Training</h3>
+              <p>Employee training materials and onboarding presentations</p>
             </div>
           </div>
         </div>
@@ -3150,7 +3000,7 @@
           
           recentItem.innerHTML = `
             <div class="recent-info">
-              <div class="recent-title">${escapeHtml(title)}</div>
+              <div class="recent-title recent-presentation-title">${escapeHtml(title)}</div>
               <div class="recent-date">${escapeHtml(dateLabel)}</div>
             </div>
             <div class="recent-actions">
@@ -3247,7 +3097,7 @@
             
             recentItem.innerHTML = `
               <div class="recent-info">
-                <div class="recent-title">${escapeHtml(groupName)}</div>
+                <div class="recent-title group-title">${escapeHtml(groupName)}</div>
                 <div class="recent-date">${memberCount} ${memberCount === 1 ? 'member' : 'members'} • ${createdDate}</div>
               </div>
               <div class="recent-actions">
@@ -4110,6 +3960,54 @@
         e.stopPropagation();
         window.location.href = "more_templates.html";
       });
+    </script>
+
+    <!-- Functional Search System -->
+    <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      const searchInput = document.getElementById("searchInput");
+      const searchBtn = document.getElementById("searchBtn");
+
+      function performSearch() {
+        const query = searchInput.value.trim().toLowerCase();
+        if (!query) return;
+
+        const highlight = (element) => {
+          element.scrollIntoView({ behavior: "smooth", block: "center" });
+          element.style.outline = "2px solid #00ff88";
+          setTimeout(() => (element.style.outline = "none"), 1500);
+        };
+
+        // Presentations
+        const presentationMatch = [...document.querySelectorAll(".recent-presentation-title")]
+          .find(item => item.textContent.toLowerCase().includes(query));
+
+        if (presentationMatch) return highlight(presentationMatch);
+
+        // Groups
+        const groupMatch = [...document.querySelectorAll(".group-title")]
+          .find(item => item.textContent.toLowerCase().includes(query));
+
+        if (groupMatch) return highlight(groupMatch);
+
+        // Templates
+        const templateMatch = [...document.querySelectorAll(".template-title")]
+          .find(item => item.textContent.toLowerCase().includes(query));
+
+        if (templateMatch) return highlight(templateMatch);
+
+        // Nothing found
+        alert("No results found.");
+      }
+
+      searchBtn.addEventListener("click", performSearch);
+
+      searchInput.addEventListener("keydown", function (e) {
+        if (e.key === "Enter") {
+          performSearch();
+        }
+      });
+    });
     </script>
 
   </body>

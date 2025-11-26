@@ -423,6 +423,69 @@ function closeNewGroupModal() {
   document.getElementById('newGroupName').value = '';
 }
 
+// Helper function to save group to recent groups
+function saveGroup(group) {
+  if (!group || !group.groupID) {
+    console.error('Invalid group data:', group);
+    return;
+  }
+  
+  const currentUser = JSON.parse(localStorage.getItem('currentUser') || 'null');
+  const userID = currentUser?.userID || currentUser?.email;
+  
+  if (!userID) {
+    console.error('No user ID found for saving group');
+    return;
+  }
+  
+  // Ensure group has required structure
+  const groupToSave = {
+    groupID: group.groupID,
+    name: group.groupName || group.name || 'Unnamed Group',
+    createdAt: group.createdAt || new Date().toISOString(),
+    members: group.members || []
+  };
+  
+  try {
+    // Add to Database recents
+    if (typeof Database !== 'undefined') {
+      Database.addRecentGroup(userID, groupToSave.groupID);
+      console.log('Group saved to recents:', groupToSave.groupID);
+    }
+  } catch (e) {
+    console.error('Error saving group:', e);
+  }
+}
+
+// Helper function to render recent groups
+function renderRecentGroups() {
+  const currentUser = JSON.parse(localStorage.getItem('currentUser') || 'null');
+  const userID = currentUser?.userID || currentUser?.email;
+  
+  if (!userID) {
+    console.warn('No user ID found for rendering groups');
+    return;
+  }
+  
+  // Call sidebar reload function
+  if (typeof loadSidebarData === 'function') {
+    try {
+      loadSidebarData();
+    } catch (e) {
+      console.warn('Could not reload sidebar:', e);
+    }
+  }
+  
+  // Also call specific sidebar group loader if available
+  if (typeof loadRecentGroupsSidebar === 'function') {
+    try {
+      loadRecentGroupsSidebar(userID);
+    } catch (e) {
+      console.warn('Could not reload groups sidebar:', e);
+    }
+  }
+}
+
 function createGroup() {
   const groupName = document.getElementById('newGroupName').value.trim();
   if (!groupName) {
@@ -500,27 +563,13 @@ function createGroup() {
     slides: []
   });
 
-  // Add to recents - use userID or email as fallback
-  const userIdentifier = currentUser.userID || currentUser.email || userID;
-  if (userIdentifier && typeof Database !== 'undefined') {
-    try {
-      Database.addRecentGroup(userIdentifier, newGroup.groupID);
-      console.log('Group added to recents:', newGroup.groupID, 'for user:', userIdentifier);
-    } catch (e) {
-      console.error('Error adding group to recents:', e);
-    }
-  } else {
-    console.error('Could not add to recents: No user identifier found', { currentUser, userID });
-  }
-
-  // Reload sidebar if function exists (for Home page)
-  if (typeof loadSidebarData === 'function') {
-    try {
-      loadSidebarData();
-    } catch (e) {
-      console.warn('Could not reload sidebar:', e);
-    }
-  }
+  // Save group to recent groups using helper function
+  saveGroup(newGroup);
+  
+  // Render recent groups to update UI
+  renderRecentGroups();
+  
+  console.log('Group created successfully:', newGroup);
 
   // Close modal
   closeNewGroupModal();
@@ -557,5 +606,7 @@ window.deleteCurrentSlide = deleteCurrentSlide;
 window.createNewGroup = createNewGroup;
 window.closeNewGroupModal = closeNewGroupModal;
 window.createGroup = createGroup;
+window.saveGroup = saveGroup;
+window.renderRecentGroups = renderRecentGroups;
 window.showGroupSettings = showGroupSettings;
 
